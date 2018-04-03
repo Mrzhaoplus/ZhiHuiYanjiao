@@ -4,6 +4,10 @@
         "source": "D:\\ZhiHuiYanjiao\\PushSDK\\build\\intermediates\\bundles\\debug\\res\\layout\\upush_notification.xml"
     },
     {
+        "merged": "E:\\ZhiHuiYanjiao\\PushSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\upush_notification.xml",
+        "source": "E:\\ZhiHuiYanjiao\\PushSDK\\build\\intermediates\\bundles\\debug\\res\\layout\\upush_notification.xml"
+    },
+    {
         "merged": "G:\\ZhiHuiYanjiao\\PushSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\upush_notification.xml",
         "source": "G:\\ZhiHuiYanjiao\\PushSDK\\build\\intermediates\\bundles\\debug\\res\\layout\\upush_notification.xml"
     },
