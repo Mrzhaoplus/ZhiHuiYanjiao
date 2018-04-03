@@ -5,6 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +112,24 @@ public class BaseActivity extends AppCompatActivity {
 //
 //
 //    }
+
+    public void setShowPop(PopupWindow popupWindow, View view){
+        if(popupWindow!=null&&popupWindow.isShowing()){
+            popupWindow.dismiss();
+        }else{
+            setWindowTranslucence(0.3);
+            popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+        }
+    }
+    //设置Window窗口的透明度
+    public void setWindowTranslucence(double d){
+
+        Window window = getWindow();
+        WindowManager.LayoutParams attributes = window.getAttributes();
+        attributes.alpha=(float) d;
+        window.setAttributes(attributes);
+
+    }
 
 
 }

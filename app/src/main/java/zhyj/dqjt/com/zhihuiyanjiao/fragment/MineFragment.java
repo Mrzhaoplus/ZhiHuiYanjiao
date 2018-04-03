@@ -7,11 +7,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import zhyj.dqjt.com.zhihuiyanjiao.MyCollectionActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.R;
+import zhyj.dqjt.com.zhihuiyanjiao.adapter.MyCollectionAdapter;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseFragment;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.minefragment.MydynamicActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.minefragment.MyFansiActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.minefragment.MyFllowActivity;
+import zhyj.dqjt.com.zhihuiyanjiao.util.SignActivity;
 
 /**
  * date : ${Date}
@@ -75,6 +78,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         text_guanzhu.setOnClickListener(this);//设置监听
         text_fensi.setOnClickListener(this);
         text_dongtai.setOnClickListener(this);
+        text_collect.setOnClickListener(this);
+        text_qiandao.setOnClickListener(this);
     }
 
 
@@ -94,6 +99,14 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
              case R.id.text_dongtai:
                   Intent intent2=new Intent(getActivity(), MydynamicActivity.class);
                  startActivity(intent2);
+                 break;
+             case R.id.text_collect:
+                 Intent intent3=new Intent(getActivity(), MyCollectionActivity.class);
+                 startActivity(intent3);
+                 break;
+             case R.id.text_qiandao:
+                 Intent intent4=new Intent(getActivity(), SignActivity.class);
+                 startActivity(intent4);
                  break;
          }
 

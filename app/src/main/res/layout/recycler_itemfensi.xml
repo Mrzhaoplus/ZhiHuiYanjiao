@@ -35,7 +35,7 @@
            <LinearLayout
                android:id="@+id/liner_guanzhu"
                android:layout_marginRight="20dp"
-               android:background="@drawable/shape_orageradioline"
+               android:background="@drawable/shape_xiao_orageradioline"
                android:layout_centerVertical="true"
                android:layout_alignParentRight="true"
                android:layout_width="75dp"
