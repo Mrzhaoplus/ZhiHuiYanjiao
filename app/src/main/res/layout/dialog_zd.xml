@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="40dp"
+    android:layout_marginLeft="40dp"
+    android:background="@drawable/shape_backwhiteradioline"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+     <RelativeLayout
+         android:layout_marginTop="10dp"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content">
+         <TextView
+             android:textColor="@color/bg_color"
+             android:padding="10dp"
+             android:layout_centerVertical="true"
+             android:layout_centerHorizontal="true"
+             android:textSize="17sp"
+             android:text="积分顶帖"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content" />
+     </RelativeLayout>
+    <RelativeLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:padding="8dp"
+            android:textSize="16sp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="本次顶帖需要花费5积分(2017-12-27 09:19后开始新的计费周期)，\n是否继续？"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_xxgz"
+        android:padding="8dp"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:text="详细规则"
+        android:textColor="#FFFF6602"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_marginTop="10dp"
+        android:background="@color/back_color"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"></View>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+   <TextView
+       android:id="@+id/text_pause"
+       android:gravity="center"
+       android:layout_weight="2"
+       android:layout_gravity="center"
+       android:layout_centerVertical="true"
+       android:textSize="17sp"
+       android:text="取消"
+       android:layout_width="0dp"
+       android:layout_height="match_parent" />
+    <View
+        android:layout_weight="0.01"
+        android:background="@color/back_color"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"></View>
+    <TextView
+        android:id="@+id/text_sure"
+        android:gravity="center"
+        android:layout_weight="2"
+        android:layout_gravity="center"
+        android:layout_centerVertical="true"
+        android:textSize="17sp"
+        android:text="确认"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
+</LinearLayout>
+</LinearLayout>
+</LinearLayout>
