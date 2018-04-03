@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+   <RelativeLayout
+       android:layout_centerHorizontal="true"
+       android:layout_width="match_parent"
+       android:layout_height="270dp">
+    <ImageView
+        android:scaleType="centerCrop"
+        android:src="@drawable/tui_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/item_img" />
+
+    <RelativeLayout
+        android:alpha="0.6"
+        android:background="@color/tui_xu"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+        <ImageView
+            android:id="@+id/item_tou"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_tou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/item_zan"
+            android:drawablePadding="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/white"
+            android:text="121"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/tui_xin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="40dp"
+    android:layout_marginLeft="40dp"
+    android:background="@drawable/shape_backwhiteradioline"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+     <RelativeLayout
+         android:layout_marginTop="10dp"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content">
+         <TextView
+             android:textColor="@color/bg_color"
+             android:padding="10dp"
+             android:layout_centerVertical="true"
+             android:layout_centerHorizontal="true"
+             android:textSize="17sp"
+             android:text="关注成功"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content" />
+     </RelativeLayout>
+    <RelativeLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:padding="8dp"
+            android:textSize="16sp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="TA的动态会在焦点首页里面展示"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <View
+        android:layout_marginTop="10dp"
+        android:background="@color/back_color"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"></View>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+   <TextView
+       android:id="@+id/text_pause"
+       android:gravity="center"
+       android:layout_weight="2"
+       android:layout_gravity="center"
+       android:layout_centerVertical="true"
+       android:textSize="17sp"
+       android:text="取消"
+       android:layout_width="0dp"
+       android:layout_height="match_parent" />
+    <View
+        android:layout_weight="0.01"
+        android:background="@color/back_color"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"></View>
+    <TextView
+        android:id="@+id/text_sure"
+        android:gravity="center"
+        android:layout_weight="2"
+        android:layout_gravity="center"
+        android:layout_centerVertical="true"
+        android:textSize="17sp"
+        android:text="知道了"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
+</LinearLayout>
+</LinearLayout>
+</LinearLayout>

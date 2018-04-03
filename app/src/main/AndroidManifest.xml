@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="zhyj.dqjt.com.zhihuiyanjiao">
+
+    <application
+        android:name=".base.Myapplication"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".fragment.mainfragment.JiaodianActivity" /> <!-- -每日焦点 -->
+        <activity android:name=".fragment.mainfragment.JiaoDetailActivity" /> <!-- 每日焦点详情 -->
+        <activity android:name=".util.lookphoto.ImagePagerActivity" /> <!-- 图片查看 -->
+        <activity android:name=".fragment.minefragment.MyFllowActivity" /> <!-- 我的关注 -->
+        <activity android:name=".fragment.minefragment.MyFansiActivity" /> <!-- 我的粉丝 -->
+        <activity android:name=".fragment.minefragment.MydynamicActivity" /> <!-- 我的动态 -->
+        <activity android:name=".fragment.mainfragment.LuKuangActivity"></activity>
+    </application>
+
+</manifest>

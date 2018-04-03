@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:descendantFocusability="blocksDescendants">
+
+
+
+      <LinearLayout
+          android:id="@+id/liners"
+          android:layout_marginLeft="10dp"
+          android:orientation="vertical"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+          <TextView
+              android:layout_marginLeft="5dp"
+              android:layout_gravity="center"
+              android:gravity="center"
+              android:textColor="@color/text_orage"
+              android:padding="2dp"
+              android:layout_marginTop="20dp"
+              android:textSize="16sp"
+              android:text="15"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content" />
+          <TextView
+              android:layout_marginLeft="5dp"
+              android:padding="5dp"
+              android:layout_gravity="center"
+              android:gravity="center"
+              android:textColor="@color/textcolcr"
+              android:textSize="14sp"
+              android:text="12月"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content" />
+      </LinearLayout>
+
+      <RelativeLayout
+          android:id="@+id/reals"
+          android:layout_marginTop="15dp"
+          android:layout_toRightOf="@id/liners"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+          <TextView
+              android:layout_centerVertical="true"
+              android:layout_marginLeft="15dp"
+             android:padding="10dp"
+              android:textSize="14sp"
+              android:textColor="@color/bg_color"
+              android:text="个人主页"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content" />
+
+          <ImageView
+              android:layout_marginRight="22dp"
+              android:layout_centerVertical="true"
+              android:layout_alignParentRight="true"
+              android:src="@drawable/icon_zhuye"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content" />
+      </RelativeLayout>
+    <LinearLayout
+        android:layout_marginTop="2dp"
+        android:id="@+id/linerss"
+        android:layout_below="@id/reals"
+        android:layout_toRightOf="@id/liners"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/item_count"
+            android:lineSpacingMultiplier="1.2"
+            android:textColor="@color/black_san"
+            android:textSize="14sp"
+            android:text="迪迪热巴和关晓彤机场对比，一个美上天一个涂掉查，鹿晗哭了"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_toRightOf="@id/liners"
+        android:layout_below="@id/linerss"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/text_share"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:textColor="@color/black_san"
+            android:gravity="center|left"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/icon_share"
+            android:padding="10dp"
+            android:text="分享"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/text_collect"
+            android:layout_weight="1"
+            android:textColor="@color/black_san"
+            android:gravity="center|left"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/icon_collect"
+            android:padding="10dp"
+            android:text="收藏"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/text_zan"
+            android:layout_weight="1"
+            android:textColor="@color/black_san"
+            android:gravity="center|left"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/icon_dianzan"
+            android:padding="10dp"
+            android:text="点赞"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</RelativeLayout>

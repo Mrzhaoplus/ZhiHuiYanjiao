@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+<android.support.v4.widget.NestedScrollView
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<RelativeLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    android:id="@+id/real"
+    android:background="@color/white"
+    android:layout_marginTop="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/tv_back"
+        android:layout_marginLeft="10dp"
+        android:padding="10dp"
+        android:src="@drawable/img_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/img_collect"
+        android:layout_marginRight="10dp"
+        android:padding="10dp"
+        android:layout_alignParentRight="true"
+          android:src="@drawable/icon_collect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/liner"
+        android:layout_below="@id/real"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/text_title"
+            android:lineSpacingMultiplier="1.2"
+            android:textColor="@color/black_san"
+            android:textSize="17sp"
+            android:text="东里亚现身上海虹桥机场，宫前一节与之合影，显摆就靠它了"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/relas"
+            android:layout_below="@id/liner"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/img_tou"
+                android:layout_margin="10dp"
+                android:src="@drawable/icon_tou"
+                android:layout_width="60dp"
+                android:layout_height="60dp" />
+
+            <RelativeLayout
+                android:id="@+id/relan"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/img_tou"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textColor="@color/black_san"
+                    android:textSize="16sp"
+                    android:layout_marginTop="10dp"
+                    android:text="我的昵称"
+                    android:id="@+id/text_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/text_address"
+                    android:textSize="14sp"
+                    android:drawablePadding="10dp"
+                    android:text="天安门  12-24"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@id/text_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <RelativeLayout
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@id/text_name"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp">
+                    <ImageView
+                        android:src="@drawable/img_dengji"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView2" />
+                    <TextView
+                        android:id="@+id/text_dengji"
+                        android:textColor="#f8b804"
+                        android:textSize="5sp"
+                        android:text="1"
+                        android:layout_marginRight="2.5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@+id/imageView2" />
+                </RelativeLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/liners"
+        android:layout_below="@id/relas"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/text_count"
+            android:textSize="14sp"
+            android:text="上海虹桥机场是明星经常出现的的机场之一，每天都有很多粉丝
+            上海虹桥机场是明星经常出现的的机场之一，每天都有很多粉丝
+            上海虹桥机场是明星经常出现的的机场之一，每天都有很多粉丝"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+     <zhyj.dqjt.com.zhihuiyanjiao.util.NoScrollGridView
+         android:layout_below="@id/liners"
+         android:id="@+id/gridview"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="15dp"
+         android:numColumns="3"
+         android:layout_marginLeft="15dp"
+         android:layout_marginRight="5dp"
+         android:horizontalSpacing="2dp"
+         android:verticalSpacing="2dp" ></zhyj.dqjt.com.zhihuiyanjiao.util.NoScrollGridView>
+</RelativeLayout>
+</android.support.v4.widget.NestedScrollView>
+</LinearLayout>

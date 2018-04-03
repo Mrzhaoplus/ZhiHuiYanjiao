@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+
+<LinearLayout
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/img_pho"
+        android:scaleType="fitXY"
+        android:src="@drawable/img_ka"
+        android:layout_width="100dp"
+        android:layout_height="80dp" />
+    <LinearLayout
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black_san"
+            android:textSize="14sp"
+            android:text="今年买房只建议在一二线买，三四线虽火，但有个致命的缺陷"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/text_date"
+                android:textSize="14sp"
+                android:layout_marginTop="20dp"
+                android:text="2018-12-23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/text_zan"
+                android:textSize="14sp"
+                android:drawablePadding="10dp"
+                android:layout_marginRight="10dp"
+                android:text="1234"
+                android:layout_marginTop="20dp"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@drawable/icon_zan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>
+
+</LinearLayout>

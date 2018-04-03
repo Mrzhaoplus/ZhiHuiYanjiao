@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+
+<RelativeLayout
+    android:layout_marginTop="20dp"
+    android:id="@+id/relar"
+    android:layout_marginLeft="10dp"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/tv_back"
+        android:layout_marginLeft="10dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/img_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_centerHorizontal="true"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content">
+       <LinearLayout
+           android:id="@+id/liner1"
+           android:orientation="vertical"
+           android:layout_weight="1"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content">
+           <TextView
+
+               android:id="@+id/text_guanzhu"
+               android:gravity="center"
+               android:padding="5dp"
+               android:layout_marginTop="5dp"
+               android:text="关注"
+               android:textSize="16sp"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" />
+           <View
+               android:layout_gravity="center"
+               android:layout_marginLeft="5dp"
+               android:layout_marginRight="5dp"
+               android:visibility="invisible"
+               android:id="@+id/v1"
+               android:background="@color/text_orage"
+               android:layout_width="40dp"
+               android:layout_height="3dp"></View>
+       </LinearLayout>
+    <LinearLayout
+        android:id="@+id/liner2"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/text_tuijian"
+            android:textColor="@color/text_orage"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_marginTop="5dp"
+            android:text="推荐"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <View
+            android:id="@+id/v2"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+           android:layout_marginRight="5dp"
+            android:background="@color/text_orage"
+            android:layout_width="40dp"
+            android:layout_height="3dp"></View>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/liner3"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/text_daren"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_marginTop="5dp"
+            android:text="达人"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <View
+            android:id="@+id/v3"
+            android:visibility="invisible"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@color/text_orage"
+            android:layout_width="40dp"
+            android:layout_height="3dp"></View>
+    </LinearLayout>
+</LinearLayout>
+     <ImageView
+         android:id="@+id/tv_pai"
+         android:layout_marginRight="15dp"
+         android:layout_centerVertical="true"
+         android:layout_alignParentRight="true"
+         android:src="@drawable/icon_pitcure"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content" />
+</RelativeLayout>
+    <FrameLayout
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/relar"
+        android:id="@+id/find_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout>
+</RelativeLayout>

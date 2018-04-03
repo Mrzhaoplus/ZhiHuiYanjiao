@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+<LinearLayout
+    android:layout_marginTop="20dp"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="45dp">
+    <TextView
+        android:layout_gravity="center"
+        android:textColor="@color/black_san"
+        android:gravity="center"
+        android:textSize="17sp"
+        android:padding="10dp"
+        android:text="我的消息"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>
+<View
+    android:background="@color/main_hui"
+    android:layout_width="match_parent"
+    android:layout_height="10dp"></View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+             android:id="@+id/liner_pinlun"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+        <TextView
+
+            android:id="@+id/text_pin"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:textColor="@color/text_orage"
+            android:textSize="16sp"
+            android:text="评价消息"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+            <View
+                android:id="@+id/v1"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@color/text_orage"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"></View>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/liner_dianzan"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/text_zan"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:textColor="@color/black_san"
+                android:textSize="16sp"
+                android:text="点赞消息"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <View
+                android:visibility="gone"
+                android:id="@+id/v2"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@color/text_orage"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"></View>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:background="@color/color_hui"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"></View>
+    <FrameLayout
+        android:id="@+id/fram_layout"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></FrameLayout>
+</LinearLayout>

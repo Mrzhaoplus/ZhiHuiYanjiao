@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+        <ImageView
+            android:id="@+id/item_img"
+            android:layout_margin="15dp"
+            android:src="@drawable/img_ka"
+            android:layout_width="90dp"
+            android:layout_height="90dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/item_count"
+                android:textSize="16sp"
+                android:textColor="@color/black_san"
+                android:text="今天买房只建议一二线买，三四线虽火却有个致命缺陷！"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:textSize="16sp"
+                    android:text="2018-01-08"
+                    android:textColor="@color/textcolcr"
+                    android:id="@+id/item_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/item_zan"
+                    android:textSize="16sp"
+                    android:layout_marginRight="15dp"
+                    android:drawablePadding="10dp"
+                    android:textColor="@color/textcolcr"
+                    android:text="1234"
+                    android:drawableLeft="@drawable/icon_zan"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
