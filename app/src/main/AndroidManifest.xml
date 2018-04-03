@@ -20,11 +20,8 @@
         <activity android:name=".fragment.minefragment.MyFllowActivity" /> <!-- 我的关注 -->
         <activity android:name=".fragment.minefragment.MyFansiActivity" /> <!-- 我的粉丝 -->
         <activity android:name=".fragment.minefragment.MydynamicActivity" /> <!-- 我的动态 -->
-        <activity android:name=".fragment.mainfragment.LuKuangActivity"></activity>
-        <activity android:name=".MyCollectionActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".util.SignActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".SignRuleActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".TopRuleActivity" android:screenOrientation="portrait" />
+        <activity android:name=".fragment.mainfragment.LuKuangActivity" />
+        <activity android:name=".LiveActivity"></activity>
     </application>
 
 </manifest>

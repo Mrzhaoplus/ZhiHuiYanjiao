@@ -19,6 +19,7 @@ import com.youth.banner.Banner;
 import java.util.ArrayList;
 import java.util.List;
 
+import zhyj.dqjt.com.zhihuiyanjiao.LiveActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.R;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.Homeadapter;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseFragment;
@@ -49,6 +50,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     public ImageView imageView;
     public RecyclerView recy_view;
     private SpringView spring_view;
+    private ImageView life;
 
     @Override
     protected int setContentView() {
@@ -71,6 +73,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         this.text_jiao = (TextView) rootView.findViewById(R.id.text_jiao);
         this.text_lu = (TextView) rootView.findViewById(R.id.text_lu);
         this.imageView = (ImageView) rootView.findViewById(R.id.imageView);
+         this.life = rootView.findViewById(R.id.life);
         this.recy_view = (RecyclerView) rootView.findViewById(R.id.recy_view);
         spring_view = rootView.findViewById(R.id.spring_view);
         //获取id
@@ -87,6 +90,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         BannerUtils.startBanner(banner, banlist);
         text_jiao.setOnClickListener(this);
         text_lu.setOnClickListener(this);
+        life.setOnClickListener(this);
          /*
              适配器
           */
@@ -142,6 +146,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             case R.id.text_lu:
                 Intent lu=new Intent(getActivity(), LuKuangActivity.class);
                 startActivity(lu);
+                break;
+            case R.id.life:
+                Intent live=new Intent(getActivity(), LiveActivity.class);
+                startActivity(live);
                 break;
         }
     }

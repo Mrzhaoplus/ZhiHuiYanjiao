@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.liaoinstan.springview.container.DefaultFooter;
+import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
 import zhyj.dqjt.com.zhihuiyanjiao.R;
@@ -41,7 +43,8 @@ public class TuijianFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
-
+        jiao_spring.setFooter(new DefaultFooter(getActivity()));
+        jiao_spring.setHeader(new DefaultHeader(getActivity()));
 
     }
 }

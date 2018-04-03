@@ -10,6 +10,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import zhyj.dqjt.com.zhihuiyanjiao.R;
+
 /**
  * Created by Mr赵 on 2018/4/2.
  */
@@ -61,9 +63,32 @@ public class ZiXunAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(getItemViewType(i)==IMAGE_ONE){
-
+               ViewHodelOne imagone;
+              if(view==null){
+                 imagone=new ViewHodelOne();
+                 view=View.inflate(context, R.layout.zixun_imagone,null);
+                 imagone.text_tile=view.findViewById(R.id.text_tile);
+                  imagone.imag=view.findViewById(R.id.imag);
+                  imagone.text_date=view.findViewById(R.id.text_date);
+                  imagone.text_zan=view.findViewById(R.id.text_zan);
+                  view.setTag(imagone);
+              }else{
+                  imagone= (ViewHodelOne) view.getTag();
+              }
+        }else if(getItemViewType(i)==IMAGE_NO){
+            ViewHodelNo imagone;
+            if(view==null){
+                imagone=new ViewHodelNo();
+                view=View.inflate(context, R.layout.zixun_imagno,null);
+                imagone.text_tile=view.findViewById(R.id.text_tile);
+                imagone.text_date=view.findViewById(R.id.text_date);
+                imagone.text_zan=view.findViewById(R.id.text_zan);
+                view.setTag(imagone);
+            }else{
+                imagone= (ViewHodelNo) view.getTag();
+            }
         }
-        return null;
+        return view;
     }
     //优化有图片
     class ViewHodelOne{
