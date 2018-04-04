@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#000</color>
     <color name="text_orage">#ff8e4a</color>
     <color name="name_color">#5cb3eb</color>
     <color name="white">#fff</color>
@@ -72,4 +72,9 @@
     <color name="result_points">#c000ff00</color>
     <color name="system_bar_color">#FFFEC252</color>
     <color name="navpage">#FFE1E8EB</color>
+
+    <color name="ls_color">#FF9AC1FF</color>
+
+    <color name="ls_text">#FF6DACFF</color>
+
 </resources>

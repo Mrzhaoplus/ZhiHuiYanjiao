@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="zhyj.dqjt.com.zhihuiyanjiao.LifeActivity">
+    >
     <RelativeLayout
         android:layout_marginTop="20dp"
         android:padding="15dp"

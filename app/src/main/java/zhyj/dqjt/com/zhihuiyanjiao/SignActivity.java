@@ -1,4 +1,4 @@
-package zhyj.dqjt.com.zhihuiyanjiao.util;
+package zhyj.dqjt.com.zhihuiyanjiao;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import zhyj.dqjt.com.zhihuiyanjiao.R;
-import zhyj.dqjt.com.zhihuiyanjiao.SignRuleActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.SignAdapter;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseActivity;
 

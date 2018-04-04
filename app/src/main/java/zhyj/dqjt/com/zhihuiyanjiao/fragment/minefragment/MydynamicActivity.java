@@ -356,4 +356,23 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
         dialog.show();
     }
 
+
+    private void cgDialog(int grary, int animationStyle) {
+        BaseDialog.Builder builder = new BaseDialog.Builder(MydynamicActivity.this);
+        final BaseDialog dialog = builder.setViewId(R.layout.dialog_dtcg)
+                //设置dialogpadding
+                .setPaddingdp(0, 10, 0, 10)
+                //设置显示位置
+                .setGravity(grary)
+                //设置动画
+                .setAnimation(animationStyle)
+                //设置dialog的宽高
+                .setWidthHeightpx(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                //设置触摸dialog外围是否关闭
+                .isOnTouchCanceled(false)
+                //设置监听事件
+                .builder();
+        dialog.show();
+    }
+
 }

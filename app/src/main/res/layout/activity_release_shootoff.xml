@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:id="@+id/include_back"
+            android:padding="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/img_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:padding="18dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/bg_color"
+            android:text="发布到我得拍客"
+            android:textSize="17sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_fb"
+            android:padding="18dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="#FFFF6A0D"
+            android:text="发布"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFE5E5E5"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:hint="心里想什么，尽情说出来"
+                android:gravity="left|top"
+                android:textSize="12sp"
+                android:background="@android:color/transparent"
+                android:layout_marginBottom="10dp"
+                />
+
+            <zhyj.dqjt.com.zhihuiyanjiao.util.MyGridView
+                android:id="@+id/mygridview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:numColumns="3"
+                android:horizontalSpacing="3dp"
+                android:verticalSpacing="3dp">
+            </zhyj.dqjt.com.zhihuiyanjiao.util.MyGridView>
+
+            <LinearLayout
+                android:id="@+id/ll_szwz"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/weizhi_3x"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="所在位置"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="14sp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="选择发布分类"
+            android:textSize="14sp"
+            android:padding="10dp"/>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_fbfl"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:padding="10dp"
+            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

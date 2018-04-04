@@ -9,12 +9,11 @@ import android.widget.TextView;
 
 import zhyj.dqjt.com.zhihuiyanjiao.MyCollectionActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.R;
-import zhyj.dqjt.com.zhihuiyanjiao.adapter.MyCollectionAdapter;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseFragment;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.minefragment.MydynamicActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.minefragment.MyFansiActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.minefragment.MyFllowActivity;
-import zhyj.dqjt.com.zhihuiyanjiao.util.SignActivity;
+import zhyj.dqjt.com.zhihuiyanjiao.SignActivity;
 
 /**
  * date : ${Date}
