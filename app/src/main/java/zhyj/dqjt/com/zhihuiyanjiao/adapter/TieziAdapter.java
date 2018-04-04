@@ -38,9 +38,7 @@ public class TieziAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
     public TieziAdapter(@LayoutRes int layoutResId, @Nullable ArrayList<String> data) {
         super(layoutResId, data);
-
     }
-
     @Override
     protected void convert(final BaseViewHolder helper, String item) {
 
@@ -70,31 +68,14 @@ public class TieziAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
             }
         });
     }
-
     public class TPAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
         public TPAdapter(@LayoutRes int layoutResId, @Nullable ArrayList<String> data) {
             super(layoutResId, data);
-
-
-
         }
-
         @Override
         protected void convert(BaseViewHolder helper, String item) {
-
-
-
-
-
-
-
         }
-
-
-
-
-
 
     }
 
@@ -110,7 +91,6 @@ public class TieziAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
     public interface OnItemClickListener{
         void ItemClick(View view,int position);
-
         void FxClickListener(int pos);
         void ScClickListener(int pos);
         void DzClickListener(int pos);

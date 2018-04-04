@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
     <RelativeLayout
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="200dp">
         <ImageView
@@ -21,20 +22,29 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:padding="5dp"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:layout_marginLeft="5dp"
             android:id="@+id/text_tile"
             android:text="看看10.9级地震多可怕，一个城市瞬间崩塌废墟一片"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
            <TextView
                android:id="@+id/text_date"
+               android:layout_marginRight="5dp"
                android:layout_alignParentRight="true"
                android:text="2047.11.11"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content" />
-    </RelativeLayout>
 
+    </RelativeLayout>
+    <View
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/back_bei"
+        ></View>
 </LinearLayout>

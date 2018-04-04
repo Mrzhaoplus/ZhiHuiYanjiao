@@ -43,6 +43,32 @@ public class TuijianFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+        jiao_spring.setType(SpringView.Type.FOLLOW);
+        jiao_spring.setListener(new SpringView.OnFreshListener() {
+            @Override
+            public void onRefresh() {
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                    }
+                }, 5000);
+                jiao_spring.onFinishFreshAndLoad();
+            }
+
+            @Override
+            public void onLoadmore() {
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                    }
+                }, 5000);
+                jiao_spring.onFinishFreshAndLoad();
+            }
+        });
         jiao_spring.setFooter(new DefaultFooter(getActivity()));
         jiao_spring.setHeader(new DefaultHeader(getActivity()));
 

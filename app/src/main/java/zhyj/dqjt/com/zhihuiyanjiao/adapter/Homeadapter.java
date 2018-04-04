@@ -12,16 +12,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zhyj.dqjt.com.zhihuiyanjiao.R;
+import zhyj.dqjt.com.zhihuiyanjiao.interfase.RecyGetonclick;
 
 /**
  * date : ${Date}
  * author:衣鹏宇(ypu)
+ *
  */
 
 public class Homeadapter extends RecyclerView.Adapter<Homeadapter.MyviewHolder> {
 
     private Context context;
     private List<String>   list = new ArrayList<>();
+    private RecyGetonclick click;
+
+    public void getthis(RecyGetonclick click){
+        this.click=click;
+    }
 
     public Homeadapter(Context context) {
         this.context = context;
@@ -42,10 +49,18 @@ public class Homeadapter extends RecyclerView.Adapter<Homeadapter.MyviewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(MyviewHolder holder, int position) {
+    public void onBindViewHolder(MyviewHolder holder, final int position) {
 
             holder.text_zan.setText(list.get(position).toString()+"12");
-
+              //设置recycler点击事件
+            if(click!=null){
+                holder.view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        click.onclick(position);
+                    }
+                });
+            }
     }
 
     @Override
@@ -57,14 +72,16 @@ public class Homeadapter extends RecyclerView.Adapter<Homeadapter.MyviewHolder> 
         public ImageView img_pho;
         public TextView text_date;
         public TextView text_zan;
-
+          public View view;
         public MyviewHolder(View rootView) {
             super(rootView);
+            this.view = rootView;
             this.img_pho = (ImageView) rootView.findViewById(R.id.img_pho);
             this.text_date = (TextView) rootView.findViewById(R.id.text_date);
             this.text_zan = (TextView) rootView.findViewById(R.id.text_zan);
         }
     }
+
 
 
 }

@@ -7,7 +7,7 @@ import android.widget.ImageView;
 
 import zhyj.dqjt.com.zhihuiyanjiao.util.MyContants;
 
-public class ZixunDitailsActivity extends AppCompatActivity {
+public class MagXiangqingActivity extends AppCompatActivity {
 
     private ImageView img_back;
 
@@ -15,9 +15,10 @@ public class ZixunDitailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MyContants.windows(this);
-        setContentView(R.layout.activity_zixun_ditails);
+        setContentView(R.layout.activity_mag_xiangqing);
         initView();
     }
+
 
     private void initView() {
         img_back = (ImageView) findViewById(R.id.img_back);

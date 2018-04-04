@@ -7,14 +7,17 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import zhyj.dqjt.com.zhihuiyanjiao.MainActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.R;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseFragment;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.paikefragment.DarenFragment;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.paikefragment.GuanzhuFragment;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.paikefragment.TuijianFragment;
+import zhyj.dqjt.com.zhihuiyanjiao.util.AddPopwindow;
 
 /**
  * date : ${Date}
@@ -65,6 +68,7 @@ public class PaikewFragment extends BaseFragment implements View.OnClickListener
          liner1.setOnClickListener(this);
          liner2.setOnClickListener(this);
          liner3.setOnClickListener(this);
+         tv_pai.setOnClickListener(this);
         text_guanzhu.setTextColor(getResources().getColor(R.color.black_san));
         if (tuijianFragment == null) {
             tuijianFragment = new TuijianFragment();
@@ -112,6 +116,11 @@ public class PaikewFragment extends BaseFragment implements View.OnClickListener
                 }
                 addFragments(darenFragment);
                 break;
+                case R.id.tv_pai:
+                    //点击弹出Pop框
+                    AddPopwindow addPopwindow = new AddPopwindow((MainActivity) getActivity());
+                    addPopwindow.showMoreWindow(view);
+                    break;
 
         }
     }

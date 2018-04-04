@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/line1"
+        android:padding="15dp"
+       android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/be_read"
+            android:visibility="visible"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/yuandian"
+            />
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/text_tile"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="进日雾霾加重，15点30分燕郊发布空气污染蓝色预警"
+            />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/back_bei"
+        android:layout_marginTop="5dp"
+        ></View>
+
+</LinearLayout>

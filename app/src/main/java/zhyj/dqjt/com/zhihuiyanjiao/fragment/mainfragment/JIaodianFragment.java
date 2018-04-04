@@ -9,6 +9,8 @@ import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
+import java.util.logging.Handler;
+
 import zhyj.dqjt.com.zhihuiyanjiao.R;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.Jiaodianadapter;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseFragment;
@@ -45,6 +47,32 @@ public class JIaodianFragment extends BaseFragment {
                   startActivity(intent);
               }
           });
+        jiao_spring.setType(SpringView.Type.FOLLOW);
+        jiao_spring.setListener(new SpringView.OnFreshListener() {
+            @Override
+            public void onRefresh() {
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                    }
+                }, 5000);
+                jiao_spring.onFinishFreshAndLoad();
+            }
+
+            @Override
+            public void onLoadmore() {
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                    }
+                }, 5000);
+                jiao_spring.onFinishFreshAndLoad();
+            }
+        });
         jiao_spring.setFooter(new DefaultFooter(getActivity()));
         jiao_spring.setHeader(new DefaultHeader(getActivity()));
     }

@@ -19,8 +19,7 @@ import zhyj.dqjt.com.zhihuiyanjiao.R;
 public class ZiXunAdapter extends BaseAdapter {
       private   Context context;
       private List<String> list=new ArrayList<>();
-        private int IMAGE_ONE=1;
-        private int IMAGE_NO=0;
+
     public ZiXunAdapter(Context context) {
         this.context = context;
         data();
@@ -52,17 +51,11 @@ public class ZiXunAdapter extends BaseAdapter {
         return 2;
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if(position==1||position==4){
-          return IMAGE_NO;
-        }
-        return IMAGE_ONE;
-    }
+
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if(getItemViewType(i)==IMAGE_ONE){
+
                ViewHodelOne imagone;
               if(view==null){
                  imagone=new ViewHodelOne();
@@ -75,19 +68,7 @@ public class ZiXunAdapter extends BaseAdapter {
               }else{
                   imagone= (ViewHodelOne) view.getTag();
               }
-        }else if(getItemViewType(i)==IMAGE_NO){
-            ViewHodelNo imagone;
-            if(view==null){
-                imagone=new ViewHodelNo();
-                view=View.inflate(context, R.layout.zixun_imagno,null);
-                imagone.text_tile=view.findViewById(R.id.text_tile);
-                imagone.text_date=view.findViewById(R.id.text_date);
-                imagone.text_zan=view.findViewById(R.id.text_zan);
-                view.setTag(imagone);
-            }else{
-                imagone= (ViewHodelNo) view.getTag();
-            }
-        }
+
         return view;
     }
     //优化有图片
@@ -97,10 +78,5 @@ public class ZiXunAdapter extends BaseAdapter {
      TextView text_date;
      TextView text_zan;
     }
-    //优化没图片
-        class ViewHodelNo{
-        TextView text_tile;
-        TextView text_date;
-        TextView text_zan;
-    }
+
 }

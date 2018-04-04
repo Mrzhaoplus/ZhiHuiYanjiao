@@ -20,11 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zhyj.dqjt.com.zhihuiyanjiao.LiveActivity;
+import zhyj.dqjt.com.zhihuiyanjiao.MsgItmeActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.R;
+import zhyj.dqjt.com.zhihuiyanjiao.ZixunDitailsActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.Homeadapter;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseFragment;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.mainfragment.JiaodianActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.mainfragment.LuKuangActivity;
+import zhyj.dqjt.com.zhihuiyanjiao.interfase.RecyGetonclick;
 import zhyj.dqjt.com.zhihuiyanjiao.util.BannerUtils;
 import zhyj.dqjt.com.zhihuiyanjiao.util.DividerItemDecoration;
 import zhyj.dqjt.com.zhihuiyanjiao.util.MyUtils;
@@ -34,7 +37,7 @@ import zhyj.dqjt.com.zhihuiyanjiao.util.MyUtils;
  * author:衣鹏宇(ypu)
  */
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener, RecyGetonclick {
 
     public View rootView;
     public ImageView img_tu;
@@ -91,10 +94,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         text_jiao.setOnClickListener(this);
         text_lu.setOnClickListener(this);
         life.setOnClickListener(this);
+        ll_msg.setOnClickListener(this);
          /*
              适配器
           */
         Homeadapter homeadapter=new Homeadapter(getActivity());
+        homeadapter.getthis(this);
         //创建管理器
         recy_view.setLayoutManager(new LinearLayoutManager(getActivity()));
         //列表管理器
@@ -151,6 +156,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 Intent live=new Intent(getActivity(), LiveActivity.class);
                 startActivity(live);
                 break;
+            case R.id.ll_msg:
+                Intent intent = new Intent(getActivity(), MsgItmeActivity.class);
+                startActivity(intent);
+                break;
         }
+    }
+
+    @Override
+    public void onclick(int position) {
+        Intent intent = new Intent(getActivity(), ZixunDitailsActivity.class);
+        startActivity(intent);
     }
 }

@@ -2,11 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="zhyj.dqjt.com.zhihuiyanjiao">
 
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
     <application
         android:name=".base.Myapplication"
         android:icon="@mipmap/ic_launcher"
@@ -19,15 +14,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
-        </provider>
         <activity android:name=".fragment.mainfragment.JiaodianActivity" /> <!-- -每日焦点 -->
         <activity android:name=".fragment.mainfragment.JiaoDetailActivity" /> <!-- 每日焦点详情 -->
         <activity android:name=".util.lookphoto.ImagePagerActivity" /> <!-- 图片查看 -->
@@ -35,10 +21,12 @@
         <activity android:name=".fragment.minefragment.MyFansiActivity" /> <!-- 我的粉丝 -->
         <activity android:name=".fragment.minefragment.MydynamicActivity" /> <!-- 我的动态 -->
         <activity android:name=".fragment.mainfragment.LuKuangActivity" />
-        <activity android:name=".LiveActivity"></activity>
-        <activity android:name=".ReleaseShootoffActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".LocationActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".SearchLocationActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".LiveActivity" />
+        <activity android:name=".ZixunDitailsActivity" />
+        <activity android:name=".LukuangDitailsActivity" />
+        <activity android:name=".MsgItmeActivity" />
+        <activity android:name=".MagXiangqingActivity" />
+        <activity android:name=".YuanTieActivity"></activity>
     </application>
 
 </manifest>

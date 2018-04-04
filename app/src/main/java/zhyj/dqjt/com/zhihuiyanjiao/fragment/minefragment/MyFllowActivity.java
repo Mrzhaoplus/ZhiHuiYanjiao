@@ -55,11 +55,9 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
         myfollowadapter.SetonItemClicklistener(new Myfollowadapter.OnItemClickLister() {
             @Override
             public void onItemClick(View view, int position) {
-
                     //根据position 跳转道不同用户的主页
                 Intent  intent=new Intent(MyFllowActivity.this,MydynamicActivity.class);
                  startActivity(intent);
-
             }
         });
 
@@ -73,8 +71,6 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
                new Handler().postDelayed(new Runnable() {
                    @Override
                    public void run() {
-
-
                    }
                }, 5000);
                springView.onFinishFreshAndLoad();
@@ -92,11 +88,8 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
                springView.onFinishFreshAndLoad();
            }
        });
-
         springView.setFooter(new DefaultFooter(this));
         springView.setHeader(new DefaultHeader(this));
-
-
     }
 
     @Override
