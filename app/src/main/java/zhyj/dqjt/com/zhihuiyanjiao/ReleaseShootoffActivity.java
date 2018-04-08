@@ -27,6 +27,7 @@ import zhyj.dqjt.com.zhihuiyanjiao.adapter.MyCollectionAdapter;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.ShangChuanAdapter;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.TagAdapter;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseActivity;
+import zhyj.dqjt.com.zhihuiyanjiao.util.MyContants;
 import zhyj.dqjt.com.zhihuiyanjiao.util.MyGridView;
 
 /**
@@ -50,6 +51,7 @@ public class ReleaseShootoffActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyContants.windows(this);
         setContentView(R.layout.activity_release_shootoff);
 
         include_back= (ImageView) findViewById(R.id.include_back);

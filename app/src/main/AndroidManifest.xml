@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="zhyj.dqjt.com.zhihuiyanjiao">
-
+ <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".base.Myapplication"
         android:icon="@mipmap/ic_launcher"
@@ -21,16 +21,34 @@
         <activity android:name=".fragment.minefragment.MyFansiActivity" /> <!-- 我的粉丝 -->
         <activity android:name=".fragment.minefragment.MydynamicActivity" /> <!-- 我的动态 -->
         <activity android:name=".fragment.mainfragment.LuKuangActivity" />
-        <activity android:name=".LiveActivity" />
-        <activity android:name=".ZixunDitailsActivity" />
-        <activity android:name=".LukuangDitailsActivity" />
-        <activity android:name=".MsgItmeActivity" />
-        <activity android:name=".MagXiangqingActivity" />
-        <activity android:name=".YuanTieActivity" ></activity>
+        <activity
+            android:name=".LiveActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ZixunDitailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LukuangDitailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MsgItmeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MagXiangqingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".YuanTieActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ReleaseShootoffActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LocationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SearchLocationActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".VideoActivity"></activity>
+    </application>
 
-
-    <activity android:name=".ReleaseShootoffActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".LocationActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".SearchLocationActivity" android:screenOrientation="portrait"/>
-</application>
 </manifest>

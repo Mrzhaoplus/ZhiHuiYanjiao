@@ -9,15 +9,16 @@
          android:id="@+id/spring_view"
          android:layout_width="match_parent"
          android:layout_height="match_parent">
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <View
-
         android:background="@color/back_color"
         android:layout_width="match_parent"
         android:layout_height="5dp"></View>
+
     <GridView
         android:horizontalSpacing="5dp"
         android:verticalSpacing="5dp"
@@ -25,7 +26,9 @@
         android:numColumns="2"
         android:id="@+id/tui_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></GridView>
+        android:layout_height="wrap_content"></GridView>
+
     </LinearLayout>
+
      </com.liaoinstan.springview.widget.SpringView>
 </LinearLayout>

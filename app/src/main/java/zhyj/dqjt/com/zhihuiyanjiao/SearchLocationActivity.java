@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.SearchLocationAdapter;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseActivity;
+import zhyj.dqjt.com.zhihuiyanjiao.util.MyContants;
 
 /**
  * Created by Administrator on 2018/4/4.
@@ -27,6 +28,7 @@ public class SearchLocationActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyContants.windows(this);
         setContentView(R.layout.activity_search_location);
 
         rv_ss= (RecyclerView) findViewById(R.id.rv_ss);

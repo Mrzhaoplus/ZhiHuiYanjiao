@@ -30,6 +30,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <ImageView
+                                android:id="@+id/img_back"
                                 android:layout_margin="20dp"
                                 android:src="@drawable/img_whiteback"
                                 android:textColor="@color/white"
