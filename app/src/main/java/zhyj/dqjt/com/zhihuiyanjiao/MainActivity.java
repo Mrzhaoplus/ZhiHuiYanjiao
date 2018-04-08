@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MineFragment mineFragment;
     private ImageView frag_add;
 
-    //哈喽
+    //hahahahahha
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
