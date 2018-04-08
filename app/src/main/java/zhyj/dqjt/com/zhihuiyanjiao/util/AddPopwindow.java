@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import zhyj.dqjt.com.zhihuiyanjiao.MainActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.R;
+import zhyj.dqjt.com.zhihuiyanjiao.ReleaseShootoffActivity;
 
 /**
  * date : ${Date}
@@ -164,13 +166,14 @@ public class AddPopwindow extends PopupWindow implements View.OnClickListener {
                   }
                   break;
               case R.id.btn_paike:
-                  Toast.makeText(mContext, "aad", Toast.LENGTH_SHORT).show();
+//                  Toast.makeText(mContext, "aad", Toast.LENGTH_SHORT).show();
 
-
+                  Intent intent = new Intent(mContext, ReleaseShootoffActivity.class);
+                  mContext.startActivity(intent);
 
                   break;
               case R.id.btn_jiaodian:
-                  Toast.makeText(mContext, "assad", Toast.LENGTH_SHORT).show();
+//                  Toast.makeText(mContext, "assad", Toast.LENGTH_SHORT).show();
 
                   break;
 
