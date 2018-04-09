@@ -10,12 +10,12 @@
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
-        <ImageView
+        <View
             android:id="@+id/be_read"
             android:visibility="visible"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:src="@drawable/yuandian"
+           android:background="@drawable/dian"
             />
 
         <TextView

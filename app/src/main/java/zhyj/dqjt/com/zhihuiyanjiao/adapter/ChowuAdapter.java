@@ -1,5 +1,6 @@
 package zhyj.dqjt.com.zhihuiyanjiao.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -171,7 +172,7 @@ public class ChowuAdapter extends BaseAdapter {
         holder.text_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.show(context,"分享",1);
+                showFXDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion);
             }
         });
         //收藏
@@ -190,7 +191,25 @@ public class ChowuAdapter extends BaseAdapter {
         });
         return convertView;
     }
-
+    private void showFXDialog(int grary, int animationStyle) {
+        BaseDialog.Builder builder = new BaseDialog.Builder(context);
+        //设置触摸dialog外围是否关闭
+        //设置监听事件
+        Dialog dialog = builder.setViewId(R.layout.sharing_pop_item_view)
+                //设置dialogpadding
+                .setPaddingdp(0, 0, 0, 0)
+                //设置显示位置
+                .setGravity(grary)
+                //设置动画
+                .setAnimation(animationStyle)
+                //设置dialog的宽高
+                .setWidthHeightpx(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                //设置触摸dialog外围是否关闭
+                .isOnTouchCanceled(true)
+                //设置监听事件
+                .builder();
+        dialog.show();
+    }
     /*
       返回类型
      */

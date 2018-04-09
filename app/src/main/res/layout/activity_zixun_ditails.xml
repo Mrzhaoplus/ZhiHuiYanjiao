@@ -9,7 +9,6 @@
     <RelativeLayout
         android:layout_marginTop="20dp"
         android:padding="15dp"
-        android:background="#ece8e8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     <ImageView
@@ -27,6 +26,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/back_bei"/>
          <WebView
              android:layout_width="match_parent"
              android:layout_height="match_parent"></WebView>

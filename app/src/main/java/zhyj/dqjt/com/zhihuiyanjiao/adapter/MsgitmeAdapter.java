@@ -62,7 +62,7 @@ public class MsgitmeAdapter extends BaseAdapter {
         return view;
     }
     public class Viewhodel{
-        ImageView be_read;
+        View be_read;
         TextView text_tile;
     }
 }

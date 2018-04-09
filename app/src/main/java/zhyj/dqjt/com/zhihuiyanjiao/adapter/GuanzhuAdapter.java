@@ -1,13 +1,16 @@
 package zhyj.dqjt.com.zhihuiyanjiao.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,6 +23,7 @@ import zhyj.dqjt.com.zhihuiyanjiao.adapter.Jiaodianadapter;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.Recygradeadapter;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseFragment;
 import zhyj.dqjt.com.zhihuiyanjiao.bean.Imagebean;
+import zhyj.dqjt.com.zhihuiyanjiao.util.BaseDialog;
 import zhyj.dqjt.com.zhihuiyanjiao.util.ToastUtils;
 
 /**
@@ -203,7 +207,34 @@ public class GuanzhuAdapter extends BaseAdapter {
                 });
                 break;
         }
+        holder.text_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showFXDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion);
+            }
+        });
+
+
         return convertView;
+    }
+    private void showFXDialog(int grary, int animationStyle) {
+        BaseDialog.Builder builder = new BaseDialog.Builder(context);
+        //设置触摸dialog外围是否关闭
+        //设置监听事件
+        Dialog dialog = builder.setViewId(R.layout.sharing_pop_item_view)
+                //设置dialogpadding
+                .setPaddingdp(0, 0, 0, 0)
+                //设置显示位置
+                .setGravity(grary)
+                //设置动画
+                .setAnimation(animationStyle)
+                //设置dialog的宽高
+                .setWidthHeightpx(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                //设置触摸dialog外围是否关闭
+                .isOnTouchCanceled(true)
+                //设置监听事件
+                .builder();
+        dialog.show();
     }
 
     /*
