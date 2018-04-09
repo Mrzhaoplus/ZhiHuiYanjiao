@@ -65,6 +65,8 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
     private SharingPop sharingPop;
     private TextView tv_jfzd,tv_sc,tv_close;
     Dialog DDdialog;
+    private ImageView img_back;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +82,7 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
         imageView2 = (ImageView) findViewById(R.id.imageView2);
         text_name = (TextView) findViewById(R.id.text_name);
         text_sex = (ImageView) findViewById(R.id.text_sex);
+        img_back = (ImageView) findViewById(R.id.img_back);
         guan_num = (TextView) findViewById(R.id.guan_num);
         text_guanzhu = (LinearLayout) findViewById(R.id.text_guanzhu);
         fen_num = (TextView) findViewById(R.id.fen_num);
@@ -96,6 +99,7 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
         liner_dongtai = (LinearLayout) findViewById(R.id.liner_dongtai);
         zdPop = new ZDPop(MydynamicActivity.this,R.layout.zd_pop_item_view);
         sharingPop = new SharingPop(MydynamicActivity.this,R.layout.sharing_pop_item_view);
+
           /*
            设置监听
          */
@@ -189,6 +193,7 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
         tv_jfzd.setOnClickListener(this);
         tv_sc.setOnClickListener(this);
         tv_close.setOnClickListener(this);
+        img_back.setOnClickListener(this);
 
     }
 
@@ -269,6 +274,11 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
             case R.id.tv_close:
 
                 DDdialog.dismiss();
+
+                break;
+            case R.id.img_back:
+
+                finish();
 
                 break;
 

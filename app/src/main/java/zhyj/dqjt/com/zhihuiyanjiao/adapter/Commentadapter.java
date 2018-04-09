@@ -30,7 +30,6 @@ public class Commentadapter extends RecyclerView.Adapter<Commentadapter.Myviewho
     public Commentadapter(Context context) {
         this.context = context;
         data();
-
     }
 
     private void data() {

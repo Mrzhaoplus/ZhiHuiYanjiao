@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
     <RelativeLayout
         android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
@@ -15,7 +14,6 @@
             android:src="@drawable/icon_tou"
             android:layout_width="60dp"
             android:layout_height="60dp" />
-
         <RelativeLayout
             android:id="@+id/relan"
             android:layout_marginLeft="10dp"
@@ -61,6 +59,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignEnd="@+id/imageView2" />
+
+
             </RelativeLayout>
             <LinearLayout
                 android:visibility="gone"
@@ -80,37 +80,37 @@
 
             </LinearLayout>
         </RelativeLayout>
-            <LinearLayout
-                android:id="@+id/zan_liners"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@id/img_tou"
-                android:layout_marginLeft="10dp"
-                android:layout_below="@id/relan"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:textColor="@color/name_color"
-                    android:textSize="14sp"
-                    android:text="琉璃喔下的女孩"
-                    android:id="@+id/text_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
+        <LinearLayout
+            android:id="@+id/zan_liners"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/img_tou"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@id/relan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/name_color"
+                android:textSize="14sp"
+                android:text="琉璃喔下的女孩"
+                android:id="@+id/text_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
 
-                    android:textSize="14sp"
-                    android:text="点赞了我的帖子"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+                android:textSize="14sp"
+                android:text="点赞了我的帖子"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/yuantie_liner"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/shape_backhuiradioline"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/img_tou"
-            android:layout_below="@id/liners"
+            android:layout_below="@id/zan_liners"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -120,6 +120,8 @@
                 android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            </LinearLayout>
+        </LinearLayout>
     </RelativeLayout>
+
+
 </LinearLayout>

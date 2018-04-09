@@ -22,6 +22,7 @@ import java.util.List;
 import zhyj.dqjt.com.zhihuiyanjiao.LiveActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.MsgItmeActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.R;
+import zhyj.dqjt.com.zhihuiyanjiao.SearchActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.ZixunDitailsActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.Homeadapter;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseFragment;
@@ -95,6 +96,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         text_lu.setOnClickListener(this);
         life.setOnClickListener(this);
         ll_msg.setOnClickListener(this);
+        tv_search.setOnClickListener(this);
          /*
              适配器
           */
@@ -159,6 +161,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             case R.id.ll_msg:
                 Intent intent = new Intent(getActivity(), MsgItmeActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.tv_search:
+                Intent search = new Intent(getActivity(), SearchActivity.class);
+                startActivity(search);
                 break;
         }
     }

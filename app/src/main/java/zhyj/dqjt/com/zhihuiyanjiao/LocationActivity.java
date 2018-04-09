@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.LocationAdapter;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.MyCollectionAdapter;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseActivity;
+import zhyj.dqjt.com.zhihuiyanjiao.util.MyContants;
 
 /**
  * Created by Administrator on 2018/4/4.
@@ -30,6 +31,7 @@ public class LocationActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyContants.windows(this);
         setContentView(R.layout.activity_location);
         rv_wz= (RecyclerView) findViewById(R.id.rv_wz);
         iv_ss= (ImageView) findViewById(R.id.iv_ss);

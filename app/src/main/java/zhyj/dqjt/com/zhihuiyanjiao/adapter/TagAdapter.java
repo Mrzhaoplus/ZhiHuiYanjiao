@@ -36,7 +36,6 @@ public class TagAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
         TextView tv_type_content=helper.getView(R.id.tv_type_content);
 
         if(pos==helper.getAdapterPosition()){
-
             rl_bk.setBackgroundResource(R.drawable.shape_xz_ls_jx);
             tv_type_content.setTextColor(content.getResources().getColor(R.color.white));
         }else{
