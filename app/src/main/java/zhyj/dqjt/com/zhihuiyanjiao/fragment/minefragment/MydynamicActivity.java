@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.widget.SpringView;
+import com.luck.picture.lib.decoration.RecycleViewDivider;
 
 import org.zackratos.ultimatebar.UltimateBar;
 
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 
 import zhyj.dqjt.com.zhihuiyanjiao.R;
 import zhyj.dqjt.com.zhihuiyanjiao.TopRuleActivity;
+import zhyj.dqjt.com.zhihuiyanjiao.adapter.DongTaiAdapter;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.TieziAdapter;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.util.BaseDialog;
@@ -40,6 +43,7 @@ import zhyj.dqjt.com.zhihuiyanjiao.util.ZDPop;
  */
 
 public class MydynamicActivity extends BaseActivity implements View.OnClickListener {
+    ImageView iv_gz,iv_zyfh;
     private ImageView img_tou;
     private TextView text_deng;
     private ImageView imageView2;
@@ -65,8 +69,7 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
     private SharingPop sharingPop;
     private TextView tv_jfzd,tv_sc,tv_close;
     Dialog DDdialog;
-    private ImageView img_back;
-
+    RecycleViewDivider recycleViewDivider;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,14 +81,15 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
 
     private void initView() {
         img_tou = (ImageView) findViewById(R.id.img_tou);
+        iv_gz= (ImageView) findViewById(R.id.iv_gz);
         text_deng = (TextView) findViewById(R.id.text_deng);
         imageView2 = (ImageView) findViewById(R.id.imageView2);
         text_name = (TextView) findViewById(R.id.text_name);
         text_sex = (ImageView) findViewById(R.id.text_sex);
-        img_back = (ImageView) findViewById(R.id.img_back);
         guan_num = (TextView) findViewById(R.id.guan_num);
         text_guanzhu = (LinearLayout) findViewById(R.id.text_guanzhu);
         fen_num = (TextView) findViewById(R.id.fen_num);
+        iv_zyfh= (ImageView) findViewById(R.id.iv_zyfh);
         text_fensi = (LinearLayout) findViewById(R.id.text_fensi);
         collect_num = (TextView) findViewById(R.id.collect_num);
         text_collect = (LinearLayout) findViewById(R.id.text_collect);
@@ -99,7 +103,7 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
         liner_dongtai = (LinearLayout) findViewById(R.id.liner_dongtai);
         zdPop = new ZDPop(MydynamicActivity.this,R.layout.zd_pop_item_view);
         sharingPop = new SharingPop(MydynamicActivity.this,R.layout.sharing_pop_item_view);
-
+        recycleViewDivider = new RecycleViewDivider(MydynamicActivity.this, GridLayoutManager.HORIZONTAL, 5, getResources().getColor(R.color.transparent));
           /*
            设置监听
          */
@@ -119,6 +123,8 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
         initRefresh();
         liner_dongtai.setOnClickListener(this);
         liner_tiezi.setOnClickListener(this);
+        iv_gz.setOnClickListener(this);
+        iv_zyfh.setOnClickListener(this);
         zdPop.setOnDismissListener(onDismissListener);
         zdPop.setZDClickListener(zdClickListener);
         sharingPop.setOnDismissListener(onDismissListener);
@@ -169,6 +175,43 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
         dialog.show();
     }
 
+    private void showGZDialog(int grary, int animationStyle) {
+        BaseDialog.Builder builder = new BaseDialog.Builder(this);
+        //设置触摸dialog外围是否关闭
+        //设置监听事件
+        final Dialog dialog = builder.setViewId(R.layout.gz_item_view)
+                //设置dialogpadding
+                .setPaddingdp(0, 0, 0, 0)
+                //设置显示位置
+                .setGravity(grary)
+                //设置动画
+                .setAnimation(animationStyle)
+                //设置dialog的宽高
+                .setWidthHeightpx(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                //设置触摸dialog外围是否关闭
+                .isOnTouchCanceled(true)
+                //设置监听事件
+                .builder();
+        dialog.show();
+
+        TextView tv_qxgz = dialog.findViewById(R.id.tv_qxgz);
+        TextView tv_gz_close = dialog.findViewById(R.id.tv_gz_close);
+        tv_qxgz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialog.dismiss();
+
+            }
+        });
+        tv_gz_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
     private void showDDDDialog(int grary, int animationStyle) {
         BaseDialog.Builder builder = new BaseDialog.Builder(this);
         //设置触摸dialog外围是否关闭
@@ -193,7 +236,6 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
         tv_jfzd.setOnClickListener(this);
         tv_sc.setOnClickListener(this);
         tv_close.setOnClickListener(this);
-        img_back.setOnClickListener(this);
 
     }
 
@@ -247,6 +289,9 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
                 v1.setVisibility(View.VISIBLE);
                 text_zan.setTextColor(getResources().getColor(R.color.black_san));
                 v2.setVisibility(View.INVISIBLE);
+                recy_card.setLayoutManager(new LinearLayoutManager(MydynamicActivity.this));
+                recy_card.removeItemDecoration(recycleViewDivider);
+                recy_card.setNestedScrollingEnabled(false);
                 TieziAdapter tieziAdapter= new TieziAdapter(R.layout.tz_item_view, mList);
                 recy_card.setAdapter(tieziAdapter);
 
@@ -258,6 +303,14 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
                 text_pin.setTextColor(getResources().getColor(R.color.black_san));
                 v1.setVisibility(View.INVISIBLE);
 
+                recy_card.setLayoutManager(new GridLayoutManager(MydynamicActivity.this,2));
+                recycleViewDivider = new RecycleViewDivider(MydynamicActivity.this, GridLayoutManager.HORIZONTAL, 5, getResources().getColor(R.color.transparent));
+                recy_card.addItemDecoration(recycleViewDivider);
+//                recy_card.addItemDecoration(new GridDivider(MydynamicActivity.this, 20, this.getResources().getColor(R.color.white)));
+                recy_card.setNestedScrollingEnabled(false);
+
+                final DongTaiAdapter tagAdapter  = new DongTaiAdapter(R.layout.tui_recyitem, mList);
+                recy_card.setAdapter(tagAdapter);
 
                 break;
 
@@ -276,10 +329,13 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
                 DDdialog.dismiss();
 
                 break;
-            case R.id.img_back:
+            case R.id.iv_gz:
 
+                showGZDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion);
+
+                break;
+            case R.id.iv_zyfh:
                 finish();
-
                 break;
 
         }

@@ -5,6 +5,7 @@
 
 
    <RelativeLayout
+       android:id="@+id/rl_dt"
        android:layout_centerHorizontal="true"
        android:layout_width="match_parent"
        android:layout_height="270dp">

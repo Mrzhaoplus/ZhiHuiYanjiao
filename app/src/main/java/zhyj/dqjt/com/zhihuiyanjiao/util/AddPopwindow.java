@@ -12,7 +12,11 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.compress.Luban;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +27,9 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import zhyj.dqjt.com.zhihuiyanjiao.MainActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.R;
+import zhyj.dqjt.com.zhihuiyanjiao.ReleaseFocusActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.ReleaseShootoffActivity;
+import zhyj.dqjt.com.zhihuiyanjiao.VideoRecordingActivity;
 
 /**
  * date : ${Date}
@@ -159,6 +165,7 @@ public class AddPopwindow extends PopupWindow implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        Intent intent;
           switch (v.getId()){
               case R.id.r_close:
                   if (isShowing()) {
@@ -167,18 +174,22 @@ public class AddPopwindow extends PopupWindow implements View.OnClickListener {
                   break;
               case R.id.btn_paike:
 //                  Toast.makeText(mContext, "aad", Toast.LENGTH_SHORT).show();
-
-                  Intent intent = new Intent(mContext, ReleaseShootoffActivity.class);
+                  intent = new Intent(mContext, VideoRecordingActivity.class);
                   mContext.startActivity(intent);
 
                   break;
               case R.id.btn_jiaodian:
 //                  Toast.makeText(mContext, "assad", Toast.LENGTH_SHORT).show();
 
+                  intent = new Intent(mContext, ReleaseFocusActivity.class);
+                  mContext.startActivity(intent);
+
                   break;
 
           }
 
     }
+
+
 
 }

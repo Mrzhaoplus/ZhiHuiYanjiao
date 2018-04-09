@@ -41,68 +41,45 @@
             android:layout_height="wrap_content" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFE5E5E5">
+        android:background="#FFE5E5E5"
+        android:orientation="vertical">
+
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:padding="10dp"
             android:layout_marginTop="10dp"
+            android:padding="10dp"
             android:orientation="vertical">
 
 
-            <LinearLayout
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:hint="心里想什么，尽情说出来"
+                android:gravity="left|top"
+                android:textSize="12sp"
+                android:background="@android:color/transparent"
+                android:layout_marginBottom="10dp"
+                />
+
+            <zhyj.dqjt.com.zhihuiyanjiao.util.MyGridView
+                android:id="@+id/mygridview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <RelativeLayout
-                    android:layout_width="150dp"
-                    android:layout_height="220dp">
-
-
-
-                    <VideoView
-                        android:id="@+id/videoView"
-                        android:layout_width="150dp"
-                        android:layout_height="220dp"
-                        />
-
-                    <ImageView
-                        android:id="@+id/iv_bf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:visibility="invisible"
-                        android:src="@drawable/shipin_3x"/>
-
-                </RelativeLayout>
-
-
-                
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:background="#FFF5F5F5"
-                    android:layout_marginLeft="10dp"
-                    android:layout_height="220dp">
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textSize="14sp"
-                        android:gravity="left|top"
-                        android:layout_margin="10dp"
-                        android:background="@android:color/transparent"
-                        android:hint="心里想什么，尽情说出来"/>
-
-
-                </RelativeLayout>
-
-            </LinearLayout>
+                android:paddingTop="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:numColumns="3"
+                android:horizontalSpacing="3dp"
+                android:verticalSpacing="3dp">
+            </zhyj.dqjt.com.zhihuiyanjiao.util.MyGridView>
 
             <LinearLayout
                 android:id="@+id/ll_szwz"
@@ -126,10 +103,13 @@
                     android:textSize="14sp"/>
 
             </LinearLayout>
-
         </LinearLayout>
 
-    </RelativeLayout>
+
+
+
+    </LinearLayout>
+
 
 
 </LinearLayout>

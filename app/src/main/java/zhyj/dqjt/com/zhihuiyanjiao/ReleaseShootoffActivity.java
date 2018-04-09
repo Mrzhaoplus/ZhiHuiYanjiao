@@ -1,6 +1,7 @@
 package zhyj.dqjt.com.zhihuiyanjiao;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -27,12 +28,11 @@ import zhyj.dqjt.com.zhihuiyanjiao.base.BaseActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.util.MyGridView;
 
 /**
- * Created by Administrator on 2018/4/4.
+ * Created by Administrator on 2018/4/8.
  */
 
-public class ReleaseFocusActivity extends BaseActivity {
+public class ReleaseShootoffActivity extends BaseActivity {
 
-    private RecyclerView rv_fbfl;
 
     private ImageView include_back;
 
@@ -40,38 +40,26 @@ public class ReleaseFocusActivity extends BaseActivity {
     private MyGridView mygridview;
     private GridViewAddImgesAdpter addImgesAdpter;
     ArrayList<String> arrayList = new ArrayList<>();
-    ArrayList<String> mList = new ArrayList<>();
-    List<LocalMedia> list = new ArrayList<>();
     List<LocalMedia> listAll = new ArrayList<>();
     private List<LocalMedia> selectList = new ArrayList<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_release_focus);
+        setContentView(R.layout.activity_release_shootoff);
 
         include_back= (ImageView) findViewById(R.id.include_back);
-        rv_fbfl= (RecyclerView) findViewById(R.id.rv_fbfl);
         ll_szwz= (LinearLayout) findViewById(R.id.ll_szwz);
         mygridview= (MyGridView) findViewById(R.id.mygridview);
-        mList.add("");
-        mList.add("");
-        mList.add("");
-        mList.add("");
-        mList.add("");
-        mList.add("");
-        mList.add("");
-        mList.add("");
 
-        rv_fbfl.setLayoutManager(new GridLayoutManager(ReleaseFocusActivity.this,4));
-        rv_fbfl.setNestedScrollingEnabled(false);
+        String path=getIntent().getStringExtra("img");
 
-        final TagAdapter tagAdapter  = new TagAdapter(R.layout.type_item_view, mList,ReleaseFocusActivity.this);
-        rv_fbfl.setAdapter(tagAdapter);
-
+        LocalMedia localMedia = new LocalMedia();
+        localMedia.setPath(path);
         /**
          * 添加照片adapter
          */
-        addImgesAdpter = new GridViewAddImgesAdpter(list, this);
+        listAll.add(localMedia);
+        addImgesAdpter = new GridViewAddImgesAdpter(listAll, this);
         mygridview.setAdapter(addImgesAdpter);
         mygridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -91,29 +79,19 @@ public class ReleaseFocusActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(ReleaseFocusActivity.this,LocationActivity.class);
+                Intent intent = new Intent(ReleaseShootoffActivity.this,LocationActivity.class);
                 startActivity(intent);
 
             }
         });
 
-        tagAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Log.e("TAG","点击到：："+position);
-
-                tagAdapter.setXZ(position);
-                tagAdapter.notifyDataSetChanged();
-
-            }
-        });
 
     }
 
 
     private void requestPhoto() {
         // 进入相册 以下是例子：不需要的api可以不写
-        PictureSelector.create(ReleaseFocusActivity.this)
+        PictureSelector.create(ReleaseShootoffActivity.this)
                 .openGallery(PictureMimeType.ofImage())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                 .theme(R.style.picture_default_style1)// 主题样式设置 具体参考 values/styles   用法：R.style.picture.white.style
                 .maxSelectNum(9)// 最大图片选择数量

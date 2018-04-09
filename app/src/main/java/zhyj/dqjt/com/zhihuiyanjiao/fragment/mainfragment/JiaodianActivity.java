@@ -1,5 +1,6 @@
 package zhyj.dqjt.com.zhihuiyanjiao.fragment.mainfragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import zhyj.dqjt.com.zhihuiyanjiao.IssueReportActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.R;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.util.MyContants;
@@ -66,6 +68,7 @@ public class JiaodianActivity extends BaseActivity implements View.OnClickListen
         liner1.setOnClickListener(this);
         liner3.setOnClickListener(this);
         img_back.setOnClickListener(this);
+        img_question.setOnClickListener(this);
         if(tuijianfragment==null){
             tuijianfragment=new TuijianFragment();
         }
@@ -74,6 +77,9 @@ public class JiaodianActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
+
+        Intent intent;
+
         switch (view.getId()){
             case R.id.liner1:
                 v1.setVisibility(View.VISIBLE);
@@ -114,6 +120,11 @@ public class JiaodianActivity extends BaseActivity implements View.OnClickListen
 
             case R.id.img_back:
                 finish();
+                break;
+            case R.id.img_question:
+                intent = new Intent(JiaodianActivity.this, IssueReportActivity.class);
+                startActivity(intent);
+
                 break;
         }
     }
