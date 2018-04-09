@@ -86,6 +86,63 @@
                          android:layout_height="25dp" />
 
                  </RelativeLayout>
+                   <TextView
+                       android:padding="10dp"
+                       android:id="@+id/video_title"
+                       android:textSize="14sp"
+                       android:text="每天坚持运动、有利于身体健康、摆脱肥胖、正确的减肥方式、拍客内容"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:padding="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+                            <TextView
+                                android:id="@+id/text_zan"
+                                android:gravity="center|left"
+                                android:drawablePadding="10dp"
+                                android:drawableLeft="@drawable/tui_xin"
+                                android:text="0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:text="点赞"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+
+                        <TextView
+                            android:id="@+id/text_time"
+                            android:padding="10dp"
+                            android:layout_alignParentRight="true"
+                            android:text="19小时前"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+                 <View
+                     android:padding="10dp"
+                     android:layout_width="match_parent"
+                     android:layout_height="10dp"
+                     android:background="@color/color_hui"
+                     />
+
+                 <TextView
+                     android:id="@+id/text_pinglun"
+                     android:gravity="center|left"
+                     android:drawablePadding="10dp"
+                     android:drawableLeft="@drawable/img_suggest"
+                     android:padding="10dp"
+                     android:text="144评论"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content" />
+                 
                  <android.support.v7.widget.RecyclerView
                      android:id="@+id/rcy_view"
                      android:layout_width="match_parent"

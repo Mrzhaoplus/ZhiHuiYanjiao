@@ -18,8 +18,8 @@ import zhyj.dqjt.com.zhihuiyanjiao.R;
  */
 
 public class Video_pinglun_Adapter extends RecyclerView.Adapter<Video_pinglun_Adapter.ViewHodel> {
- Context ctx;
-List<String>list=new ArrayList<>();
+ private Context ctx;
+ private List<String>list=new ArrayList<>();
     public Video_pinglun_Adapter(Context ctx) {
         this.ctx = ctx;
         data();
@@ -48,7 +48,7 @@ List<String>list=new ArrayList<>();
         return list.size();
     }
 
-    public class ViewHodel extends RecyclerView.ViewHolder {
+    public class ViewHodel extends RecyclerView.ViewHolder{
         public ImageView img_tou;
         public TextView name;
         public TextView address;

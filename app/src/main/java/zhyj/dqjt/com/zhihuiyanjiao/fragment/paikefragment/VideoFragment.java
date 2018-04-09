@@ -6,11 +6,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import zhyj.dqjt.com.zhihuiyanjiao.R;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.Video_pinglun_Adapter;
@@ -32,6 +33,10 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
     private ImageView tou;
     private ImageView frnxiang;
     private RadioButton zan;
+    private TextView time;
+    private TextView pinglun;
+    private TextView text_zan;
+
     @Override
     protected int setContentView() {
         return R.layout.fragment_video;
@@ -41,21 +46,35 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
     protected void lazyLoad() {
         View contentView = getContentView();
         video = contentView.findViewById(R.id.video_view);
-        recy_view = contentView.findViewById(R.id.recy_view);
+        recy_view = contentView.findViewById(R.id.rcy_view);
         img_back = contentView.findViewById(R.id.img_back);
         guanzhu = contentView.findViewById(R.id.guanzhu);
         tou = contentView.findViewById(R.id.video_tou);
         zan = contentView.findViewById(R.id.video_zan);
         frnxiang = contentView.findViewById(R.id.video_fenxiang);
+        time = contentView.findViewById(R.id.text_time);
+        pinglun = contentView.findViewById(R.id.text_pinglun);
+        text_zan = contentView.findViewById(R.id.text_zan);
         img_back.setOnClickListener(this);
         guanzhu.setOnClickListener(this);
         tou.setOnClickListener(this);
         frnxiang.setOnClickListener(this);
-
-
-        /*recy_view.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+        zan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                String s = text_zan.getText().toString();
+                int i = Integer.parseInt(s);
+                if(b){
+                    text_zan.setText((i+1)+"");
+                }
+            }
+        });
+        recy_view.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recy_view.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
+        recy_view.setNestedScrollingEnabled(false);
+       //recy_view.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         Video_pinglun_Adapter video_pinglun_adapter = new Video_pinglun_Adapter(getActivity());
-        recy_view.setAdapter(video_pinglun_adapter);*/
+        recy_view.setAdapter(video_pinglun_adapter);
     }
     /*
     * 点击事件
@@ -77,8 +96,6 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
             case R.id.video_fenxiang:
                 showFXDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion);
                 break;
-
-
         }
     }
 
