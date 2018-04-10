@@ -10,14 +10,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import zhyj.dqjt.com.zhihuiyanjiao.R;
-import zhyj.dqjt.com.zhihuiyanjiao.YuanTieActivity;
-import zhyj.dqjt.com.zhihuiyanjiao.fragment.mainfragment.LuKuangActivity;
+import zhyj.dqjt.com.zhihuiyanjiao.fragment.mainfragment.JiaoDetailActivity;
 
 /**
  * date : ${Date}
@@ -85,14 +83,14 @@ public class Praiseadapter extends RecyclerView.Adapter<Praiseadapter.Myviewhold
         holder.liners.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, YuanTieActivity.class);
+                Intent intent = new Intent(context, JiaoDetailActivity.class);
                 context.startActivity(intent);
             }
         });
         holder.yuantie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, YuanTieActivity.class);
+                Intent intent = new Intent(context, JiaoDetailActivity.class);
                 context.startActivity(intent);
             }
         });

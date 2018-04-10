@@ -1,6 +1,8 @@
 package zhyj.dqjt.com.zhihuiyanjiao.fragment.mainfragment;
 
+import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import zhyj.dqjt.com.zhihuiyanjiao.R;
@@ -27,5 +29,12 @@ public class ChowuFragment extends BaseFragment {
         lv = contentView.findViewById(R.id.lv);
         ChowuAdapter chowuAdapter = new ChowuAdapter(getActivity());
         lv.setAdapter(chowuAdapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), JiaoDetailActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

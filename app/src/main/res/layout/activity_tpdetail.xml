@@ -5,30 +5,33 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context="zhyj.dqjt.com.zhihuiyanjiao.YuanTieActivity">
+    tools:context="zhyj.dqjt.com.zhihuiyanjiao.TPDetailActivity">
     <RelativeLayout
+        android:id="@+id/real"
+        android:background="@color/white"
         android:layout_marginTop="20dp"
-        android:padding="15dp"
-        android:background="#ece8e8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageView
-            android:id="@+id/img_back"
+            android:id="@+id/tv_back"
             android:layout_marginLeft="10dp"
+            android:padding="10dp"
             android:src="@drawable/img_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
-          <ImageView
-              android:id="@+id/collect"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_alignParentRight="true"
-              android:background="@drawable/icon_collect"
-              />
+        <TextView
+            android:id="@+id/shuliang"
+            android:textColor="@color/black_san"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:text="图片（2/3）"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
-    <WebView
-        android:id="@+id/web_view"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></WebView>
+        android:layout_height="match_parent"></android.support.v4.view.ViewPager>
 </LinearLayout>

@@ -8,6 +8,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -52,6 +54,8 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
     private TextView text_zan;
     private RecyclerView jiao_pinglun;
     private TextView liuyan;
+    private EditText ed_text;
+    private Button button_fabu;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,7 +84,8 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
         text_zan = (TextView) findViewById(R.id.text_zan);
         jiao_pinglun = (RecyclerView) findViewById(R.id.jiao_pinglun);
         liuyan = (TextView) findViewById(R.id.text_liuyan);
-
+        ed_text = (EditText) findViewById(R.id.ed_text);
+        button_fabu = (Button) findViewById(R.id.button_fabu);
         /**
          *点击事件
          */

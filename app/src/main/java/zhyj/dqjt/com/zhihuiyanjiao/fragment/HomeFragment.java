@@ -97,6 +97,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         life.setOnClickListener(this);
         ll_msg.setOnClickListener(this);
         tv_search.setOnClickListener(this);
+        imageView.setOnClickListener(this);
          /*
              适配器
           */
@@ -165,6 +166,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             case R.id.tv_search:
                 Intent search = new Intent(getActivity(), SearchActivity.class);
                 startActivity(search);
+                break;
+            case R.id.imageView:
+                Intent intent1 = new Intent(getActivity(), ZixunDitailsActivity.class);
+                startActivity(intent1);
                 break;
         }
     }

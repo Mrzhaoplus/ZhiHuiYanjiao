@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white">
     <android.support.v4.widget.NestedScrollView
+        android:layout_above="@+id/lines"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -214,4 +214,28 @@
                 android:background="@color/back_bei"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-</LinearLayout>
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:id="@+id/lines"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <EditText
+            android:layout_margin="5dp"
+            android:id="@+id/ed_text"
+            android:layout_weight="3"
+            android:background="@null"
+            android:hint="请说说您的看法..."
+            android:layout_width="0dp"
+            android:layout_height="40dp" />
+        <Button
+            android:background="@drawable/shape_fabu"
+            android:id="@+id/button_fabu"
+            android:textColor="@color/white"
+            android:text="发布"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp" />
+    </LinearLayout>
+</RelativeLayout>
