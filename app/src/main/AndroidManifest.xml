@@ -63,6 +63,7 @@
         <activity android:name=".SignRuleActivity" android:screenOrientation="portrait"/>
         <activity android:name=".VideoRecordingActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ReleaseShootoffVidoActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".TPDetailActivity" android:screenOrientation="portrait"/>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"

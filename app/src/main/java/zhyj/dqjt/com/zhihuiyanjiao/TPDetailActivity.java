@@ -39,13 +39,6 @@ public class TPDetailActivity extends AppCompatActivity {
         tv_back = (ImageView) findViewById(R.id.tv_back);
         vp = (ViewPager) findViewById(R.id.vp);
         shuliang = (TextView) findViewById(R.id.shuliang);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                shuliang.setText("图片（"+(position+1)+"/"+size+"）");
-            }
-        });
-
         tv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,11 +46,13 @@ public class TPDetailActivity extends AppCompatActivity {
             }
         });
 
-       for(int i=0;i<size;i++){
-           //list.add(R.drawable.icon_mine)
+        for(int i=0;i<size;i++){
+            ImageView imageView = new ImageView(this);
+            imageView.setImageResource(R.drawable.icon_mine);
+           list.add(imageView);
        }
-
-        vp.setAdapter(new ViewPager_Adapter(list,this));
+        shuliang.setText("图片（"+(position+1)+"/"+size+"）");
+        vp.setAdapter(new ViewPager_Adapter(list,TPDetailActivity.this));
 
     }
 }

@@ -40,8 +40,7 @@ public class ViewPager_Adapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-
-
+        container.addView(list.get(position));
         return list.get(position);
     }
 }
