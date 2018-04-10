@@ -43,6 +43,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     public RelativeLayout real_kefu;
     public TextView text_yaoqing;
     public RelativeLayout real_yaoqing;
+    private ImageView iv_grtx;
 
     @Override
     protected int setContentView() {
@@ -74,11 +75,13 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         this.real_kefu = (RelativeLayout) contentView.findViewById(R.id.real_kefu);
         this.text_yaoqing = (TextView) contentView.findViewById(R.id.text_yaoqing);
         this.real_yaoqing = (RelativeLayout) contentView.findViewById(R.id.real_yaoqing);
+        iv_grtx=contentView.findViewById(R.id.iv_grtx);
         text_guanzhu.setOnClickListener(this);//设置监听
         text_fensi.setOnClickListener(this);
         text_dongtai.setOnClickListener(this);
         text_collect.setOnClickListener(this);
         text_qiandao.setOnClickListener(this);
+        iv_grtx.setOnClickListener(this);
     }
 
 
@@ -106,6 +109,10 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
              case R.id.text_qiandao:
                  Intent intent4=new Intent(getActivity(), SignActivity.class);
                  startActivity(intent4);
+                 break;
+             case R.id.iv_grtx:
+                 Intent intent5=new Intent(getActivity(), MydynamicActivity.class);
+                 startActivity(intent5);
                  break;
          }
 

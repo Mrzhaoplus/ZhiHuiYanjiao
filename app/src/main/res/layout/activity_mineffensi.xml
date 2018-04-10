@@ -5,11 +5,32 @@
     android:orientation="vertical">
 
 
-    <include
-        layout="@layout/include_title"
+    <RelativeLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ></include>
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:id="@+id/include_back"
+            android:padding="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/img_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/include_title"
+            android:padding="18dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/bg_color"
+            android:text="我关注的人"
+            android:textSize="17sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
     <com.liaoinstan.springview.widget.SpringView
         android:id="@+id/spring_view"

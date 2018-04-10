@@ -78,6 +78,7 @@
             </RelativeLayout>
         </RelativeLayout>
        <ImageView
+           android:id="@+id/iv_grtx"
            android:layout_marginLeft="20dp"
            android:layout_alignParentBottom="true"
            android:src="@drawable/icon_tou"

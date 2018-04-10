@@ -25,6 +25,7 @@ import java.util.List;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.GridViewAddImgesAdpter;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.TagAdapter;
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseActivity;
+import zhyj.dqjt.com.zhihuiyanjiao.bean.Info;
 import zhyj.dqjt.com.zhihuiyanjiao.util.MyGridView;
 
 /**
@@ -42,6 +43,7 @@ public class ReleaseShootoffActivity extends BaseActivity {
     ArrayList<String> arrayList = new ArrayList<>();
     List<LocalMedia> listAll = new ArrayList<>();
     private List<LocalMedia> selectList = new ArrayList<>();
+    private Info info;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,13 +54,21 @@ public class ReleaseShootoffActivity extends BaseActivity {
         mygridview= (MyGridView) findViewById(R.id.mygridview);
 
         String path=getIntent().getStringExtra("img");
+        info= (Info) getIntent().getSerializableExtra("list");
+        if(path!=null){
+            if(path.length()>0){
+                LocalMedia localMedia = new LocalMedia();
+                localMedia.setPath(path);
+                listAll.add(localMedia);
 
-        LocalMedia localMedia = new LocalMedia();
-        localMedia.setPath(path);
+            }
+        }
+        if(info!=null){
+            listAll.addAll(info.list);
+        }
         /**
          * 添加照片adapter
          */
-        listAll.add(localMedia);
         addImgesAdpter = new GridViewAddImgesAdpter(listAll, this);
         mygridview.setAdapter(addImgesAdpter);
         mygridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

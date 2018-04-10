@@ -28,6 +28,7 @@ import org.zackratos.ultimatebar.UltimateBar;
 
 import java.util.ArrayList;
 
+import zhyj.dqjt.com.zhihuiyanjiao.MyCollectionActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.R;
 import zhyj.dqjt.com.zhihuiyanjiao.TopRuleActivity;
 import zhyj.dqjt.com.zhihuiyanjiao.adapter.DongTaiAdapter;
@@ -125,6 +126,9 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
         liner_tiezi.setOnClickListener(this);
         iv_gz.setOnClickListener(this);
         iv_zyfh.setOnClickListener(this);
+        text_guanzhu.setOnClickListener(this);
+        text_fensi.setOnClickListener(this);
+        text_collect.setOnClickListener(this);
         zdPop.setOnDismissListener(onDismissListener);
         zdPop.setZDClickListener(zdClickListener);
         sharingPop.setOnDismissListener(onDismissListener);
@@ -282,6 +286,7 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        Intent intent;
         switch (view.getId()){
 
             case R.id.liner_tiezi://帖子
@@ -337,7 +342,20 @@ public class MydynamicActivity extends BaseActivity implements View.OnClickListe
             case R.id.iv_zyfh:
                 finish();
                 break;
+            case R.id.text_guanzhu:
 
+                intent=new Intent(MydynamicActivity.this, MyFllowActivity.class);
+                startActivity(intent);
+
+                break;
+            case R.id.text_fensi://粉丝
+                intent=new Intent(MydynamicActivity.this, MyFansiActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.text_collect:
+                intent=new Intent(MydynamicActivity.this, MyCollectionActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 

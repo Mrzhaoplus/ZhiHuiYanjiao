@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="zhyj.dqjt.com.zhihuiyanjiao">
+          package="zhyj.dqjt.com.zhihuiyanjiao">
 
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -56,29 +54,15 @@
             android:name=".SearchLocationActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".VideoActivity" />
-        <activity android:name=".SearchActivity" />
-        <activity
-            android:name=".ReleaseFocusActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".MyCollectionActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".IssueReportActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".SignActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".SignRuleActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".VideoRecordingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ReleaseShootoffVidoActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".SearchActivity"></activity>
 
+        <activity android:name=".ReleaseFocusActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".MyCollectionActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".IssueReportActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".SignActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".SignRuleActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".VideoRecordingActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ReleaseShootoffVidoActivity" android:screenOrientation="portrait"/>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -86,10 +70,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-
-        <activity android:name=".TPDetailActivity"></activity>
+                android:resource="@xml/file_paths"/>
+        </provider>s
     </application>
-
 </manifest>

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-         <ScrollView
+
+
+
+
+         <android.support.v4.widget.NestedScrollView
              android:layout_width="match_parent"
              android:layout_height="match_parent">
              <LinearLayout
@@ -11,81 +15,73 @@
                  android:layout_width="match_parent"
                  android:layout_height="match_parent">
                  <RelativeLayout
+                     android:id="@+id/rl_sp"
                  android:layout_width="match_parent"
-                 android:layout_height="match_parent">
-                     <ImageView
+                 android:background="@color/white"
+                 android:layout_height="wrap_content">
+
+                     <RelativeLayout
+                         android:id="@+id/rl_video"
                          android:layout_width="match_parent"
-                         android:layout_height="550dp"
-                         android:background="@drawable/m3"
-                         />
-                     <LinearLayout
-                         android:id="@+id/img_back"
-                         android:layout_margin="20dp"
-                         android:gravity="center"
-                         android:background="@drawable/shape_fanhui"
-                         android:layout_width="30dp"
-                         android:layout_height="30dp">
+                         android:visibility="gone"
+                         android:layout_height="500dp">
+
+                         <VideoView
+                             android:id="@+id/vv_sp"
+                             android:layout_width="match_parent"
+                             android:layout_centerVertical="true"
+                             android:layout_height="wrap_content"/>
+
+
                          <ImageView
-                             android:src="@drawable/img_whiteback"
-                             android:layout_width="20dp"
-                             android:layout_height="20dp" />
-                     </LinearLayout>
+                             android:id="@+id/iv_xq_bf"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_centerInParent="true"
+                             android:visibility="invisible"
+                             android:src="@drawable/shipin_3x"/>
 
-                    <RelativeLayout
-                        android:visibility="visible"
-                        android:id="@+id/guanzhu"
-                        android:background="@drawable/shape_fanhui"
-                       android:layout_marginRight="20dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_width="100dp"
-                        android:layout_height="30dp">
-                        <ImageView
-                            android:layout_marginLeft="5dp"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/icon_collect"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:layout_marginLeft="25dp"
-                            android:textSize="14sp"
-                            android:layout_centerVertical="true"
-                            android:textColor="@color/white"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="+关注"
-                            />
-                    </RelativeLayout>
-                     <ImageView
-                         android:id="@+id/video_tou"
-                         android:layout_alignParentRight="true"
-                         android:layout_marginTop="20dp"
-                         android:layout_marginRight="20dp"
-                         android:background="@drawable/icon_tou"
-                         android:layout_width="30dp"
-                         android:layout_height="30dp" />
-                     <RadioButton
-                         android:id="@+id/video_zan"
-                         android:layout_alignParentRight="true"
-                         android:layout_marginTop="30dp"
-                         android:layout_marginRight="20dp"
-                         android:button="@null"
-                         android:layout_below="@+id/video_tou"
-                         android:background="@drawable/sele_dianzan"
-                         android:layout_width="25dp"
-                         android:layout_height="25dp" />
+                     </RelativeLayout>
 
-                     <ImageView
-                         android:id="@+id/video_fenxiang"
-                         android:layout_alignParentRight="true"
-                         android:layout_marginTop="30dp"
-                         android:layout_marginRight="20dp"
-                         android:layout_below="@+id/video_zan"
-                         android:background="@drawable/icon_share"
-                         android:layout_width="25dp"
-                         android:layout_height="25dp" />
+                     <RelativeLayout
+                         android:id="@+id/rl_img"
+                         android:layout_width="match_parent"
+                         android:layout_height="500dp">
+
+                         <android.support.v4.view.ViewPager
+                             android:id="@+id/vp_img_banner"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"></android.support.v4.view.ViewPager>
+
+                         <LinearLayout
+                             android:id="@+id/ll_dian"
+                             android:layout_width="match_parent"
+                             android:orientation="horizontal"
+                             android:gravity="center"
+                             android:layout_marginBottom="10dp"
+                             android:layout_alignParentBottom="true"
+                             android:layout_height="wrap_content">
+
+
+
+                         </LinearLayout>
+
+
+                     </RelativeLayout>
+
+
+
 
                  </RelativeLayout>
+
+
+                 <ProgressBar
+                     android:id="@+id/sp_jd"
+                     android:layout_width="match_parent"
+                     style="@style/StyleProgressBar"
+                     android:background="#F2F2F2"
+                     android:layout_height="5dp"/>
+
                    <TextView
                        android:padding="10dp"
                        android:id="@+id/video_title"
@@ -142,16 +138,79 @@
                      android:text="144评论"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content" />
-                 <View
-                     android:layout_width="match_parent"
-                     android:layout_height="1dp"
-                     android:background="@color/back_bei"/>
                  
                  <android.support.v7.widget.RecyclerView
                      android:id="@+id/rcy_view"
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
              </LinearLayout>
-     </ScrollView>
+     </android.support.v4.widget.NestedScrollView>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/img_back"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:background="@drawable/shape_fanhui"
+        android:layout_width="30dp"
+        android:layout_height="30dp">
+        <ImageView
+            android:src="@drawable/img_whiteback"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:visibility="visible"
+        android:id="@+id/guanzhu"
+        android:background="@drawable/shape_fanhui"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_width="100dp"
+        android:layout_height="30dp">
+        <ImageView
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_collect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginLeft="25dp"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+关注"
+            />
+    </RelativeLayout>
+    <ImageView
+        android:id="@+id/video_tou"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/icon_tou"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+    <RadioButton
+        android:id="@+id/video_zan"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="20dp"
+        android:button="@null"
+        android:layout_below="@+id/video_tou"
+        android:background="@drawable/sc_xz_3x"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+
+    <ImageView
+        android:id="@+id/video_fenxiang"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/video_zan"
+        android:background="@drawable/fx_icon_3x"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+
+</RelativeLayout>

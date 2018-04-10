@@ -36,7 +36,7 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyContants.windows(this);
+//        MyContants.windows(this);
         setContentView(R.layout.activity_mineffensi);
         initView();
     }

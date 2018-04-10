@@ -12,6 +12,7 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import zhyj.dqjt.com.zhihuiyanjiao.base.BaseActivity;
+import zhyj.dqjt.com.zhihuiyanjiao.bean.Info;
 
 /**
  * Created by Administrator on 2018/4/8.
@@ -43,7 +44,6 @@ public class ReleaseShootoffVidoActivity extends BaseActivity {
         });
 
         String url=getIntent().getStringExtra("url");
-
         Uri uri = Uri.parse( url );
 
         MediaController mediaController = new MediaController(this);

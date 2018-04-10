@@ -1,10 +1,12 @@
 package zhyj.dqjt.com.zhihuiyanjiao;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -12,8 +14,16 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.entity.LocalMedia;
+
 import org.zackratos.ultimatebar.UltimateBar;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import zhyj.dqjt.com.zhihuiyanjiao.bean.Info;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.HomeFragment;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.MessageFragment;
 import zhyj.dqjt.com.zhihuiyanjiao.fragment.MineFragment;
@@ -90,6 +100,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 第四步：提交
         transaction.commit();
         currentf = f;
+    }
+    List<LocalMedia> listAll = new ArrayList<>();
+    private List<LocalMedia> selectList = new ArrayList<>();
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            Log.e("TAG","图片返回");
+            switch (requestCode) {
+                case PictureConfig.CHOOSE_REQUEST:
+                    Log.e("TAG","图片选择结果回调");
+                    // 图片选择结果回调
+                    selectList = PictureSelector.obtainMultipleResult(data);
+                    listAll.addAll(selectList);
+                    selectList.clear();
+                    Info info = new Info();
+                    info.list = new ArrayList<>();
+                    info.list.addAll(listAll);
+                    Intent intent = new Intent(MainActivity.this,ReleaseShootoffActivity.class);
+                    intent.putExtra("list",info);
+                    startActivity(intent);
+                    break;
+            }
+        }
     }
 
     @Override
