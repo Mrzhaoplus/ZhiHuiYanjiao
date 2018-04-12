@@ -51,15 +51,12 @@ public class VideoRecordingActivity extends BaseActivity {
 
         //1.1.1
         jCameraView = (JCameraView) findViewById(R.id.jcameraview);
-
 //设置视频保存路径
         jCameraView.setSaveVideoPath(Environment.getExternalStorageDirectory().getPath() + File.separator + "JCamera");
 //设置只能录像或只能拍照或两种都可以（默认两种都可以）
         jCameraView.setFeatures(JCameraView.BUTTON_STATE_BOTH);
-
 //设置视频质量
         jCameraView.setMediaQuality(JCameraView.MEDIA_QUALITY_MIDDLE);
-
 //JCameraView 监听
         jCameraView.setErrorLisenter(new ErrorListener() {
             @Override
@@ -93,19 +90,16 @@ public class VideoRecordingActivity extends BaseActivity {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
             public void recordSuccess(String url, Bitmap firstFrame) {
                 //获取视频路径
                 Log.i("TAG", "url = " + url);
-
                 Intent intent = new Intent(VideoRecordingActivity.this,ReleaseShootoffVidoActivity.class);
                 intent.putExtra("url",url);
                 startActivity(intent);
                 finish();
-
             }
             //@Override
             //public void quit() {

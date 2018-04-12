@@ -17,7 +17,7 @@ public class ZhaoLingFragment extends BaseFragment {
     private ListView lv;
     @Override
     protected int setContentView() {
-        return R.layout.frag_zhaoling;
+        return R.layout.frag_gz;
     }
 
     @Override

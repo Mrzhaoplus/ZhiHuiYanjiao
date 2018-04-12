@@ -17,7 +17,7 @@ public class ZhaopinFragment extends BaseFragment {
     private ListView lv;
     @Override
     protected int setContentView() {
-        return R.layout.frag_zhaopin;
+        return R.layout.frag_gz;
     }
 
     @Override

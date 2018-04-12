@@ -67,12 +67,10 @@ public class Tujianadapter extends BaseAdapter {
         }
        //下载数据
         holder.tui_zan.setText(list.get(i).toString()+"");
-
         //设置点击事件
         holder.tui_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context,"点击了"+i,Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, VideoActivity.class);
                 context.startActivity(intent);
             }

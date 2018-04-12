@@ -14,10 +14,12 @@ import java.util.List;
 public class ViewPager_Adapter extends PagerAdapter {
     private List<View> list;
     private Context context;
+    private int i;
 
-    public ViewPager_Adapter(List<View> list, Context context) {
+    public ViewPager_Adapter(List<View> list, Context context, int i) {
         this.list = list;
         this.context = context;
+        this.i = i;
     }
 
     @Override

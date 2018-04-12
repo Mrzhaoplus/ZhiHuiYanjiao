@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.MyContants;
 
 /**
  * Created by Administrator on 2018/4/3.
@@ -19,6 +20,7 @@ public class SignRuleActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyContants.windows(this);
         setContentView(R.layout.activity_sign_rule);
         include_back= (ImageView) findViewById(R.id.include_back);
         include_back.setOnClickListener(new View.OnClickListener() {

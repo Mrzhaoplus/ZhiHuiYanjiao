@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import www.diandianxing.com.diandianxing.adapter.GridViewAddImgesAdpter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyGridView;
 import www.diandianxing.com.diandianxing.R;
 
@@ -46,6 +48,7 @@ public class IssueReportActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyContants.windows(this);
         setContentView(R.layout.activity_issue_report);
         include_back = (ImageView) findViewById(R.id.include_back);
         include_title = (TextView) findViewById(R.id.include_title);

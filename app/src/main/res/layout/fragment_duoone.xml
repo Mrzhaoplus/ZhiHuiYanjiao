@@ -80,15 +80,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-     <ImageView
+     <android.support.v7.widget.RecyclerView
          android:scaleType="fitXY"
-         android:id="@+id/item_pho"
-         android:src="@drawable/icon_mine"
+         android:id="@+id/item_recycler"
          android:layout_marginRight="20dp"
          android:layout_marginTop="10dp"
          android:layout_marginLeft="20dp"
          android:layout_width="match_parent"
-         android:layout_height="160dp" />
+         android:layout_height="wrap_content" />
 
 <LinearLayout
     android:layout_marginTop="20dp"

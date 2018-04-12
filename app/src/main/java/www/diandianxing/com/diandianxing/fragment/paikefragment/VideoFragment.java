@@ -94,6 +94,9 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
         vp_img_banner=contentView.findViewById(R.id.vp_img_banner);
         ll_dian=contentView.findViewById(R.id.ll_dian);
         vv_sp=findViewById(R.id.vv_sp);
+        //设置控件为半透明
+        img_back.getBackground().setAlpha(80);
+        guanzhu.getBackground().setAlpha(80);
 handler=new Handler();
         views = new ArrayList<>();
         Uri uri = Uri.parse( "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" );

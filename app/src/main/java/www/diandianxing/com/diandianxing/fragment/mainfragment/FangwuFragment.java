@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import www.diandianxing.com.diandianxing.adapter.FangwuAdapter;
 import www.diandianxing.com.diandianxing.adapter.TwoCardAdapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.R;
@@ -17,14 +18,14 @@ public class FangwuFragment extends BaseFragment {
     private ListView lv;
     @Override
     protected int setContentView() {
-        return R.layout.frag_fangwu;
+        return R.layout.frag_gz;
     }
 
     @Override
     protected void lazyLoad() {
         View contentView = getContentView();
         lv = contentView.findViewById(R.id.lv);
-        TwoCardAdapter zhaolingAdapter = new TwoCardAdapter(getActivity());
+        FangwuAdapter zhaolingAdapter = new FangwuAdapter(getActivity());
         lv.setAdapter(zhaolingAdapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

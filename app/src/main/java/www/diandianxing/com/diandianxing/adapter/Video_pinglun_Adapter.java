@@ -1,6 +1,7 @@
 package www.diandianxing.com.diandianxing.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 
 /**
  * Created by Mr赵 on 2018/4/8.
@@ -30,7 +32,6 @@ public class Video_pinglun_Adapter extends RecyclerView.Adapter<Video_pinglun_Ad
             list.add("");
         }
     }
-
     @Override
     public ViewHodel onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(ctx).inflate(R.layout.video_pinglun, parent, false);
@@ -40,7 +41,14 @@ public class Video_pinglun_Adapter extends RecyclerView.Adapter<Video_pinglun_Ad
 
     @Override
     public void onBindViewHolder(ViewHodel holder, int position) {
-
+       //点击头像跳转至主页
+        holder.img_tou.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ctx, MydynamicActivity.class);
+                ctx.startActivity(intent);
+            }
+        });
     }
 
     @Override

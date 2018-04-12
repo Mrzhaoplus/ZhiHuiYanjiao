@@ -18,6 +18,7 @@ import www.diandianxing.com.diandianxing.adapter.Myfollowadapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.MyContants;
 
 /**
  * Created by ASUS on 2018/3/20.
@@ -33,7 +34,7 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        MyContants.windows(this);
+        MyContants.windows(this);
         setContentView(R.layout.activity_mineguanzhu);
         initView();
     }

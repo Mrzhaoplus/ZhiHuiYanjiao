@@ -22,6 +22,7 @@ import www.diandianxing.com.diandianxing.adapter.MyCollectionAdapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.MyContants;
 
 /**
  * Created by Administrator on 2018/4/3.
@@ -40,6 +41,7 @@ public class MyCollectionActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyContants.windows(this);
         setContentView(R.layout.activity_my_collection);
         include_back= (ImageView) findViewById(R.id.include_back);
         springView= (SpringView) findViewById(R.id.springView);

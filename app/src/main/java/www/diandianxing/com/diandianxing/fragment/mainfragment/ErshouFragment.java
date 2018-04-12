@@ -17,7 +17,7 @@ public class ErshouFragment extends BaseFragment {
     private ListView lv;
     @Override
     protected int setContentView() {
-        return R.layout.frag_ershou;
+        return R.layout.frag_gz;
     }
 
     @Override

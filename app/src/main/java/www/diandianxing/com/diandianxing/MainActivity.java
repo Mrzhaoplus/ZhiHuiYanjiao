@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MessageFragment messageFragment;
     private MineFragment mineFragment;
     private ImageView frag_add;
+
     private long preTime;
     //hahahahahha
 

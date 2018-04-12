@@ -3,6 +3,7 @@ package www.diandianxing.com.diandianxing;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -35,8 +36,10 @@ public class TPDetailActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        size = getIntent().getIntExtra("size",0);
+        size = getIntent().getIntExtra("size", 0);
         position = getIntent().getIntExtra("position", 0);
+
+
         tv_back = (ImageView) findViewById(R.id.tv_back);
         vp = (ViewPager) findViewById(R.id.vp);
         shuliang = (TextView) findViewById(R.id.shuliang);
@@ -47,13 +50,33 @@ public class TPDetailActivity extends AppCompatActivity {
             }
         });
 
-        for(int i=0;i<size;i++){
+        for (int i = 0; i < size; i++) {
             ImageView imageView = new ImageView(this);
             imageView.setImageResource(R.drawable.icon_mine);
-           list.add(imageView);
-       }
-        shuliang.setText("图片（"+(position+1)+"/"+size+"）");
-        vp.setAdapter(new ViewPager_Adapter(list,TPDetailActivity.this));
+            list.add(imageView);
+        }
 
+
+        vp.setAdapter(new ViewPager_Adapter(list, TPDetailActivity.this, position));
+        vp.setCurrentItem(position);
+
+        //监听事件
+        vp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.i("============", "position:" + position );
+                shuliang.setText("图片（" + (position + 1) + "/" + size + "）");
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 }

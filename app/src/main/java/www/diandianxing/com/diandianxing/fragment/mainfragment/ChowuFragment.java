@@ -19,7 +19,7 @@ public class ChowuFragment extends BaseFragment {
 
     @Override
     protected int setContentView() {
-        return R.layout.frag_chowu;
+        return R.layout.frag_gz;
     }
 
     @Override

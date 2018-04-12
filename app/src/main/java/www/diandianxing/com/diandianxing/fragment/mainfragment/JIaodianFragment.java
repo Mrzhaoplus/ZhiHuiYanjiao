@@ -28,6 +28,7 @@ public class JIaodianFragment extends BaseFragment {
         return R.layout.fragment_jiaodian;
     }
 
+
     @Override
     protected void lazyLoad() {
 

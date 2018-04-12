@@ -38,6 +38,7 @@
                        <EditText
                            android:id="@+id/ed_search"
                            android:layout_marginLeft="5dp"
+                           android:textSize="16sp"
                            android:layout_centerInParent="true"
                            android:layout_width="match_parent"
                            android:layout_height="wrap_content"
@@ -83,70 +84,5 @@
         android:layout_height="wrap_content"
         android:id="@+id/recycler_search"
         ></android.support.v7.widget.RecyclerView>
-    <!-- <LinearLayout
-         android:layout_marginTop="10dp"
-         android:orientation="horizontal"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content">
-         <TextView
-            android:layout_marginLeft="15dp"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:paddingLeft="10dp"
-             android:paddingRight="10dp"
-             android:paddingBottom="5dp"
-             android:paddingTop="5dp"
-             android:textSize="16sp"
-             android:text="佟丽娅"
-             android:background="@drawable/search_shousuo"
-             />
-         <TextView
-             android:layout_marginLeft="15dp"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:paddingLeft="10dp"
-             android:paddingRight="10dp"
-             android:paddingBottom="5dp"
-             android:paddingTop="5dp"
-             android:textSize="16sp"
-             android:text="燕郊"
-             android:background="@drawable/search_shousuo"
-             />
-         <TextView
-             android:layout_marginLeft="15dp"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:paddingLeft="10dp"
-             android:paddingRight="10dp"
-             android:textSize="16sp"
-             android:paddingBottom="5dp"
-             android:paddingTop="5dp"
-             android:text="资讯"
-             android:background="@drawable/search_shousuo"
-             />
-         <TextView
-             android:layout_marginLeft="15dp"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:paddingLeft="10dp"
-             android:paddingRight="10dp"
-             android:paddingBottom="5dp"
-             android:paddingTop="5dp"
-             android:textSize="16sp"
-             android:text="资讯"
-             android:background="@drawable/search_shousuo"
-             />
-         <TextView
-             android:layout_marginLeft="15dp"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:paddingLeft="10dp"
-             android:paddingRight="10dp"
-             android:paddingBottom="5dp"
-             android:paddingTop="5dp"
-             android:textSize="16sp"
-             android:text="求职"
-             android:background="@drawable/search_shousuo"
-             />
-     </LinearLayout>-->
+
 </LinearLayout>
