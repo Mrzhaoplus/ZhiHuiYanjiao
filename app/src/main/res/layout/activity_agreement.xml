@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#eee"
+    >
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:padding="6dp"
+            android:id="@+id/iv_callback"
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/call_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="注册协议"
+            android:id="@+id/zhong"
+            android:textColor="@color/textcolcr"
+            android:layout_centerHorizontal="true"
+            android:textSize="18dp"
+            android:padding="10dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/you"
+            android:textSize="17sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:padding="6dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:background="@drawable/round_white"
+        android:layout_marginBottom="20dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginLeft="5dip"
+        android:layout_width="wrap_content"
+        android:layout_height="0dip"
+        android:layout_weight="1">
+        <LinearLayout
+            android:id="@+id/web_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <WebView
+                android:background="#fff"
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </WebView>
+        </LinearLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_below="@id/web_layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dip">
+        <TextView
+            android:id="@+id/tv_to_top"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="#fff"
+            android:text="取消"
+            android:background="#ff9c28"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tv_to_next"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="#fff"
+            android:text="同意协议"
+            android:background="#f25b10"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</LinearLayout>

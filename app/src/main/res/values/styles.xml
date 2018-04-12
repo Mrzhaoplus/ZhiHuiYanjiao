@@ -29,6 +29,9 @@
         <item name="android:mirrorForRtl">true</item>
     </style>
 
+    <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/selector_checkbox</item>
+    </style>
     <style name="popwin_anim_style">
         <item name="android:windowEnterAnimation">@anim/in_pop</item>
         <item name="android:windowExitAnimation">@anim/out_pop</item>
