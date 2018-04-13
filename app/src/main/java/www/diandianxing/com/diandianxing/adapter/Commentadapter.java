@@ -68,17 +68,13 @@ public class Commentadapter extends RecyclerView.Adapter<Commentadapter.Myviewho
                 return true;
             }
         });
+
+        //点击跳转详情页
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 holder.shanchu.setVisibility(View.GONE);
                 flag=false;
-            }
-        });
-        //点击跳转详情页
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 Intent intent = new Intent(context, JiaoDetailActivity.class);
                 context.startActivity(intent);
             }
@@ -86,6 +82,8 @@ public class Commentadapter extends RecyclerView.Adapter<Commentadapter.Myviewho
         holder.img_tou.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                holder.shanchu.setVisibility(View.GONE);
+                flag=false;
                 Intent intent = new Intent(context, MydynamicActivity.class);
                 context.startActivity(intent);
             }

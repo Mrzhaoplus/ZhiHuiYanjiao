@@ -2,9 +2,11 @@ package www.diandianxing.com.diandianxing.adapter;
 
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -30,11 +32,9 @@ public class MyCollectionAdapter extends BaseQuickAdapter<String, BaseViewHolder
 
     @Override
     protected void convert(final BaseViewHolder helper, String item) {
-
         ImageView iv_wdsc_sc=helper.getView(R.id.iv_wdsc_sc);
         ImageView iv_wdsc_zw = helper.getView(R.id.iv_wdsc_zw);
-
-        TextView tv_gz = helper.getView(R.id.tv_gz);
+        final TextView tv_gz = helper.getView(R.id.tv_gz);
 
         if(isqh){
             iv_wdsc_sc.setVisibility(View.VISIBLE);
@@ -46,18 +46,32 @@ public class MyCollectionAdapter extends BaseQuickAdapter<String, BaseViewHolder
         tv_gz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 gzClickListener.onGZClickListener(helper.getAdapterPosition());
-
+                tv_gz.setVisibility(View.GONE);
             }
         });
-
+        //点击暴露方法，暴露索引值
+        iv_wdsc_sc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gzClickListener.onSCClickListener(helper.getAdapterPosition());
+            }
+        });
+        //条目点击事件
+        helper.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gzClickListener.onItemClickLisener(helper.getAdapterPosition());
+            }
+        });
 
     }
 
 
     public interface GZClickListener{
         void onGZClickListener(int pos);
+        void onSCClickListener(int pos);
+        void  onItemClickLisener(int pos);
     }
 
     public  void setonGZClickListener(GZClickListener gzClickListener){

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -13,8 +14,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import www.diandianxing.com.diandianxing.IssueReportActivity;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.bean.FragEventBug;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
 
@@ -42,6 +48,9 @@ public class JiaodianActivity extends BaseActivity implements View.OnClickListen
   JIaodianFragment jiaodianfragment;
     TuijianFragment tuijianfragment;
     OldnewFragment oldnewfragment;
+    private boolean flag=true;
+    private int msgg;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,9 +81,44 @@ public class JiaodianActivity extends BaseActivity implements View.OnClickListen
         if(tuijianfragment==null){
             tuijianfragment=new TuijianFragment();
         }
-         AddFragment(tuijianfragment);
+        AddFragment(tuijianfragment);
+        if(flag){
+            //注册
+            EventBus.getDefault().register(this);
+            flag=false;
+        }
+
     }
 
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void fangfa(FragEventBug eveen){
+        msgg = eveen.getMsgg();
+        if(msgg ==3){
+            v1.setVisibility(View.VISIBLE);
+            v2.setVisibility(View.INVISIBLE);
+            v3.setVisibility(View.INVISIBLE);
+            text_guanzhu.setTextColor(getResources().getColor(R.color.text_orage));
+            text_daren.setTextColor(getResources().getColor(R.color.black_san));
+            text_tuijian.setTextColor(getResources().getColor(R.color.black_san));
+            if(jiaodianfragment==null){
+                jiaodianfragment=new JIaodianFragment();
+            }
+            AddFragment(jiaodianfragment);
+        }else{
+            v2.setVisibility(View.VISIBLE);
+            v1.setVisibility(View.INVISIBLE);
+            v3.setVisibility(View.INVISIBLE);
+            text_tuijian.setTextColor(getResources().getColor(R.color.text_orage));
+            text_daren.setTextColor(getResources().getColor(R.color.black_san));
+            text_guanzhu.setTextColor(getResources().getColor(R.color.black_san));
+            if(tuijianfragment==null){
+                tuijianfragment=new TuijianFragment();
+            }
+            AddFragment(tuijianfragment);
+        }
+    }
     @Override
     public void onClick(View view) {
 
@@ -146,4 +190,12 @@ public class JiaodianActivity extends BaseActivity implements View.OnClickListen
 
 
       }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //注销
+        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().removeAllStickyEvents();
+    }
 }

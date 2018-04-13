@@ -57,7 +57,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.search:
                 //获取输入框内容
-                String content = ed_seach.getText().toString();
+                String content = ed_seach.getText().toString().trim();
                 if (TextUtils.isEmpty(content)) {
                     Toast.makeText(SearchActivity.this, "输入内容为空", Toast.LENGTH_SHORT).show();
                 } else {
@@ -70,16 +70,5 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void submit() {
-        // validate
-        String search = ed_search.getText().toString().trim();
-        if (TextUtils.isEmpty(search)) {
-            Toast.makeText(this, "请输入地址", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
-        // TODO validate success, do something
-
-
-    }
 }

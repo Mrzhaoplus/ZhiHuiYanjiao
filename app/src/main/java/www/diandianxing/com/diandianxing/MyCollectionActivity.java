@@ -1,5 +1,6 @@
 package www.diandianxing.com.diandianxing;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 
 import www.diandianxing.com.diandianxing.adapter.MyCollectionAdapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.MyContants;
@@ -78,7 +81,6 @@ public class MyCollectionActivity extends BaseActivity {
         tv_bj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if(isqh){
                     tv_bj.setText("编辑");
                 }else{
@@ -97,9 +99,20 @@ public class MyCollectionActivity extends BaseActivity {
     private MyCollectionAdapter.GZClickListener gzClickListener = new MyCollectionAdapter.GZClickListener() {
         @Override
         public void onGZClickListener(int pos) {
-
             Log.e("TAG","pos==="+pos);
             shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+        }
+          //点击删除条目刷新适配器
+        @Override
+        public void onSCClickListener(int pos) {
+            mList.remove(pos);
+
+            changegameAdapter.notifyDataSetChanged();
+        }
+          //跳转详情页
+        @Override
+        public void onItemClickLisener(int pos) {
+             startActivity(new Intent(MyCollectionActivity.this, JiaoDetailActivity.class));
         }
     };
 

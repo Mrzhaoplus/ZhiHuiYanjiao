@@ -19,11 +19,15 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.adapter.GridViewAddImgesAdpter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.bean.FragEventBug;
+import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaodianActivity;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyGridView;
 import www.diandianxing.com.diandianxing.R;
@@ -35,8 +39,6 @@ import www.diandianxing.com.diandianxing.R;
 public class IssueReportActivity extends BaseActivity implements View.OnClickListener{
 
     private MyGridView mygridview_wtsb;
-    private ImageView include_back;
-    private TextView include_title;
     private EditText et_wtnr;
     private TextView tv_zs_num;
     private GridViewAddImgesAdpter addImgesAdpter;
@@ -45,17 +47,19 @@ public class IssueReportActivity extends BaseActivity implements View.OnClickLis
     List<LocalMedia> list = new ArrayList<>();
     List<LocalMedia> listAll = new ArrayList<>();
     private List<LocalMedia> selectList = new ArrayList<>();
+    private ImageView img_back;
+    private TextView put_in;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MyContants.windows(this);
         setContentView(R.layout.activity_issue_report);
-        include_back = (ImageView) findViewById(R.id.include_back);
-        include_title = (TextView) findViewById(R.id.include_title);
+        img_back = (ImageView) findViewById(R.id.include_back);
         mygridview_wtsb= (MyGridView) findViewById(R.id.mygridview_wtsb);
         tv_zs_num= (TextView) findViewById(R.id.tv_zs_num);
         et_wtnr= (EditText) findViewById(R.id.et_wtnr);
-        include_title.setText("问题上报");
+        put_in = (TextView) findViewById(R.id.wenti_put);
         /**
          * 添加照片adapter
          */
@@ -67,18 +71,17 @@ public class IssueReportActivity extends BaseActivity implements View.OnClickLis
                 requestPhoto();
             }
         });
-        include_back.setOnClickListener(this);
+        img_back.setOnClickListener(this);
+        put_in.setOnClickListener(this);
         et_wtnr.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -86,7 +89,7 @@ public class IssueReportActivity extends BaseActivity implements View.OnClickLis
                 if(trim.length()>140){
                     Toast.makeText(IssueReportActivity.this,"超出字数限制",Toast.LENGTH_SHORT).show();
                 }else{
-                    tv_zs_num.setText(trim.length()+"/140");
+                    tv_zs_num.setText((140-trim.length())+"/140");
                 }
             }
         });
@@ -96,6 +99,10 @@ public class IssueReportActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.include_back:
+                finish();
+                break;
+            case R.id.wenti_put:
+                EventBus.getDefault().postSticky(new FragEventBug(3, null));
                 finish();
                 break;
         }

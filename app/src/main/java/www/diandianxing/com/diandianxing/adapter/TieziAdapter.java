@@ -52,7 +52,6 @@ public class TieziAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
         changegameAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
                         Intent intent = new Intent(mContext, TPDetailActivity.class);
                         intent.putExtra("size",mList.size());
                         intent.putExtra("position",position);
@@ -86,8 +85,6 @@ public class TieziAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
         }
         @Override
         protected void convert(BaseViewHolder helper, String item) {
-
-
 
         }
 

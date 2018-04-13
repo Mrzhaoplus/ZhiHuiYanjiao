@@ -89,6 +89,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         ViewGroup.LayoutParams layoutParams = banner.getLayoutParams();
         layoutParams.height = MyUtils.getScreenWidth(mContext) * 7 / 15;
         banner.setLayoutParams(layoutParams);
+        banner.setDelayTime(3000);
         List<String> banlist = new ArrayList<>();
         banlist.add("http://h.hiphotos.baidu.com/zhidao/pic/item/c2fdfc039245d688bb61de94a2c27d1ed21b249a.jpg");
         banlist.add("http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1301/25/c0/17712320_1359096063354.jpg");
@@ -123,8 +124,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                  new Handler().postDelayed(new Runnable() {
                      @Override
                      public void run() {
-
-
                      }
                  }, 5000);
                  spring_view.onFinishFreshAndLoad();

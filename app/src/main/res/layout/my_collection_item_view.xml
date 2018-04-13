@@ -50,6 +50,7 @@
 
 
                 <TextView
+                    android:visibility="visible"
                     android:id="@+id/tv_gz"
                     android:gravity="center_horizontal"
                     android:textSize="14sp"
