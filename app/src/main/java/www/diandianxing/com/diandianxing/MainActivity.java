@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.umeng.socialize.media.Base;
 
 import org.zackratos.ultimatebar.UltimateBar;
 
@@ -37,7 +38,7 @@ import www.diandianxing.com.diandianxing.R;
 /*
   zhuye
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
     private FrameLayout fl;
     private RadioButton rb_home;
     private RadioButton rb_find;

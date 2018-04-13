@@ -16,6 +16,7 @@ import java.util.List;
 
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 
 /**
  * date : ${Date}
@@ -80,14 +81,7 @@ public class Praiseadapter extends RecyclerView.Adapter<Praiseadapter.Myviewhold
             }
         });
         //点击跳转详情页
-        holder.liners.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, JiaoDetailActivity.class);
-                context.startActivity(intent);
-            }
-        });
-        holder.yuantie.setOnClickListener(new View.OnClickListener() {
+        holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, JiaoDetailActivity.class);
@@ -95,6 +89,13 @@ public class Praiseadapter extends RecyclerView.Adapter<Praiseadapter.Myviewhold
             }
         });
 
+        holder.img_tou.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, MydynamicActivity.class);
+                context.startActivity(intent);
+            }
+        });
 
     }
 

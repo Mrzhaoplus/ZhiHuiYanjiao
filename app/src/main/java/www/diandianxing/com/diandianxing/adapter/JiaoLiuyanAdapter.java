@@ -1,6 +1,7 @@
 package www.diandianxing.com.diandianxing.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 
 /**
  * Created by Mr赵 on 2018/4/9.
@@ -40,6 +42,16 @@ public class JiaoLiuyanAdapter extends RecyclerView.Adapter<JiaoLiuyanAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
+        holder.img_tou.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(context, MydynamicActivity.class);
+                context.startActivity(intent);
+
+            }
+        });
 
     }
 

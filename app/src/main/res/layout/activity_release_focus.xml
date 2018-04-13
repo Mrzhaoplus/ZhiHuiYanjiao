@@ -7,6 +7,7 @@
     <RelativeLayout
         android:background="@color/white"
         android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -14,13 +15,14 @@
             android:id="@+id/include_back"
             android:padding="8dp"
             android:layout_marginLeft="10dp"
-            android:layout_margin="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:src="@drawable/img_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:padding="18dp"
+            android:padding="10dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:textColor="@color/bg_color"

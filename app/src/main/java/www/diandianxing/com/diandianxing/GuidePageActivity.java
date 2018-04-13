@@ -2,6 +2,7 @@ package www.diandianxing.com.diandianxing;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -29,6 +30,7 @@ public class GuidePageActivity extends BaseActivity {
     private int[] imgurls = {R.drawable.guid1,R.drawable.guide2,R.drawable.guide3,R.drawable.guide4};
 
     private LinearLayout liner;
+    private Handler handler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class GuidePageActivity extends BaseActivity {
         setContentView(R.layout.activity_guidepage);
         vp = (ViewPager) findViewById(R.id.vp);
         liner = (LinearLayout) findViewById(R.id.liner);
+        handler = new Handler();
         if (mGuidePagerAdapter == null) {
             mGuidePagerAdapter = new GuidePagerAdapter();
         }
@@ -53,7 +56,20 @@ public class GuidePageActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (position == 2) {
+                if (position == 3) {
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            SpUtils.putBoolean(GuidePageActivity.this,"sousou",false);
+                            Intent intent = new Intent(GuidePageActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        }
+                    },3000);
+
 
                 }
             }

@@ -9,15 +9,18 @@
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginTop="20dp"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:layout_centerVertical="true"
             android:id="@+id/include_back"
             android:padding="8dp"
-            android:layout_marginLeft="10dp"
-            android:layout_margin="10dp"
             android:src="@drawable/img_back"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -44,6 +47,7 @@
                 android:textSize="14sp"
                 android:singleLine="true"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:maxLines="1"
                 android:background="@android:color/transparent"/>
 

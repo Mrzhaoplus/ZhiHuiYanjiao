@@ -28,7 +28,7 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:textColor="@color/text_orage"
-            android:text="点点行"
+            android:text="智慧燕郊"
             android:layout_marginTop="12dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/logio"

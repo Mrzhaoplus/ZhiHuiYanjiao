@@ -1,5 +1,6 @@
 package www.diandianxing.com.diandianxing;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -58,10 +59,12 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 //获取输入框内容
                 String content = ed_seach.getText().toString();
                 if (TextUtils.isEmpty(content)) {
-                    Toast.makeText(SearchActivity.this, "输入框为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchActivity.this, "输入内容为空", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(SearchActivity.this, content, Toast.LENGTH_SHORT).show();
-                    ed_seach.setText("");
+
+                    Intent intent1 = new Intent(SearchActivity.this, ZixunDitailsActivity.class);
+                    startActivity(intent1);
+
                 }
                 break;
         }

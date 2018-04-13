@@ -44,7 +44,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     public View rootView;
     public ImageView img_tu;
-    public TextView tv_search;
+    public LinearLayout tv_search;
     public ImageView iv_msg;
     public TextView tv_text_msg;
     public LinearLayout ll_msg;
@@ -69,7 +69,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         View contentView = getContentView();
         this.rootView = contentView;
         this.img_tu = (ImageView) rootView.findViewById(R.id.img_tu);
-        this.tv_search = (TextView) rootView.findViewById(R.id.tv_search);
+        this.tv_search = (LinearLayout) rootView.findViewById(R.id.tv_search);
         this.iv_msg = (ImageView) rootView.findViewById(R.id.iv_msg);
         this.tv_text_msg = (TextView) rootView.findViewById(R.id.tv_text_msg);
         this.ll_msg = (LinearLayout) rootView.findViewById(R.id.ll_msg);

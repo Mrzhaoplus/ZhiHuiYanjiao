@@ -75,7 +75,6 @@ public class Masteradapter extends RecyclerView.Adapter<Masteradapter.Myviewhold
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context,"点击了"+position,Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, MydynamicActivity.class);
                 context.startActivity(intent);
             }

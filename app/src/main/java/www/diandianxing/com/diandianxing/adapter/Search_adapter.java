@@ -1,6 +1,7 @@
 package www.diandianxing.com.diandianxing.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.ZixunDitailsActivity;
 
 /**
  * Created by Mr赵 on 2018/4/9.
@@ -41,9 +43,14 @@ public class Search_adapter extends RecyclerView.Adapter<Search_adapter.ViewHode
     holder.view.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Toast.makeText(context,position+"",Toast.LENGTH_SHORT).show();
+
+            Intent intent1 = new Intent(context, ZixunDitailsActivity.class);
+            context.startActivity(intent1);
+
         }
     });
+
+
     }
 
     @Override

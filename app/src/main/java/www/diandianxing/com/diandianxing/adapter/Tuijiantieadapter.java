@@ -23,7 +23,9 @@ import java.util.List;
 
 import www.diandianxing.com.diandianxing.bean.Imagebean;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
+import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
+import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 import www.diandianxing.com.diandianxing.R;
 
@@ -36,8 +38,10 @@ public class Tuijiantieadapter extends BaseAdapter {
     private Context context;
     private List<String> lists = new ArrayList<>();
     private TextView text_sure;
-    public Tuijiantieadapter(Context context) {
+    private ShareListener shareListener;
+    public Tuijiantieadapter(Context context,ShareListener shareListener) {
         this.context = context;
+        this.shareListener=shareListener;
         data();
     }
 
@@ -78,6 +82,7 @@ public class Tuijiantieadapter extends BaseAdapter {
                     holder.item_recycler = (RecyclerView) convertView.findViewById(R.id.item_recycler);
                     holder.text_colltet = (TextView)     convertView .findViewById(R.id.text_collect);
                     holder.text_zan = (TextView)     convertView .findViewById(R.id.text_zan);
+            holder.ll_view=convertView.findViewById(R.id.ll_view);
                     holder.text_share = (TextView)     convertView .findViewById(R.id.text_share);
                     holder.rela_guanzhu = convertView.findViewById(R.id.rela_guanzhu);
 
@@ -122,10 +127,18 @@ public class Tuijiantieadapter extends BaseAdapter {
         holder.item_recycler.setAdapter(tpAdapter1);
 
 
-        holder.item_count.setOnClickListener(new View.OnClickListener() {
+        holder.ll_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(context,JiaoDetailActivity.class);
+                context.startActivity(intent);
+            }
+        });
+
+        holder.img_tou.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(context,MydynamicActivity.class);
                 context.startActivity(intent);
             }
         });
@@ -146,6 +159,7 @@ public class Tuijiantieadapter extends BaseAdapter {
         public TextView text_dengji;
         public TextView item_count;
         public RecyclerView recy_grade;
+        public LinearLayout ll_view;
         public TextView text_share,text_colltet,text_zan;
         public RelativeLayout rela_guanzhu;
     }
@@ -188,11 +202,13 @@ public class Tuijiantieadapter extends BaseAdapter {
     }
 
 
+    private LinearLayout ll_wx,ll_pyq,ll_qq,ll_kj,ll_wb;
+    private TextView quxiao;
     private void showFXDialog(int grary, int animationStyle) {
         BaseDialog.Builder builder = new BaseDialog.Builder(context);
         //设置触摸dialog外围是否关闭
         //设置监听事件
-        Dialog dialog = builder.setViewId(R.layout.sharing_pop_item_view)
+        final Dialog dialog = builder.setViewId(R.layout.sharing_pop_item_view)
                 //设置dialogpadding
                 .setPaddingdp(0, 0, 0, 0)
                 //设置显示位置
@@ -205,6 +221,49 @@ public class Tuijiantieadapter extends BaseAdapter {
                 .isOnTouchCanceled(true)
                 //设置监听事件
                 .builder();
+
         dialog.show();
+        ll_wx=dialog.findViewById(R.id.ll_wx);
+        ll_pyq=dialog.findViewById(R.id.ll_pyq);
+        ll_qq=dialog.findViewById(R.id.ll_qq);
+        ll_kj=dialog.findViewById(R.id.ll_kj);
+        ll_wb=dialog.findViewById(R.id.ll_wb);
+        quxiao=dialog.findViewById(R.id.quxiao);
+        quxiao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        ll_wx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareListener.OnShareListener(0);
+            }
+        });
+        ll_pyq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareListener.OnShareListener(1);
+            }
+        });
+        ll_qq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareListener.OnShareListener(2);
+            }
+        });
+        ll_kj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareListener.OnShareListener(3);
+            }
+        });
+        ll_wb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareListener.OnShareListener(4);
+            }
+        });
     }
 }

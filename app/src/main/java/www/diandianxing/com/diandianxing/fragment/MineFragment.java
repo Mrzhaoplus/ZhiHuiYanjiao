@@ -128,6 +128,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                  break;
              case R.id.iv_grtx:
                  Intent intent5=new Intent(getActivity(), MydynamicActivity.class);
+                 intent5.putExtra("title","我的主页");
                  startActivity(intent5);
                  break;
              case R.id.real_car:

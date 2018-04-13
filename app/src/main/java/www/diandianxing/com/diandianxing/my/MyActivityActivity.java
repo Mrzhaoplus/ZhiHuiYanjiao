@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import org.zackratos.ultimatebar.UltimateBar;
 
 import www.diandianxing.com.diandianxing.Login.BangdingActivity;
+import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 import www.diandianxing.com.diandianxing.set.SetActivity;
 import www.diandianxing.com.diandianxing.set.WalletActivity;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
@@ -200,8 +201,13 @@ public class MyActivityActivity extends BangdingActivity implements View.OnClick
                 break;
             //照片
             case R.id.my_photo:
-                Intent intent1=new Intent(this,PersonActivity.class);
-                startActivity(intent1);
+//                Intent intent1=new Intent(this,PersonActivity.class);
+//                startActivity(intent1);
+
+                Intent wd=new Intent(this, MydynamicActivity.class);
+                wd.putExtra("title","我的主页");
+                startActivity(wd);
+
                 break;
             //信用
             case R.id.my_xinyong:

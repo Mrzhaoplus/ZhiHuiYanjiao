@@ -8,8 +8,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ListView
-        android:dividerHeight="1dp"
-        android:divider="@color/back_bei"
+        android:dividerHeight="0dp"
+        android:divider="@android:color/transparent"
         android:layout_marginTop="10dp"
         android:id="@+id/jiaodan_list"
         android:layout_width="match_parent"

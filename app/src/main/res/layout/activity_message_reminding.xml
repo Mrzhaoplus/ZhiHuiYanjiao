@@ -44,6 +44,8 @@
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 app:sb_checked="false"
+                app:sb_uncheck_color="#fff"
+                app:sb_checked_color="#FFF8B702"
                 app:sb_show_indicator="false" />
         </RelativeLayout>
 
@@ -72,6 +74,8 @@
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 app:sb_checked="false"
+                app:sb_uncheck_color="#fff"
+                app:sb_checked_color="#FFF8B702"
                 app:sb_show_indicator="false" />
         </RelativeLayout>
 
@@ -253,6 +257,8 @@
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 app:sb_checked="false"
+                app:sb_uncheck_color="#fff"
+                app:sb_checked_color="#FFF8B702"
                 app:sb_show_indicator="false" />
         </RelativeLayout>
 

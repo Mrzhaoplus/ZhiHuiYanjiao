@@ -104,6 +104,148 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"></View>
         </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_sjhm"
+                android:drawablePadding="10dp"
+                android:text="手机号码"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:textColor="@color/black_san"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+v
+
+            <TextView
+                android:textColor="@color/textcolcr"
+                android:text="12345678902"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:textSize="16sp"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <View
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/tv_sjhm"
+                android:layout_width="match_parent"
+                android:background="@color/font_black_5"
+                android:layout_height="1dp"></View>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_xb"
+                android:drawablePadding="10dp"
+                android:text="性别"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:textColor="@color/black_san"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            v
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_xb_xz"
+                    android:textSize="16sp"
+                    android:checked="true"
+                    android:paddingLeft="10dp"
+                    android:text="男"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_xb_xz"
+                    android:textSize="16sp"
+                    android:paddingLeft="10dp"
+                    android:text="女"
+                    android:layout_marginLeft="10dp"/>
+            </RadioGroup>
+
+            <View
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/tv_xb"
+                android:layout_width="match_parent"
+                android:background="@color/font_black_5"
+                android:layout_height="1dp"></View>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:drawablePadding="10dp"
+                android:text="地区选择"
+                android:id="@+id/tv_dqxz"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:textColor="@color/black_san"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/iv_dqxz"
+                android:padding="3dp"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/set_next"
+                android:layout_width="25dp"
+                android:layout_height="25dp" />
+            <TextView
+                android:id="@+id/tv_sf_xz"
+                android:textColor="@color/reds"
+                android:text="未选择"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/iv_dqxz"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/tv_dqxz"
+                android:background="@color/font_black_5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"></View>
+        </RelativeLayout>
+
+
+
         <RelativeLayout
             android:id="@+id/real_renzheng"
             android:layout_width="match_parent"
@@ -142,8 +284,40 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
+                android:layout_below="@+id/set_renzheng"
+                android:background="@color/font_black_5"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"></View>
         </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:drawablePadding="10dp"
+                android:text="签名"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:textColor="@color/black_san"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="请输入您的签名"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:background="@android:color/transparent"/>
+
+
+        </LinearLayout>
+
+
     </LinearLayout>
 </LinearLayout>

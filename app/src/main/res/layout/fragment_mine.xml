@@ -328,6 +328,7 @@
     <RelativeLayout
         android:layout_marginLeft="10dp"
         android:id="@+id/real_kefu"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

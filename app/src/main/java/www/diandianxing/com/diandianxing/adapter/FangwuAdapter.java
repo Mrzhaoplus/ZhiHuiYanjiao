@@ -24,6 +24,7 @@ import java.util.List;
 import www.diandianxing.com.diandianxing.bean.Imagebean;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
+import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 import www.diandianxing.com.diandianxing.R;
 
@@ -34,9 +35,10 @@ import www.diandianxing.com.diandianxing.R;
 public class FangwuAdapter extends BaseAdapter {
     private Context context;
     private List<String> lists = new ArrayList<>();
-
-    public FangwuAdapter(Context context) {
+    private ShareListener shareListener;
+    public FangwuAdapter(Context context,ShareListener shareListener) {
         this.context = context;
+        this.shareListener=shareListener;
         data();
     }
 
@@ -135,11 +137,13 @@ public class FangwuAdapter extends BaseAdapter {
         public TextView text_share,text_colltet,text_zan;
     }
 
+    private LinearLayout ll_wx,ll_pyq,ll_qq,ll_kj,ll_wb;
+    private TextView quxiao;
     private void showFXDialog(int grary, int animationStyle) {
         BaseDialog.Builder builder = new BaseDialog.Builder(context);
         //设置触摸dialog外围是否关闭
         //设置监听事件
-        Dialog dialog = builder.setViewId(R.layout.sharing_pop_item_view)
+        final Dialog dialog = builder.setViewId(R.layout.sharing_pop_item_view)
                 //设置dialogpadding
                 .setPaddingdp(0, 0, 0, 0)
                 //设置显示位置
@@ -152,7 +156,50 @@ public class FangwuAdapter extends BaseAdapter {
                 .isOnTouchCanceled(true)
                 //设置监听事件
                 .builder();
+
         dialog.show();
+        ll_wx=dialog.findViewById(R.id.ll_wx);
+        ll_pyq=dialog.findViewById(R.id.ll_pyq);
+        ll_qq=dialog.findViewById(R.id.ll_qq);
+        ll_kj=dialog.findViewById(R.id.ll_kj);
+        ll_wb=dialog.findViewById(R.id.ll_wb);
+        quxiao=dialog.findViewById(R.id.quxiao);
+        quxiao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        ll_wx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareListener.OnShareListener(0);
+            }
+        });
+        ll_pyq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareListener.OnShareListener(1);
+            }
+        });
+        ll_qq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareListener.OnShareListener(2);
+            }
+        });
+        ll_kj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareListener.OnShareListener(3);
+            }
+        });
+        ll_wb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareListener.OnShareListener(4);
+            }
+        });
     }
 
 }

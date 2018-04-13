@@ -1,11 +1,13 @@
 package www.diandianxing.com.diandianxing.adapter;
 
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -14,6 +16,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.ArrayList;
 
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.TPDetailActivity;
 
 /**
  * Created by Administrator on 2018/4/3.
@@ -32,9 +35,11 @@ public class TieziAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     protected void convert(final BaseViewHolder helper, String item) {
 
         RecyclerView rv_tp = helper.getView(R.id.rv_tp);
-        ImageView iv_ddd = helper.getView(R.id.iv_ddd);
-        TextView text_share = helper.getView(R.id.text_share);
-        ArrayList<String> mList=new ArrayList<>();
+        final ImageView iv_ddd = helper.getView(R.id.iv_ddd);
+        final TextView text_share = helper.getView(R.id.text_share);
+        final LinearLayout ll_xq = helper.getView(R.id.ll_xq);
+
+        final ArrayList<String> mList=new ArrayList<>();
         if (mList.size()<=0){
             mList.add("");
             mList.add("");
@@ -44,6 +49,17 @@ public class TieziAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
         rv_tp.setNestedScrollingEnabled(false);
         TPAdapter changegameAdapter = new TPAdapter(R.layout.tpp_item_view, mList);
         rv_tp.setAdapter(changegameAdapter);
+        changegameAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                        Intent intent = new Intent(mContext, TPDetailActivity.class);
+                        intent.putExtra("size",mList.size());
+                        intent.putExtra("position",position);
+                mContext.startActivity(intent);
+
+            }
+        });
         iv_ddd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,6 +72,12 @@ public class TieziAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
                 mOnItemClickListener.FxClickListener(helper.getAdapterPosition());
             }
         });
+        ll_xq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemClickListener.ItemClick(null,helper.getAdapterPosition());
+            }
+        });
     }
     public class TPAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
@@ -64,6 +86,9 @@ public class TieziAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
         }
         @Override
         protected void convert(BaseViewHolder helper, String item) {
+
+
+
         }
 
     }

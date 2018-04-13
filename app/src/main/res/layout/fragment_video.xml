@@ -8,6 +8,7 @@
 
 
          <android.support.v4.widget.NestedScrollView
+             android:id="@+id/nsc_pm"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
              <LinearLayout
@@ -69,7 +70,25 @@
 
                      </RelativeLayout>
 
+                     <RadioButton
+                         android:id="@+id/video_zan"
+                         android:layout_alignParentRight="true"
+                         android:layout_marginTop="80dp"
+                         android:layout_marginRight="20dp"
+                         android:button="@null"
+                         android:background="@drawable/sc_xz_3x"
+                         android:layout_width="30dp"
+                         android:layout_height="30dp" />
 
+                     <ImageView
+                         android:id="@+id/video_fenxiang"
+                         android:layout_alignParentRight="true"
+                         android:layout_marginTop="30dp"
+                         android:layout_marginRight="20dp"
+                         android:layout_below="@+id/video_zan"
+                         android:background="@drawable/fx_icon_3x"
+                         android:layout_width="30dp"
+                         android:layout_height="30dp" />
 
 
                  </RelativeLayout>
@@ -143,6 +162,13 @@
                      android:id="@+id/rcy_view"
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                 <View
+                     android:id="@+id/view"
+                     android:layout_width="match_parent"
+                     android:layout_height="5dp"
+                     android:layout_above="@+id/lines"
+                     android:background="@color/back_bei"
+                     ></View>
              </LinearLayout>
      </android.support.v4.widget.NestedScrollView>
 
@@ -155,8 +181,8 @@
         android:layout_height="30dp">
         <ImageView
             android:src="@drawable/img_whiteback"
-            android:layout_width="20dp"
-            android:layout_height="20dp" />
+            android:layout_width="15dp"
+            android:layout_height="15dp" />
     </LinearLayout>
 
     <RelativeLayout
@@ -190,26 +216,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/icon_tou"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
-    <RadioButton
-        android:id="@+id/video_zan"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="20dp"
-        android:button="@null"
-        android:layout_below="@+id/video_tou"
-        android:background="@drawable/sc_xz_3x"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
-
-    <ImageView
-        android:id="@+id/video_fenxiang"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="20dp"
-        android:layout_below="@+id/video_zan"
-        android:background="@drawable/fx_icon_3x"
         android:layout_width="30dp"
         android:layout_height="30dp" />
 

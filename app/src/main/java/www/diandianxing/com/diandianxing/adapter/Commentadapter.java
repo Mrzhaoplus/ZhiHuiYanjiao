@@ -16,6 +16,7 @@ import java.util.List;
 
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 
 /**
  * date : ${Date}
@@ -75,17 +76,17 @@ public class Commentadapter extends RecyclerView.Adapter<Commentadapter.Myviewho
             }
         });
         //点击跳转详情页
-        holder.liners.setOnClickListener(new View.OnClickListener() {
+        holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, JiaoDetailActivity.class);
                 context.startActivity(intent);
             }
         });
-        holder.yuantie.setOnClickListener(new View.OnClickListener() {
+        holder.img_tou.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, JiaoDetailActivity.class);
+                Intent intent = new Intent(context, MydynamicActivity.class);
                 context.startActivity(intent);
             }
         });

@@ -10,7 +10,7 @@
 
 <LinearLayout
     android:id="@+id/liners"
-    android:layout_marginTop="350dp"
+    android:layout_marginTop="420dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView

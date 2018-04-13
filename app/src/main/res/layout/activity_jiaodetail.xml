@@ -222,20 +222,25 @@
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <EditText
-            android:layout_margin="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/ed_text"
             android:layout_weight="3"
             android:background="@null"
             android:hint="请说说您的看法..."
             android:layout_width="0dp"
-            android:layout_height="40dp" />
+            android:layout_gravity="center_vertical"
+            android:textSize="14sp"
+            android:layout_height="match_parent" />
         <Button
             android:background="@drawable/shape_fabu"
             android:id="@+id/button_fabu"
             android:textColor="@color/white"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_vertical"
             android:text="发布"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="40dp" />
+            android:layout_width="80dp"
+            android:layout_marginRight="5dp"
+            android:layout_height="35dp" />
     </LinearLayout>
 </RelativeLayout>

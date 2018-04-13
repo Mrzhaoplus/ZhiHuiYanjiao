@@ -61,9 +61,9 @@
         <activity android:name=".MainActivity" android:screenOrientation="portrait"/>
 
         <activity android:name=".fragment.mainfragment.JiaodianActivity" /> <!-- -每日焦点 -->
-        <activity android:name=".fragment.mainfragment.JiaoDetailActivity" /> <!-- 每日焦点详情 -->
+        <activity android:name=".fragment.mainfragment.JiaoDetailActivity" android:windowSoftInputMode="stateUnchanged|adjustPan"/> <!-- 每日焦点详情 -->
         <activity android:name=".util.lookphoto.ImagePagerActivity" /> <!-- 图片查看 -->
-        <activity android:name=".fragment.minefragment.MyFllowActivity" /> <!-- 我的关注 -->
+        <activity android:name=".fragment.minefragment.MyFllowActivity" /> <!-- 我的关注 -->v
         <activity android:name=".fragment.minefragment.MyFansiActivity" /> <!-- 我的粉丝 -->
         <activity android:name=".fragment.minefragment.MydynamicActivity" /> <!-- 我的动态 -->
         <activity android:name=".fragment.mainfragment.LuKuangActivity" />
@@ -92,7 +92,8 @@
         <activity
             android:name=".SearchLocationActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".VideoActivity" />
+        <activity android:name=".VideoActivity"
+                  android:windowSoftInputMode="stateUnchanged|adjustPan"/>
         <activity android:name=".SearchActivity"></activity>
 
         <activity android:name=".ReleaseFocusActivity" android:screenOrientation="portrait"/>
