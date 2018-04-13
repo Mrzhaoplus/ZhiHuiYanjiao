@@ -16,8 +16,8 @@
                android:id="@+id/img_tou"
                android:scaleType="fitXY"
                android:src="@drawable/icon_tou"
-               android:layout_width="60dp"
-               android:layout_height="60dp" />
+               android:layout_width="50dp"
+               android:layout_height="50dp" />
 
               <TextView
                   android:layout_toRightOf="@id/img_tou"
@@ -38,15 +38,16 @@
                android:background="@drawable/shape_orageradioline"
                android:layout_centerVertical="true"
                android:layout_alignParentRight="true"
-               android:layout_width="75dp"
+               android:layout_width="65dp"
                android:layout_height="wrap_content">
 
                <TextView
                    android:gravity="center_horizontal"
-                   android:textSize="16sp"
+                   android:textSize="14sp"
                    android:textColor="@color/white"
                    android:text="+关注"
-                   android:padding="10dp"
+                   android:paddingTop="7dp"
+                   android:paddingBottom="7dp"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content" />
            </LinearLayout>

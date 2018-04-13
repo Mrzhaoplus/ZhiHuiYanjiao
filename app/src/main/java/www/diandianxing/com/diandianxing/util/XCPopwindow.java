@@ -172,10 +172,17 @@ public class XCPopwindow extends PopupWindow implements View.OnClickListener {
                   intent = new Intent(mContext, VideoRecordingActivity.class);
                   mContext.startActivity(intent);
 
+
+                  dismiss();
+
+
                   break;
               case R.id.btn_jiaodian:
 //                  Toast.makeText(mContext, "assad", Toast.LENGTH_SHORT).show();
                   albumClickListener.OnAlbumClickListener();
+
+
+                  dismiss();
 
                   break;
 

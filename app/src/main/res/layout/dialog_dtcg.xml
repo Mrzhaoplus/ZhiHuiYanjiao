@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+              android:gravity="center_horizontal"
     android:orientation="vertical">
 
 
@@ -9,18 +10,14 @@
 <LinearLayout
     android:orientation="vertical"
     android:layout_marginTop="10dp"
-    android:layout_marginRight="40dp"
-    android:layout_marginLeft="40dp"
-    android:paddingTop="30dp"
-    android:paddingBottom="30dp"
     android:background="@drawable/shape_backwhiteradioline"
-    android:layout_width="match_parent"
-    android:gravity="center_horizontal"
-    android:layout_height="wrap_content">
+    android:layout_width="180dp"
+    android:gravity="center"
+    android:layout_height="180dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@drawable/dtcg_3x"/>
 
         <TextView

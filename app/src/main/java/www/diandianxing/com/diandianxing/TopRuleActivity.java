@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.MyContants;
 
 /**
  * Created by Administrator on 2018/4/3.
@@ -16,15 +17,13 @@ import www.diandianxing.com.diandianxing.R;
 public class TopRuleActivity extends BaseActivity {
 
     private ImageView include_back;
-    private TextView include_title;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyContants.windows(this);
         setContentView(R.layout.activity_sign_rule);
         include_back= (ImageView) findViewById(R.id.include_back);
-        include_title= (TextView) findViewById(R.id.include_title);
-        include_title.setText("置顶规则");
         include_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

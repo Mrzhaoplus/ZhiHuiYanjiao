@@ -153,6 +153,7 @@
                     android:layout_alignParentRight="true"
                     android:checked="true"
                     android:enabled="false"
+                    android:layout_marginRight="5dp"
                     android:button="@drawable/selector_xx"
                      />
             </RelativeLayout>
@@ -185,6 +186,7 @@
                     android:button="@drawable/selector_xx"
                     android:enabled="false"
                     android:checked="true"
+                    android:layout_marginRight="5dp"
                     />
             </RelativeLayout>
 
@@ -216,6 +218,7 @@
                     android:button="@drawable/selector_xx"
                     android:enabled="false"
                     android:checked="true"
+                    android:layout_marginRight="5dp"
                     />
             </RelativeLayout>
 

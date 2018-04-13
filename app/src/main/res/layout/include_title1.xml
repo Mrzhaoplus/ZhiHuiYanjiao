@@ -19,7 +19,7 @@
             android:id="@+id/zhong"
             android:textColor="@color/white"
             android:layout_centerHorizontal="true"
-            android:textSize="18dp"
+            android:textSize="17sp"
             android:padding="10dp"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"

@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.MyContants;
 
 /**
  * Created by Administrator on 2018/4/8.
@@ -32,6 +33,7 @@ public class VideoRecordingActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyContants.windows(this);
         setContentView(R.layout.activity_video_recording);
 
         if (Build.VERSION.SDK_INT >= 19) {

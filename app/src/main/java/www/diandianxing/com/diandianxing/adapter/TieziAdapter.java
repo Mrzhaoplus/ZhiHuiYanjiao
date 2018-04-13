@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -28,6 +29,9 @@ public class TieziAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
     DianClickListener dianClickListener;
 
+    private boolean isxs;
+
+
     public TieziAdapter(@LayoutRes int layoutResId, @Nullable ArrayList<String> data) {
         super(layoutResId, data);
     }
@@ -38,13 +42,20 @@ public class TieziAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
         final ImageView iv_ddd = helper.getView(R.id.iv_ddd);
         final TextView text_share = helper.getView(R.id.text_share);
         final LinearLayout ll_xq = helper.getView(R.id.ll_xq);
-
+        RelativeLayout rl_title_xs = helper.getView(R.id.rl_title_xs);
         final ArrayList<String> mList=new ArrayList<>();
         if (mList.size()<=0){
             mList.add("");
             mList.add("");
             mList.add("");
         }
+
+        if(isxs){
+            rl_title_xs.setVisibility(View.VISIBLE);
+        }else {
+            rl_title_xs.setVisibility(View.GONE);
+        }
+
         rv_tp.setLayoutManager(new GridLayoutManager(mContext,3));
         rv_tp.setNestedScrollingEnabled(false);
         TPAdapter changegameAdapter = new TPAdapter(R.layout.tpp_item_view, mList);
@@ -87,6 +98,13 @@ public class TieziAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
         protected void convert(BaseViewHolder helper, String item) {
 
         }
+
+    }
+
+
+    public void setXS(boolean isxs){
+
+        this.isxs = isxs;
 
     }
 

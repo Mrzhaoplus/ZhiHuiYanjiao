@@ -170,13 +170,14 @@ public class AddPopwindow extends PopupWindow implements View.OnClickListener {
 //                  Toast.makeText(mContext, "aad", Toast.LENGTH_SHORT).show();
                   intent = new Intent(mContext, VideoRecordingActivity.class);
                   mContext.startActivity(intent);
-
+                  dismiss();
                   break;
               case R.id.btn_jiaodian:
 //                  Toast.makeText(mContext, "assad", Toast.LENGTH_SHORT).show();
 
                   intent = new Intent(mContext, ReleaseFocusActivity.class);
                   mContext.startActivity(intent);
+                  dismiss();
 
                   break;
 

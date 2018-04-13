@@ -23,6 +23,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.widget.SpringView;
@@ -93,6 +94,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
     private BaseDialog dialog;
     private List<LocalMedia> selectList = new ArrayList<>();
     private String cutPath;
+    private String title;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +129,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
         v2 = (View) findViewById(R.id.v2);
         liner_dongtai = (LinearLayout) findViewById(R.id.liner_dongtai);
 
-        String title = getIntent().getStringExtra("title");
+        title = getIntent().getStringExtra("title");
         if(title!=null){
             tv_dt_title.setText(title);
         }
@@ -155,6 +157,12 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
         recy_card.setNestedScrollingEnabled(false);
         TieziAdapter tieziAdapter= new TieziAdapter(R.layout.tz_item_view, mList);
         recy_card.setAdapter(tieziAdapter);
+
+        if("我的主页".equals(title)){
+            tieziAdapter.setXS(true);
+            tieziAdapter.notifyDataSetChanged();
+        }
+
         tieziAdapter.setOnDianClickListener(dianClickListener);
         tieziAdapter.SetOnItemClickListener(onItemClickListener);
         initRefresh();
@@ -353,7 +361,10 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                 recy_card.setNestedScrollingEnabled(false);
                 TieziAdapter tieziAdapter= new TieziAdapter(R.layout.tz_item_view, mList);
                 recy_card.setAdapter(tieziAdapter);
-
+                if("我的主页".equals(title)){
+                    tieziAdapter.setXS(true);
+                    tieziAdapter.notifyDataSetChanged();
+                }
                 break;
 
             case R.id.liner_dongtai://动态
@@ -596,10 +607,9 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                     cutPath = selectList.get(0).getCutPath();
                     File file = new File(cutPath);
                     Log.d("TAg",cutPath);
-                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+//                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                     Drawable fromPath = Drawable.createFromPath(cutPath);
                     rl_bg.setBackground(fromPath);
-
                     /*
                        质量压缩
                      */
@@ -682,6 +692,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
         text_sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                cgDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
                 dialog.dismiss();
             }
         });
@@ -715,7 +726,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                 //设置dialog的宽高
                 .setWidthHeightpx(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 //设置触摸dialog外围是否关闭
-                .isOnTouchCanceled(false)
+                .isOnTouchCanceled(true)
                 //设置监听事件
                 .builder();
         dialog.show();
