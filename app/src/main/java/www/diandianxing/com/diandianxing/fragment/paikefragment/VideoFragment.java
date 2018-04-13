@@ -3,16 +3,20 @@ package www.diandianxing.com.diandianxing.fragment.paikefragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.OnTouch;
 import www.diandianxing.com.diandianxing.adapter.MyPagerAdapter;
 import www.diandianxing.com.diandianxing.adapter.Video_pinglun_Adapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
@@ -81,7 +86,10 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
     private NestedScrollView nsc_pm;
 
     private List<View> views;
-
+    private RelativeLayout ding;
+    private RelativeLayout kongjian;
+    private int scrollY1;
+    private int height;
 
 
     @Override
@@ -91,7 +99,10 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
     @Override
     protected void lazyLoad() {
+
         View contentView = getContentView();
+        ding = contentView.findViewById(R.id.ding);
+        kongjian = contentView.findViewById(R.id.kongjian);
         video = contentView.findViewById(R.id.video_view);
         recy_view = contentView.findViewById(R.id.rcy_view);
         img_back = contentView.findViewById(R.id.img_back);
@@ -108,13 +119,38 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
         time = contentView.findViewById(R.id.text_time);
         pinglun = contentView.findViewById(R.id.text_pinglun);
         text_zan = contentView.findViewById(R.id.text_zan);
+
         vp_img_banner=contentView.findViewById(R.id.vp_img_banner);
         ll_dian=contentView.findViewById(R.id.ll_dian);
         vv_sp=findViewById(R.id.vv_sp);
         //设置控件为半透明
         img_back.getBackground().setAlpha(80);
         guanzhu.getBackground().setAlpha(80);
-handler=new Handler();
+
+        /*
+        * 设置改变颜色
+        * */
+       /* int measuredHeight ;
+
+          if(rl_video.getVisibility()==View.VISIBLE){
+              measuredHeight= rl_video.getMeasuredHeight();
+          }else{
+              measuredHeight= rl_img.getMeasuredHeight();
+          }*/
+
+
+
+        ViewTreeObserver vto = kongjian.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                kongjian.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                height = kongjian.getHeight();
+            }
+        });
+
+
+        handler=new Handler();
         views = new ArrayList<>();
         Uri uri = Uri.parse( "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" );
         MediaController mediaController = new MediaController(getActivity());
@@ -195,8 +231,12 @@ handler=new Handler();
         @Override
         public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
-            Log.e("TAG1","scrollX="+scrollX+",scrollY="+scrollY+",oldScrollX="+oldScrollX+",oldScrollY="+oldScrollY);
-
+            Log.i("TAG1","scrollX="+scrollX+",scrollY="+scrollY+",oldScrollX="+oldScrollX+",oldScrollY="+oldScrollY);
+            if(scrollY>=height){
+                ding.getBackground().setAlpha(230);
+            }else{
+                ding.getBackground().setAlpha(0);
+            }
         }
 
     };
@@ -471,4 +511,6 @@ handler=new Handler();
         ll_kj.setOnClickListener(this);
         ll_wb.setOnClickListener(this);
     }
+
+
 }

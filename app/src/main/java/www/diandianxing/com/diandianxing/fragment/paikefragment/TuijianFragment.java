@@ -58,8 +58,7 @@ public class TuijianFragment extends BaseFragment {
                 spring_view.onFinishFreshAndLoad();
             }
         });
-
-         spring_view.setHeader(new DefaultHeader(getActivity()));
+        spring_view.setHeader(new DefaultHeader(getActivity()));
         spring_view.setFooter(new DefaultFooter(getActivity()));
 
     }

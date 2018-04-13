@@ -117,7 +117,6 @@ public class TieziAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     }
 
     //设置接口回调用于adapter监听
-
     public interface OnItemClickListener{
         void ItemClick(View view, int position);
         void FxClickListener(int pos);

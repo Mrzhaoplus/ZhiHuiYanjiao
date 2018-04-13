@@ -78,8 +78,6 @@ public class Tujianadapter extends BaseAdapter {
 
         return view;
     }
-
-    //
     class Viewholer{
         ImageView tui_img,tui_tou;
         TextView tui_zan;
