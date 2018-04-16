@@ -32,6 +32,7 @@ public class MyCollectionAdapter extends BaseQuickAdapter<String, BaseViewHolder
 
     @Override
     protected void convert(final BaseViewHolder helper, String item) {
+        helper.setIsRecyclable(false);
         ImageView iv_wdsc_sc=helper.getView(R.id.iv_wdsc_sc);
         ImageView iv_wdsc_zw = helper.getView(R.id.iv_wdsc_zw);
         final TextView tv_gz = helper.getView(R.id.tv_gz);

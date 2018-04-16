@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
               android:background="@color/white"
-    tools:context="zhyj.dqjt.com.zhihuiyanjiao.SearchActivity">
+    >
 
     <RelativeLayout
         android:layout_marginTop="20dp"
@@ -69,27 +69,45 @@
         android:layout_height="10dp"
         android:background="@color/back_bei"
         />
-    <TextView
-        android:layout_margin="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="#696666"
-        android:text="大家都在搜"
-        />
-    <View
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@color/color_hui"
-        />
+        android:layout_height="match_parent"
+        android:background="@color/back_bei">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/recycler_search"
-        ></android.support.v7.widget.RecyclerView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#696666"
+                android:text="大家都在搜"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/color_hui"
+                />
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycler_search"
+                ></android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+    x
+
+
 
 </LinearLayout>
