@@ -85,10 +85,6 @@
                 android:layout_height="2dp"></View>
         </LinearLayout>
     </LinearLayout>
-    <View
-        android:background="@color/color_hui"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"></View>
     <FrameLayout
         android:id="@+id/fram_layout"
         android:layout_marginTop="15dp"
