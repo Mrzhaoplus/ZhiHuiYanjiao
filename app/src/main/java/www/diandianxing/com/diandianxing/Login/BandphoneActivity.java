@@ -226,7 +226,7 @@ public class BandphoneActivity extends BaseActivity {
                   if(result.getCode()==200){
                       SpUtils.putString(BandphoneActivity.this,"userid",result.getDatas().getId());
                       SpUtils.putString(BandphoneActivity.this,"token",result.getDatas().getToken());
-                      SpUtils.putInt(BandphoneActivity.this, "guid", 1);
+                      SpUtils.putInt(BandphoneActivity.this, "guid", 2);
                       //绑定成功跳登录
                        Intent intent=new Intent(BandphoneActivity.this, MainActivity.class);
                         startActivity(intent);

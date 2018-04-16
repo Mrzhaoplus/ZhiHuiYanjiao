@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.luck.picture.lib.PictureSelector;
@@ -18,12 +19,17 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.adapter.GridViewAddImgesAdpter;
 import www.diandianxing.com.diandianxing.adapter.TagAdapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyGridView;
 import www.diandianxing.com.diandianxing.R;
@@ -40,6 +46,7 @@ public class ReleaseFocusActivity extends BaseActivity {
 
     private LinearLayout ll_szwz;
     private MyGridView mygridview;
+    private TextView textView2;
     private GridViewAddImgesAdpter addImgesAdpter;
     ArrayList<String> arrayList = new ArrayList<>();
     ArrayList<String> mList = new ArrayList<>();
@@ -52,9 +59,12 @@ public class ReleaseFocusActivity extends BaseActivity {
         MyContants.windows(this);
         setContentView(R.layout.activity_release_focus);
 
+        EventBus.getDefault().register(ReleaseFocusActivity.this);
+
         include_back= (ImageView) findViewById(R.id.include_back);
         rv_fbfl= (RecyclerView) findViewById(R.id.rv_fbfl);
         ll_szwz= (LinearLayout) findViewById(R.id.ll_szwz);
+        textView2= (TextView) findViewById(R.id.textView2);
         mygridview= (MyGridView) findViewById(R.id.mygridview);
         mList.add("");
         mList.add("");
@@ -113,6 +123,17 @@ public class ReleaseFocusActivity extends BaseActivity {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void XXX(MsgBus messageEvent) {
+
+        textView2.setText(messageEvent.msg);
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(ReleaseFocusActivity.this);
+    }
 
     private void requestPhoto() {
         // 进入相册 以下是例子：不需要的api可以不写

@@ -27,8 +27,8 @@
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
         <ImageView
             android:id="@+id/img_tu"
             android:layout_centerVertical="true"
@@ -75,8 +75,8 @@
                 >
                 <ImageView
                     android:id="@+id/iv_msg"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:src="@drawable/img_messages"/>
             </FrameLayout>
@@ -87,6 +87,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="消息"
+                android:visibility="gone"
                 android:textColor="#666666"
                 android:textSize="12sp"/>
         </LinearLayout>

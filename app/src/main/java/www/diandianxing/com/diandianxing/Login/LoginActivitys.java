@@ -119,7 +119,7 @@ public class LoginActivitys extends UMLoginActivity implements View.OnClickListe
                     //将 token与userid保存
                     SpUtils.putString(LoginActivitys.this,"token",token);
                     SpUtils.putString(LoginActivitys.this,"userid",id);
-                    SpUtils.putInt(LoginActivitys.this, "guid", 1);
+                    SpUtils.putInt(LoginActivitys.this, "guid", 2);
                     Intent intent=new Intent(LoginActivitys.this, MainActivity.class);
                     startActivity(intent);
                     finish();

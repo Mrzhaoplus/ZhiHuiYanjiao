@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.compress.Luban;
@@ -14,12 +15,17 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.adapter.GridViewAddImgesAdpter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.bean.Info;
+import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyGridView;
 import www.diandianxing.com.diandianxing.R;
@@ -40,15 +46,17 @@ public class ReleaseShootoffActivity extends BaseActivity {
     List<LocalMedia> listAll = new ArrayList<>();
     private List<LocalMedia> selectList = new ArrayList<>();
     private Info info;
+    private TextView textView2;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MyContants.windows(this);
         setContentView(R.layout.activity_release_shootoff);
-
+        EventBus.getDefault().register(ReleaseShootoffActivity.this);
         include_back= (ImageView) findViewById(R.id.include_back);
         ll_szwz= (LinearLayout) findViewById(R.id.ll_szwz);
         mygridview= (MyGridView) findViewById(R.id.mygridview);
+        textView2= (TextView) findViewById(R.id.textView2);
 
         String path=getIntent().getStringExtra("img");
         info= (Info) getIntent().getSerializableExtra("list");
@@ -93,6 +101,18 @@ public class ReleaseShootoffActivity extends BaseActivity {
         });
 
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void XXX(MsgBus messageEvent) {
+
+        textView2.setText(messageEvent.msg);
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(ReleaseShootoffActivity.this);
     }
 
 

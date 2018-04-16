@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import org.zackratos.ultimatebar.UltimateBar;
 
 import www.diandianxing.com.diandianxing.Login.LoginActivity;
+import www.diandianxing.com.diandianxing.Login.LoginActivitys;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.R;
@@ -58,19 +59,11 @@ public class GuidePageActivity extends BaseActivity {
             public void onPageSelected(int position) {
                 if (position == 3) {
 
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            SpUtils.putBoolean(GuidePageActivity.this,"sousou",false);
-                            Intent intent = new Intent(GuidePageActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-
-                        }
-                    },3000);
+                    handler.postDelayed(runnable,3000);
 
 
+                }else{
+                    handler.removeCallbacks(runnable);
                 }
             }
 
@@ -81,6 +74,25 @@ public class GuidePageActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(runnable);
+    }
+
+    private Runnable runnable=new Runnable() {
+        @Override
+        public void run() {
+
+            SpUtils.putBoolean(GuidePageActivity.this,"sousou",false);
+//            SpUtils.putInt(GuidePageActivity.this, "guid", 1);
+            Intent intent = new Intent(GuidePageActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+
+        }
+    };
+
     private class GuidePagerAdapter extends PagerAdapter {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
@@ -89,22 +101,24 @@ public class GuidePageActivity extends BaseActivity {
             View tv_into = view.findViewById(R.id.tv_into);
             if (position ==3) {
                 tv_into.setVisibility(View.VISIBLE);
-            } else {
-                tv_into.setVisibility(View.GONE);
-            }
-            tv_into.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                     /*
                        存boolean值获取状态
                      */
 
-                    SpUtils.putBoolean(GuidePageActivity.this,"sousou",false);
-                    Intent intent = new Intent(GuidePageActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
+                        SpUtils.putBoolean(GuidePageActivity.this,"sousou",false);
+//                        SpUtils.putInt(GuidePageActivity.this, "guid", 1);
+                        Intent intent = new Intent(GuidePageActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            } else {
+                tv_into.setVisibility(View.GONE);
+            }
+
             imageView.setImageResource(imgurls[position]);
             container.addView(view);
             return view;

@@ -8,10 +8,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import www.diandianxing.com.diandianxing.adapter.LocationAdapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
 
@@ -64,6 +69,18 @@ public class LocationActivity extends BaseActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(LocationActivity.this,SearchLocationActivity.class);
                 startActivity(intent);
+                finish();
+            }
+        });
+        locationAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                MsgBus msgBus = new MsgBus();
+                msgBus.msg="北京天安门";
+                EventBus.getDefault().postSticky(msgBus);
+                finish();
+
             }
         });
     }

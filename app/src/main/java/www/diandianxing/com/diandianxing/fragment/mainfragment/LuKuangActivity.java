@@ -65,7 +65,7 @@ public class LuKuangActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.liner1:
-                text_zixun.setTextColor(Color.RED);
+                text_zixun.setTextColor(getResources().getColor(R.color.guancolor));
                 text_lukuang.setTextColor(Color.BLACK);
                 zixun_view.setVisibility(View.VISIBLE);
                 lu_view.setVisibility(View.INVISIBLE);
@@ -77,7 +77,7 @@ public class LuKuangActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.liner2:
                 text_zixun.setTextColor(Color.BLACK);
-                text_lukuang.setTextColor(Color.RED);
+                text_lukuang.setTextColor(getResources().getColor(R.color.guancolor));
                 zixun_view.setVisibility(View.INVISIBLE);
                 lu_view.setVisibility(View.VISIBLE);
                 //跳转页面

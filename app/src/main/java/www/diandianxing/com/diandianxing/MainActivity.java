@@ -1,6 +1,9 @@
 package www.diandianxing.com.diandianxing;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,20 +23,25 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.umeng.socialize.media.Base;
 
+import org.greenrobot.eventbus.EventBus;
 import org.zackratos.ultimatebar.UltimateBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.bean.FragEventBug;
 import www.diandianxing.com.diandianxing.bean.Info;
 import www.diandianxing.com.diandianxing.fragment.HomeFragment;
 import www.diandianxing.com.diandianxing.fragment.MessageFragment;
 import www.diandianxing.com.diandianxing.fragment.MineFragment;
 import www.diandianxing.com.diandianxing.fragment.PaikewFragment;
 import www.diandianxing.com.diandianxing.util.AddPopwindow;
+import www.diandianxing.com.diandianxing.util.ConUtils;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /*
   zhuye
@@ -54,6 +62,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView frag_add;
 
     private long preTime;
+
+    private int tag;
+
     //hahahahahha
 
     @Override
@@ -78,6 +89,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         rgp = (RadioGroup) findViewById(R.id.rgp);
         activity_main = (LinearLayout) findViewById(R.id.activity_main);
         frag_add = (ImageView) findViewById(R.id.frag_add);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConUtils.TAG_ZT);
+        registerReceiver(broadcastReceiver,intentFilter);
+
         rb_home.setOnClickListener(this);
         rb_find.setOnClickListener(this);
         rb_message.setOnClickListener(this);
@@ -133,6 +149,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rb_home:
@@ -140,30 +162,44 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     homeFragment = new HomeFragment();
                 }
                 addFragments(homeFragment);
+                tag=0;
                 break;
             case R.id.rb_find:
                 if (findFragment == null) {
                     findFragment = new PaikewFragment();
                 }
                 addFragments(findFragment);
+                tag=1;
                 break;
             case R.id.rb_message:
                 if (messageFragment == null) {
                     messageFragment = new MessageFragment();
                 }
                 addFragments(messageFragment);
+                tag=3;
                 break;
             case R.id.rb_mine:
-                if (mineFragment == null) {
-                    mineFragment = new MineFragment();
+
+                int guid = SpUtils.getInt(MainActivity.this, "guid", 0);
+                if(guid!=2){
+                    startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                    rb_mine.setChecked(false);
+                    RadioButton rb= (RadioButton) rgp.getChildAt(tag);
+                    rb.setChecked(true);
                 }
-                addFragments(mineFragment);
+                else {
+                    if (mineFragment == null) {
+                        mineFragment = new MineFragment();
+                    }
+                    addFragments(mineFragment);
+                }
                 break;
             case R.id.frag_add:
                 AddPopwindow popWindow = new AddPopwindow(MainActivity.this);
                 popWindow.showMoreWindow(v);
                 //加号
                 break;
+
         }
     }
 
@@ -181,6 +217,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
 
     }
+
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if(ConUtils.TAG_ZT.equals(intent.getAction())){
+                tag=0;
+                if (homeFragment == null) {
+                    homeFragment = new HomeFragment();
+                }
+                addFragments(homeFragment);
+                RadioButton rb= (RadioButton) rgp.getChildAt(tag);
+                rb.setChecked(true);
+            }
+        }
+    };
 
 
 }

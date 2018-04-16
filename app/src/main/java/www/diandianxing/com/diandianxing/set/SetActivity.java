@@ -18,6 +18,7 @@ import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.my.ProtocolActivity;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.CacheDataManager;
+import www.diandianxing.com.diandianxing.util.ConUtils;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.R;
@@ -198,13 +199,17 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
         tv_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SpUtils.putInt(SetActivity.this, "guid", 2);
+                SpUtils.putInt(SetActivity.this, "guid",1);
 
                 //更新页面
                 dialog.dismiss();
-                realBack();
-                Intent intent3=new Intent(SetActivity.this,LoginActivity.class);
-                startActivity(intent3);
+//                realBack();
+//                Intent intent3=new Intent(SetActivity.this,LoginActivity.class);
+//                startActivity(intent3);
+                Intent intent = new Intent();
+                intent.setAction(ConUtils.TAG_ZT);
+                sendBroadcast(intent);
+                finish();
 
 
 

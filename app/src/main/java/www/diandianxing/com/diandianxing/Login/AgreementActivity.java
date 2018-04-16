@@ -143,7 +143,7 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
                 if(result.getCode()==200){
                     SpUtils.putString(AgreementActivity.this,"userid",result.getDatas().getId());
                     SpUtils.putString(AgreementActivity.this,"token",result.getDatas().getToken());
-                    SpUtils.putInt(AgreementActivity.this, "guid", 1);
+                    SpUtils.putInt(AgreementActivity.this, "guid", 2);
                     //绑定成功跳登录
                     Intent intent=new Intent(AgreementActivity.this, MainActivity.class);
                     startActivity(intent);

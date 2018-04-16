@@ -20,7 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.DianDianActivity;
+import www.diandianxing.com.diandianxing.GuidePageActivity;
+import www.diandianxing.com.diandianxing.LancherActivity;
 import www.diandianxing.com.diandianxing.LiveActivity;
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
+import www.diandianxing.com.diandianxing.MainActivity;
 import www.diandianxing.com.diandianxing.MsgItmeActivity;
 import www.diandianxing.com.diandianxing.SearchActivity;
 import www.diandianxing.com.diandianxing.ZixunDitailsActivity;
@@ -34,6 +38,7 @@ import www.diandianxing.com.diandianxing.util.BannerUtils;
 import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.util.MyUtils;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /**
  * date : ${Date}
@@ -176,8 +181,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.text_diandian:
 
-                Intent dd = new Intent(getActivity(), DianDianActivity.class);
-                startActivity(dd);
+                int guid = SpUtils.getInt(getActivity(), "guid", 1);
+                if(guid!=2){
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                }
+                else {
+                    Intent dd = new Intent(getActivity(), DianDianActivity.class);
+                    startActivity(dd);
+                }
+
+
 
                 break;
             case R.id.img_tu:

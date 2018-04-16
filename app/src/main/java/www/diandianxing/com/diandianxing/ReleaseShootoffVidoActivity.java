@@ -9,10 +9,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.TextView;
 import android.widget.VideoView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.util.MyContants;
 
 /**
@@ -28,16 +34,18 @@ public class ReleaseShootoffVidoActivity extends BaseActivity {
 
     private VideoView videoView;
     private ImageView iv_bf;
+    private TextView textView2;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MyContants.windows(this);
         setContentView(R.layout.activity_release_shootoff_vido);
-
+        EventBus.getDefault().register(ReleaseShootoffVidoActivity.this);
         include_back= (ImageView) findViewById(R.id.include_back);
         ll_szwz= (LinearLayout) findViewById(R.id.ll_szwz);
         videoView= (VideoView) findViewById(R.id.videoView);
         iv_bf= (ImageView) findViewById(R.id.iv_bf);
+        textView2= (TextView) findViewById(R.id.textView2);
         include_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,6 +90,18 @@ public class ReleaseShootoffVidoActivity extends BaseActivity {
             }
         });
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void XXX(MsgBus messageEvent) {
+
+        textView2.setText(messageEvent.msg);
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(ReleaseShootoffVidoActivity.this);
     }
 
     class MyPlayerOnCompletionListener implements MediaPlayer.OnCompletionListener {

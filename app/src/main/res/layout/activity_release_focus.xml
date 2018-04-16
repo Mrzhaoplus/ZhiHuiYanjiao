@@ -100,8 +100,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:numColumns="3"
                     android:horizontalSpacing="3dp"
                     android:verticalSpacing="3dp">
@@ -126,7 +126,8 @@
                         android:layout_height="wrap_content"
                         android:text="所在位置"
                         android:layout_marginLeft="10dp"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        android:id="@+id/textView2"/>
 
                 </LinearLayout>
             </LinearLayout>
