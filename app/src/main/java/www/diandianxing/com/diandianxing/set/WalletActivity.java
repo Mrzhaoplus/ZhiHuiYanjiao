@@ -222,9 +222,7 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
-
                 });
 //        Map<String,String> map=new HashMap<>();
 //         map.put("uid",SpUtils.getString(this,"userid",null));

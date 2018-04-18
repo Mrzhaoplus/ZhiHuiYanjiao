@@ -15,6 +15,7 @@
         android:layout_height="match_parent">
 
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/sv_zy"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -272,7 +273,9 @@
     </com.liaoinstan.springview.widget.SpringView>
 
     <RelativeLayout
-        android:layout_marginTop="10dp"
+        android:id="@+id/rl_bt"
+        android:paddingTop="10dp"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView

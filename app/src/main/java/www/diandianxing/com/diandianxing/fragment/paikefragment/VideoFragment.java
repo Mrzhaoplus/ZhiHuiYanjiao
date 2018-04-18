@@ -85,6 +85,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
     private LinearLayout ll_dian;
     private NestedScrollView nsc_pm;
 
+
     private List<View> views;
     private RelativeLayout ding;
     private RelativeLayout kongjian;

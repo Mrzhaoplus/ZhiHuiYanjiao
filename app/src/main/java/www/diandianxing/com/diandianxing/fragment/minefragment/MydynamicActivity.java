@@ -10,12 +10,14 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -95,6 +97,11 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
     private List<LocalMedia> selectList = new ArrayList<>();
     private String cutPath;
     private String title;
+
+    private NestedScrollView sv_zy;
+    private int height;
+    private RelativeLayout rl_bt;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +120,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
         text_sex = (ImageView) findViewById(R.id.text_sex);
         tv_dt_title= (TextView) findViewById(R.id.tv_dt_title);
         guan_num = (TextView) findViewById(R.id.guan_num);
+        sv_zy= (NestedScrollView) findViewById(R.id.sv_zy);
         text_guanzhu = (LinearLayout) findViewById(R.id.text_guanzhu);
         fen_num = (TextView) findViewById(R.id.fen_num);
         iv_zyfh= (ImageView) findViewById(R.id.iv_zyfh);
@@ -124,11 +132,20 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
         sv_tz= (SpringView) findViewById(R.id.sv_tz);
         rl_bg= (RelativeLayout) findViewById(R.id.rl_bg);
         v1 = (View) findViewById(R.id.v1);
+        rl_bt= (RelativeLayout) findViewById(R.id.rl_bt);
         liner_tiezi = (LinearLayout) findViewById(R.id.liner_tiezi);
         text_zan = (TextView) findViewById(R.id.text_zan);
         v2 = (View) findViewById(R.id.v2);
         liner_dongtai = (LinearLayout) findViewById(R.id.liner_dongtai);
-
+        ViewTreeObserver vto = rl_bg.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                rl_bg.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                height = rl_bg.getHeight();
+            }
+        });
+        rl_bt.getBackground().setAlpha(0);
         title = getIntent().getStringExtra("title");
         if(title!=null){
             tv_dt_title.setText(title);
@@ -177,7 +194,22 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
         zdPop.setOnDismissListener(onDismissListener);
         zdPop.setZDClickListener(zdClickListener);
         sharingPop.setOnDismissListener(onDismissListener);
+        sv_zy.setOnScrollChangeListener(scrollChangeListener);
     }
+
+    private NestedScrollView.OnScrollChangeListener scrollChangeListener = new NestedScrollView.OnScrollChangeListener() {
+        @Override
+        public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+            Log.e("TAG","数据：：：："+(scrollY/height));
+            if(scrollY>=height){
+            rl_bt.getBackground().setAlpha(230);
+            }else{
+                rl_bt.getBackground().setAlpha(0);
+            }
+        }
+
+    };
 
     ;private TieziAdapter.OnItemClickListener onItemClickListener = new TieziAdapter.OnItemClickListener() {
         @Override

@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="10dp"
+        android:paddingTop="15dp"
         android:paddingBottom="10dp">
         <ImageView
             android:id="@+id/img_tu"

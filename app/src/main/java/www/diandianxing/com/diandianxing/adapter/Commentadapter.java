@@ -26,7 +26,7 @@ import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity
 public class Commentadapter extends RecyclerView.Adapter<Commentadapter.Myviewholder> {
     private Context context;
     List<String> list=new ArrayList<>();
-    private Boolean flag=false;
+    private LongDeleteListener longDeleteListener;
     public Commentadapter(Context context) {
         this.context = context;
         data();
@@ -51,20 +51,12 @@ public class Commentadapter extends RecyclerView.Adapter<Commentadapter.Myviewho
     @Override
     public void onBindViewHolder(final Myviewholder holder, final int position) {
             holder.da_zan.setText("天安门\r\r "+list.get(position).toString());
-        holder.shanchu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                holder.shanchu.setVisibility(View.GONE);
-                flag=false;
-            }
-        });
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if(flag==false){
-                    holder.shanchu.setVisibility(View.VISIBLE);
-                    flag=true;
-                }
+
+                longDeleteListener.OnLongDeleteListener(position);
+
                 return true;
             }
         });
@@ -73,8 +65,6 @@ public class Commentadapter extends RecyclerView.Adapter<Commentadapter.Myviewho
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.shanchu.setVisibility(View.GONE);
-                flag=false;
                 Intent intent = new Intent(context, JiaoDetailActivity.class);
                 context.startActivity(intent);
             }
@@ -82,8 +72,6 @@ public class Commentadapter extends RecyclerView.Adapter<Commentadapter.Myviewho
         holder.img_tou.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.shanchu.setVisibility(View.GONE);
-                flag=false;
                 Intent intent = new Intent(context, MydynamicActivity.class);
                 context.startActivity(intent);
             }
@@ -107,7 +95,6 @@ public class Commentadapter extends RecyclerView.Adapter<Commentadapter.Myviewho
         public TextView text_username;
         public LinearLayout liners;
         public LinearLayout yuantie;
-        public LinearLayout shanchu;
         public Myviewholder(View rootView) {
             super(rootView);
             this.view = rootView;
@@ -119,8 +106,14 @@ public class Commentadapter extends RecyclerView.Adapter<Commentadapter.Myviewho
             this.text_username = (TextView) rootView.findViewById(R.id.text_username);
             this.liners = (LinearLayout) rootView.findViewById(R.id.liners);
             this.yuantie = (LinearLayout) rootView.findViewById(R.id.yuantie_liner);
-            this.shanchu = (LinearLayout) rootView.findViewById(R.id.shanchu);
         }
     }
 
+    public interface LongDeleteListener{
+        void OnLongDeleteListener(int pos);
+    }
+
+    public void setOnLongDeleteListener(LongDeleteListener longDeleteListener){
+        this.longDeleteListener=longDeleteListener;
+    }
 }

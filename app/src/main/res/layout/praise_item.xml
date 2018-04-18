@@ -11,13 +11,16 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/img_tou"
-            android:layout_margin="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/icon_tou"
             android:layout_width="60dp"
             android:layout_height="60dp" />
         <RelativeLayout
             android:id="@+id/relan"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/img_tou"
             android:layout_width="match_parent"
@@ -85,7 +88,7 @@
             android:id="@+id/zan_liners"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/img_tou"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:layout_below="@id/relan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -106,7 +109,7 @@
         <LinearLayout
             android:id="@+id/yuantie_liner"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/shape_backhuiradioline"
             android:layout_marginTop="10dp"
@@ -130,5 +133,6 @@
          android:layout_marginLeft="20dp"
          android:layout_marginRight="15dp"
          android:background="@color/back_bei"/>
+
 
 </LinearLayout>

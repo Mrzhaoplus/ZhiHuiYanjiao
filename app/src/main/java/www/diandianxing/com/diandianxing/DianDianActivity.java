@@ -261,20 +261,24 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
         networkbike();
         sss();  //初始化服务，创建创建长链接
         //加载点点行自行车
-        addmark();
+//        addmark();
         dingshi();//上传自己位置定时器
       //  mtimers.schedule(timerTasks,1000,1000);
     }
     /*
        根据经纬度搜索附近的车辆
      */
+
+
+
+
     private void networkbike() {
            Map<String,String> map=new HashMap<>();
-        Log.d("lo", SpUtils.getString(this,"lo",null)+"cccccc");
-        Log.d("la", SpUtils.getString(this,"la",null)+"ccc");
              map.put("longitude", SpUtils.getString(this,"lo",null));
-             map.put("latitude", SpUtils.getString(this,"la",null));
-             map.put("uid", SpUtils.getString(this,"userid",null));
+        map.put("latitude", SpUtils.getString(this,"la",null));
+        Log.d("TAG", SpUtils.getString(this,"lo",null)+"cccccc");
+        Log.d("TAG", SpUtils.getString(this,"la",null)+"ccc");
+        map.put("uid", SpUtils.getString(this,"userid",null));
              map.put("token", SpUtils.getString(this,"token",null));
        RetrofitManager.get(MyContants.BASEURL+"s=Bike/indexInfo",map,new BaseObserver1<MainBikebean>("") {
            @Override
@@ -307,10 +311,12 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
               //      }
                     String address1 = SpUtils.getString(DianDianActivity.this, "address", null);
                     if(address1.equals("gongxiang")){
+                        Log.e("TAG","gongxiang");
                         //刷新
                         addmark();
                     }
                     else if(address1.equals("dianzi")){
+                        Log.e("TAG","dianzi");
                         adddianzimark();
 
                     }
@@ -333,6 +339,116 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
 
 
     }
+
+
+    /*
+       根据经纬度搜索附近的车辆
+     */
+    private void networkss(final String  la, final String lo) {
+        Map<String,String> map=new HashMap<>();
+        map.put("longitude", lo);
+        map.put("latitude", la);
+        Log.d("TAG", lo+"ddddddddd");
+        Log.d("TAG", la+"ddd");
+        map.put("uid", SpUtils.getString(this,"userid",null));
+        map.put("token", SpUtils.getString(this,"token",null));
+        RetrofitManager.get(MyContants.BASEURL+"s=Bike/indexInfo",map,new BaseObserver1<MainBikebean>("") {
+            @Override
+            public void onSuccess(MainBikebean result, String tag) {
+                if(result.getCode()==200){
+                    //电子围栏
+                    enclosure = result.getDatas().getEnclosure();
+                    if(enclosure.size()>0) {
+                        surplusbike = enclosure.get(0).getSurplusbike();
+                    }
+                    //共享单车
+                    bike = result.getDatas().getBike();
+//                    list1 = new ArrayList<>();
+//                    if(bike!=null&&bike.size()>0) {
+//                        for (int i = 0; i < bike.size(); i++) {
+//                            Log.d("list", list1.size() + "");
+//                            LatLng lat = new LatLng(Double.valueOf(bike.get(i).getLatitude().toString().trim()), Double.valueOf(bike.get(i).getLongitude().toString().trim()));
+//                            list1.add(lat);
+//                            markerOption = new MarkerOptions();
+//                            markerOption.position(list1.get(i));
+//                            markerOption.draggable(true);//设置Marker可拖动
+//                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+//                                    .decodeResource(getResources(), R.drawable.chebiao)));
+//                            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+//                            markerOption.setFlat(false);//设置marker平贴地图效果
+//                            marker = aMap.addMarker(markerOption);
+//                            marker.setObject(new BikeBean("--i--" + i, list1.get(i).latitude, list1.get(i).longitude));
+//                            // marker.showInfoWindow();
+//                        }
+                    //      }
+                    String address1 = SpUtils.getString(DianDianActivity.this, "address", null);
+                    double v = Double.valueOf(la).doubleValue();
+                    double v1 = Double.valueOf(lo).doubleValue();
+
+                    LatLng lat = new LatLng(v,v1);
+                    markerOption = new MarkerOptions();
+                    markerOption.position(lat);
+                    markerOption.draggable(true);//设置Marker可拖动
+                    markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                            .decodeResource(getResources(), R.drawable.dwdd)));
+                    // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+                    markerOption.setFlat(false);//设置marker平贴地图效果
+                    aMap.addMarker(markerOption);
+
+                    if(dc.size()>0){
+                        for(int i=0 ;i<dc.size();i++){
+
+                            Marker marker = dc.get(i);
+//                            Log.e("TAG","删除：：："+marker);
+                            marker.destroy();
+                        }
+                        dc.clear();
+                    }
+
+                    if(dzwl.size()>0){
+                        for(int i=0 ;i<dzwl.size();i++){
+
+                            Marker marker = dzwl.get(i);
+//                            Log.e("TAG","删除：：："+marker);
+                            marker.destroy();
+                        }
+                        dzwl.clear();
+                    }
+
+                    if(address1.equals("gongxiang")){
+
+
+                        //刷新
+                        addmark();
+                    }
+                    else if(address1.equals("dianzi")){
+
+
+
+
+                        adddianzimark();
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailed(int code,String data) {
+                if(code==1001){
+                    if(data.equals("token不正确")) {
+                        ToastUtils.show(DianDianActivity.this, "账号已过期，请重新登录", 1);
+                        Intent intent = new Intent(DianDianActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            }
+        });
+
+
+    }
+
 
 
     private void network() {
@@ -1050,9 +1166,12 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
 
         }
         else if(eventMessage.getMsg().equals("myposition")){
-             datamap();
-            mlocationClient.startLocation();
 
+            isdd=false;
+            aMap.clear();
+            dc.clear();
+            mlocationClient.startLocation();
+            networkbike();
 
         }
         else if(eventMessage.getMsg().equals("yincang")){
@@ -1063,11 +1182,23 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
          //   mlocationClient.stopLocation();
             //常用地址
             //修改地图的中心点位置
+            isdd=true;
             String lat = SpUtils.getString(this, "lat", null);
             String lon = SpUtils.getString(this, "lon", null);
             double v = Double.valueOf(lat).doubleValue();
             double v1 = Double.valueOf(lon).doubleValue();
             Log.d("vvv",v+"dddd"+v1+"");
+
+//            aMap.clear();
+
+
+
+
+//            mlocationClient.startLocation();
+
+            networkss(lat,lon);
+
+
             mUpdata = CameraUpdateFactory.newCameraPosition(
 //15是缩放比例，0是倾斜度，30显示比例
                     new CameraPosition(new LatLng(v,v1), 15, 0, 30));//这是地理位置，就是经纬度。
@@ -1091,6 +1222,7 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
         }
         else if(eventMessage.getMsg().equals("changyong")){
           //  mlocationClient.stopLocation();
+            isdd=true;
             //常用地址
             //修改地图的中心点位置
             String lat = SpUtils.getString(this, "lat", null);
@@ -1101,6 +1233,7 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
 //            mUiSettings = aMap.getUiSettings();
 //            mUiSettings.setZoomControlsEnabled(false);
 //            mUiSettings.setCompassEnabled(true);
+            networkss(lat,lon);
             mUpdata = CameraUpdateFactory.newCameraPosition(
 //15是缩放比例，0是倾斜度，30显示比例
              new CameraPosition(new LatLng(v,v1), 15, 0, 30));//这是地理位置，就是经纬度。
@@ -1588,6 +1721,9 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
 
     }
 
+    private boolean isdd;
+
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -1681,55 +1817,114 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
                 //扫码
                 break;
             case R.id.iv_address:
+                isdd=false;
+                aMap.clear();
+                dc.clear();
                 mlocationClient.startLocation();
-                String address = SpUtils.getString(this, "address", null);
-                if (address.equals("gongxiang")) {
-                    addmark();
-
-                } else if (address.equals("dianzi")) {
-                    adddianzimark();
-
-                }
+                //网络请求车
+                networkbike();
+//                String address = SpUtils.getString(this, "address", null);
+//                if (address.equals("gongxiang")) {
+//                    addmark();
+//
+//                } else if (address.equals("dianzi")) {
+//                    adddianzimark();
+//
+//                }
                 //定位
                 break;
             case R.id.iv_refresh:
 
-                mlocationClient.startLocation();
-                //网络请求车
-                networkbike();
-                String address1 = SpUtils.getString(this, "address", null);
-                 if(address1.equals("gongxiang")){
-                     //刷新
-                     addmark();
-                 }
-                else if(address1.equals("dianzi")){
-                     adddianzimark();
+                if(isdd){
 
-                 }
+                    String lat = SpUtils.getString(this, "lat", null);
+                    String lon = SpUtils.getString(this, "lon", null);
+                    double v = Double.valueOf(lat).doubleValue();
+                    double v1 = Double.valueOf(lon).doubleValue();
+                    networkss(lat,lon);
+                    mUpdata = CameraUpdateFactory.newCameraPosition(
+//15是缩放比例，0是倾斜度，30显示比例
+                            new CameraPosition(new LatLng(v,v1), 15, 0, 30));//这是地理位置，就是经纬度。
+                    aMap.moveCamera(mUpdata);//定位的方法
+
+                }else{
+                    aMap.clear();
+                    dc.clear();
+                    mlocationClient.startLocation();
+                    //网络请求车
+                    networkbike();
+                }
+
+
+//                String address1 = SpUtils.getString(this, "address", null);
+//                 if(address1.equals("gongxiang")){
+//                     //刷新
+//                     addmark();
+//                 }
+//                else if(address1.equals("dianzi")){
+//                     adddianzimark();
+//
+//                 }
 
                 break;
             case R.id.real_gongxiang:
-                mlocationClient.startLocation();
-                liner_mark.setVisibility(View.GONE);
                 SpUtils.putString(this, "address", "gongxiang");
-                aMap.clear();
-                //网络请求车
-                networkbike();
-          //     addmark();
-
                 img_che.setImageResource(R.drawable.img_gongbick);
                 img_wei.setImageResource(R.drawable.img_dianziwei);
+                liner_mark.setVisibility(View.GONE);
+                if(isdd){
+
+                    String lat = SpUtils.getString(this, "lat", null);
+                    String lon = SpUtils.getString(this, "lon", null);
+                    double v = Double.valueOf(lat).doubleValue();
+                    double v1 = Double.valueOf(lon).doubleValue();
+                    networkss(lat,lon);
+                    mUpdata = CameraUpdateFactory.newCameraPosition(
+//15是缩放比例，0是倾斜度，30显示比例
+                            new CameraPosition(new LatLng(v,v1), 15, 0, 30));//这是地理位置，就是经纬度。
+                    aMap.moveCamera(mUpdata);//定位的方法
+
+                }else{
+                    aMap.clear();
+                    dc.clear();
+                    mlocationClient.startLocation();
+                    liner_mark.setVisibility(View.GONE);
+                    //网络请求车
+                    networkbike();
+                }
+
+
+
                 break;
             case R.id.real_dianzi:
-                mlocationClient.startLocation();
                 liner_mark.setVisibility(View.GONE);
                 SpUtils.putString(this, "address", "dianzi");
                 SpUtils.putString(this, "xuanze", "dianziwei");
                 img_che.setImageResource(R.drawable.img_gongxiangfalse);
                 img_wei.setImageResource(R.drawable.img_dian_true);
-                aMap.clear();
-                networkbike();//网络请求电子围栏
-             //   adddianzimark();
+
+
+                if(isdd){
+
+                    String lat = SpUtils.getString(this, "lat", null);
+                    String lon = SpUtils.getString(this, "lon", null);
+                    double v = Double.valueOf(lat).doubleValue();
+                    double v1 = Double.valueOf(lon).doubleValue();
+                    networkss(lat,lon);
+                    mUpdata = CameraUpdateFactory.newCameraPosition(
+//15是缩放比例，0是倾斜度，30显示比例
+                            new CameraPosition(new LatLng(v,v1), 15, 0, 30));//这是地理位置，就是经纬度。
+                    aMap.moveCamera(mUpdata);//定位的方法
+
+                }else{
+                    aMap.clear();
+                    dzwl.clear();
+                    mlocationClient.startLocation();
+                    liner_mark.setVisibility(View.GONE);
+                    //网络请求车
+                    networkbike();
+                }
+
 
                 break;
             case R.id.jiaona:
@@ -1973,7 +2168,7 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
      */
     public void adddianzimark() {
         list1 = new ArrayList<>();
-
+        dzwl.clear();
         if(enclosure!=null&&enclosure.size()>0) {
             for (int i = 0; i < enclosure.size(); i++) {
                 Log.d("list", "shulia" + enclosure.size() + "");
@@ -1986,7 +2181,8 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
                         .decodeResource(getResources(), R.drawable.dianziwei)));
                 // 将Marker设置为贴地显示，可以双指下拉地图查看效果
                 markerOption.setFlat(false);//设置marker平贴地图效果
-                marker = aMap.addMarker(markerOption);
+                Marker marker = aMap.addMarker(markerOption);
+                dzwl.add(marker);
                 marker.setObject(new BikeBean("--i--" + i, list1.get(i).latitude, list1.get(i).longitude));
                 marker.showInfoWindow();
             }
@@ -2010,12 +2206,19 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    public void addmark() {
 
+    private List<Marker> dc = new ArrayList<>();
+
+    private List<Marker> dzwl = new ArrayList<>();
+
+;    public void addmark() {
         list1 = new ArrayList<>();
+        dc.clear();
+
+
         if(bike!=null&&bike.size()>0) {
             for (int i = 0; i < bike.size(); i++) {
-                Log.d("list", list1.size() + "");
+                Log.d("TAG", bike.size() + "个数据源");
                 LatLng lat = new LatLng(Double.valueOf(bike.get(i).getLatitude().toString().trim()).doubleValue(), Double.valueOf(bike.get(i).getLongitude().toString().trim()).doubleValue());
                 list1.add(lat);
                 markerOption = new MarkerOptions();
@@ -2025,11 +2228,13 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
                         .decodeResource(getResources(), R.drawable.chebiao)));
                 // 将Marker设置为贴地显示，可以双指下拉地图查看效果
                 markerOption.setFlat(false);//设置marker平贴地图效果
-                marker = aMap.addMarker(markerOption);
+                Marker marker = aMap.addMarker(markerOption);
+                dc.add(marker);
                 marker.setObject(new BikeBean("--i--" + i, list1.get(i).latitude, list1.get(i).longitude));
                 // marker.showInfoWindow();
             }
         }
+        Log.d("TAG", dc.size() + "坐标物个数据源");
         //mark点击事件
         aMap.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
             @Override
