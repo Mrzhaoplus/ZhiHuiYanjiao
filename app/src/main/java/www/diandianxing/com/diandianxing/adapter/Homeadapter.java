@@ -2,17 +2,26 @@ package www.diandianxing.com.diandianxing.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.ShujuBean.Home_zixun_Bean;
 import www.diandianxing.com.diandianxing.interfase.RecyGetonclick;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.Api;
+import www.diandianxing.com.diandianxing.util.ImageLoder;
 
 /**
  * date : ${Date}
@@ -21,24 +30,17 @@ import www.diandianxing.com.diandianxing.R;
  */
 
 public class Homeadapter extends RecyclerView.Adapter<Homeadapter.MyviewHolder> {
-
+    List<Home_zixun_Bean.DatasBean> list;
     private Context context;
-    private List<String>   list = new ArrayList<>();
     private RecyGetonclick click;
 
     public void getthis(RecyGetonclick click){
         this.click=click;
     }
 
-    public Homeadapter(Context context) {
+    public Homeadapter(List<Home_zixun_Bean.DatasBean> list, Context context) {
+        this.list = list;
         this.context = context;
-        data();
-    }
-
-    private void data() {
-        for (int i = 0; i <6; i++) {
-             list.add(i+"");
-        }
     }
 
     @Override
@@ -51,7 +53,13 @@ public class Homeadapter extends RecyclerView.Adapter<Homeadapter.MyviewHolder> 
     @Override
     public void onBindViewHolder(MyviewHolder holder, final int position) {
 
-            holder.text_zan.setText(list.get(position).toString()+"12");
+        ImageLoader.getInstance().displayImage(list.get(position).getSmallImage(),holder.img_pho,ImageLoder.getDefaultOption());
+         holder.neirong.setText(list.get(position).getInfoTitle());
+         //时间戳转换为日期
+        String dateToString = getDateToString(String.valueOf(list.get(position).getCreateTime()));
+        holder.text_date.setText(dateToString);
+
+        holder.text_zan.setText(list.get(position).getDianZanCount()+"");
               //设置recycler点击事件
             if(click!=null){
                 holder.view.setOnClickListener(new View.OnClickListener() {
@@ -73,15 +81,24 @@ public class Homeadapter extends RecyclerView.Adapter<Homeadapter.MyviewHolder> 
         public TextView text_date;
         public TextView text_zan;
           public View view;
+        public TextView neirong;
+
         public MyviewHolder(View rootView) {
             super(rootView);
             this.view = rootView;
+            neirong = rootView.findViewById(R.id.neirong);
             this.img_pho = (ImageView) rootView.findViewById(R.id.img_pho);
             this.text_date = (TextView) rootView.findViewById(R.id.text_date);
             this.text_zan = (TextView) rootView.findViewById(R.id.text_zan);
         }
     }
-
+    //  时间戳转为日期  /年/月/日
+    public static String getDateToString(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        long lcc_time = Long.valueOf(time);
+        String format = sdf.format(new Date(lcc_time * 1000L));
+        return format;
+    }
 
 
 }

@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.util.EventMessage;
+import www.diandianxing.com.diandianxing.util.ImageLoder;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.R;
 
@@ -51,11 +52,13 @@ public class Myapplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         application = this;
         initUMShare();
         Config.DEBUG = true;
 //        initUMPush();
 //        UMPush();
+        ImageLoder.info(this);
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder() //
                 .showImageForEmptyUri(R.drawable.ic_launcher) //
                 .showImageOnFail(R.drawable.ic_launcher) //

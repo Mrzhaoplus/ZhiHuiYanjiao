@@ -35,6 +35,12 @@ public class ZiXunFragment extends BaseFragment {
         View contentView = getContentView();
         this.lv = contentView.findViewById(R.id.list_view);
         this.sv = contentView.findViewById(R.id.zixun_sv);
+
+
+
+
+
+
         //创建适配器
         ZiXunAdapter ziXunAdapter = new ZiXunAdapter(getActivity());
         lv.setAdapter(ziXunAdapter);

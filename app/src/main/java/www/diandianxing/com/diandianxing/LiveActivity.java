@@ -6,26 +6,32 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.ShujuBean.Live_Bean;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.ChowuFragment;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.ErshouFragment;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.FangwuFragment;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.GuanzhuFragment;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.ZhaoLingFragment;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.ZhaopinFragment;
+import www.diandianxing.com.diandianxing.interfase.Live_Presenter_interfase;
+import www.diandianxing.com.diandianxing.presenter.Live_presenter;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
 
-public class LiveActivity extends AppCompatActivity {
+public class LiveActivity extends AppCompatActivity implements Live_Presenter_interfase {
     private ImageView img_back;
     private ViewPager vp_pager;
     private TabLayout tab;
-    private List<String> name = new ArrayList<>();
+
+    private Live_presenter live_presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +39,6 @@ public class LiveActivity extends AppCompatActivity {
         setContentView(R.layout.activity_life);
         initView();
     }
-
     private void initView() {
         img_back = (ImageView) findViewById(R.id.img_back);
         vp_pager = (ViewPager) findViewById(R.id.vp_pager);
@@ -45,14 +50,21 @@ public class LiveActivity extends AppCompatActivity {
                 finish();
             }
         });
+        //引用
+        live_presenter = new Live_presenter(this);
+        live_presenter.getpath();
 
-        //添加数据
-        name.add("关注");
-        name.add("宠物天地");
-        name.add("失物招领");
-        name.add("二手市场");
-        name.add("房屋租售");
-        name.add("求职招聘");
+
+    }
+    @Override
+    public void getsuccess(final Live_Bean live_bean) {
+                final List<String> name = new ArrayList<>();
+                   if(live_bean.getCode().equals("200")){
+                       List<Live_Bean.DatasBean> datas = live_bean.getDatas();
+                       for (int i=0;i<datas.size();i++){
+                           name.add(datas.get(i).getContent());
+                       }
+                   }
         vp_pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public CharSequence getPageTitle(int position) {

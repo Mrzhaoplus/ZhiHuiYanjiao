@@ -21,6 +21,7 @@ public class LukuangDitailsActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        int id = getIntent().getIntExtra("id", 0);
         img_back = (ImageView) findViewById(R.id.img_back);
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override

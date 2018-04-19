@@ -7,10 +7,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.ShujuBean.LuKuang_Bean;
+import www.diandianxing.com.diandianxing.util.ImageLoder;
 
 /**
  * Created by Mr赵 on 2018/4/3.
@@ -18,19 +24,13 @@ import www.diandianxing.com.diandianxing.R;
 
 public class LuKuangAdapter extends BaseAdapter {
     private Context context;
-    private List<String> list=new ArrayList<>();
+    List<LuKuang_Bean.DatasBean> list;
 
-    public LuKuangAdapter(Context context) {
+    public LuKuangAdapter(Context context, List<LuKuang_Bean.DatasBean> datas) {
         this.context = context;
-        data();
+        this.list = datas;
     }
 
-    private void data() {
-        for(int i=0;i<6;i++){
-               list.add(i+"");
-        }
-
-    }
 
     @Override
     public int getCount() {
@@ -60,6 +60,11 @@ public class LuKuangAdapter extends BaseAdapter {
         }else{
             vh= (ViewHolder) view.getTag();
         }
+        vh.text_tile.setText(list.get(i).getTrafficTitle());
+        ImageLoader.getInstance().displayImage(list.get(i).getImgUrl(),vh.imag, ImageLoder.getDefaultOption());
+        String dateToString = getDateToString(String.valueOf(list.get(i).getCreateTime()));
+        vh.text_date.setText(dateToString);
+
         if(vh.text_tile.getText().length()>20){
             vh.text_tile.setText(vh.text_tile.getText().toString().substring(0,15)+".....");
         }else{
@@ -75,5 +80,11 @@ public class LuKuangAdapter extends BaseAdapter {
         TextView text_tile;
         TextView text_date;
     }
-
+    //  时间戳转为日期  /年/月/日
+    public static String getDateToString(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        long lcc_time = Long.valueOf(time);
+        String format = sdf.format(new Date(lcc_time * 1000L));
+        return format;
+    }
 }

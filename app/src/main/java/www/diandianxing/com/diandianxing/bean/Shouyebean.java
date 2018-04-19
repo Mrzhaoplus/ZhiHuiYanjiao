@@ -6,8 +6,6 @@ package www.diandianxing.com.diandianxing.bean;
  */
 
 public class Shouyebean {
-
-
     /**
      * code : 200
      * msg : success
