@@ -21,7 +21,7 @@ import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity
 
 public class JiaoLiuyanAdapter extends RecyclerView.Adapter<JiaoLiuyanAdapter.ViewHolder> {
    private Context context;
-    private List<String>list=new ArrayList<>();
+    private List<String>list;
     public JiaoLiuyanAdapter(Context context) {
         this.context = context;
         data();

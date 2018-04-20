@@ -54,6 +54,7 @@ import www.diandianxing.com.diandianxing.util.ToastUtils;
 public class Jiaodianadapter extends BaseAdapter {
     private Context context;
     private List<GuanzhuJD> lists ;
+
     private ShareListener shareListener;
 
     private StateClickListener stateClickListener;
@@ -106,7 +107,7 @@ public class Jiaodianadapter extends BaseAdapter {
 
         holder.text_name.setText(guanzhuJD.userName);
 
-        holder.da_address.setText(guanzhuJD.address+" "+ MyUtils.stampToDate(guanzhuJD.createTime));
+        holder.da_address.setText(MyUtils.stampToDate(guanzhuJD.updateTime)+" "+guanzhuJD.address);
 
 holder.item_count.setText(guanzhuJD.postContent);
 
@@ -158,6 +159,8 @@ holder.item_count.setText(guanzhuJD.postContent);
 
                             stateClickListener.ShouCangClickListener(Integer.parseInt(guanzhuJD.id),0,1,-1,position);
 
+                        }else{
+                            stateClickListener.QuXiaoShouCangClickListener(Integer.parseInt(guanzhuJD.id),0,1,position);
                         }
 
                     }
@@ -171,6 +174,8 @@ holder.item_count.setText(guanzhuJD.postContent);
 
                             stateClickListener.DianZanClickListener(Integer.parseInt(guanzhuJD.id),0,0,-1,position);
 
+                        }else{
+                            stateClickListener.QuXiaoDianZanClickListener(Integer.parseInt(guanzhuJD.id),0,0,position);
                         }
                     }
                 });
@@ -189,6 +194,8 @@ holder.ll_view.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
         Intent intent=new Intent(context,JiaoDetailActivity.class);
+
+        intent.putExtra("guanzhu",guanzhuJD);
         context.startActivity(intent);
     }
 });

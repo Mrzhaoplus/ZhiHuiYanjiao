@@ -11,4 +11,9 @@ public interface StateClickListener {
 
     void DianZanClickListener(int objId , int obj_type,int operation_type,int fx,int pos);
 
+    void QuXiaoShouCangClickListener(int objId , int obj_type,int operation_type,int pos);
+
+    void QuXiaoDianZanClickListener(int objId , int obj_type,int operation_type,int pos);
+
+
 }

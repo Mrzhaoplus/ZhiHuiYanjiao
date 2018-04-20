@@ -16,5 +16,7 @@ public class Info implements Serializable{
 
     public List<String> imgs;
 
+    public GuanzhuJD guanzhuJD;
+
 
 }

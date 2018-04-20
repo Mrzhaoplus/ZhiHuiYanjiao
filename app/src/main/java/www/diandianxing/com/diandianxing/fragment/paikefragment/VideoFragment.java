@@ -125,8 +125,11 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
         ll_dian=contentView.findViewById(R.id.ll_dian);
         vv_sp=findViewById(R.id.vv_sp);
         //设置控件为半透明
-        img_back.getBackground().setAlpha(80);
-        guanzhu.getBackground().setAlpha(80);
+//        img_back.getBackground().setAlpha(80);
+//        guanzhu.getBackground().setAlpha(80);
+
+        ding.getBackground().mutate().setAlpha(0);
+
 
         /*
         * 设置改变颜色
@@ -234,9 +237,9 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
             Log.i("TAG1","scrollX="+scrollX+",scrollY="+scrollY+",oldScrollX="+oldScrollX+",oldScrollY="+oldScrollY);
             if(scrollY>=height){
-                ding.getBackground().setAlpha(230);
+                ding.getBackground().mutate().setAlpha(230);
             }else{
-                ding.getBackground().setAlpha(0);
+                ding.getBackground().mutate().setAlpha(0);
             }
         }
 
@@ -280,6 +283,11 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ding.getBackground().mutate().setAlpha(0);
+    }
 
     private Runnable runnable = new Runnable() {
         @Override

@@ -145,7 +145,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                 height = rl_bg.getHeight();
             }
         });
-        rl_bt.getBackground().setAlpha(0);
+        rl_bt.getBackground().mutate().setAlpha(0);
         title = getIntent().getStringExtra("title");
         if(title!=null){
             tv_dt_title.setText(title);
@@ -203,9 +203,9 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
 
             Log.e("TAG","数据：：：："+(scrollY/height));
             if(scrollY>=height){
-            rl_bt.getBackground().setAlpha(230);
+            rl_bt.getBackground().mutate().setAlpha(230);
             }else{
-                rl_bt.getBackground().setAlpha(0);
+                rl_bt.getBackground().mutate().setAlpha(0);
             }
         }
 

@@ -3,11 +3,13 @@ package www.diandianxing.com.diandianxing.fragment.mainfragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +20,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.HttpParams;
+import com.lzy.okgo.model.Response;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -25,24 +34,34 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import www.diandianxing.com.diandianxing.adapter.JiaoLiuyanAdapter;
+import www.diandianxing.com.diandianxing.adapter.Jiaodianadapter;
 import www.diandianxing.com.diandianxing.adapter.TPAdapter1;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.base.Myapplication;
+import www.diandianxing.com.diandianxing.bean.CustomReplayList;
+import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.bean.Info;
+import www.diandianxing.com.diandianxing.bean.PingLunInfo;
 import www.diandianxing.com.diandianxing.bean.Sharebean;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
+import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.MyUtils;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /**
@@ -73,6 +92,9 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
     private Button button_fabu;
     private TextView tv_jdxq_gz;
     private TextView text_sure;
+    GuanzhuJD guanzhuJD;
+    private int pageNo=1;
+    JiaoLiuyanAdapter jiaoLiuyanAdapter;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +125,46 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
         ed_text = (EditText) findViewById(R.id.ed_text);
         tv_jdxq_gz= (TextView) findViewById(R.id.tv_jdxq_gz);
         button_fabu = (Button) findViewById(R.id.button_fabu);
+
+        jiao_Recycler.setLayoutManager(new GridLayoutManager(this,3));
+        jiao_Recycler.setNestedScrollingEnabled(false);
+
+        guanzhuJD = (GuanzhuJD) getIntent().getSerializableExtra("guanzhu");
+        text_title.setText(guanzhuJD.postTitle);
+        Glide.with(JiaoDetailActivity.this).load(guanzhuJD.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(img_tou);
+        text_name.setText(guanzhuJD.userName);
+        da_address.setText(MyUtils.stampToDate(guanzhuJD.updateTime)+" "+guanzhuJD.address);
+        text_dengji.setText(guanzhuJD.userLevel);
+        if(Integer.parseInt(guanzhuJD.is_focus)==0){
+            rela_guanzhu.setVisibility(View.VISIBLE);
+        }else{
+            rela_guanzhu.setVisibility(View.INVISIBLE);
+        }
+        text_count.setText(guanzhuJD.postContent);
+
+        if(Integer.parseInt(guanzhuJD.is_collect)==0){
+            img_collect.setImageResource(R.drawable.icon_collect);
+        }else{
+            img_collect.setImageResource(R.drawable.shouchang_xz_icon_3x);
+        }
+        text_zan.setText(guanzhuJD.dianZanCount);
+        if(Integer.parseInt(guanzhuJD.is_zan)==0){
+            Drawable nav_up=getResources().getDrawable(R.drawable.icon_dianzan);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            text_zan.setCompoundDrawables(nav_up, null, null, null);
+        }else{
+            Drawable nav_up=getResources().getDrawable(R.drawable.dianzan_xz_icon_3x);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            text_zan.setCompoundDrawables(nav_up, null, null, null);
+        }
+
+        TPAdapter1 tpAdapter1 = new TPAdapter1(this,guanzhuJD.imagesList);
+        jiao_Recycler.setAdapter(tpAdapter1);
+        jiao_pinglun.setLayoutManager(new LinearLayoutManager(this));
+        jiao_pinglun.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        jiao_pinglun.setNestedScrollingEnabled(false);
+        jiaoLiuyanAdapter = new JiaoLiuyanAdapter(this);
+        jiao_pinglun.setAdapter(jiaoLiuyanAdapter);
         /**
          *点击事件
          */
@@ -110,18 +172,9 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
         img_tou.setOnClickListener(this);
         tv_jdxq_gz.setOnClickListener(this);
         text_share.setOnClickListener(this);
-        jiao_Recycler.setLayoutManager(new GridLayoutManager(this,3));
-        jiao_Recycler.setNestedScrollingEnabled(false);
+        img_collect.setOnClickListener(this);
+        text_zan.setOnClickListener(this);
 
-        Info info= (Info) getIntent().getSerializableExtra("imgs");
-
-        TPAdapter1 tpAdapter1 = new TPAdapter1(this,info.imgs);
-        jiao_Recycler.setAdapter(tpAdapter1);
-        jiao_pinglun.setLayoutManager(new LinearLayoutManager(this));
-        jiao_pinglun.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-        jiao_pinglun.setNestedScrollingEnabled(false);
-        JiaoLiuyanAdapter jiaoLiuyanAdapter = new JiaoLiuyanAdapter(this);
-        jiao_pinglun.setAdapter(jiaoLiuyanAdapter);
     }
 
     @Override
@@ -140,8 +193,265 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
             case R.id.text_share:
                 showFXDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion);
                 break;
+            case R.id.img_collect:
+
+                if(Integer.parseInt(guanzhuJD.is_collect)==0){
+
+                    network(Integer.parseInt(guanzhuJD.id),0,1);
+
+                }else{
+                    QXnetwork(Integer.parseInt(guanzhuJD.id),0,1);
+                }
+
+                break;
+            case R.id.text_zan:
+
+                if(Integer.parseInt(guanzhuJD.is_zan)==0){
+
+                    network(Integer.parseInt(guanzhuJD.id),0,0);
+
+                }else{
+                    QXnetwork(Integer.parseInt(guanzhuJD.id),0,0);
+                }
+
+                break;
         }
     }
+
+
+    private void network(int objId , int obj_type, final int operation_type) {
+
+        HttpParams params = new HttpParams();
+        params.put("objId", objId);
+
+        params.put("obj_type", obj_type);
+
+        params.put("operation_type",operation_type);
+
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/userOperation")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "数据" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+
+                                if(operation_type==0){
+                                    guanzhuJD.is_zan="1";
+                                    guanzhuJD.dianZanCount=Integer.parseInt(guanzhuJD.dianZanCount)+1+"";
+                                }else{
+                                    guanzhuJD.is_collect="1";
+                                    guanzhuJD.collectCount=Integer.parseInt(guanzhuJD.collectCount)+1+"";
+                                }
+                                if(Integer.parseInt(guanzhuJD.is_collect)==0){
+                                    img_collect.setImageResource(R.drawable.icon_collect);
+                                }else{
+                                    img_collect.setImageResource(R.drawable.shouchang_xz_icon_3x);
+                                }
+
+                                text_zan.setText(guanzhuJD.dianZanCount);
+                                if(Integer.parseInt(guanzhuJD.is_zan)==0){
+                                    Drawable nav_up=getResources().getDrawable(R.drawable.icon_dianzan);
+                                    nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+                                    text_zan.setCompoundDrawables(nav_up, null, null, null);
+                                }else{
+                                    Drawable nav_up=getResources().getDrawable(R.drawable.dianzan_xz_icon_3x);
+                                    nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+                                    text_zan.setCompoundDrawables(nav_up, null, null, null);
+                                }
+
+                            } else {
+                                Toast.makeText(JiaoDetailActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+
+    private void QXnetwork(int objId , int obj_type, final int operation_type) {
+
+        HttpParams params = new HttpParams();
+        params.put("objId", objId);
+
+        params.put("obj_type", obj_type);
+
+        params.put("operation_type",operation_type);
+
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/userCancelOperation")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "取消数据" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+
+                                if(operation_type==0){
+                                    guanzhuJD.is_zan="0";
+                                    guanzhuJD.dianZanCount=Integer.parseInt(guanzhuJD.dianZanCount)-1+"";
+                                }else{
+                                    guanzhuJD.is_collect="0";
+                                    guanzhuJD.collectCount=Integer.parseInt(guanzhuJD.collectCount)-1+"";
+                                }
+
+                                if(Integer.parseInt(guanzhuJD.is_collect)==0){
+                                    img_collect.setImageResource(R.drawable.icon_collect);
+                                }else{
+                                    img_collect.setImageResource(R.drawable.shouchang_xz_icon_3x);
+                                }
+
+                                text_zan.setText(guanzhuJD.dianZanCount);
+                                if(Integer.parseInt(guanzhuJD.is_zan)==0){
+                                    Drawable nav_up=getResources().getDrawable(R.drawable.icon_dianzan);
+                                    nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+                                    text_zan.setCompoundDrawables(nav_up, null, null, null);
+                                }else{
+                                    Drawable nav_up=getResources().getDrawable(R.drawable.dianzan_xz_icon_3x);
+                                    nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+                                    text_zan.setCompoundDrawables(nav_up, null, null, null);
+                                }
+
+
+                            } else {
+                                Toast.makeText(JiaoDetailActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+
+//    private void networklist() {
+//
+//        HttpParams params = new HttpParams();
+//        params.put("pageNo", pageNo);
+//        params.put("token", Api.token);
+//        params.put("objId", guanzhuJD.id);
+//        params.put("objType", 0);
+//        OkGo.<String>post(Api.BASE_URL +"app/home/getCommentList")
+//                .tag(this)
+//                .params(params)
+//                .execute(new StringCallback() {
+//                    @Override
+//                    public void onSuccess(Response<String> response) {
+//
+//                        String body = response.body();
+//                        Log.d("TAG", "评论内容：" + body);
+//                        JSONObject jsonobj = null;
+//                        try {
+//                            jsonobj = new JSONObject(body);
+//                            int code = jsonobj.getInt("code");
+//                            JSONArray datas = jsonobj.getJSONArray("datas");
+//                            List<PingLunInfo> pingLunInfos = new ArrayList<PingLunInfo>();
+//                            if (code == 200) {
+//
+//                                String allCount=jsonobj.getString("allCount");
+//
+//                                for(int i=0;i<datas.length();i++){
+//
+//                                    JSONObject jo = datas.getJSONObject(i);
+//
+//                                    PingLunInfo pingLunInfo = new PingLunInfo();
+//                                    pingLunInfo.id=jo.getString("");
+//                                    pingLunInfo.userId=jo.getString("userId");
+//                                    pingLunInfo.userName=jo.getString("userName");
+//                                    pingLunInfo.objId=jo.getString("objId");
+//                                    pingLunInfo.content=jo.getString("content");
+//                                    pingLunInfo.createTime=jo.getString("createTime");
+//                                    pingLunInfo.isDeleted=jo.getString("isDeleted");
+//                                    pingLunInfo.objType=jo.getString("objType");
+//                                    pingLunInfo.nickName=jo.getString("nickName");
+//                                    pingLunInfo.pic=jo.getString("pic");
+//
+//                                    pingLunInfo.customReplayLists = new ArrayList<CustomReplayList>();
+//                                    JSONArray ja=jo.getJSONArray("customReplayList");
+//                                    for(int j=0;j<ja.length();j++){
+//
+//                                        JSONObject jo1 = ja.getJSONObject(j);
+//                                        CustomReplayList crl = new CustomReplayList();
+//                                        crl.id=jo1.getString("");
+//                                        crl.commentFatherId=jo1.getString("commentFatherId");
+//                                        crl.replyId=jo1.getString("replyId");
+//                                        crl.beReturnedId=jo1.getString("beReturnedId");
+//                                        crl.replyContent=jo1.getString("replyContent");
+//                                        crl.createTime=jo1.getString("createTime");
+//                                        crl.isDelete=jo1.getString("isDelete");
+//                                        crl.replName=jo1.getString("replName");
+//                                        crl.beReturnedName=jo1.getString("beReturnedName");
+//                                        crl.postId=jo1.getString("postId");
+//                                        crl.nickName=jo1.getString("nickName");
+//                                        crl.userId=jo1.getString("userId");
+//                                        crl.pic=jo1.getString("pic");
+//                                        pingLunInfo.customReplayLists.add(crl);
+//                                    }
+//
+//
+//                                    pingLunInfos.add(pingLunInfo);
+//
+//                                }
+//                                if(pageNo>1){
+//
+//                                    if(pingLunInfos.size()<=0){
+//
+//                                        Toast.makeText(JiaoDetailActivity.this,Api.TOAST,Toast.LENGTH_SHORT).show();
+//
+//                                    }else{
+//                                        lists.addAll(guanzhuJDs);
+//                                    }
+//
+//                                }else{
+//
+//                                    lists.addAll(guanzhuJDs);
+//
+//                                }
+//
+//                                if(jiaodianadapter==null){
+//                                    jiaodianadapter=new Jiaodianadapter(getActivity(),lists,shareListener,stateClickListener);
+//                                    jiao_list.setAdapter(jiaodianadapter);
+//                                }else{
+//
+//                                    jiaodianadapter.notifyDataSetChanged();
+//                                }
+//
+//
+//                            } else {
+//                                Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+//
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                            Log.e("TAG","解析失败了！！！");
+//                        }
+//                    }
+//                });
+//    }
+
 
     private LinearLayout ll_wx,ll_pyq,ll_qq,ll_kj,ll_wb;
     private TextView quxiao;

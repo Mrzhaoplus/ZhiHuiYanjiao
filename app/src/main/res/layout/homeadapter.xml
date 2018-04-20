@@ -24,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/neirong"
             android:layout_marginTop="5dp"
@@ -32,8 +33,8 @@
             android:text="今年买房只建议在一二线买，三四线虽火，但有个致命的缺陷"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <RelativeLayout
-            android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
