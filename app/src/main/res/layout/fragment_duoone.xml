@@ -14,7 +14,6 @@
         <ImageView
             android:id="@+id/img_tou"
             android:layout_margin="10dp"
-            android:src="@drawable/icon_tou"
             android:layout_width="60dp"
             android:layout_height="60dp" />
 
@@ -37,6 +36,9 @@
                 android:drawablePadding="10dp"
                 android:text="天安门  12-24"
                 android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:layout_below="@id/text_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -94,12 +96,14 @@
 <LinearLayout
     android:layout_marginTop="20dp"
 android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/text_share"
         android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_weight="1"
         android:textColor="@color/black_san"
         android:gravity="center|left"
@@ -117,7 +121,8 @@ android:layout_marginLeft="20dp"
         android:drawablePadding="10dp"
         android:drawableLeft="@drawable/icon_collect"
         android:padding="10dp"
-        android:text="收藏"
+        android:layout_marginRight="20dp"
+        android:text=""
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
     <TextView
@@ -128,7 +133,7 @@ android:layout_marginLeft="20dp"
         android:drawablePadding="10dp"
         android:drawableLeft="@drawable/icon_dianzan"
         android:padding="10dp"
-        android:text="点赞"
+        android:text=""
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
 </LinearLayout>

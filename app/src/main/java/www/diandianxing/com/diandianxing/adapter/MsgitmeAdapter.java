@@ -10,16 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.bean.MessInfo;
 
 /**
  * Created by Mr赵 on 2018/4/4.
  */
 
 public class MsgitmeAdapter extends BaseAdapter {
-    private List<String> list=new ArrayList<>();
+    private List<MessInfo> list=new ArrayList<>();
     private Context ctx;
 
-    public MsgitmeAdapter(List<String> list, Context ctx) {
+    public MsgitmeAdapter(List<MessInfo> list, Context ctx) {
         this.list = list;
         this.ctx = ctx;
     }
@@ -52,6 +53,15 @@ public class MsgitmeAdapter extends BaseAdapter {
         }else{
             hodel= (Viewhodel) view.getTag();
         }
+
+        MessInfo messInfo = list.get(position);
+
+        if(Integer.parseInt(messInfo.is_read)==0){
+            hodel.be_read.setVisibility(View.VISIBLE);
+        }else{
+            hodel.be_read.setVisibility(View.INVISIBLE);
+        }
+        hodel.text_tile.setText(messInfo.msgTitle);
 
 
 

@@ -25,13 +25,16 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import www.diandianxing.com.diandianxing.adapter.JiaoLiuyanAdapter;
 import www.diandianxing.com.diandianxing.adapter.TPAdapter1;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.base.Myapplication;
+import www.diandianxing.com.diandianxing.bean.Info;
 import www.diandianxing.com.diandianxing.bean.Sharebean;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
@@ -109,7 +112,10 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
         text_share.setOnClickListener(this);
         jiao_Recycler.setLayoutManager(new GridLayoutManager(this,3));
         jiao_Recycler.setNestedScrollingEnabled(false);
-        TPAdapter1 tpAdapter1 = new TPAdapter1(this);
+
+        Info info= (Info) getIntent().getSerializableExtra("imgs");
+
+        TPAdapter1 tpAdapter1 = new TPAdapter1(this,info.imgs);
         jiao_Recycler.setAdapter(tpAdapter1);
         jiao_pinglun.setLayoutManager(new LinearLayoutManager(this));
         jiao_pinglun.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));

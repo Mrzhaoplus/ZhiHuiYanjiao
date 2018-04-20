@@ -9,10 +9,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.adapter.ViewPager_Adapter;
+import www.diandianxing.com.diandianxing.bean.Info;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
 
@@ -38,7 +41,7 @@ public class TPDetailActivity extends AppCompatActivity {
     private void initView() {
         size = getIntent().getIntExtra("size", 0);
         position = getIntent().getIntExtra("position", 0);
-
+        Info info = (Info) getIntent().getSerializableExtra("imgs");
 
         tv_back = (ImageView) findViewById(R.id.tv_back);
         vp = (ViewPager) findViewById(R.id.vp);
@@ -50,9 +53,13 @@ public class TPDetailActivity extends AppCompatActivity {
             }
         });
 
+        List<String> imgs = info.imgs;
+
         for (int i = 0; i < size; i++) {
             ImageView imageView = new ImageView(this);
-            imageView.setImageResource(R.drawable.icon_mine);
+
+            Glide.with(TPDetailActivity.this).load(imgs.get(i)).into(imageView);
+
             list.add(imageView);
         }
 

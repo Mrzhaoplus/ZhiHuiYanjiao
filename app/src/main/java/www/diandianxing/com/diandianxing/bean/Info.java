@@ -14,4 +14,7 @@ public class Info implements Serializable{
 
     public List<LocalMedia> list;
 
+    public List<String> imgs;
+
+
 }

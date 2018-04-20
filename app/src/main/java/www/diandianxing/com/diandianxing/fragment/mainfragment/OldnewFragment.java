@@ -2,6 +2,7 @@ package www.diandianxing.com.diandianxing.fragment.mainfragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -10,22 +11,34 @@ import android.widget.Toast;
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.HttpParams;
+import com.lzy.okgo.model.Response;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import www.diandianxing.com.diandianxing.adapter.Tuijiantieadapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.base.Myapplication;
+import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.bean.Sharebean;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
+import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.SpUtils;
@@ -38,6 +51,9 @@ import www.diandianxing.com.diandianxing.util.SpUtils;
 public class OldnewFragment extends BaseFragment {
     private ListView jiao_list;
     private SpringView jiao_spring;
+    private List<GuanzhuJD> lists =new ArrayList<>();
+    private int pageNo=1;
+    Tuijiantieadapter jiaodianadapter;
     @Override
     protected int setContentView() {
         return R.layout.fragment_oldnew;
@@ -48,8 +64,9 @@ public class OldnewFragment extends BaseFragment {
         View contentView = getContentView();
         jiao_list = contentView.findViewById(R.id.jiaodan_list);
         jiao_spring = contentView.findViewById(R.id.jiao_springview);
-        Tuijiantieadapter jiaodianadapter=new Tuijiantieadapter(getActivity(),shareListener);
-        jiao_list.setAdapter(jiaodianadapter);
+
+
+        networklist();
 
         jiao_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -67,9 +84,11 @@ public class OldnewFragment extends BaseFragment {
                     @Override
                     public void run() {
 
-
+                        lists.clear();
+                        pageNo=1;
+                        networklist();
                     }
-                }, 5000);
+                }, 0);
                 jiao_spring.onFinishFreshAndLoad();
             }
 
@@ -78,16 +97,116 @@ public class OldnewFragment extends BaseFragment {
                 new android.os.Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+                        pageNo++;
+                        networklist();
 
                     }
-                }, 5000);
+                }, 0);
                 jiao_spring.onFinishFreshAndLoad();
             }
         });
         jiao_spring.setFooter(new DefaultFooter(getActivity()));
         jiao_spring.setHeader(new DefaultHeader(getActivity()));
 
+    }
+
+    private void networklist() {
+
+        HttpParams params = new HttpParams();
+        params.put("pageNo", pageNo);
+        params.put("token", Api.token);
+        params.put("type",2);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/postHotOrNew")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "内容：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            JSONArray datas = jsonobj.getJSONArray("datas");
+                            List<GuanzhuJD> guanzhuJDs = new ArrayList<GuanzhuJD>();
+                            if (code == 200) {
+                                for(int i=0;i<datas.length();i++){
+
+                                    JSONObject jo = datas.getJSONObject(i);
+
+                                    GuanzhuJD guanzhu = new GuanzhuJD();
+                                    guanzhu.id=jo.getString("id");
+                                    guanzhu.userId=jo.getString("userId");
+                                    guanzhu.postType=jo.getString("postType");
+                                    guanzhu.postTitle=jo.getString("postTitle");
+                                    guanzhu.postContent=jo.getString("postContent");
+                                    guanzhu.createTime=jo.getString("createTime");
+                                    guanzhu.updateTime=jo.getString("updateTime");
+                                    guanzhu.address=jo.getString("address");
+                                    guanzhu.postFlage=jo.getString("postFlage");
+                                    guanzhu.postStatus=jo.getString("postStatus");
+                                    guanzhu.isDeleted=jo.getString("isDeleted");
+                                    guanzhu.userName=jo.getString("userName");
+                                    guanzhu.userLevel=jo.getString("userLevel");
+                                    guanzhu.postImge=jo.getString("postImge");
+                                    guanzhu.commentCount=jo.getString("commentCount");
+                                    guanzhu.dianZanCount=jo.getString("dianZanCount");
+                                    guanzhu.collectCount=jo.getString("collectCount");
+                                    guanzhu.relayCount=jo.getString("relayCount");
+                                    guanzhu.pic=jo.getString("pic");
+                                    guanzhu.is_collect=jo.getString("is_collect");
+                                    guanzhu.is_zan=jo.getString("is_zan");
+                                    guanzhu.is_fx=jo.getString("is_fx");
+                                    guanzhu.is_focus=jo.getString("is_focus");
+                                    JSONArray ja=jo.getJSONArray("imagesList");
+
+                                    guanzhu.imagesList = new ArrayList<String>();
+                                    for(int j=0;j<ja.length();j++){
+                                        guanzhu.imagesList.add(ja.getString(j));
+                                    }
+
+                                    guanzhuJDs.add(guanzhu);
+
+
+                                }
+                                if(pageNo>1){
+
+                                    if(guanzhuJDs.size()<=0){
+
+                                        Toast.makeText(getActivity(),Api.TOAST,Toast.LENGTH_SHORT).show();
+
+                                    }else{
+                                        lists.addAll(guanzhuJDs);
+                                    }
+
+                                }else{
+
+                                    lists.addAll(guanzhuJDs);
+
+                                }
+
+                                if(jiaodianadapter==null){
+                                    jiaodianadapter=new Tuijiantieadapter(getActivity(),shareListener,lists);
+                                    jiao_list.setAdapter(jiaodianadapter);
+                                }else{
+
+                                    jiaodianadapter.notifyDataSetChanged();
+                                }
+
+
+                            } else {
+                                Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
     }
 
     private ShareListener shareListener = new ShareListener() {

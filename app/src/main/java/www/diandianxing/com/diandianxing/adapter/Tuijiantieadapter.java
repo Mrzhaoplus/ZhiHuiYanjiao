@@ -17,14 +17,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.bean.Imagebean;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
+import www.diandianxing.com.diandianxing.util.MyUtils;
 import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 import www.diandianxing.com.diandianxing.R;
@@ -36,20 +40,15 @@ import www.diandianxing.com.diandianxing.R;
 
 public class Tuijiantieadapter extends BaseAdapter {
     private Context context;
-    private List<String> lists = new ArrayList<>();
+    private List<GuanzhuJD> lists ;
     private TextView text_sure;
     private ShareListener shareListener;
-    public Tuijiantieadapter(Context context,ShareListener shareListener) {
+    public Tuijiantieadapter(Context context,ShareListener shareListener,List<GuanzhuJD> lists) {
         this.context = context;
         this.shareListener=shareListener;
-        data();
+        this.lists=lists;
     }
 
-    private void data() {
-        for (int i = 0; i < 8; i++) {
-            lists.add("");
-        }
-    }
     @Override
     public int getCount() {
         return lists.size();
@@ -92,6 +91,23 @@ public class Tuijiantieadapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        final GuanzhuJD guanzhuJD = lists.get(position);
+
+        holder.text_name.setText(guanzhuJD.userName);
+
+        holder.da_address.setText(guanzhuJD.address+" "+ MyUtils.stampToDate(guanzhuJD.createTime));
+
+        holder.item_count.setText(guanzhuJD.postContent);
+
+        holder.text_colltet.setText(guanzhuJD.collectCount);
+
+        holder.text_zan.setText(guanzhuJD.dianZanCount);
+
+        holder.text_dengji.setText(guanzhuJD.userLevel);
+
+        Glide.with(context).load(guanzhuJD.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
+
+
         holder.rela_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,10 +136,9 @@ public class Tuijiantieadapter extends BaseAdapter {
                 ToastUtils.show(context,"点赞",1);
             }
         });
-
         holder.item_recycler.setLayoutManager(new GridLayoutManager(context,3));
         holder.item_recycler.setNestedScrollingEnabled(false);
-        TPAdapter1 tpAdapter1 = new TPAdapter1(context);
+        TPAdapter1 tpAdapter1 = new TPAdapter1(context,guanzhuJD.imagesList);
         holder.item_recycler.setAdapter(tpAdapter1);
 
 
