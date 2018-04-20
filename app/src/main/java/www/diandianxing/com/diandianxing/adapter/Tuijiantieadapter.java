@@ -3,6 +3,7 @@ package www.diandianxing.com.diandianxing.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,8 +29,10 @@ import www.diandianxing.com.diandianxing.bean.Imagebean;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
+import www.diandianxing.com.diandianxing.util.GuanzhuClickListener;
 import www.diandianxing.com.diandianxing.util.MyUtils;
 import www.diandianxing.com.diandianxing.util.ShareListener;
+import www.diandianxing.com.diandianxing.util.StateClickListener;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 import www.diandianxing.com.diandianxing.R;
 
@@ -43,10 +46,14 @@ public class Tuijiantieadapter extends BaseAdapter {
     private List<GuanzhuJD> lists ;
     private TextView text_sure;
     private ShareListener shareListener;
-    public Tuijiantieadapter(Context context,ShareListener shareListener,List<GuanzhuJD> lists) {
+    private StateClickListener stateClickListener;
+    private GuanzhuClickListener guanzhuClickListener;
+    public Tuijiantieadapter(Context context,ShareListener shareListener,List<GuanzhuJD> lists,StateClickListener stateClickListener,GuanzhuClickListener guanzhuClickListener) {
         this.context = context;
         this.shareListener=shareListener;
         this.lists=lists;
+        this.stateClickListener=stateClickListener;
+        this.guanzhuClickListener=guanzhuClickListener;
     }
 
     @Override
@@ -65,7 +72,7 @@ public class Tuijiantieadapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup viewGroup) {
+    public View getView(final int position, View convertView, ViewGroup viewGroup) {
         ViewHolder holder;
         int type = getItemViewType(position);
         if (convertView == null) {
@@ -107,12 +114,40 @@ public class Tuijiantieadapter extends BaseAdapter {
 
         Glide.with(context).load(guanzhuJD.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
 
+        if(Integer.parseInt(guanzhuJD.is_collect)==0){
+            Drawable nav_up=context.getResources().getDrawable(R.drawable.icon_collect);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            holder.text_colltet.setCompoundDrawables(nav_up, null, null, null);
+        }else{
+            Drawable nav_up=context.getResources().getDrawable(R.drawable.shouchang_xz_icon_3x);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            holder.text_colltet.setCompoundDrawables(nav_up, null, null, null);
+        }
+
+        if(Integer.parseInt(guanzhuJD.is_zan)==0){
+            Drawable nav_up=context.getResources().getDrawable(R.drawable.icon_dianzan);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            holder.text_zan.setCompoundDrawables(nav_up, null, null, null);
+        }else{
+            Drawable nav_up=context.getResources().getDrawable(R.drawable.dianzan_xz_icon_3x);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            holder.text_zan.setCompoundDrawables(nav_up, null, null, null);
+        }
+
+        if(Integer.parseInt(guanzhuJD.is_focus)==0){
+            holder.rela_guanzhu.setVisibility(View.VISIBLE);
+        }else{
+            holder.rela_guanzhu.setVisibility(View.INVISIBLE);
+        }
+
 
         holder.rela_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+                if(Integer.parseInt(guanzhuJD.is_focus)==0){
+                    shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion,position);
+                }
             }
         });
         //分享
@@ -126,14 +161,26 @@ public class Tuijiantieadapter extends BaseAdapter {
         holder.text_colltet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.show(context,"收藏",1);
+                if(Integer.parseInt(guanzhuJD.is_collect)==0){
+
+                    stateClickListener.ShouCangClickListener(Integer.parseInt(guanzhuJD.id),0,1,-1,position);
+
+                }else{
+                    stateClickListener.QuXiaoShouCangClickListener(Integer.parseInt(guanzhuJD.id),0,1,position);
+                }
             }
         });
         //点赞
         holder.text_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.show(context,"点赞",1);
+                if(Integer.parseInt(guanzhuJD.is_zan)==0){
+
+                    stateClickListener.DianZanClickListener(Integer.parseInt(guanzhuJD.id),0,0,-1,position);
+
+                }else{
+                    stateClickListener.QuXiaoDianZanClickListener(Integer.parseInt(guanzhuJD.id),0,0,position);
+                }
             }
         });
         holder.item_recycler.setLayoutManager(new GridLayoutManager(context,3));
@@ -146,6 +193,7 @@ public class Tuijiantieadapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(context,JiaoDetailActivity.class);
+                intent.putExtra("guanzhu",guanzhuJD);
                 context.startActivity(intent);
             }
         });
@@ -180,7 +228,7 @@ public class Tuijiantieadapter extends BaseAdapter {
     }
 
 
-    private void shumaDialog(int grary, int animationStyle) {
+    private void shumaDialog(int grary, int animationStyle, final int pos) {
         BaseDialog.Builder builder = new BaseDialog.Builder(context);
         final BaseDialog dialog = builder.setViewId(R.layout.dialog_guanzhu)
                 //设置dialogpadding
@@ -203,6 +251,11 @@ public class Tuijiantieadapter extends BaseAdapter {
        text_sure.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
+
+               GuanzhuJD guanzhuJD = lists.get(pos);
+
+               guanzhuClickListener.OnGuanzhuClickListener(Integer.parseInt(guanzhuJD.userId),pos);
+
                dialog.dismiss();
            }
        });

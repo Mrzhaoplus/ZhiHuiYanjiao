@@ -53,15 +53,22 @@ public class TPDetailActivity extends AppCompatActivity {
             }
         });
 
-        List<String> imgs = info.imgs;
+        if(info!=null){
+            List<String> imgs = info.imgs;
 
-        for (int i = 0; i < size; i++) {
-            ImageView imageView = new ImageView(this);
+            if(imgs!=null){
+                for (int i = 0; i < size; i++) {
+                    ImageView imageView = new ImageView(this);
 
-            Glide.with(TPDetailActivity.this).load(imgs.get(i)).into(imageView);
+                    Glide.with(TPDetailActivity.this).load(imgs.get(i)).into(imageView);
 
-            list.add(imageView);
+                    list.add(imageView);
+                }
+            }
         }
+
+
+
 
 
         vp.setAdapter(new ViewPager_Adapter(list, TPDetailActivity.this, position));

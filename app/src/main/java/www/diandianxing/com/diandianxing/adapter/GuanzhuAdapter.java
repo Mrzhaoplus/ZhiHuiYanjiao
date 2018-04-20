@@ -32,6 +32,7 @@ import www.diandianxing.com.diandianxing.ShujuBean.Live_gunzhu_Bean;
 import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.bean.Imagebean;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
+import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 import www.diandianxing.com.diandianxing.interfase.List_view;
 import www.diandianxing.com.diandianxing.interfase.RecyGetonclick;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
@@ -107,6 +108,41 @@ public class GuanzhuAdapter extends BaseAdapter {
             }
         });
 
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                guanzhuJD = new GuanzhuJD();
+                guanzhuJD.address=datasBean.getAddress();
+                guanzhuJD.imagesList=datasBean.getImagesList();
+                guanzhuJD.id= String.valueOf(datasBean.getId());
+                guanzhuJD.dianZanCount= String.valueOf(datasBean.getDianZanCount());
+                guanzhuJD.createTime= String.valueOf(datasBean.getCreateTime());
+                guanzhuJD.commentCount= String.valueOf(datasBean.getCommentCount());
+                guanzhuJD.collectCount= String.valueOf(datasBean.getCollectCount());
+                guanzhuJD.is_collect= String.valueOf(datasBean.getIs_collect());
+                guanzhuJD.is_focus= String.valueOf(datasBean.getIs_focus());
+                guanzhuJD.is_fx= String.valueOf(datasBean.getIs_fx());
+                guanzhuJD.is_zan= String.valueOf(datasBean.getIs_zan());
+                guanzhuJD.isDeleted= String.valueOf(datasBean.getIsDeleted());
+                guanzhuJD.pic=datasBean.getPic();
+                guanzhuJD.postContent=datasBean.getPostContent();
+                guanzhuJD.postFlage= String.valueOf(datasBean.getPostFlage());
+                guanzhuJD.postImge=datasBean.getPostImge();
+                guanzhuJD.postStatus= String.valueOf(datasBean.getPostStatus());
+                guanzhuJD.postTitle=datasBean.getPostTitle();
+                guanzhuJD.postType=datasBean.getPostType();
+                guanzhuJD.relayCount= String.valueOf(datasBean.getRelayCount());
+                guanzhuJD.updateTime= String.valueOf(datasBean.getUpdateTime());
+                guanzhuJD.userId= String.valueOf(datasBean.getUserId());
+                guanzhuJD.userLevel=datasBean.getUserLevel();
+                guanzhuJD.userName=datasBean.getUserName();
+                Intent intent=new Intent(context,JiaoDetailActivity.class);
+                intent.putExtra("guanzhu",guanzhuJD);
+                context.startActivity(intent);
+            }
+        });
+
+
         if(lists.get(position).getIs_collect()==0){
             Drawable nav_up=context.getResources().getDrawable(R.drawable.icon_collect);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
@@ -156,34 +192,17 @@ public class GuanzhuAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-                guanzhuJD = new GuanzhuJD();
-                guanzhuJD.address=datasBean.getAddress();
-                guanzhuJD.imagesList=datasBean.getImagesList();
-                guanzhuJD.id= String.valueOf(datasBean.getId());
-                guanzhuJD.dianZanCount= String.valueOf(datasBean.getDianZanCount());
-                guanzhuJD.createTime= String.valueOf(datasBean.getCreateTime());
-                guanzhuJD.commentCount= String.valueOf(datasBean.getCommentCount());
-                guanzhuJD.collectCount= String.valueOf(datasBean.getCollectCount());
-                guanzhuJD.is_collect= String.valueOf(datasBean.getIs_collect());
-                guanzhuJD.is_focus= String.valueOf(datasBean.getIs_focus());
-                guanzhuJD.is_fx= String.valueOf(datasBean.getIs_fx());
-                guanzhuJD.is_zan= String.valueOf(datasBean.getIs_zan());
-                guanzhuJD.isDeleted= String.valueOf(datasBean.getIsDeleted());
-                guanzhuJD.pic=datasBean.getPic();
-                guanzhuJD.postContent=datasBean.getPostContent();
-                guanzhuJD.postFlage= String.valueOf(datasBean.getPostFlage());
-                guanzhuJD.postImge=datasBean.getPostImge();
-                guanzhuJD.postStatus= String.valueOf(datasBean.getPostStatus());
-                guanzhuJD.postTitle=datasBean.getPostTitle();
-                guanzhuJD.postType=datasBean.getPostType();
-                guanzhuJD.relayCount= String.valueOf(datasBean.getRelayCount());
-                guanzhuJD.updateTime= String.valueOf(datasBean.getUpdateTime());
-                guanzhuJD.userId= String.valueOf(datasBean.getUserId());
-                guanzhuJD.userLevel=datasBean.getUserLevel();
-                guanzhuJD.userName=datasBean.getUserName();
-                Intent intent=new Intent(context,JiaoDetailActivity.class);
-                intent.putExtra("guanzhu",guanzhuJD);
+
+            }
+        });
+
+        holder.img_tou.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(context, MydynamicActivity.class);
                 context.startActivity(intent);
+
             }
         });
            holder.text_name.setText(lists.get(position).getUserName());

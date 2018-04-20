@@ -190,12 +190,17 @@ holder.item_count.setText(guanzhuJD.postContent);
 
         TPAdapter1 tpAdapter1 = new TPAdapter1(context,guanzhuJD.imagesList);
         holder.item_recycler.setAdapter(tpAdapter1);
+
+
 holder.ll_view.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
         Intent intent=new Intent(context,JiaoDetailActivity.class);
 
         intent.putExtra("guanzhu",guanzhuJD);
+
+
+
         context.startActivity(intent);
     }
 });

@@ -19,14 +19,14 @@
         android:layout_width="match_parent"
         android:layout_height="5dp"></View>
 
-    <GridView
+    <www.diandianxing.com.diandianxing.util.MyGridView
         android:horizontalSpacing="5dp"
         android:verticalSpacing="5dp"
         android:gravity="center"
         android:numColumns="2"
         android:id="@+id/tui_recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></GridView>
+        android:layout_height="wrap_content"></www.diandianxing.com.diandianxing.util.MyGridView>
 
     </LinearLayout>
 

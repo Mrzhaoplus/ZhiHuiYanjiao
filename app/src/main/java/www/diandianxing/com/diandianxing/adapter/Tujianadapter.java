@@ -9,11 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.VideoActivity;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
 
 /**
  * date : ${Date}
@@ -24,17 +29,12 @@ import www.diandianxing.com.diandianxing.R;
 
 public class Tujianadapter extends BaseAdapter {
      private Context context;
-     private List<String> list=new ArrayList<>();
-    public Tujianadapter(Context context) {
+     private List<PaiKeInfo> list;
+    public Tujianadapter(Context context,List<PaiKeInfo> list) {
         this.context = context;
-        data();
+        this.list=list;
     }
 
-    private void data() {
-        for (int i = 0; i <10; i++) {
-             list.add("");
-        }
-    }
 
     @Override
     public int getCount() {
@@ -65,8 +65,19 @@ public class Tujianadapter extends BaseAdapter {
         else {
           holder= (Viewholer) view.getTag();
         }
-       //下载数据
-        holder.tui_zan.setText(list.get(i).toString()+"");
+
+
+        PaiKeInfo paiKeInfo = list.get(i);
+
+        Glide.with(context).load(paiKeInfo.imageUrl).into(holder.tui_img);
+
+        Glide.with(context).load(paiKeInfo.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.tui_tou);
+
+
+        holder.tui_zan.setText(paiKeInfo.collectCount);
+
+
+
         //设置点击事件
         holder.tui_img.setOnClickListener(new View.OnClickListener() {
             @Override

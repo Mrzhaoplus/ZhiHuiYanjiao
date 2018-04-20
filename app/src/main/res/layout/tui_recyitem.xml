@@ -11,7 +11,6 @@
        android:layout_height="270dp">
     <ImageView
         android:scaleType="centerCrop"
-        android:src="@drawable/tui_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/item_img" />
@@ -27,15 +26,14 @@
             android:id="@+id/item_tou"
             android:layout_marginLeft="10dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/icon_tou"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
         <TextView
             android:id="@+id/item_zan"
             android:drawablePadding="10dp"
             android:layout_marginRight="10dp"
             android:textColor="@color/white"
-            android:text="121"
+            android:text="0"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:drawableLeft="@drawable/tui_xin"

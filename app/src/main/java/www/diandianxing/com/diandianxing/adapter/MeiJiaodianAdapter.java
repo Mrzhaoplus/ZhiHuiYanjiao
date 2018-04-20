@@ -120,7 +120,7 @@ public class MeiJiaodianAdapter extends BaseAdapter {
         holder.item_recycler.setAdapter(tpAdapter1);
 
 
-        holder.item_count.setOnClickListener(new View.OnClickListener() {
+        convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(context,JiaoDetailActivity.class);

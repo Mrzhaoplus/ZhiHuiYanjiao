@@ -32,6 +32,6 @@ public class GuanzhuJD implements Serializable{
     public String is_zan;
     public String is_fx;
     public String is_focus;
-    public List<String > imagesList;
+    public List<String> imagesList;
 
 }

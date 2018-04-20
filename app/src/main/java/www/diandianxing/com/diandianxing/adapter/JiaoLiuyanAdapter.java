@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.bean.PingLunInfo;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 
 /**
@@ -21,17 +22,12 @@ import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity
 
 public class JiaoLiuyanAdapter extends RecyclerView.Adapter<JiaoLiuyanAdapter.ViewHolder> {
    private Context context;
-    private List<String>list=new ArrayList<>();
-    public JiaoLiuyanAdapter(Context context) {
+    private List<PingLunInfo> list;
+    public JiaoLiuyanAdapter(Context context,List<PingLunInfo> list) {
         this.context = context;
-        data();
+        this.list=list;
     }
 
-    private void data() {
-        for (int i=0;i<10;i++){
-            list.add("");
-        }
-    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
