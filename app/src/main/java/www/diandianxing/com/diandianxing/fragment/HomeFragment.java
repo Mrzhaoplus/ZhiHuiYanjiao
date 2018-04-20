@@ -271,16 +271,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             }else{
                 list.addAll(datas);
             }
-
             homeadapter.notifyDataSetChanged();
         }
-
-
-
         }
-
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();

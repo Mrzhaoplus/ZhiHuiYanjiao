@@ -4,6 +4,7 @@ import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
+import www.diandianxing.com.diandianxing.ShujuBean.DianzanAndFenxiang_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Live_gunzhu_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.zixun_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Live_Bean;
@@ -41,6 +42,10 @@ public interface SerViceAPI {
       @FormUrlEncoded
       @POST("app/home/focusAttention")
       Observable<Live_gunzhu_Bean> live_guanzhu(@Field("token") String token,@Field("pageNo") int type);
+      //点赞或者关注
+      @FormUrlEncoded
+      @POST("app/home/focusAttention")
+      Observable<DianzanAndFenxiang_Bean> zanandguan(@Field("token") String token, @Field("objId") int objId,@Field("obj_type")int obj_type,@Field("operation_type")int operation_type);
 
 
 

@@ -1,13 +1,18 @@
 package www.diandianxing.com.diandianxing.fragment.mainfragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.liaoinstan.springview.container.DefaultFooter;
+import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
@@ -20,15 +25,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import www.diandianxing.com.diandianxing.ShujuBean.DianzanAndFenxiang_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Live_gunzhu_Bean;
 import www.diandianxing.com.diandianxing.adapter.GuanzhuAdapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.base.Myapplication;
 import www.diandianxing.com.diandianxing.bean.Sharebean;
+import www.diandianxing.com.diandianxing.interfase.Dianzan_presenter_interfase;
+import www.diandianxing.com.diandianxing.interfase.List_view;
 import www.diandianxing.com.diandianxing.interfase.Live_guanzhu_presenter_interfase;
+import www.diandianxing.com.diandianxing.interfase.RecyGetonclick;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
+import www.diandianxing.com.diandianxing.presenter.Dianzan_presenter;
 import www.diandianxing.com.diandianxing.presenter.Live_guanzhu_presenter;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.MyContants;
@@ -39,7 +49,7 @@ import www.diandianxing.com.diandianxing.util.SpUtils;
  * Created by Mr赵 on 2018/4/3.
  */
 
-public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presenter_interfase {
+public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presenter_interfase, Dianzan_presenter_interfase, List_view {
 
     private ListView lv;
     private Live_guanzhu_presenter live_guanzhu_presenter;
@@ -47,6 +57,26 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
     List<Live_gunzhu_Bean.DatasBean>list=new ArrayList<>();
     private SpringView springView;
     private GuanzhuAdapter guanzhuAdapter;
+    private int what;
+    private int postion;
+    private Dianzan_presenter dianzan_presenter;
+
+    @Override
+    public void onclick(int position, int state, int id) {
+        this.postion=position;
+        this.what=state;
+        if(state==0){
+            Log.i("TAG","点赞");
+          /*  dianzan_presenter = new Dianzan_presenter(this);
+            dianzan_presenter.setpath(Api.token,id,0,0);*/
+        }else if(state==1){
+            Log.i("TAG","收藏");
+         /*   dianzan_presenter = new Dianzan_presenter(this);
+            dianzan_presenter.setpath(Api.token,id,0,1);*/
+        }
+    }
+
+
 
     @Override
     protected int setContentView() {
@@ -64,7 +94,9 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
 
 
         guanzhuAdapter = new GuanzhuAdapter(getActivity(),shareListener,list);
+        guanzhuAdapter.getclick(this);
         lv.setAdapter(guanzhuAdapter);
+
          lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
              @Override
              public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -77,7 +109,7 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
+               new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                        list.clear();
@@ -102,7 +134,8 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
                 springView.onFinishFreshAndLoad();
             }
         });
-
+        springView.setFooter(new DefaultFooter(getActivity()));
+        springView.setHeader(new DefaultHeader(getActivity()));
     }
 
     private ShareListener shareListener = new ShareListener() {
@@ -260,4 +293,30 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
           guanzhuAdapter.notifyDataSetChanged();
       }
     }
+
+    @Override
+    public void setsuccess(DianzanAndFenxiang_Bean zan) {
+        if(zan.getCode().equals("200")){
+            if(what==0){
+                if(list.get(postion).getIs_zan()==0){
+                    list.get(postion).setDianZanCount(zan.getDatas().getZanCount()+1);
+                    list.get(postion).setDianZanCount(1);
+                }else{
+                    list.get(postion).setDianZanCount(zan.getDatas().getZanCount());
+                }
+            }else{
+                if(list.get(postion).getIs_collect()==0){
+                    list.get(postion).setCollectCount(zan.getDatas().getZanCount()+1);
+                    list.get(postion).setIs_collect(1);
+                }else{
+                    list.get(postion).setCollectCount(zan.getDatas().getZanCount());
+                }
+
+            }
+
+        }
+    }
+
+
+
 }

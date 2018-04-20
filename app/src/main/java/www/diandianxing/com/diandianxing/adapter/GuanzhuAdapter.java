@@ -3,6 +3,9 @@ package www.diandianxing.com.diandianxing.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -24,9 +27,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.ShujuBean.DianzanAndFenxiang_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Live_gunzhu_Bean;
+import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.bean.Imagebean;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
+import www.diandianxing.com.diandianxing.interfase.List_view;
+import www.diandianxing.com.diandianxing.interfase.RecyGetonclick;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.ImageLoder;
 import www.diandianxing.com.diandianxing.util.ShareListener;
@@ -39,16 +46,19 @@ import www.diandianxing.com.diandianxing.R;
 
 public class GuanzhuAdapter extends BaseAdapter {
     private Context context;
-
     private ShareListener shareListener;
     List<Live_gunzhu_Bean.DatasBean>lists;
+    private GuanzhuJD guanzhuJD;
+    private List_view jiekou;
 
-    public GuanzhuAdapter(Context context, ShareListener shareListener, List<Live_gunzhu_Bean.DatasBean> lists) {
+    public GuanzhuAdapter(Context context, ShareListener shareListener, List<Live_gunzhu_Bean.DatasBean> lists ) {
         this.context = context;
         this.shareListener = shareListener;
         this.lists = lists;
     }
-
+    public void getclick(List_view jiekou){
+         this.jiekou=jiekou;
+    }
     @Override
     public int getCount() {
         return lists.size();
@@ -65,8 +75,8 @@ public class GuanzhuAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup viewGroup) {
-       ViewHolder holder;
+    public View getView(final int position, View convertView, ViewGroup viewGroup) {
+       final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
 
@@ -86,7 +96,7 @@ public class GuanzhuAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-
+        final Live_gunzhu_Bean.DatasBean datasBean = lists.get(position);
 
 
         //分享
@@ -96,18 +106,44 @@ public class GuanzhuAdapter extends BaseAdapter {
                 showFXDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion);
             }
         });
+
+        if(lists.get(position).getIs_collect()==0){
+            Drawable nav_up=context.getResources().getDrawable(R.drawable.icon_collect);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            holder.text_colltet.setCompoundDrawables(nav_up, null, null, null);
+            holder.text_colltet.setText(lists.get(position).getCollectCount()+"");
+        }else{
+            Drawable nav_up=context.getResources().getDrawable(R.drawable.shouchang_xz_icon_3x);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            holder.text_colltet.setCompoundDrawables(nav_up, null, null, null);
+            holder.text_colltet.setText(lists.get(position).getCollectCount()+"");
+        }
+        if(lists.get(position).getIs_zan()==0){
+            Drawable nav_up=context.getResources().getDrawable(R.drawable.icon_dianzan);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            holder.text_zan.setCompoundDrawables(nav_up, null, null, null);
+            holder.text_zan.setText(lists.get(position).getDianZanCount()+"");
+
+        }else{
+            Drawable nav_up=context.getResources().getDrawable(R.drawable.dianzan_xz_icon_3x);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            holder.text_zan.setCompoundDrawables(nav_up, null, null, null);
+            holder.text_zan.setText(lists.get(position).getDianZanCount()+"");
+        }
         //收藏
         holder.text_colltet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.show(context,"收藏",1);
+              jiekou.onclick(position,1,lists.get(position).getId());
+
+
             }
         });
         //点赞
         holder.text_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.show(context,"点赞",1);
+                jiekou.onclick(position,0,lists.get(position).getId());
             }
         });
         List<String> imagesList = lists.get(position).getImagesList();
@@ -119,7 +155,34 @@ public class GuanzhuAdapter extends BaseAdapter {
         holder.item_count.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                guanzhuJD = new GuanzhuJD();
+                guanzhuJD.address=datasBean.getAddress();
+                guanzhuJD.imagesList=datasBean.getImagesList();
+                guanzhuJD.id= String.valueOf(datasBean.getId());
+                guanzhuJD.dianZanCount= String.valueOf(datasBean.getDianZanCount());
+                guanzhuJD.createTime= String.valueOf(datasBean.getCreateTime());
+                guanzhuJD.commentCount= String.valueOf(datasBean.getCommentCount());
+                guanzhuJD.collectCount= String.valueOf(datasBean.getCollectCount());
+                guanzhuJD.is_collect= String.valueOf(datasBean.getIs_collect());
+                guanzhuJD.is_focus= String.valueOf(datasBean.getIs_focus());
+                guanzhuJD.is_fx= String.valueOf(datasBean.getIs_fx());
+                guanzhuJD.is_zan= String.valueOf(datasBean.getIs_zan());
+                guanzhuJD.isDeleted= String.valueOf(datasBean.getIsDeleted());
+                guanzhuJD.pic=datasBean.getPic();
+                guanzhuJD.postContent=datasBean.getPostContent();
+                guanzhuJD.postFlage= String.valueOf(datasBean.getPostFlage());
+                guanzhuJD.postImge=datasBean.getPostImge();
+                guanzhuJD.postStatus= String.valueOf(datasBean.getPostStatus());
+                guanzhuJD.postTitle=datasBean.getPostTitle();
+                guanzhuJD.postType=datasBean.getPostType();
+                guanzhuJD.relayCount= String.valueOf(datasBean.getRelayCount());
+                guanzhuJD.updateTime= String.valueOf(datasBean.getUpdateTime());
+                guanzhuJD.userId= String.valueOf(datasBean.getUserId());
+                guanzhuJD.userLevel=datasBean.getUserLevel();
+                guanzhuJD.userName=datasBean.getUserName();
                 Intent intent=new Intent(context,JiaoDetailActivity.class);
+                intent.putExtra("guanzhu",guanzhuJD);
                 context.startActivity(intent);
             }
         });
@@ -138,13 +201,14 @@ public class GuanzhuAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+
     public static class ViewHolder {
 
         public RecyclerView item_recycler;
         public ImageView img_tou;
         public TextView text_name;
         public TextView da_address;
-        public TextView da_tate;
         public ImageView imageView2;
         public TextView text_dengji;
         public TextView item_count;
@@ -222,4 +286,5 @@ public class GuanzhuAdapter extends BaseAdapter {
         String format = sdf.format(new Date(lcc_time * 1000L));
         return format;
     }
+
 }

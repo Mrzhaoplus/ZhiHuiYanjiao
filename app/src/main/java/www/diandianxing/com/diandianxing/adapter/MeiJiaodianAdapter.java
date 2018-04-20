@@ -113,10 +113,10 @@ public class MeiJiaodianAdapter extends BaseAdapter {
                 ToastUtils.show(context,"点赞",1);
             }
         });
-
+        List<String> aaa = new ArrayList<>();
         holder.item_recycler.setLayoutManager(new GridLayoutManager(context,3));
         holder.item_recycler.setNestedScrollingEnabled(false);
-        TPAdapter1 tpAdapter1 = new TPAdapter1(context,null);
+        TPAdapter1 tpAdapter1 = new TPAdapter1(context,aaa);
         holder.item_recycler.setAdapter(tpAdapter1);
 
 
