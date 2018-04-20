@@ -12,11 +12,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import www.diandianxing.com.diandianxing.adapter.Search_adapter;
+import www.diandianxing.com.diandianxing.interfase.SouLadel_presenter_interfise;
+import www.diandianxing.com.diandianxing.model.SouLabel_bean;
+import www.diandianxing.com.diandianxing.presenter.SouLabel_Presenter;
+import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
 
-public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
+public class SearchActivity extends AppCompatActivity implements View.OnClickListener, SouLadel_presenter_interfise {
 
     private ImageView img_back;
     private ImageView sou;
@@ -24,6 +30,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private TextView search;
     private EditText ed_search;
     private RecyclerView recycler_view;
+    private SouLabel_Presenter souLabel_presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +47,12 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         recycler_view = (RecyclerView) findViewById(R.id.recycler_search);
         img_back.setOnClickListener(this);
         search.setOnClickListener(this);
-        recycler_view.setLayoutManager(new GridLayoutManager(SearchActivity.this,4));
-        recycler_view.setNestedScrollingEnabled(false);
-        Search_adapter search_adapter = new Search_adapter(this);
-          recycler_view.setAdapter(search_adapter);
+        //引用
+        souLabel_presenter = new SouLabel_Presenter(this);
+        souLabel_presenter.getpath(Api.token);
+
+
+
 
 
     }
@@ -70,5 +79,22 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+       souLabel_presenter.getkong();
+    }
 
+    @Override
+    public void getsuccess(SouLabel_bean souLabel_bean) {
+        List<String> datas = souLabel_bean.getDatas();
+        recycler_view.setLayoutManager(new GridLayoutManager(SearchActivity.this,4));
+        recycler_view.setNestedScrollingEnabled(false);
+        Search_adapter search_adapter = new Search_adapter(SearchActivity.this,datas);
+        recycler_view.setAdapter(search_adapter);
+
+
+
+
+    }
 }

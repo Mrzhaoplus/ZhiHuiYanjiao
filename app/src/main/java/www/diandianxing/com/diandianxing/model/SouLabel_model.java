@@ -5,28 +5,30 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import www.diandianxing.com.diandianxing.ShujuBean.Live_Bean;
-import www.diandianxing.com.diandianxing.interfase.Live_Model_interfase;
+import www.diandianxing.com.diandianxing.interfase.SouLadel_model_interfise;
 import www.diandianxing.com.diandianxing.util.MyRetrofit;
 
 /**
- * Created by Mr赵 on 2018/4/18.
+ * Created by Mr赵 on 2018/4/19.
  */
 
-public class Live_model {
-    private final Live_Model_interfase jiekou;
+public class SouLabel_model {
+    private final SouLadel_model_interfise jiekou;
 
-    public Live_model(Live_Model_interfase jiekou) {
-      this.jiekou=jiekou;
+    public SouLabel_model(SouLadel_model_interfise jiekou) {
+          this.jiekou=jiekou;
     }
     public void getpath(String token){
-        Observable<Live_Bean> live = MyRetrofit.getSerViceAPI().live(token);
+        Observable<SouLabel_bean> live = MyRetrofit.getSerViceAPI().soulabel(token);
         live.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Live_Bean>() {
+                .subscribe(new Consumer<SouLabel_bean>() {
                     @Override
-                    public void accept(Live_Bean live_bean) throws Exception {
+                    public void accept(SouLabel_bean live_bean) throws Exception {
                         jiekou.getsuccess(live_bean);
                     }
                 });
-    }
 
+
+
+    }
 }

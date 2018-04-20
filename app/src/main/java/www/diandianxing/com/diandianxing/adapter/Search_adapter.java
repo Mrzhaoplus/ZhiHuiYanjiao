@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -19,16 +20,11 @@ import www.diandianxing.com.diandianxing.ZixunDitailsActivity;
 
 public class Search_adapter extends RecyclerView.Adapter<Search_adapter.ViewHodel> {
     private Context context;
-     private List<String>list=new ArrayList<>();
-    public Search_adapter(Context context) {
-        this.context = context;
-        data();
-    }
+     private List<String> list;
 
-    private void data() {
-         for (int i=0;i<8;i++){
-            list.add("");
-         }
+    public Search_adapter(Context context, List<String> list) {
+        this.context = context;
+        this.list = list;
     }
 
     @Override
@@ -39,17 +35,15 @@ public class Search_adapter extends RecyclerView.Adapter<Search_adapter.ViewHode
     }
 
     @Override
-    public void onBindViewHolder(ViewHodel holder, final int position) {
+    public void onBindViewHolder(final ViewHodel holder, final int position) {
     holder.view.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
             Intent intent1 = new Intent(context, ZixunDitailsActivity.class);
             context.startActivity(intent1);
-
         }
     });
-
+        holder.ladel.setText(list.get(position));
 
     }
 
@@ -60,10 +54,14 @@ public class Search_adapter extends RecyclerView.Adapter<Search_adapter.ViewHode
     public class ViewHodel extends RecyclerView.ViewHolder{
 
         public View view;
+        public  TextView ladel;
 
         public ViewHodel(View itemView) {
             super(itemView);
             view = itemView;
+            ladel = itemView.findViewById(R.id.ladel);
+
+
         }
     }
 }

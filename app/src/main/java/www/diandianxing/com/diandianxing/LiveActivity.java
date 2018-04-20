@@ -18,10 +18,12 @@ import www.diandianxing.com.diandianxing.fragment.mainfragment.ChowuFragment;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.ErshouFragment;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.FangwuFragment;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.GuanzhuFragment;
+import www.diandianxing.com.diandianxing.fragment.mainfragment.MeiJiaidianFragment;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.ZhaoLingFragment;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.ZhaopinFragment;
 import www.diandianxing.com.diandianxing.interfase.Live_Presenter_interfase;
 import www.diandianxing.com.diandianxing.presenter.Live_presenter;
+import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
 
@@ -52,19 +54,19 @@ public class LiveActivity extends AppCompatActivity implements Live_Presenter_in
         });
         //引用
         live_presenter = new Live_presenter(this);
-        live_presenter.getpath();
+        live_presenter.getpath(Api.token);
 
 
     }
     @Override
     public void getsuccess(final Live_Bean live_bean) {
                 final List<String> name = new ArrayList<>();
-                   if(live_bean.getCode().equals("200")){
-                       List<Live_Bean.DatasBean> datas = live_bean.getDatas();
+                name.add("关注");
+                       final List<Live_Bean.DatasBean> datas = live_bean.getDatas();
                        for (int i=0;i<datas.size();i++){
                            name.add(datas.get(i).getContent());
                        }
-                   }
+
         vp_pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public CharSequence getPageTitle(int position) {
@@ -76,10 +78,12 @@ public class LiveActivity extends AppCompatActivity implements Live_Presenter_in
                 Fragment fragment=null;
                 switch (position){
                     case 0:
+
                         fragment=new GuanzhuFragment();
                         break;
                     case 1:
-                        fragment=new ChowuFragment();
+
+                        fragment = new MeiJiaidianFragment();
                         break;
                     case 2:
                         fragment=new ZhaoLingFragment();
@@ -93,6 +97,9 @@ public class LiveActivity extends AppCompatActivity implements Live_Presenter_in
                     case 5:
                         fragment=new ZhaopinFragment();
                         break;
+                    case 6:
+                        fragment=new ChowuFragment();
+                        break;
                 }
                 return fragment;
             }
@@ -103,5 +110,11 @@ public class LiveActivity extends AppCompatActivity implements Live_Presenter_in
             }
         });
         tab.setupWithViewPager(vp_pager);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        live_presenter.kong();
     }
 }

@@ -20,8 +20,8 @@ public class Lunbo_model {
         this.jiekou=jiekou;
     }
 
-    public void getString() {
-        Observable<Lunbo_Bean> lun = MyRetrofit.getSerViceAPI().lun();
+    public void getString(String token) {
+        Observable<Lunbo_Bean> lun = MyRetrofit.getSerViceAPI().lun(token);
         lun.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Lunbo_Bean>() {
                     @Override

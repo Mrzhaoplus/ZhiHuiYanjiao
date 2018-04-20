@@ -18,8 +18,8 @@ public class Lukuang_model {
     public Lukuang_model(Lukuang_model_interfase jiekou) {
         this.jeikou=jiekou;
     }
-    public void getpath(int type){
-        Observable<LuKuang_Bean> lukuang = MyRetrofit.getSerViceAPI().lukuang(type);
+    public void getpath(int type,String token){
+        Observable<LuKuang_Bean> lukuang = MyRetrofit.getSerViceAPI().lukuang(type,token);
         lukuang.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<LuKuang_Bean>() {
                     @Override

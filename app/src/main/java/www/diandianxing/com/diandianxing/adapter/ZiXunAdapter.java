@@ -7,10 +7,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.ShujuBean.zixun_Bean;
+import www.diandianxing.com.diandianxing.util.ImageLoder;
 
 /**
  * Created by Mr赵 on 2018/4/2.
@@ -18,17 +24,10 @@ import www.diandianxing.com.diandianxing.R;
 
 public class ZiXunAdapter extends BaseAdapter {
       private   Context context;
-      private List<String> list=new ArrayList<>();
-
-    public ZiXunAdapter(Context context) {
+      private List<zixun_Bean.DatasBean> list;
+    public ZiXunAdapter(Context context, List<zixun_Bean.DatasBean> datas) {
         this.context = context;
-        data();
-    }
-
-    private void data() {
-        for(int i=0;i<6;i++){
-            list.add(i+"");
-        }
+        this.list = datas;
     }
 
     @Override
@@ -45,17 +44,8 @@ public class ZiXunAdapter extends BaseAdapter {
     public long getItemId(int i) {
         return i;
     }
-
-    @Override
-    public int getViewTypeCount() {
-        return 2;
-    }
-
-
-
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-
                ViewHodelOne imagone;
               if(view==null){
                  imagone=new ViewHodelOne();
@@ -68,7 +58,11 @@ public class ZiXunAdapter extends BaseAdapter {
               }else{
                   imagone= (ViewHodelOne) view.getTag();
               }
-
+        ImageLoader.getInstance().displayImage(list.get(i).getSmallImage(),imagone.imag, ImageLoder.getDefaultOption());
+              imagone.text_tile.setText(list.get(i).getInfoTitle());
+              imagone.text_zan.setText(list.get(i).getDianZanCount()+"点赞");
+              String dateToString = getDateToString(String.valueOf(list.get(i).getUpdateTime()/1000));
+              imagone.text_date.setText(dateToString);
         return view;
     }
     //优化有图片
@@ -78,5 +72,14 @@ public class ZiXunAdapter extends BaseAdapter {
      TextView text_date;
      TextView text_zan;
     }
+
+    //  时间戳转为日期  /年/月/日
+    public static String getDateToString(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        long lcc_time = Long.valueOf(time);
+        String format = sdf.format(new Date(lcc_time * 1000L));
+        return format;
+    }
+
 
 }

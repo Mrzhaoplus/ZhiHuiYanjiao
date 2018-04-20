@@ -2,7 +2,6 @@ package www.diandianxing.com.diandianxing.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +10,13 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import www.diandianxing.com.diandianxing.ShujuBean.Home_zixun_Bean;
+import www.diandianxing.com.diandianxing.ShujuBean.zixun_Bean;
 import www.diandianxing.com.diandianxing.interfase.RecyGetonclick;
 import www.diandianxing.com.diandianxing.R;
-import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.ImageLoder;
 
 /**
@@ -30,7 +26,7 @@ import www.diandianxing.com.diandianxing.util.ImageLoder;
  */
 
 public class Homeadapter extends RecyclerView.Adapter<Homeadapter.MyviewHolder> {
-    List<Home_zixun_Bean.DatasBean> list;
+    List<zixun_Bean.DatasBean> list;
     private Context context;
     private RecyGetonclick click;
 
@@ -38,7 +34,7 @@ public class Homeadapter extends RecyclerView.Adapter<Homeadapter.MyviewHolder> 
         this.click=click;
     }
 
-    public Homeadapter(List<Home_zixun_Bean.DatasBean> list, Context context) {
+    public Homeadapter(List<zixun_Bean.DatasBean> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -56,7 +52,7 @@ public class Homeadapter extends RecyclerView.Adapter<Homeadapter.MyviewHolder> 
         ImageLoader.getInstance().displayImage(list.get(position).getSmallImage(),holder.img_pho,ImageLoder.getDefaultOption());
          holder.neirong.setText(list.get(position).getInfoTitle());
          //时间戳转换为日期
-        String dateToString = getDateToString(String.valueOf(list.get(position).getCreateTime()));
+        String dateToString = getDateToString(String.valueOf(list.get(position).getCreateTime()/1000));
         holder.text_date.setText(dateToString);
 
         holder.text_zan.setText(list.get(position).getDianZanCount()+"");

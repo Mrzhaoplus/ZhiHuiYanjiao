@@ -18,8 +18,8 @@ public class Live_presenter implements Live_Model_interfase {
         this.jiekou=jiekou;
         live_model = new Live_model(this);
     }
-    public void getpath(){
-        live_model.getpath();
+    public void getpath(String token){
+        live_model.getpath(token);
     }
     public void kong(){
     if(jiekou!=null){

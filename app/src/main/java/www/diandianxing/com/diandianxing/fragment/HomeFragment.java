@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
@@ -27,17 +28,17 @@ import www.diandianxing.com.diandianxing.LiveActivity;
 import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.MsgItmeActivity;
 import www.diandianxing.com.diandianxing.SearchActivity;
-import www.diandianxing.com.diandianxing.ShujuBean.Home_zixun_Bean;
+import www.diandianxing.com.diandianxing.ShujuBean.zixun_Bean;
 import www.diandianxing.com.diandianxing.ZixunDitailsActivity;
 import www.diandianxing.com.diandianxing.adapter.Homeadapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.ShujuBean.Lunbo_Bean;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaodianActivity;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.LuKuangActivity;
-import www.diandianxing.com.diandianxing.interfase.Home_Zixun_presenterinterfase;
+import www.diandianxing.com.diandianxing.interfase.Zixun_presenterinterfase;
 import www.diandianxing.com.diandianxing.interfase.LunPresenter_interfase;
 import www.diandianxing.com.diandianxing.interfase.RecyGetonclick;
-import www.diandianxing.com.diandianxing.presenter.Home_Zixun_presenter;
+import www.diandianxing.com.diandianxing.presenter.Zixun_presenter;
 import www.diandianxing.com.diandianxing.presenter.Lunbo_presenter;
 import www.diandianxing.com.diandianxing.set.AboutweActivity;
 import www.diandianxing.com.diandianxing.util.Api;
@@ -54,7 +55,7 @@ import www.diandianxing.com.diandianxing.util.SpUtils;
  * c69fdd9ef168a35da9450b9313d08b43
  */
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener, RecyGetonclick, LunPresenter_interfase, Home_Zixun_presenterinterfase {
+public class HomeFragment extends BaseFragment implements View.OnClickListener, RecyGetonclick, LunPresenter_interfase, Zixun_presenterinterfase {
 
     public View rootView;
     public ImageView img_tu;
@@ -74,9 +75,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     List<String> banlist = new ArrayList<>();
     private TextView zixun_itme;
     private TextView zan;
-    private List<Home_zixun_Bean.DatasBean> datas;
+     List<zixun_Bean.DatasBean> list=new ArrayList<>();
     private Lunbo_presenter lunbo_presenter;
-    private Home_Zixun_presenter home_zixun_presenter;
+    private Zixun_presenter home_zixun_presenter;
+    private int typeNo=1;
+    private Homeadapter homeadapter;
 
     @Override
     protected int setContentView() {
@@ -104,16 +107,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         spring_view = rootView.findViewById(R.id.spring_view);
         zixun_itme = rootView.findViewById(R.id.zixun);
         zan = rootView.findViewById(R.id.zan);
-        String token = SpUtils.getString(getActivity(), "token", "");
-        Log.i("=================",token);
 
         //获取id
         banner = contentView.findViewById(R.id.banner);
         //获取引用
         lunbo_presenter = new Lunbo_presenter(this);
-        lunbo_presenter.getString();
-        home_zixun_presenter = new Home_Zixun_presenter(this);
-        home_zixun_presenter.getpath(1);
+        lunbo_presenter.getString(Api.token);
+        home_zixun_presenter = new Zixun_presenter(this);
+        home_zixun_presenter.getpath(1,Api.token,typeNo);
 
         text_jiao.setOnClickListener(this);
         text_lu.setOnClickListener(this);
@@ -127,6 +128,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
              适配器
           */
 
+        homeadapter = new Homeadapter(list,getActivity());
+        homeadapter.getthis(this);
+        //创建管理器
+        recy_view.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //列表管理器
+        recy_view.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        recy_view.setAdapter(homeadapter);
+        //加载刷新
+        recy_view.setNestedScrollingEnabled(false);
+
         spring_view.setType(SpringView.Type.FOLLOW);
 
          spring_view.setListener(new SpringView.OnFreshListener() {
@@ -136,8 +147,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                  new Handler().postDelayed(new Runnable() {
                      @Override
                      public void run() {
+                         list.clear();
+                         typeNo=1;
+                         home_zixun_presenter.getpath(1, Api.token,typeNo);
+                         homeadapter.notifyDataSetChanged();
                      }
-                 }, 5000);
+                 }, 0);
                  spring_view.onFinishFreshAndLoad();
              }
              //上拉加载
@@ -146,8 +161,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                  new Handler().postDelayed(new Runnable() {
                      @Override
                      public void run() {
+                       typeNo++;
+                         home_zixun_presenter.getpath(1, Api.token,typeNo);
+                         homeadapter.notifyDataSetChanged();
                      }
-                 }, 5000);
+                 }, 0);
                  spring_view.onFinishFreshAndLoad();
 
              }
@@ -238,25 +256,30 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
-    public void getsuccess(Home_zixun_Bean zixun) {
+    public void getsuccess(zixun_Bean zixun) {
         if(zixun.getCode().equals("200")){
-
-            datas = zixun.getDatas();
+            List<zixun_Bean.DatasBean> datas = zixun.getDatas();
             ImageLoader.getInstance().displayImage(datas.get(0).getBigImage(),imageView, ImageLoder.getDefaultOption());
             zixun_itme.setText(datas.get(0).getInfoTitle());
             zan.setText(datas.get(0).getDianZanCount()+"");
-            Homeadapter homeadapter=new Homeadapter(datas,getActivity());
-            homeadapter.getthis(this);
-            //创建管理器
-            recy_view.setLayoutManager(new LinearLayoutManager(getActivity()));
-            //列表管理器
-            recy_view.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
-            recy_view.setAdapter(homeadapter);
-            //加载刷新
-            recy_view.setNestedScrollingEnabled(false);
+            if(typeNo>1){
+                if(datas.size()>0){
+                    list.addAll(datas);
+                }else{
+                    Toast.makeText(getActivity(),Api.TOAST,Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                list.addAll(datas);
+            }
+
+            homeadapter.notifyDataSetChanged();
         }
 
-    }
+
+
+        }
+
+
 
     @Override
     public void onDestroy() {

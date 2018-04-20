@@ -120,11 +120,9 @@ public class ChowuAdapter extends BaseAdapter {
             }
         });
 
-List<String> aaa = new ArrayList<>();
-
         holder.item_recycler.setLayoutManager(new GridLayoutManager(context,3));
         holder.item_recycler.setNestedScrollingEnabled(false);
-        TPAdapter1 tpAdapter1 = new TPAdapter1(context,aaa);
+        TPAdapter1 tpAdapter1 = new TPAdapter1(context,null);
         holder.item_recycler.setAdapter(tpAdapter1);
 
 

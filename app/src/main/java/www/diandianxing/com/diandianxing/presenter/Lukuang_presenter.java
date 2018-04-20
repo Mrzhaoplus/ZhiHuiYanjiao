@@ -19,8 +19,8 @@ public class Lukuang_presenter implements Lukuang_model_interfase {
         lukuang_model = new Lukuang_model(this);
 
     }
-    public void getpath(int type){
-   lukuang_model.getpath(type);
+    public void getpath(int type,String token){
+   lukuang_model.getpath(type,token);
     }
     public void getkong(){
        if(jiekou!=null){

@@ -15,13 +15,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.ShujuBean.Live_gunzhu_Bean;
 import www.diandianxing.com.diandianxing.bean.Imagebean;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
+import www.diandianxing.com.diandianxing.util.ImageLoder;
 import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 import www.diandianxing.com.diandianxing.R;
@@ -32,19 +39,14 @@ import www.diandianxing.com.diandianxing.R;
 
 public class GuanzhuAdapter extends BaseAdapter {
     private Context context;
-    private List<String> lists = new ArrayList<>();
+
     private ShareListener shareListener;
-    public GuanzhuAdapter(Context context,ShareListener shareListener) {
+    List<Live_gunzhu_Bean.DatasBean>lists;
+
+    public GuanzhuAdapter(Context context, ShareListener shareListener, List<Live_gunzhu_Bean.DatasBean> lists) {
         this.context = context;
-        this.shareListener=shareListener;
-        data();
-    }
-
-    private void data() {
-        for (int i = 0; i < 8; i++) {
-            lists.add("");
-        }
-
+        this.shareListener = shareListener;
+        this.lists = lists;
     }
 
     @Override
@@ -64,9 +66,9 @@ public class GuanzhuAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
-        Jiaodianadapter.ViewHolder holder;
+       ViewHolder holder;
         if (convertView == null) {
-            holder = new Jiaodianadapter.ViewHolder();
+            holder = new ViewHolder();
 
             convertView = LayoutInflater.from(context).inflate(R.layout.fragment_duoone, null);
             holder.img_tou = (ImageView) convertView.findViewById(R.id.img_tou);
@@ -81,8 +83,11 @@ public class GuanzhuAdapter extends BaseAdapter {
             holder.text_share = (TextView)     convertView .findViewById(R.id.text_share);
             convertView.setTag(holder);
         } else {
-            holder = (Jiaodianadapter.ViewHolder) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
+
+
+
 
         //分享
         holder.text_share.setOnClickListener(new View.OnClickListener() {
@@ -105,10 +110,10 @@ public class GuanzhuAdapter extends BaseAdapter {
                 ToastUtils.show(context,"点赞",1);
             }
         });
-        List<String> aaa = new ArrayList<>();
+        List<String> imagesList = lists.get(position).getImagesList();
         holder.item_recycler.setLayoutManager(new GridLayoutManager(context,3));
         holder.item_recycler.setNestedScrollingEnabled(false);
-        TPAdapter1 tpAdapter1 = new TPAdapter1(context,aaa);
+        TPAdapter1 tpAdapter1 = new TPAdapter1(context,imagesList);
         holder.item_recycler.setAdapter(tpAdapter1);
 
         holder.item_count.setOnClickListener(new View.OnClickListener() {
@@ -118,17 +123,28 @@ public class GuanzhuAdapter extends BaseAdapter {
                 context.startActivity(intent);
             }
         });
+           holder.text_name.setText(lists.get(position).getUserName());
+        String address = lists.get(position).getAddress();
+
+
+        Glide.with(context).load(lists.get(position).getPic()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
+           String dateToString = getDateToString(String.valueOf(lists.get(position).getCreateTime() / 1000));
+
+            holder.item_count.setText(lists.get(position).getPostContent());
+        holder.text_dengji.setText(lists.get(position).getUserLevel());
+
+            holder.da_address.setText(dateToString+" "+address);
+
 
         return convertView;
     }
-
-
     public static class ViewHolder {
 
         public RecyclerView item_recycler;
         public ImageView img_tou;
         public TextView text_name;
         public TextView da_address;
+        public TextView da_tate;
         public ImageView imageView2;
         public TextView text_dengji;
         public TextView item_count;
@@ -198,5 +214,12 @@ public class GuanzhuAdapter extends BaseAdapter {
                 shareListener.OnShareListener(4);
             }
         });
+    }
+    //  时间戳转为日期  /年/月/日
+    public static String getDateToString(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        long lcc_time = Long.valueOf(time);
+        String format = sdf.format(new Date(lcc_time * 1000L));
+        return format;
     }
 }

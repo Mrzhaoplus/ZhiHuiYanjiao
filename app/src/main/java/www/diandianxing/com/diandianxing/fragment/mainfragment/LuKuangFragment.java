@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
@@ -20,6 +21,8 @@ import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.interfase.Lukuang_presenter_interfase;
 import www.diandianxing.com.diandianxing.presenter.Lukuang_presenter;
+import www.diandianxing.com.diandianxing.util.Api;
+import www.diandianxing.com.diandianxing.util.ToastUtils;
 
 /**
  * Created by Mr赵 on 2018/4/2.
@@ -32,9 +35,8 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
     private ListView lv;
     private Lukuang_presenter lukuang_presenter;
     private int type=1;
-    List<List<LuKuang_Bean.DatasBean>>list=new ArrayList();
     private LuKuangAdapter luKuangAdapter;
-
+    List<LuKuang_Bean.DatasBean>list=new ArrayList<>();
     @Override
     protected int setContentView() {
         return R.layout.fragment_shishilukuang;
@@ -47,9 +49,21 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
         lv = contentView.findViewById(R.id.list_view);
          //创建引用
         lukuang_presenter = new Lukuang_presenter(this);
-        lukuang_presenter.getpath(type);
+        lukuang_presenter.getpath(type, Api.token);
 
 
+
+        //适配器
+        luKuangAdapter = new LuKuangAdapter(getActivity(),list);
+        lv.setAdapter(luKuangAdapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), LukuangDitailsActivity.class);
+                intent.putExtra("id",list.get(i).getId());
+                startActivity(intent);
+            }
+        });
 
         //刷新加载事件
         sv.setType(SpringView.Type.FOLLOW);
@@ -59,12 +73,13 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        list.clear();
                         type=1;
-                        lukuang_presenter.getpath(type);
+                        lukuang_presenter.getpath(type,Api.token);
                         luKuangAdapter.notifyDataSetChanged();
 
                     }
-                }, 5000);
+                }, 0);
                 sv.onFinishFreshAndLoad();
             }
 
@@ -74,10 +89,10 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
                     @Override
                     public void run() {
                         type++;
-                        lukuang_presenter.getpath(type);
+                        lukuang_presenter.getpath(type,Api.token);
                         luKuangAdapter.notifyDataSetChanged();
                     }
-                }, 5000);
+                }, 0);
                 sv.onFinishFreshAndLoad();
 
             }
@@ -90,20 +105,16 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
     public void getsuccess(LuKuang_Bean luKuang_bean) {
         if(luKuang_bean.getCode().equals("200")){
             final List<LuKuang_Bean.DatasBean> datas = luKuang_bean.getDatas();
-
-            //适配器
-            luKuangAdapter = new LuKuangAdapter(getActivity(),datas);
-            lv.setAdapter(luKuangAdapter);
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(getActivity(), LukuangDitailsActivity.class);
-                    intent.putExtra("id",datas.get(i).getId());
-                    startActivity(intent);
+            if(type>1){
+                if(datas.size()>0){
+                    list.addAll(datas);
+                }else{
+                    Toast.makeText(getActivity(),Api.TOAST,Toast.LENGTH_SHORT).show();
                 }
-            });
-
-
+            }else{
+                list.addAll(datas);
+            }
+            luKuangAdapter.notifyDataSetChanged();
         }
     }
 

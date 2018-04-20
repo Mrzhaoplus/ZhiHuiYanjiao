@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
+        android:id="@+id/ladel"
         android:layout_margin="5dp"
         android:gravity="center"
         android:layout_width="match_parent"

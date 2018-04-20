@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,27 +15,25 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import www.diandianxing.com.diandianxing.bean.Imagebean;
+import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
-import www.diandianxing.com.diandianxing.R;
 
 /**
  * Created by Mr赵 on 2018/4/3.
  */
 
-public class FangwuAdapter extends BaseAdapter {
+public class MeiJiaodianAdapter extends BaseAdapter {
     private Context context;
     private List<String> lists = new ArrayList<>();
+    private TextView text_sure;
     private ShareListener shareListener;
-    public FangwuAdapter(Context context,ShareListener shareListener) {
+    public MeiJiaodianAdapter(Context context, ShareListener shareListener) {
         this.context = context;
         this.shareListener=shareListener;
         data();
@@ -46,9 +43,7 @@ public class FangwuAdapter extends BaseAdapter {
         for (int i = 0; i < 8; i++) {
             lists.add("");
         }
-
     }
-
     @Override
     public int getCount() {
         return lists.size();
@@ -66,11 +61,12 @@ public class FangwuAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
-        Jiaodianadapter.ViewHolder holder;
+        Tuijiantieadapter.ViewHolder holder;
+        int type = getItemViewType(position);
         if (convertView == null) {
-            holder = new Jiaodianadapter.ViewHolder();
+            holder = new Tuijiantieadapter.ViewHolder();
 
-            convertView = LayoutInflater.from(context).inflate(R.layout.fragment_duoone, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.fragment_tuiduoone, null);
             holder.img_tou = (ImageView) convertView.findViewById(R.id.img_tou);
             holder.text_name = (TextView) convertView.findViewById(R.id.text_name);
             holder.da_address = (TextView) convertView.findViewById(R.id.da_address);
@@ -81,11 +77,21 @@ public class FangwuAdapter extends BaseAdapter {
             holder.text_colltet = (TextView)     convertView .findViewById(R.id.text_collect);
             holder.text_zan = (TextView)     convertView .findViewById(R.id.text_zan);
             holder.text_share = (TextView)     convertView .findViewById(R.id.text_share);
+            holder.rela_guanzhu = convertView.findViewById(R.id.rela_guanzhu);
+
+
             convertView.setTag(holder);
         } else {
-            holder = (Jiaodianadapter.ViewHolder) convertView.getTag();
+            holder = (Tuijiantieadapter.ViewHolder) convertView.getTag();
         }
 
+        holder.rela_guanzhu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+            }
+        });
         //分享
         holder.text_share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +119,7 @@ public class FangwuAdapter extends BaseAdapter {
         TPAdapter1 tpAdapter1 = new TPAdapter1(context,null);
         holder.item_recycler.setAdapter(tpAdapter1);
 
+
         holder.item_count.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,6 +132,8 @@ public class FangwuAdapter extends BaseAdapter {
     }
 
 
+
+
     public static class ViewHolder {
 
         public RecyclerView item_recycler;
@@ -134,11 +143,52 @@ public class FangwuAdapter extends BaseAdapter {
         public ImageView imageView2;
         public TextView text_dengji;
         public TextView item_count;
+        public RecyclerView recy_grade;
         public TextView text_share,text_colltet,text_zan;
+        public RelativeLayout rela_guanzhu;
     }
+
+
+    private void shumaDialog(int grary, int animationStyle) {
+        BaseDialog.Builder builder = new BaseDialog.Builder(context);
+        final BaseDialog dialog = builder.setViewId(R.layout.dialog_guanzhu)
+                //设置dialogpadding
+                .setPaddingdp(0, 10, 0, 10)
+                //设置显示位置
+                .setGravity(grary)
+                //设置动画
+                .setAnimation(animationStyle)
+                //设置dialog的宽高
+                .setWidthHeightpx(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                //设置触摸dialog外围是否关闭
+                .isOnTouchCanceled(false)
+                //设置监听事件
+                .builder();
+        dialog.show();
+        text_sure = dialog.getView(R.id.text_sure);
+
+        TextView text_pause = dialog.getView(R.id.text_pause);
+        //知道了
+        text_sure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        //取消
+        text_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
 
     private LinearLayout ll_wx,ll_pyq,ll_qq,ll_kj,ll_wb;
     private TextView quxiao;
+
     private void showFXDialog(int grary, int animationStyle) {
         BaseDialog.Builder builder = new BaseDialog.Builder(context);
         //设置触摸dialog外围是否关闭
@@ -201,5 +251,4 @@ public class FangwuAdapter extends BaseAdapter {
             }
         });
     }
-
 }

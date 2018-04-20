@@ -2,35 +2,28 @@ package www.diandianxing.com.diandianxing.fragment.mainfragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.liaoinstan.springview.widget.SpringView;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import www.diandianxing.com.diandianxing.ShujuBean.Live_gunzhu_Bean;
-import www.diandianxing.com.diandianxing.adapter.GuanzhuAdapter;
-import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.adapter.ChowuAdapter;
+import www.diandianxing.com.diandianxing.adapter.MeiJiaodianAdapter;
+import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.base.Myapplication;
 import www.diandianxing.com.diandianxing.bean.Sharebean;
-import www.diandianxing.com.diandianxing.interfase.Live_guanzhu_presenter_interfase;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
-import www.diandianxing.com.diandianxing.presenter.Live_guanzhu_presenter;
-import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.SpUtils;
@@ -39,14 +32,9 @@ import www.diandianxing.com.diandianxing.util.SpUtils;
  * Created by Mr赵 on 2018/4/3.
  */
 
-public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presenter_interfase {
+public class MeiJiaidianFragment extends BaseFragment {
 
     private ListView lv;
-    private Live_guanzhu_presenter live_guanzhu_presenter;
-    private int pageNo=1;
-    List<Live_gunzhu_Bean.DatasBean>list=new ArrayList<>();
-    private SpringView springView;
-    private GuanzhuAdapter guanzhuAdapter;
 
     @Override
     protected int setContentView() {
@@ -57,52 +45,15 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
     protected void lazyLoad() {
         View contentView = getContentView();
         lv = contentView.findViewById(R.id.lv);
-        springView = contentView.findViewById(R.id.spring_view);
-        //引用
-        live_guanzhu_presenter = new Live_guanzhu_presenter(this);
-        live_guanzhu_presenter.getpath(Api.token,pageNo);
-
-
-        guanzhuAdapter = new GuanzhuAdapter(getActivity(),shareListener,list);
-        lv.setAdapter(guanzhuAdapter);
-         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-             @Override
-             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                 Intent intent = new Intent(getActivity(), JiaoDetailActivity.class);
-                 startActivity(intent);
-             }
-         });
-
-        springView.setType(SpringView.Type.FOLLOW);
-        springView.setListener(new SpringView.OnFreshListener() {
+        MeiJiaodianAdapter chowuAdapter = new MeiJiaodianAdapter(getActivity(),shareListener);
+        lv.setAdapter(chowuAdapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                       list.clear();
-                       pageNo=1;
-                        live_guanzhu_presenter.getpath(Api.token,pageNo);
-                        guanzhuAdapter.notifyDataSetChanged();
-                    }
-                },0);
-                springView.onFinishFreshAndLoad();
-            }
-
-            @Override
-            public void onLoadmore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        pageNo++;
-                        live_guanzhu_presenter.getpath(Api.token,pageNo);
-                        guanzhuAdapter.notifyDataSetChanged();
-                    }
-                },0);
-                springView.onFinishFreshAndLoad();
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), JiaoDetailActivity.class);
+                startActivity(intent);
             }
         });
-
     }
 
     private ShareListener shareListener = new ShareListener() {
@@ -177,7 +128,7 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
                 .setCallback(umShareListener)//回调监听器
                 .share();
     }
-    public UMShareListener umShareListener = new UMShareListener() {
+    public  UMShareListener umShareListener = new UMShareListener() {
         @Override
         public void onStart(SHARE_MEDIA platform) {
             //分享开始的回调
@@ -238,26 +189,4 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
         }
     };
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        live_guanzhu_presenter.getkong();
-    }
-
-    @Override
-    public void getsuccess(Live_gunzhu_Bean guanzhu) {
-      if(guanzhu.getCode().equals("200")){
-          List<Live_gunzhu_Bean.DatasBean> datas = guanzhu.getDatas();
-          if(pageNo>1){
-              if(datas.size()>0){
-                  list.addAll(datas);
-              }else{
-                  Toast.makeText(getActivity(),Api.TOAST,Toast.LENGTH_SHORT).show();
-              }
-          }else{
-              list.addAll(datas);
-          }
-          guanzhuAdapter.notifyDataSetChanged();
-      }
-    }
 }

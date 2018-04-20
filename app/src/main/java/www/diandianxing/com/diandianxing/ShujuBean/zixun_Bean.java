@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Mr赵 on 2018/4/18.
  */
 
-public class Home_zixun_Bean {
+public class zixun_Bean {
 
 
     /**

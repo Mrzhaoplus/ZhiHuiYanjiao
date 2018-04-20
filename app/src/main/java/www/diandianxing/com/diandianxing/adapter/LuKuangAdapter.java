@@ -60,15 +60,14 @@ public class LuKuangAdapter extends BaseAdapter {
         }else{
             vh= (ViewHolder) view.getTag();
         }
-        vh.text_tile.setText(list.get(i).getTrafficTitle());
         ImageLoader.getInstance().displayImage(list.get(i).getImgUrl(),vh.imag, ImageLoder.getDefaultOption());
-        String dateToString = getDateToString(String.valueOf(list.get(i).getCreateTime()));
+        String dateToString = getDateToString(String.valueOf(list.get(i).getCreateTime()/1000));
         vh.text_date.setText(dateToString);
-
-        if(vh.text_tile.getText().length()>20){
-            vh.text_tile.setText(vh.text_tile.getText().toString().substring(0,15)+".....");
+        String trafficTitle = list.get(i).getTrafficTitle();
+        if(trafficTitle.length()>20){
+            vh.text_tile.setText(trafficTitle.substring(0,15)+".....");
         }else{
-            vh.text_tile.setText(vh.text_tile.getText().toString());
+            vh.text_tile.setText(trafficTitle);
         }
 
 

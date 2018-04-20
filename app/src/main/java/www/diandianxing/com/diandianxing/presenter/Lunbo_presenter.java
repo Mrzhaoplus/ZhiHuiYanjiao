@@ -18,8 +18,8 @@ public class Lunbo_presenter implements LunModel_interfase {
         lunbo_model = new Lunbo_model(this);
         this.jiekou=jiekou;
     }
-    public void getString(){
-        lunbo_model.getString();
+    public void getString(String token){
+        lunbo_model.getString(token);
     }
     public void getkong(){
       if(jiekou!=null){
