@@ -2,176 +2,184 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-         <android.support.v4.widget.NestedScrollView
-             android:id="@+id/nsc_pm"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
-             <LinearLayout
-                 android:orientation="vertical"
-                 android:layout_width="match_parent"
-                 android:layout_height="match_parent">
-                 <RelativeLayout
-                     android:id="@+id/rl_sp"
-                 android:layout_width="match_parent"
-                 android:background="@color/white"
-                 android:layout_height="wrap_content">
-                 <RelativeLayout
-                     android:id="@+id/kongjian"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content">
-                     <RelativeLayout
-                         android:id="@+id/rl_video"
-                         android:layout_width="match_parent"
-                         android:visibility="gone"
-                         android:layout_height="500dp">
 
-                         <VideoView
-                             android:id="@+id/vv_sp"
-                             android:layout_width="match_parent"
-                             android:layout_centerVertical="true"
-                             android:layout_height="wrap_content"/>
+    <com.liaoinstan.springview.widget.SpringView
+        android:id="@+id/sv_pk"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-                         <ImageView
-                             android:id="@+id/iv_xq_bf"
-                             android:layout_width="wrap_content"
-                             android:layout_height="wrap_content"
-                             android:layout_centerInParent="true"
-                             android:visibility="invisible"
-                             android:src="@drawable/shipin_3x"/>
-                     </RelativeLayout>
-
-                     <RelativeLayout
-                         android:id="@+id/rl_img"
-                         android:layout_width="match_parent"
-                         android:layout_height="500dp">
-
-                         <android.support.v4.view.ViewPager
-                             android:id="@+id/vp_img_banner"
-                             android:layout_width="match_parent"
-                             android:layout_height="wrap_content"></android.support.v4.view.ViewPager>
-
-                         <LinearLayout
-                             android:id="@+id/ll_dian"
-                             android:layout_width="match_parent"
-                             android:orientation="horizontal"
-                             android:gravity="center"
-                             android:layout_marginBottom="10dp"
-                             android:layout_alignParentBottom="true"
-                             android:layout_height="wrap_content">
-
-
-
-                         </LinearLayout>
-
-
-                     </RelativeLayout>
-
-                     <RadioButton
-                         android:id="@+id/video_zan"
-                         android:layout_alignParentRight="true"
-                         android:layout_marginTop="80dp"
-                         android:layout_marginRight="20dp"
-                         android:button="@null"
-                         android:background="@drawable/sc_xz_3x"
-                         android:layout_width="30dp"
-                         android:layout_height="30dp" />
-
-                     <ImageView
-                         android:id="@+id/video_fenxiang"
-                         android:layout_alignParentRight="true"
-                         android:layout_marginTop="30dp"
-                         android:layout_marginRight="20dp"
-                         android:layout_below="@+id/video_zan"
-                         android:background="@drawable/fx_icon_3x"
-                         android:layout_width="30dp"
-                         android:layout_height="30dp" />
-
-
-                 </RelativeLayout>
-
-
-                     <ProgressBar
-                         android:id="@+id/sp_jd"
-                         android:layout_width="match_parent"
-                         style="@style/StyleProgressBar"
-                         android:background="#F2F2F2"
-                         android:layout_height="5dp"/>
-
-                 </RelativeLayout>
-
-
-
-
-                   <TextView
-                       android:padding="10dp"
-                       android:id="@+id/video_title"
-                       android:textSize="14sp"
-                       android:text="每天坚持运动、有利于身体健康、摆脱肥胖、正确的减肥方式、拍客内容"
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content" />
-
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nsc_pm"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <RelativeLayout
+                    android:id="@+id/rl_sp"
+                    android:layout_width="match_parent"
+                    android:background="@color/white"
+                    android:layout_height="wrap_content">
                     <RelativeLayout
+                        android:id="@+id/kongjian"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <LinearLayout
-                            android:padding="10dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
-                            <TextView
-                                android:id="@+id/text_zan"
-                                android:gravity="center|left"
-                                android:drawablePadding="10dp"
-                                android:drawableLeft="@drawable/tui_xin"
-                                android:text="0"
+                        <RelativeLayout
+                            android:id="@+id/rl_video"
+                            android:layout_width="match_parent"
+                            android:visibility="gone"
+                            android:layout_height="500dp">
+
+                            <VideoView
+                                android:id="@+id/vv_sp"
+                                android:layout_width="match_parent"
+                                android:layout_centerVertical="true"
+                                android:layout_height="wrap_content"/>
+
+                            <ImageView
+                                android:id="@+id/iv_xq_bf"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                            <TextView
-                                android:text="点赞"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:visibility="invisible"
+                                android:src="@drawable/shipin_3x"/>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/rl_img"
+                            android:layout_width="match_parent"
+                            android:layout_height="500dp">
+
+                            <android.support.v4.view.ViewPager
+                                android:id="@+id/vp_img_banner"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"></android.support.v4.view.ViewPager>
+
+                            <LinearLayout
+                                android:id="@+id/ll_dian"
+                                android:layout_width="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:layout_marginBottom="10dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_height="wrap_content">
 
 
-                        <TextView
-                            android:id="@+id/text_time"
-                            android:padding="10dp"
+
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
+
+                        <ImageView
+                            android:id="@+id/video_zan"
                             android:layout_alignParentRight="true"
-                            android:text="19小时前"
+                            android:layout_marginTop="80dp"
+                            android:layout_marginRight="20dp"
+                            android:src="@drawable/wdz"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp" />
+
+                        <ImageView
+                            android:id="@+id/video_fenxiang"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_below="@+id/video_zan"
+                            android:background="@drawable/fx_icon_3x"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp" />
+
+
+                    </RelativeLayout>
+
+
+
+                </RelativeLayout>
+                <ProgressBar
+                    android:id="@+id/sp_jd"
+                    android:layout_width="match_parent"
+                    style="@style/StyleProgressBar"
+                    android:background="#F2F2F2"
+                    android:layout_height="5dp"/>
+
+
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/video_title"
+                    android:textSize="14sp"
+                    android:text=""
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:padding="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:id="@+id/text_zan"
+                            android:gravity="center|left"
+                            android:drawablePadding="10dp"
+                            android:drawableLeft="@drawable/tui_xin"
+                            android:text="0"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
-                    </RelativeLayout>
-                 <View
-                     android:padding="10dp"
-                     android:layout_width="match_parent"
-                     android:layout_height="10dp"
-                     android:background="@color/color_hui"
-                     />
+                        <TextView
+                            android:text="点赞"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
 
-                 <TextView
-                     android:id="@+id/text_pinglun"
-                     android:gravity="center|left"
-                     android:drawablePadding="10dp"
-                     android:drawableLeft="@drawable/img_suggest"
-                     android:padding="10dp"
-                     android:text="144评论"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content" />
-                 
-                 <android.support.v7.widget.RecyclerView
-                     android:id="@+id/rcy_view"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-                 <View
-                     android:id="@+id/view"
-                     android:layout_width="match_parent"
-                     android:layout_height="5dp"
-                     android:layout_above="@+id/lines"
-                     android:background="@color/back_bei"
-                     ></View>
-             </LinearLayout>
-     </android.support.v4.widget.NestedScrollView>
+
+                    <TextView
+                        android:id="@+id/text_time"
+                        android:padding="10dp"
+                        android:layout_alignParentRight="true"
+                        android:text=""
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+                <View
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/color_hui"
+                    />
+
+                <TextView
+                    android:id="@+id/text_pinglun"
+                    android:gravity="center|left"
+                    android:drawablePadding="10dp"
+                    android:drawableLeft="@drawable/img_suggest"
+                    android:padding="10dp"
+                    android:text="0评论"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rcy_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_above="@+id/lines"
+                    android:background="@color/back_bei"
+                    ></View>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+    </com.liaoinstan.springview.widget.SpringView>
+
+
 
 
     <RelativeLayout
@@ -210,17 +218,17 @@
             <ImageView
                 android:layout_marginLeft="5dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_collect"
+                android:src="@drawable/tjgz_3x"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="30dp"
                 android:textSize="14sp"
                 android:layout_centerVertical="true"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+关注"
+                android:text="关注"
                 />
         </RelativeLayout>
         <ImageView
@@ -228,7 +236,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
-            android:background="@drawable/icon_tou"
+            android:src="@drawable/icon_tou"
             android:layout_width="30dp"
             android:layout_height="30dp" />
     </RelativeLayout>

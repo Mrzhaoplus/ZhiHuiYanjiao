@@ -39,6 +39,71 @@ public class MyUtils {
         return res;
     }
 
+    public static String stampYRToDate(String s) {
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd");
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+
+    public static String dateDiff(String startTime, String endTime, String format,String data) {
+        // 按照传入的格式生成一个simpledateformate对象
+        SimpleDateFormat sd = new SimpleDateFormat(format);
+        long nd = 1000 * 24 * 60 * 60;// 一天的毫秒数
+        long nh = 1000 * 60 * 60;// 一小时的毫秒数
+        long nm = 1000 * 60;// 一分钟的毫秒数
+        long ns = 1000;// 一秒钟的毫秒数
+        long diff;
+        long day = 0;
+        try {
+            // 获得两个时间的毫秒时间差异
+            diff = sd.parse(endTime).getTime()
+                    - sd.parse(startTime).getTime();
+            day = diff / nd;// 计算差多少天
+            long hour = diff % nd / nh;// 计算差多少小时
+            long min = diff % nd % nh / nm;// 计算差多少分钟
+            long sec = diff % nd % nh % nm / ns;// 计算差多少秒
+            // 输出结果
+            System.out.println("时间相差：" + day + "天" + hour + "小时" + min
+                    + "分钟" + sec + "秒。");
+            if (day>=1) {
+//                return day;
+
+                return stampYRToDate(data);
+
+            }else {
+                if (day==0) {
+
+                    if(hour>=1&&hour<24){
+
+                        return hour+"小时前";
+
+                    }else{
+
+                        if(min>=1&&min<60){
+
+                            return min+"分钟前";
+
+                        }else{
+                            return 0+"分钟前";
+                        }
+
+                    }
+                }else {
+                    return "今天";
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "今天";
+
+    }
+
+
+
     // base64图片转字符串
     public static String Bitmap2StrByBase64(Bitmap bit) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -166,9 +231,8 @@ public class MyUtils {
         return date;
     }
 
-    //  时间戳转为日期  /年/月/日/时/分
     public static String getDateToStringTime(String time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
         long lcc_time = Long.valueOf(time);
         String format = sdf.format(new Date(lcc_time * 1000L));
         return format;

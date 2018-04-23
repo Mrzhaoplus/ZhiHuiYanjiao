@@ -1,12 +1,13 @@
 package www.diandianxing.com.diandianxing.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2018/4/20.
  */
 
-public class PaiKeInfo {
+public class PaiKeInfo implements Serializable{
 
     public String id;
     public String imageUrl;
@@ -32,5 +33,9 @@ public class PaiKeInfo {
 
 
 
+    public String iszan;
+    public String zannum;
+    public String plnum;
+    public String isgz;
 
 }

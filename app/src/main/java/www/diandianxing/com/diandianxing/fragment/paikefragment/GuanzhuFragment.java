@@ -41,6 +41,9 @@ public class GuanzhuFragment extends BaseFragment {
     private int pageNo=1;
     Tujianadapter tujianadapter;
     private List<PaiKeInfo> list = new ArrayList<>();
+
+
+
     @Override
     protected int setContentView() {
         return R.layout.fragment_guanzhu;

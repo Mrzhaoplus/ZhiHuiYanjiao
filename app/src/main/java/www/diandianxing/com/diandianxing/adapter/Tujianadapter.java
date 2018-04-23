@@ -67,7 +67,7 @@ public class Tujianadapter extends BaseAdapter {
         }
 
 
-        PaiKeInfo paiKeInfo = list.get(i);
+        final PaiKeInfo paiKeInfo = list.get(i);
 
         Glide.with(context).load(paiKeInfo.imageUrl).into(holder.tui_img);
 
@@ -83,6 +83,9 @@ public class Tujianadapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, VideoActivity.class);
+
+                intent.putExtra("pk",paiKeInfo);
+
                 context.startActivity(intent);
             }
         });

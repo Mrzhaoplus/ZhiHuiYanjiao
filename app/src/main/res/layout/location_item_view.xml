@@ -26,16 +26,18 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tv_wz_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="北京天安门"
+                    android:text=""
                     android:textSize="14sp"
                     android:textColor="#000"/>
 
                 <TextView
+                    android:id="@+id/tv_wz_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="北京天安门北京天安门北京天安门"
+                    android:text=""
                     android:layout_marginTop="5dp"
                     android:textSize="14sp"
                     android:textColor="#999"/>

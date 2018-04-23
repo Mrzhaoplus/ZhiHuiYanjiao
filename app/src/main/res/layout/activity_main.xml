@@ -42,7 +42,7 @@
                 android:id="@+id/rb_find"
                 style="@style/bottom_tab_style"
                 android:drawableTop="@drawable/tab_good_selector"
-                android:text="发现"
+                android:text="拍客"
                 />
             <ImageView
                 android:id="@+id/frag_add"

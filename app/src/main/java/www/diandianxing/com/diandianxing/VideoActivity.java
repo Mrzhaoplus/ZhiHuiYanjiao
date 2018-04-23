@@ -10,9 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.bean.PaiKeDRInfo;
+import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
 import www.diandianxing.com.diandianxing.fragment.paikefragment.VideoFragment;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
@@ -26,6 +29,9 @@ public class VideoActivity extends AppCompatActivity {
     private Fragment currfit;
     private VideoFragment videoFragment;
 List<String>list=new ArrayList<>();
+
+    private PaiKeInfo pk;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -40,8 +46,17 @@ List<String>list=new ArrayList<>();
         view = (View) findViewById(R.id.view);
         ed_text = (EditText) findViewById(R.id.ed_text);
         button_fabu = (Button) findViewById(R.id.button_fabu);
-          if(videoFragment==null){
+
+        PaiKeInfo pk = (PaiKeInfo) getIntent().getSerializableExtra("pk");
+
+        if(videoFragment==null){
               videoFragment = new VideoFragment();
+
+            Bundle b = new Bundle();
+            b.putSerializable("pk", (Serializable) pk);
+            videoFragment.setArguments(b);
+
+
           }
         AddFragment(videoFragment);
     }
