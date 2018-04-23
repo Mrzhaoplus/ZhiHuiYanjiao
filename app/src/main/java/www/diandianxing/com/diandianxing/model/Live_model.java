@@ -27,6 +27,8 @@ public class Live_model {
                         jiekou.getsuccess(live_bean);
                     }
                 });
+
+
     }
 
 }

@@ -13,10 +13,13 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import www.diandianxing.com.diandianxing.adapter.ChowuAdapter;
+import www.diandianxing.com.diandianxing.ShujuBean.Fenlei_Bean;
+import www.diandianxing.com.diandianxing.adapter.MeiJiaodianAdapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.base.Myapplication;
@@ -34,7 +37,7 @@ import www.diandianxing.com.diandianxing.util.SpUtils;
 public class ChowuFragment extends BaseFragment {
 
     private ListView lv;
-
+     List<Fenlei_Bean.DatasBean>list=new ArrayList<>();
     @Override
     protected int setContentView() {
         return R.layout.frag_gz;
@@ -44,7 +47,7 @@ public class ChowuFragment extends BaseFragment {
     protected void lazyLoad() {
         View contentView = getContentView();
         lv = contentView.findViewById(R.id.lv);
-        ChowuAdapter chowuAdapter = new ChowuAdapter(getActivity(),shareListener);
+        MeiJiaodianAdapter chowuAdapter = new MeiJiaodianAdapter(getActivity(),list,shareListener);
         lv.setAdapter(chowuAdapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

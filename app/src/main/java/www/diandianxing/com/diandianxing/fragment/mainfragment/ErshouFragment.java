@@ -13,10 +13,13 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import www.diandianxing.com.diandianxing.adapter.TwoCardAdapter;
+import www.diandianxing.com.diandianxing.ShujuBean.Fenlei_Bean;
+import www.diandianxing.com.diandianxing.adapter.MeiJiaodianAdapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.base.Myapplication;
@@ -33,6 +36,7 @@ import www.diandianxing.com.diandianxing.util.SpUtils;
 
 public class ErshouFragment extends BaseFragment {
     private ListView lv;
+    List<Fenlei_Bean.DatasBean> list=new ArrayList<>();
     @Override
     protected int setContentView() {
         return R.layout.frag_gz;
@@ -42,7 +46,7 @@ public class ErshouFragment extends BaseFragment {
     protected void lazyLoad() {
         View contentView = getContentView();
         lv = contentView.findViewById(R.id.lv);
-        TwoCardAdapter zhaolingAdapter = new TwoCardAdapter(getActivity(),shareListener);
+        MeiJiaodianAdapter zhaolingAdapter = new MeiJiaodianAdapter(getActivity(),list,shareListener);
         lv.setAdapter(zhaolingAdapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

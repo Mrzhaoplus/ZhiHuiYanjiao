@@ -190,7 +190,6 @@ public class JiaodianActivity extends BaseActivity implements View.OnClickListen
 
 
       }
-
     @Override
     public void onDestroy() {
         super.onDestroy();

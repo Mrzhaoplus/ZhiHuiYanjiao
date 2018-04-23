@@ -5,7 +5,10 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 import www.diandianxing.com.diandianxing.ShujuBean.DianzanAndFenxiang_Bean;
+import www.diandianxing.com.diandianxing.ShujuBean.Fenlei_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Live_gunzhu_Bean;
+import www.diandianxing.com.diandianxing.ShujuBean.QuxiaozanAndFenxiang_Bean;
+import www.diandianxing.com.diandianxing.ShujuBean.Zan_msg_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.zixun_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Live_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.LuKuang_Bean;
@@ -44,10 +47,18 @@ public interface SerViceAPI {
       Observable<Live_gunzhu_Bean> live_guanzhu(@Field("token") String token,@Field("pageNo") int type);
       //点赞或者关注
       @FormUrlEncoded
-      @POST("app/home/focusAttention")
+      @POST("app/home/userOperation")
       Observable<DianzanAndFenxiang_Bean> zanandguan(@Field("token") String token, @Field("objId") int objId,@Field("obj_type")int obj_type,@Field("operation_type")int operation_type);
-
-
-
-
+      //取消点赞或者关注
+      @FormUrlEncoded
+      @POST("app/home/userCancelOperation")
+      Observable<QuxiaozanAndFenxiang_Bean> quxiaodianzan(@Field("token") String token, @Field("objId") int objId, @Field("obj_type")int obj_type, @Field("operation_type")int operation_type);
+       //点赞消息
+      @FormUrlEncoded
+      @POST("app/information/getMyCommentOrZan")
+      Observable<Zan_msg_Bean> zan_msg(@Field("token") String token,@Field("type")int type);
+      //分类下的帖子
+      @FormUrlEncoded
+      @POST("app/home/getClassificationPostList")
+      Observable<Fenlei_Bean> fenlei(@Field("token") String token, @Field("postTypeId")int postTypeId,@Field("pageNo")int page);
 }

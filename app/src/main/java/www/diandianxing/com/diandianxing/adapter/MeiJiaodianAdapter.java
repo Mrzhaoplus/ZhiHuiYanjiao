@@ -3,6 +3,7 @@ package www.diandianxing.com.diandianxing.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -15,11 +16,20 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.ShujuBean.Fenlei_Bean;
+import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
+import www.diandianxing.com.diandianxing.interfase.List_view;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
@@ -30,19 +40,21 @@ import www.diandianxing.com.diandianxing.util.ToastUtils;
 
 public class MeiJiaodianAdapter extends BaseAdapter {
     private Context context;
-    private List<String> lists = new ArrayList<>();
+    List<Fenlei_Bean.DatasBean>lists;
     private TextView text_sure;
     private ShareListener shareListener;
-    public MeiJiaodianAdapter(Context context, ShareListener shareListener) {
+    private GuanzhuJD guanzhuJD;
+    private List_view jiekou;
+    private onlick click;
+
+    public MeiJiaodianAdapter(Context context, List<Fenlei_Bean.DatasBean> lists, ShareListener shareListener) {
         this.context = context;
-        this.shareListener=shareListener;
-        data();
+        this.lists = lists;
+        this.shareListener = shareListener;
     }
 
-    private void data() {
-        for (int i = 0; i < 8; i++) {
-            lists.add("");
-        }
+    public void getclick(List_view jiekou){
+        this.jiekou=jiekou;
     }
     @Override
     public int getCount() {
@@ -60,7 +72,7 @@ public class MeiJiaodianAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup viewGroup) {
+    public View getView(final int position, View convertView, ViewGroup viewGroup) {
         Tuijiantieadapter.ViewHolder holder;
         int type = getItemViewType(position);
         if (convertView == null) {
@@ -85,10 +97,35 @@ public class MeiJiaodianAdapter extends BaseAdapter {
             holder = (Tuijiantieadapter.ViewHolder) convertView.getTag();
         }
 
+
+        if(lists.get(position).getIs_collect()==0){
+            Drawable nav_up=context.getResources().getDrawable(R.drawable.icon_collect);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            holder.text_colltet.setCompoundDrawables(nav_up, null, null, null);
+            holder.text_colltet.setText(lists.get(position).getCollectCount()+"");
+        }else{
+            Drawable nav_up=context.getResources().getDrawable(R.drawable.shouchang_xz_icon_3x);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            holder.text_colltet.setCompoundDrawables(nav_up, null, null, null);
+            holder.text_colltet.setText(lists.get(position).getCollectCount()+"");
+        }
+        if(lists.get(position).getIs_zan()==0){
+            Drawable nav_up=context.getResources().getDrawable(R.drawable.icon_dianzan);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            holder.text_zan.setCompoundDrawables(nav_up, null, null, null);
+            holder.text_zan.setText(lists.get(position).getDianZanCount()+"");
+        }else{
+            Drawable nav_up=context.getResources().getDrawable(R.drawable.dianzan_xz_icon_3x);
+            nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            holder.text_zan.setCompoundDrawables(nav_up, null, null, null);
+            holder.text_zan.setText(lists.get(position).getDianZanCount()+"");
+        }
+
+        //关注
         holder.rela_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                click.guanzhu_click(position);
                 shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
             }
         });
@@ -103,31 +140,72 @@ public class MeiJiaodianAdapter extends BaseAdapter {
         holder.text_colltet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.show(context,"收藏",1);
+                if(lists.get(position).getIs_collect()==0){
+                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getIs_collect());
+                    lists.get(position).setIs_collect(1);
+                }else if(lists.get(position).getIs_collect()==1){
+                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getIs_collect());
+                    lists.get(position).setIs_collect(0);
+                }
+
             }
         });
         //点赞
         holder.text_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.show(context,"点赞",1);
+                if(lists.get(position).getIs_zan()==0){
+                    jiekou.onclick(position,0,lists.get(position).getId(),1);
+                }else if(lists.get(position).getIs_zan()==1){
+                    jiekou.onclick(position,0,lists.get(position).getId(),0);
+                }
             }
         });
-        List<String> aaa = new ArrayList<>();
+        List<String> imagesList = lists.get(position).getImagesList();
         holder.item_recycler.setLayoutManager(new GridLayoutManager(context,3));
         holder.item_recycler.setNestedScrollingEnabled(false);
-        TPAdapter1 tpAdapter1 = new TPAdapter1(context,aaa);
+        TPAdapter1 tpAdapter1 = new TPAdapter1(context,imagesList);
         holder.item_recycler.setAdapter(tpAdapter1);
-
-
+        //添加数据
+        Glide.with(context).load(lists.get(position).getPic()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
+        String dateToString = getDateToString(String.valueOf(lists.get(position).getCreateTime() / 1000));
+        holder.item_count.setText(lists.get(position).getPostContent());
+        holder.text_dengji.setText(lists.get(position).getUserLevel());
+        holder.da_address.setText(dateToString+" "+lists.get(position).getAddress());
+        final Fenlei_Bean.DatasBean datasBean = lists.get(position);
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                guanzhuJD = new GuanzhuJD();
+                guanzhuJD.address=datasBean.getAddress();
+                guanzhuJD.imagesList=datasBean.getImagesList();
+                guanzhuJD.id= String.valueOf(datasBean.getId());
+                guanzhuJD.dianZanCount= String.valueOf(datasBean.getDianZanCount());
+                guanzhuJD.createTime= String.valueOf(datasBean.getCreateTime());
+                guanzhuJD.commentCount= String.valueOf(datasBean.getCommentCount());
+                guanzhuJD.collectCount= String.valueOf(datasBean.getCollectCount());
+                guanzhuJD.is_collect= String.valueOf(datasBean.getIs_collect());
+                guanzhuJD.is_focus= String.valueOf(datasBean.getIs_focus());
+                guanzhuJD.is_fx= String.valueOf(datasBean.getIs_fx());
+                guanzhuJD.is_zan= String.valueOf(datasBean.getIs_zan());
+                guanzhuJD.isDeleted= String.valueOf(datasBean.getIsDeleted());
+                guanzhuJD.pic=datasBean.getPic();
+                guanzhuJD.postContent=datasBean.getPostContent();
+                guanzhuJD.postFlage= String.valueOf(datasBean.getPostFlage());
+                guanzhuJD.postImge=datasBean.getPostImge();
+                guanzhuJD.postStatus= String.valueOf(datasBean.getPostStatus());
+                guanzhuJD.postTitle=datasBean.getPostTitle();
+                guanzhuJD.postType=datasBean.getPostType();
+                guanzhuJD.relayCount= String.valueOf(datasBean.getRelayCount());
+                guanzhuJD.updateTime= String.valueOf(datasBean.getUpdateTime());
+                guanzhuJD.userId= String.valueOf(datasBean.getUserId());
+                guanzhuJD.userLevel=datasBean.getUserLevel();
+                guanzhuJD.userName=datasBean.getUserName();
                 Intent intent=new Intent(context,JiaoDetailActivity.class);
+                intent.putExtra("guanzhu",guanzhuJD);
                 context.startActivity(intent);
             }
         });
-
         return convertView;
     }
 
@@ -251,4 +329,22 @@ public class MeiJiaodianAdapter extends BaseAdapter {
             }
         });
     }
+
+
+    //  时间戳转为日期  /年/月/日
+    public static String getDateToString(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        long lcc_time = Long.valueOf(time);
+        String format = sdf.format(new Date(lcc_time * 1000L));
+        return format;
+    }
+
+
+    public void guanzhu_click(onlick click){
+        this.click=click;
+    }
+
+
+
 }
+

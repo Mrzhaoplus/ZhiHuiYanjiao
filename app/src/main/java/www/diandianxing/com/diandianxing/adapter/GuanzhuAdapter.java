@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,7 @@ public class GuanzhuAdapter extends BaseAdapter {
     List<Live_gunzhu_Bean.DatasBean>lists;
     private GuanzhuJD guanzhuJD;
     private List_view jiekou;
+    private boolean flag=false;
 
     public GuanzhuAdapter(Context context, ShareListener shareListener, List<Live_gunzhu_Bean.DatasBean> lists ) {
         this.context = context;
@@ -80,7 +82,6 @@ public class GuanzhuAdapter extends BaseAdapter {
        final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-
             convertView = LayoutInflater.from(context).inflate(R.layout.fragment_duoone, null);
             holder.img_tou = (ImageView) convertView.findViewById(R.id.img_tou);
             holder.text_name = (TextView) convertView.findViewById(R.id.text_name);
@@ -98,8 +99,6 @@ public class GuanzhuAdapter extends BaseAdapter {
         }
 
         final Live_gunzhu_Bean.DatasBean datasBean = lists.get(position);
-
-
         //分享
         holder.text_share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +158,6 @@ public class GuanzhuAdapter extends BaseAdapter {
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
             holder.text_zan.setCompoundDrawables(nav_up, null, null, null);
             holder.text_zan.setText(lists.get(position).getDianZanCount()+"");
-
         }else{
             Drawable nav_up=context.getResources().getDrawable(R.drawable.dianzan_xz_icon_3x);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
@@ -170,16 +168,32 @@ public class GuanzhuAdapter extends BaseAdapter {
         holder.text_colltet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              jiekou.onclick(position,1,lists.get(position).getId());
-
+                if(lists.get(position).getIs_collect()==0){
+                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getIs_collect());
+                    lists.get(position).setIs_collect(1);
+                }else if(lists.get(position).getIs_collect()==1){
+                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getIs_collect());
+                    lists.get(position).setIs_collect(0);
+                }
 
             }
         });
+
+
+
+
+
+
         //点赞
         holder.text_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                jiekou.onclick(position,0,lists.get(position).getId());
+
+                if(lists.get(position).getIs_zan()==0){
+                    jiekou.onclick(position,0,lists.get(position).getId(),1);
+                }else if(lists.get(position).getIs_zan()==1){
+                    jiekou.onclick(position,0,lists.get(position).getId(),0);
+                }
             }
         });
         List<String> imagesList = lists.get(position).getImagesList();
@@ -211,10 +225,8 @@ public class GuanzhuAdapter extends BaseAdapter {
 
         Glide.with(context).load(lists.get(position).getPic()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
            String dateToString = getDateToString(String.valueOf(lists.get(position).getCreateTime() / 1000));
-
             holder.item_count.setText(lists.get(position).getPostContent());
-        holder.text_dengji.setText(lists.get(position).getUserLevel());
-
+            holder.text_dengji.setText(lists.get(position).getUserLevel());
             holder.da_address.setText(dateToString+" "+address);
 
 

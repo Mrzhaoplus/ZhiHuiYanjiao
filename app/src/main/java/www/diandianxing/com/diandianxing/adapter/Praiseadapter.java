@@ -11,9 +11,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.ShujuBean.Zan_msg_Bean;
+import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
@@ -27,21 +35,12 @@ import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity
 
 public class Praiseadapter extends RecyclerView.Adapter<Praiseadapter.Myviewholder> {
     private Context context;
-    List<String> list=new ArrayList<>();
+    List<Zan_msg_Bean.DatasBean> list;
     private Commentadapter.LongDeleteListener longDeleteListener;
-    public Praiseadapter(Context context) {
+
+    public Praiseadapter(Context context, List<Zan_msg_Bean.DatasBean> list) {
         this.context = context;
-        data();
-
-    }
-
-    private void data() {
-
-        for (int i = 0; i <10 ; i++) {
-              list.add("12-2"+i);
-
-
-        }
+        this.list = list;
     }
 
     @Override
@@ -53,23 +52,40 @@ public class Praiseadapter extends RecyclerView.Adapter<Praiseadapter.Myviewhold
 
     @Override
     public void onBindViewHolder(final Myviewholder holder, final int position) {
-            holder.da_zan.setText("天安门\r\r "+list.get(position).toString());
+
+        Glide.with(context).load(list.get(position).getPic()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
+        String dateToString = getDateToString(String.valueOf(list.get(position).getCreateTime() / 1000));
+        holder.da_zan.setText(dateToString);
+        holder.dengji.setText(list.get(position).getOperationType()+"");
+        holder.text_name.setText(list.get(position).getNickName());
+         holder.title.setText("原帖："+list.get(position).getTitle());
         //长按事件
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-
                 longDeleteListener.OnLongDeleteListener(position);
-
                 return true;
             }
         });
-
+        final Zan_msg_Bean.DatasBean datasBean = list.get(position);
         //点击跳转详情页
         holder.view.setOnClickListener(new View.OnClickListener() {
+
+            private GuanzhuJD guanzhuJD;
+
             @Override
             public void onClick(View view) {
+                /*guanzhuJD = new GuanzhuJD();
+                guanzhuJD.id= String.valueOf(datasBean.getId());
+                guanzhuJD.createTime= String.valueOf(datasBean.getCreateTime());
+                guanzhuJD.isDeleted= String.valueOf(datasBean.getIsDeleted());
+                guanzhuJD.pic=datasBean.getPic();
+                guanzhuJD.userId= String.valueOf(datasBean.getUserId());
+                guanzhuJD.userLevel= String.valueOf(datasBean.getOperationType());
+                guanzhuJD.userName=datasBean.getNickName();*/
+
                 Intent intent = new Intent(context, JiaoDetailActivity.class);
+               // intent.putExtra("guanzhu",guanzhuJD);
                 context.startActivity(intent);
             }
         });
@@ -95,18 +111,20 @@ public class Praiseadapter extends RecyclerView.Adapter<Praiseadapter.Myviewhold
         public ImageView img_tou;
         public TextView text_name;
         public TextView da_zan;
-        public ImageView imageView2;
+        public TextView dengji;
         public RelativeLayout relan;
         public TextView text_username;
         public LinearLayout liners;
         public LinearLayout yuantie;
+        public TextView title;
         public Myviewholder(View rootView) {
             super(rootView);
             this.view = rootView;
             this.img_tou = (ImageView) rootView.findViewById(R.id.img_tou);
             this.text_name = (TextView) rootView.findViewById(R.id.text_name);
             this.da_zan = (TextView) rootView.findViewById(R.id.da_zan);
-            this.imageView2 = (ImageView) rootView.findViewById(R.id.imageView2);
+            this.title = (TextView) rootView.findViewById(R.id.title);
+            this.dengji = (TextView) rootView.findViewById(R.id.text_dengji);
             this.relan = (RelativeLayout) rootView.findViewById(R.id.relan);
             this.text_username = (TextView) rootView.findViewById(R.id.text_username);
             this.liners = (LinearLayout) rootView.findViewById(R.id.zan_liners);
@@ -122,4 +140,12 @@ public class Praiseadapter extends RecyclerView.Adapter<Praiseadapter.Myviewhold
         this.longDeleteListener=longDeleteListener;
     }
 
+
+    //  时间戳转为日期  /年/月/日
+    public static String getDateToString(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        long lcc_time = Long.valueOf(time);
+        String format = sdf.format(new Date(lcc_time * 1000L));
+        return format;
+    }
 }

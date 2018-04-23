@@ -11,12 +11,9 @@ public class EventMessage {
     public String getMsg2() {
         return msg2;
     }
-
     public void setMsg2(String msg2) {
         this.msg2 = msg2;
     }
-
-
     public String getMsg() {
         return msg;
     }

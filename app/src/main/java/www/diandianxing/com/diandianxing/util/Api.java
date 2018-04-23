@@ -6,6 +6,6 @@ package www.diandianxing.com.diandianxing.util;
 
 public class Api {
     public static final String BASE_URL="http://47.93.45.38:8080/";
-    public static final String token="94b819df3c9daa260e4763d6affa18e6";
+    public static final String token="fd52c9f4ea33d3ff9a821b6aabdff76e";
     public static final String TOAST="暂无数据";
 }

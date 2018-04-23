@@ -15,7 +15,6 @@
             android:layout_marginRight="5dp"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/icon_tou"
             android:layout_width="60dp"
             android:layout_height="60dp" />
         <RelativeLayout
@@ -54,6 +53,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView2" />
                 <TextView
+                    android:id="@+id/text_dengji"
                     android:textColor="#f8b804"
                     android:textSize="5sp"
                     android:text="1"
@@ -120,6 +120,7 @@
 
             <TextView
                 android:textSize="14sp"
+                android:id="@+id/title"
                 android:text="原帖:今年买房建议一二线城市，三四线随现.."
                 android:padding="10dp"
                 android:layout_width="wrap_content"

@@ -21,6 +21,7 @@ public class Live_presenter implements Live_Model_interfase {
     public void getpath(String token){
         live_model.getpath(token);
     }
+
     public void kong(){
     if(jiekou!=null){
         jiekou=null;
