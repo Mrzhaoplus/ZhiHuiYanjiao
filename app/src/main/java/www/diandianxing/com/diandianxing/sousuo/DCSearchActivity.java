@@ -364,7 +364,6 @@ public class DCSearchActivity extends Activity implements PoiSearch.OnPoiSearchL
 		} else {
 			ToastUtils.show(DCSearchActivity.this, rCode,1);
 		}
-
 	}
 
 	@Override

@@ -24,6 +24,8 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.umeng.socialize.media.Base;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.zackratos.ultimatebar.UltimateBar;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.bean.FragEventBug;
 import www.diandianxing.com.diandianxing.bean.Info;
+import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.fragment.HomeFragment;
 import www.diandianxing.com.diandianxing.fragment.MessageFragment;
 import www.diandianxing.com.diandianxing.fragment.MineFragment;
@@ -73,10 +76,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         UltimateBar ultimateBar = new UltimateBar(this);
         ultimateBar.setImmersionBar();
         MyContants.windows(this);
+        EventBus.getDefault().register(MainActivity.this);
         setContentView(R.layout.activity_main);
         homeFragment = new HomeFragment();
         addFragments(homeFragment);
         initView();
+
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void XXX(MsgBus messageEvent) {
+
+        if("首页".equals(messageEvent.tiaozhuan)){
+            rb_find.setChecked(true);
+            if (findFragment == null) {
+                findFragment = new PaikewFragment("关注");
+            }
+            addFragments(findFragment);
+            tag=1;
+            if(findFragment!=null){
+                findFragment.Qiehuan();
+            }
+        }
 
     }
 
@@ -166,7 +186,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.rb_find:
                 if (findFragment == null) {
-                    findFragment = new PaikewFragment();
+                    findFragment = new PaikewFragment("推荐");
                 }
                 addFragments(findFragment);
                 tag=1;

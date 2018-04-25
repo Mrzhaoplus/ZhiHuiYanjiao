@@ -3,22 +3,33 @@ package www.diandianxing.com.diandianxing;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.compress.Luban;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.HttpParams;
+import com.lzy.okgo.model.Response;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +37,8 @@ import www.diandianxing.com.diandianxing.adapter.GridViewAddImgesAdpter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.bean.Info;
 import www.diandianxing.com.diandianxing.bean.MsgBus;
+import www.diandianxing.com.diandianxing.util.Api;
+import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyGridView;
 import www.diandianxing.com.diandianxing.R;
@@ -47,6 +60,9 @@ public class ReleaseShootoffActivity extends BaseActivity {
     private List<LocalMedia> selectList = new ArrayList<>();
     private Info info;
     private TextView textView2;
+    private String paths="",address="";
+    private EditText et_img_content;
+    private TextView tv_fb;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +71,10 @@ public class ReleaseShootoffActivity extends BaseActivity {
         EventBus.getDefault().register(ReleaseShootoffActivity.this);
         include_back= (ImageView) findViewById(R.id.include_back);
         ll_szwz= (LinearLayout) findViewById(R.id.ll_szwz);
+        tv_fb= (TextView) findViewById(R.id.tv_fb);
         mygridview= (MyGridView) findViewById(R.id.mygridview);
         textView2= (TextView) findViewById(R.id.textView2);
-
+        et_img_content= (EditText) findViewById(R.id.et_img_content);
         String path=getIntent().getStringExtra("img");
         info= (Info) getIntent().getSerializableExtra("list");
         if(path!=null){
@@ -99,13 +116,35 @@ public class ReleaseShootoffActivity extends BaseActivity {
 
             }
         });
+        tv_fb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+
+                String trim = et_img_content.getText().toString().trim();
+
+                if(trim!=null&&trim.length()>0){
+
+                    if(listAll.size()>0){
+
+                        shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+                        networkImg(trim,address);
+
+                    }else{
+                        Toast.makeText(ReleaseShootoffActivity.this,"请选择图片",Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(ReleaseShootoffActivity.this,"请输入内容",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
 
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void XXX(MsgBus messageEvent) {
-
+        address=messageEvent.msg;
         textView2.setText(messageEvent.msg);
 
     }
@@ -176,6 +215,117 @@ public class ReleaseShootoffActivity extends BaseActivity {
                     break;
             }
         }
+    }
+
+
+    private void networkImg(final String title, final String address) {
+
+        List<File> fileList = new ArrayList<>();
+        for(int i=0;i<listAll.size();i++){
+
+            File file = new File(listAll.get(i).getPath());
+
+            fileList.add(file);
+
+        }
+
+
+        HttpParams params = new HttpParams();
+        params.putFileParams("files", fileList);
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/paike/uppaikeimages")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        Log.d("TAG", "上传图片成功：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+
+                            if (code == 200) {
+
+                                paths = jsonobj.getString("datas");
+
+                                network(title,address);
+
+                            } else {
+                                Toast.makeText(ReleaseShootoffActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+    private void network(String title,String address) {
+
+        HttpParams params = new HttpParams();
+        params.put("content", title);
+        params.put("address", address);
+        params.put("paths", paths);
+        params.put("token", Api.token);
+        params.put("userId", Api.userid);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/paike/insertpaikeimage")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        dialog.dismiss();
+                        String body = response.body();
+                        Log.d("TAG", "更新图片上传成功：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+                                MsgBus msgBus = new MsgBus();
+                                msgBus.tiaozhuan="首页";
+                                EventBus.getDefault().postSticky(msgBus);
+
+                                finish();
+                            } else {
+                                Toast.makeText(ReleaseShootoffActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+    BaseDialog dialog;
+    /*
+* 对话框
+* */
+    private void shumaDialog(int grary, int animationStyle) {
+        BaseDialog.Builder builder = new BaseDialog.Builder(this);
+        dialog = builder.setViewId(R.layout.view_tips_loading)
+                //设置dialogpadding
+                .setPaddingdp(0, 10, 0, 10)
+                //设置显示位置
+                .setGravity(grary)
+                //设置动画
+                .setAnimation(animationStyle)
+                //设置dialog的宽高
+                .setWidthHeightpx(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                //设置触摸dialog外围是否关闭
+                .isOnTouchCanceled(false)
+                //设置监听事件
+                .builder();
+        dialog.show();
+        TextView tips_loading_msg = dialog.getView(R.id.tips_loading_msg);
+        tips_loading_msg.setText("发布中...");
     }
 
 }

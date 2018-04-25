@@ -57,11 +57,13 @@ public class Masteradapter extends RecyclerView.Adapter<Masteradapter.Myviewhold
 
         Glide.with(context).load(paiKeDRInfo.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
         holder.text_name.setText(paiKeDRInfo.nickName);
+
+        Log.e("TAG","点赞数：：："+paiKeDRInfo.zan);
+
         holder.da_zan.setText(paiKeDRInfo.zan);
         holder.tv_dj.setText(paiKeDRInfo.userLevel);
 
 
-        holder.da_zan.setText(list.get(position).toString());
         if(position==0){
             holder.text_dengji.setBackgroundResource(R.drawable.item_one);
             holder.text_dengji.setText("");

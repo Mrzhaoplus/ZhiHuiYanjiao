@@ -8,4 +8,6 @@ public class MsgBus {
 
     public  String msg;
 
+    public  String tiaozhuan;
+
 }

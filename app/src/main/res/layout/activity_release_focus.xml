@@ -44,7 +44,7 @@
     </RelativeLayout>
 
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:scrollbars="none"
         android:layout_height="match_parent">
@@ -53,6 +53,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FFE5E5E5"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
             android:orientation="vertical">
 
 
@@ -64,6 +66,7 @@
                 android:background="@color/white">
 
                 <EditText
+                    android:id="@+id/et_title_jd"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="请输入标题内容"
@@ -86,6 +89,7 @@
 
 
                 <EditText
+                    android:id="@+id/et_content_jd"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:hint="心里想什么，尽情说出来"
@@ -151,7 +155,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 
 </LinearLayout>

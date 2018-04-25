@@ -2,16 +2,35 @@ package www.diandianxing.com.diandianxing.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.HttpParams;
+import com.lzy.okgo.model.Response;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import www.diandianxing.com.diandianxing.MyCollectionActivity;
+import www.diandianxing.com.diandianxing.ReleaseShootoffVidoActivity;
 import www.diandianxing.com.diandianxing.SignActivity;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
+import www.diandianxing.com.diandianxing.bean.MsgBus;
+import www.diandianxing.com.diandianxing.bean.UserInfo;
+import www.diandianxing.com.diandianxing.bean.UserMsg1;
+import www.diandianxing.com.diandianxing.bean.UserMsg2;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MyFansiActivity;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MyFllowActivity;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
@@ -21,6 +40,7 @@ import www.diandianxing.com.diandianxing.my.ShareActivity;
 import www.diandianxing.com.diandianxing.set.AboutweActivity;
 import www.diandianxing.com.diandianxing.set.Feedback;
 import www.diandianxing.com.diandianxing.set.SetActivity;
+import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 
 /**
@@ -53,7 +73,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     public RelativeLayout real_yaoqing;
     private ImageView iv_grtx;
     private ImageView iv_sz;
-
+    private TextView tv_zy_name;
+    private ImageView iv_sex;
+    private TextView tv_zy_dj;
     @Override
     protected int setContentView() {
 
@@ -81,11 +103,15 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         this.text_suggest = (TextView) contentView.findViewById(R.id.text_suggest);
         this.real_suggest = (RelativeLayout) contentView.findViewById(R.id.real_suggest);
         this.text_kefu = (TextView) contentView.findViewById(R.id.text_kefu);
+        tv_zy_name=contentView.findViewById(R.id.tv_zy_name);
+        iv_sex=contentView.findViewById(R.id.iv_sex);
+        tv_zy_dj=contentView.findViewById(R.id.tv_zy_dj);
         this.real_kefu = (RelativeLayout) contentView.findViewById(R.id.real_kefu);
         this.text_yaoqing = (TextView) contentView.findViewById(R.id.text_yaoqing);
         this.real_yaoqing = (RelativeLayout) contentView.findViewById(R.id.real_yaoqing);
         iv_sz=contentView.findViewById(R.id.iv_sz);
         iv_grtx=contentView.findViewById(R.id.iv_grtx);
+        network();
         text_guanzhu.setOnClickListener(this);//设置监听
         text_fensi.setOnClickListener(this);
         text_dongtai.setOnClickListener(this);
@@ -192,6 +218,99 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         });
 
         dialog.show();
+    }
+
+
+    private void network() {
+
+        HttpParams params = new HttpParams();
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/user/myhome")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        Log.d("TAG", "我的页面：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            JSONObject datas = jsonobj.getJSONObject("datas");
+                            if (code == 200) {
+
+                                UserInfo userInfo = new UserInfo();
+                                userInfo.dtNum=datas.getString("dtNum");
+                                userInfo.scnum=datas.getString("scnum");
+                                userInfo.gznum=datas.getString("gznum");
+                                userInfo.days=datas.getString("days");
+                                userInfo.fsnum=datas.getString("fsnum");
+
+                                userInfo.userMsg1 = new UserMsg1();
+                                JSONObject jo1 = datas.getJSONObject("user");
+                                userInfo.userMsg1.id=jo1.getString("id");
+                                userInfo.userMsg1.nickname=jo1.getString("nickname");
+                                userInfo.userMsg1.password=jo1.getString("password");
+                                userInfo.userMsg1.contact=jo1.getString("contact");
+                                userInfo.userMsg1.credit=jo1.getString("credit");
+                                userInfo.userMsg1.balance=jo1.getString("balance");
+                                userInfo.userMsg1.mileage=jo1.getString("mileage");
+                                userInfo.userMsg1.token=jo1.getString("token");
+                                userInfo.userMsg1.deposit=jo1.getString("deposit");
+                                userInfo.userMsg1.depositStatus=jo1.getString("depositStatus");
+                                userInfo.userMsg1.doubles=jo1.getString("doubles");
+                                userInfo.userMsg1.idIdent=jo1.getString("idIdent");
+                                userInfo.userMsg1.type=jo1.getString("type");
+                                userInfo.userMsg1.addTime=jo1.getString("addTime");
+                                userInfo.userMsg1.encrypt=jo1.getString("encrypt");
+                                userInfo.userMsg1.lastTime=jo1.getString("lastTime");
+                                userInfo.userMsg1.ridingState=jo1.getString("ridingState");
+
+                                JSONObject jo2 = datas.getJSONObject("userinfo");
+                                userInfo.userMsg2 = new UserMsg2();
+                                userInfo.userMsg2.id=jo2.getString("id");
+                                userInfo.userMsg2.uid=jo2.getString("uid");
+                                userInfo.userMsg2.pic=jo2.getString("pic");
+                                userInfo.userMsg2.wechat=jo2.getString("wechat");
+                                userInfo.userMsg2.tencentQq=jo2.getString("tencentQq");
+                                userInfo.userMsg2.microblog=jo2.getString("microblog");
+                                userInfo.userMsg2.wechatName=jo2.getString("wechatName");
+                                userInfo.userMsg2.qqName=jo2.getString("qqName");
+                                userInfo.userMsg2.sinaName=jo2.getString("sinaName");
+                                userInfo.userMsg2.uname=jo2.getString("uname");
+                                userInfo.userMsg2.identPic=jo2.getString("identPic");
+                                userInfo.userMsg2.identNum=jo2.getString("identNum");
+                                userInfo.userMsg2.nickName=jo2.getString("nickName");
+                                userInfo.userMsg2.sort=jo2.getString("sort");
+                                userInfo.userMsg2.zan=jo2.getString("zan");
+                                userInfo.userMsg2.userLevel=jo2.getString("userLevel");
+
+
+
+                                guan_num.setText(userInfo.gznum);
+                                fen_num.setText(userInfo.fsnum);
+                                dong_num.setText(userInfo.dtNum);
+                                collect_num.setText(userInfo.scnum);
+                                text_day.setText("加入我们"+userInfo.days+"天");
+
+                                Glide.with(getActivity()).load(userInfo.userMsg2.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_grtx);
+
+                                tv_zy_name.setText(userInfo.userMsg1.nickname);
+                                tv_zy_dj.setText(userInfo.userMsg2.userLevel);
+
+
+                            } else {
+                                Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
     }
 
 }

@@ -6,11 +6,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.luck.picture.lib.PictureSelector;
@@ -18,18 +21,30 @@ import com.luck.picture.lib.compress.Luban;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.HttpParams;
+import com.lzy.okgo.model.Response;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.adapter.GridViewAddImgesAdpter;
 import www.diandianxing.com.diandianxing.adapter.TagAdapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.bean.FaBuTypeInfo;
 import www.diandianxing.com.diandianxing.bean.MsgBus;
+import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaodianActivity;
+import www.diandianxing.com.diandianxing.util.Api;
+import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyGridView;
 import www.diandianxing.com.diandianxing.R;
@@ -49,10 +64,17 @@ public class ReleaseFocusActivity extends BaseActivity {
     private TextView textView2;
     private GridViewAddImgesAdpter addImgesAdpter;
     ArrayList<String> arrayList = new ArrayList<>();
-    ArrayList<String> mList = new ArrayList<>();
+    ArrayList<FaBuTypeInfo> mList = new ArrayList<>();
     List<LocalMedia> list = new ArrayList<>();
     List<LocalMedia> listAll = new ArrayList<>();
     private List<LocalMedia> selectList = new ArrayList<>();
+    TagAdapter tagAdapter;
+    private TextView tv_fb;
+
+    private String postContent="",address="",postTitle="",postType="",images="";
+
+    private EditText et_title_jd,et_content_jd;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,21 +87,14 @@ public class ReleaseFocusActivity extends BaseActivity {
         rv_fbfl= (RecyclerView) findViewById(R.id.rv_fbfl);
         ll_szwz= (LinearLayout) findViewById(R.id.ll_szwz);
         textView2= (TextView) findViewById(R.id.textView2);
+        et_title_jd= (EditText) findViewById(R.id.et_title_jd);
+        et_content_jd= (EditText) findViewById(R.id.et_content_jd);
+        tv_fb= (TextView) findViewById(R.id.tv_fb);
         mygridview= (MyGridView) findViewById(R.id.mygridview);
-        mList.add("");
-        mList.add("");
-        mList.add("");
-        mList.add("");
-        mList.add("");
-        mList.add("");
-        mList.add("");
-        mList.add("");
+        networkType();
 
         rv_fbfl.setLayoutManager(new GridLayoutManager(ReleaseFocusActivity.this,4));
         rv_fbfl.setNestedScrollingEnabled(false);
-
-        final TagAdapter tagAdapter  = new TagAdapter(R.layout.type_item_view, mList,ReleaseFocusActivity.this);
-        rv_fbfl.setAdapter(tagAdapter);
 
         /**
          * 添加照片adapter
@@ -110,13 +125,38 @@ public class ReleaseFocusActivity extends BaseActivity {
             }
         });
 
-        tagAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        tv_fb.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Log.e("TAG","点击到：："+position);
+            public void onClick(View view) {
 
-                tagAdapter.setXZ(position);
-                tagAdapter.notifyDataSetChanged();
+                postTitle=et_title_jd.getText().toString().trim();
+                postContent=et_content_jd.getText().toString().trim();
+
+
+                if(postTitle!=null&&postTitle.length()>0){
+
+                    if(postContent!=null&&postContent.length()>0){
+
+
+                        if(postType!=null&&postType.length()>0){
+
+                            if(listAll.size()>0){
+
+                                shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+                                networkImg();
+
+                            }else{
+                                Toast.makeText(ReleaseFocusActivity.this,"请选择图片",Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(ReleaseFocusActivity.this,"请选择分类",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Toast.makeText(ReleaseFocusActivity.this,"请输入内容",Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(ReleaseFocusActivity.this,"请输入标题",Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -195,6 +235,186 @@ public class ReleaseFocusActivity extends BaseActivity {
                     break;
             }
         }
+    }
+
+
+    private void networkImg() {
+
+        List<File> fileList = new ArrayList<>();
+        for(int i=0;i<listAll.size();i++){
+
+            File file = new File(listAll.get(i).getPath());
+
+            fileList.add(file);
+
+        }
+
+
+        HttpParams params = new HttpParams();
+        params.putFileParams("file", fileList);
+//        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/uploadFrontImage")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        Log.d("TAG", "焦点上传图片成功：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("statue");
+
+                            if (code == 1) {
+
+                                images = jsonobj.getString("response");
+
+                                network();
+
+                            } else {
+                                Toast.makeText(ReleaseFocusActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+    private void network() {
+
+        HttpParams params = new HttpParams();
+        params.put("postContent", postContent);
+        params.put("address", address);
+        params.put("images", images);
+        params.put("token", Api.token);
+        params.put("postTitle", postTitle);
+        params.put("postType", postType);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/insertPostInfo")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        dialog.dismiss();
+                        String body = response.body();
+                        Log.d("TAG", "更新图片上传成功：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+
+                                Intent intent = new Intent(ReleaseFocusActivity.this,JiaodianActivity.class);
+
+                                intent.putExtra("tianzhuan",true);
+
+                                startActivity(intent);
+                                finish();
+
+                            } else {
+                                Toast.makeText(ReleaseFocusActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+
+    private void networkType() {
+        HttpParams params = new HttpParams();
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/getClassificationList")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        Log.d("TAG", "分类数据：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            JSONArray datas = jsonobj.getJSONArray("datas");
+                            List<FaBuTypeInfo> list = new ArrayList<FaBuTypeInfo>();
+                            if (code == 200) {
+
+                                    for(int i=0;i<datas.length();i++){
+
+                                        JSONObject jo=datas.getJSONObject(i);
+                                        FaBuTypeInfo faBuTypeInfo = new FaBuTypeInfo();
+                                        faBuTypeInfo.id=jo.getString("id");
+                                        faBuTypeInfo.title=jo.getString("title");
+                                        faBuTypeInfo.textType=jo.getString("textType");
+                                        faBuTypeInfo.isDeleted=jo.getString("isDeleted");
+                                        faBuTypeInfo.content=jo.getString("content");
+                                        list.add(faBuTypeInfo);
+                                    }
+
+                                mList.addAll(list);
+                                if(tagAdapter==null){
+
+                                    tagAdapter  = new TagAdapter(R.layout.type_item_view, mList,ReleaseFocusActivity.this);
+                                    rv_fbfl.setAdapter(tagAdapter);
+
+                                }else{
+                                    tagAdapter.notifyDataSetChanged();
+                                }
+                                tagAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                                        Log.e("TAG","点击到：："+position);
+
+                                        postType=mList.get(position).id;
+                                        tagAdapter.setXZ(position);
+                                        tagAdapter.notifyDataSetChanged();
+
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(ReleaseFocusActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+    BaseDialog dialog;
+    /*
+* 对话框
+* */
+    private void shumaDialog(int grary, int animationStyle) {
+        BaseDialog.Builder builder = new BaseDialog.Builder(this);
+        dialog = builder.setViewId(R.layout.view_tips_loading)
+                //设置dialogpadding
+                .setPaddingdp(0, 10, 0, 10)
+                //设置显示位置
+                .setGravity(grary)
+                //设置动画
+                .setAnimation(animationStyle)
+                //设置dialog的宽高
+                .setWidthHeightpx(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                //设置触摸dialog外围是否关闭
+                .isOnTouchCanceled(false)
+                //设置监听事件
+                .builder();
+        dialog.show();
+        TextView tips_loading_msg = dialog.getView(R.id.tips_loading_msg);
+        tips_loading_msg.setText("发布中...");
     }
 
 }

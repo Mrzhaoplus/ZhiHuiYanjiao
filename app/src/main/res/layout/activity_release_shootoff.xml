@@ -62,6 +62,7 @@
 
 
             <EditText
+                android:id="@+id/et_img_content"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:hint="心里想什么，尽情说出来"

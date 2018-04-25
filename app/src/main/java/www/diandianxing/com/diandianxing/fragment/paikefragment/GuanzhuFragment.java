@@ -14,6 +14,9 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Response;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,11 +24,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.ReleaseShootoffVidoActivity;
 import www.diandianxing.com.diandianxing.adapter.Jiaodianadapter;
 import www.diandianxing.com.diandianxing.adapter.Tujianadapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
+import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.MyGridView;
@@ -48,7 +53,6 @@ public class GuanzhuFragment extends BaseFragment {
     protected int setContentView() {
         return R.layout.fragment_guanzhu;
     }
-
     @Override
     protected void lazyLoad() {
         View contentView =getContentView();

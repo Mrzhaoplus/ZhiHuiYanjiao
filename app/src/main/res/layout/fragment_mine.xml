@@ -49,7 +49,7 @@
                 android:textSize="14sp"
                 android:layout_marginBottom="10dp"
                 android:textColor="@color/white"
-                android:text="加入我们100天"
+                android:text="加入我们0天"
                 android:layout_marginRight="15dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
@@ -69,6 +69,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView2" />
                 <TextView
+                    android:id="@+id/tv_zy_dj"
                     android:textColor="@color/white"
                     android:textSize="5sp"
                     android:text="1"
@@ -91,16 +92,19 @@
 
     <LinearLayout
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/tv_zy_name"
             android:textColor="@color/black_san"
-            android:text="琉璃余下的女孩"
+            android:text=""
             android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <ImageView
+            android:id="@+id/iv_sex"
             android:layout_marginLeft="10dp"
             android:src="@drawable/icon_girl"
             android:layout_width="wrap_content"
@@ -124,7 +128,7 @@
                 android:layout_gravity="center"
                 android:textColor="@color/bg_color"
                 android:textSize="17sp"
-                android:text="36"
+                android:text="0"
                 android:id="@+id/guan_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -147,7 +151,7 @@
                 android:layout_gravity="center"
                 android:textColor="@color/bg_color"
                 android:textSize="17sp"
-                android:text="25"
+                android:text="0"
                 android:id="@+id/fen_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -170,7 +174,7 @@
                 android:layout_gravity="center"
                 android:textColor="@color/bg_color"
                 android:textSize="17sp"
-                android:text="20"
+                android:text="0"
                 android:id="@+id/dong_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -193,7 +197,7 @@
                 android:layout_gravity="center"
                 android:textColor="@color/bg_color"
                 android:textSize="17sp"
-                android:text="40"
+                android:text="0"
                 android:id="@+id/collect_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

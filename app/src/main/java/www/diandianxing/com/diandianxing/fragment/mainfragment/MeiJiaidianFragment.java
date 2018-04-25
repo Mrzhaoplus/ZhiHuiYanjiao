@@ -51,7 +51,7 @@ import www.diandianxing.com.diandianxing.util.ToastUtils;
 /**
  * Created by Mr赵 on 2018/4/3.
  */
-
+@SuppressLint("ValidFragment")
 public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_interfase, List_view, Dianzan_presenter_interfase, Quxiaozan_presenter_interfase, onlick {
 
     private  int id;
@@ -66,11 +66,9 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
     Dianzan_presenter dianzan_presenter = new Dianzan_presenter(this);
     Quxiaozan_presenter quxiaozan_presenter = new Quxiaozan_presenter(this);
     private FenLei_presenter fenLei_presenter;
-
     public MeiJiaidianFragment(int id) {
         this.id = id;
     }
-
     public MeiJiaidianFragment() {
     }
 

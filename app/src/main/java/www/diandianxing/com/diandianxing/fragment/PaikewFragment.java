@@ -3,6 +3,7 @@ package www.diandianxing.com.diandianxing.fragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -15,8 +16,14 @@ import com.luck.picture.lib.compress.Luban;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import www.diandianxing.com.diandianxing.MainActivity;
+import www.diandianxing.com.diandianxing.ReleaseShootoffVidoActivity;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
+import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.fragment.paikefragment.DarenFragment;
 import www.diandianxing.com.diandianxing.fragment.paikefragment.GuanzhuFragment;
 import www.diandianxing.com.diandianxing.fragment.paikefragment.TuijianFragment;
@@ -47,6 +54,15 @@ public class PaikewFragment extends BaseFragment implements View.OnClickListener
     GuanzhuFragment guanzhuFragment;
     TuijianFragment tuijianFragment;
     DarenFragment darenFragment;
+
+    String msg;
+
+    public PaikewFragment(String msg){
+
+        this.msg=msg;
+
+    }
+
     @Override
     protected int setContentView() {
         return R.layout.fragment_paike;
@@ -55,6 +71,7 @@ public class PaikewFragment extends BaseFragment implements View.OnClickListener
     @Override
     protected void lazyLoad() {
         View contentView = getContentView();
+//        EventBus.getDefault().register(this);
         tv_back =(ImageView) contentView.findViewById(R.id.tv_back);
         this.tv_back = (ImageView)  contentView.findViewById(R.id.tv_back);
         this.v1 = (View)  contentView.findViewById(R.id.v1);
@@ -72,13 +89,57 @@ public class PaikewFragment extends BaseFragment implements View.OnClickListener
          liner2.setOnClickListener(this);
          liner3.setOnClickListener(this);
          tv_pai.setOnClickListener(this);
-        text_guanzhu.setTextColor(getResources().getColor(R.color.black_san));
-        if (tuijianFragment == null) {
-            tuijianFragment = new TuijianFragment();
+
+        if("关注".equals(msg)){
+            text_guanzhu.setTextColor(getResources().getColor(R.color.text_orage));
+            v1.setVisibility(View.VISIBLE);
+            v2.setVisibility(View.INVISIBLE);
+            v3.setVisibility(View.INVISIBLE);
+            text_daren.setTextColor(getResources().getColor(R.color.black_san));
+            text_tuijian.setTextColor(getResources().getColor(R.color.black_san));
+            if (guanzhuFragment == null) {
+                guanzhuFragment = new GuanzhuFragment();
+            }
+            addFragments(guanzhuFragment);
+        }else{
+            text_guanzhu.setTextColor(getResources().getColor(R.color.black_san));
+            if (tuijianFragment == null) {
+                tuijianFragment = new TuijianFragment();
+            }
+            addFragments(tuijianFragment);
         }
-        addFragments(tuijianFragment);
+
+
+    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void XXX(MsgBus messageEvent) {
+//
+//        if("关注".equals(messageEvent.tiaozhuan)){
+//
+//        }
+//    }
+
+
+    public void Qiehuan(){
+        Log.e("TAG","发送到拍客方法");
+        text_guanzhu.setTextColor(getResources().getColor(R.color.text_orage));
+        v1.setVisibility(View.VISIBLE);
+        v2.setVisibility(View.INVISIBLE);
+        v3.setVisibility(View.INVISIBLE);
+        text_daren.setTextColor(getResources().getColor(R.color.black_san));
+        text_tuijian.setTextColor(getResources().getColor(R.color.black_san));
+        if (guanzhuFragment == null) {
+            guanzhuFragment = new GuanzhuFragment();
+        }
+        addFragments(guanzhuFragment);
+
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     public void onClick(View view) {
