@@ -1,17 +1,26 @@
 package www.diandianxing.com.diandianxing.fragment.mainfragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import www.diandianxing.com.diandianxing.bean.Evebtbus_fragment;
+import www.diandianxing.com.diandianxing.bean.FragEventBug;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
 
@@ -28,6 +37,9 @@ public class LuKuangActivity extends AppCompatActivity implements View.OnClickLi
     LuKuangFragment luKuangFragment;
     private View zixun_view;
     private View lu_view;
+    private boolean flag=true;
+    private String content;
+    private int typeid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +50,11 @@ public class LuKuangActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initView() {
+        if(flag==true){
+            //注册
+            EventBus.getDefault().register(this);
+            flag=false;
+        }
         img_back = (ImageView) findViewById(R.id.img_back);
         text_zixun = (TextView) findViewById(R.id.text_zixun);
         liner1 = (RelativeLayout) findViewById(R.id.liner1);
@@ -50,14 +67,26 @@ public class LuKuangActivity extends AppCompatActivity implements View.OnClickLi
         img_back.setOnClickListener(this);
         liner1.setOnClickListener(this);
         liner2.setOnClickListener(this);
+
         //默认显示页面
         if (ziXunFragment == null) {
-            ziXunFragment = new ZiXunFragment();
+            if(typeid==1){
+                ziXunFragment = new ZiXunFragment(content);
+            }else{
+                ziXunFragment = new ZiXunFragment();
+            }
+
         }
         AddFragment(ziXunFragment);
-
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void fangfa(Evebtbus_fragment eveen){
+        typeid = eveen.getTypeid();
+        if(typeid==1){
+            Intent intent = getIntent();
+            content = intent.getStringExtra("content");
+        }
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -71,7 +100,12 @@ public class LuKuangActivity extends AppCompatActivity implements View.OnClickLi
                 lu_view.setVisibility(View.INVISIBLE);
                 //跳转页面
                 if (ziXunFragment == null) {
-                    ziXunFragment = new ZiXunFragment();
+                    if(typeid==1){
+                        ziXunFragment = new ZiXunFragment(content);
+                    }else{
+                        ziXunFragment = new ZiXunFragment();
+                    }
+
                 }
                 AddFragment(ziXunFragment);
                 break;
@@ -82,7 +116,12 @@ public class LuKuangActivity extends AppCompatActivity implements View.OnClickLi
                 lu_view.setVisibility(View.VISIBLE);
                 //跳转页面
                 if (luKuangFragment == null) {
-                    luKuangFragment = new LuKuangFragment();
+                    if(typeid==1){
+                        luKuangFragment = new LuKuangFragment(content);
+                    }else{
+                        luKuangFragment = new LuKuangFragment();
+                    }
+
                 }
                 AddFragment(luKuangFragment);
                 break;
@@ -106,5 +145,13 @@ public class LuKuangActivity extends AppCompatActivity implements View.OnClickLi
         currfit = f;
 
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //注销
+        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().removeAllStickyEvents();
     }
 }

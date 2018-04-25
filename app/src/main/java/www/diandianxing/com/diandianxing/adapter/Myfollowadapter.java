@@ -9,9 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.ShujuBean.GZ_person_Bean;
 
 /**
  * Created by ASUS on 2018/3/20.
@@ -22,19 +27,11 @@ import www.diandianxing.com.diandianxing.R;
 public class Myfollowadapter extends RecyclerView.Adapter<Myfollowadapter.MyviewHolder> {
     private OnItemClickLister mOnItemClickListener = null;
        private Context context;
-    private List<String> list=new ArrayList<>();
+    private List<GZ_person_Bean.DatesBean> list=new ArrayList<>();
 
-    public Myfollowadapter(Context context) {
+    public Myfollowadapter(Context context, List<GZ_person_Bean.DatesBean> list) {
         this.context = context;
-        data();
-    }
-
-    private void data() {
-
-        for (int i = 0; i < 10; i++) {
-               list.add("我真的好喜欢你"+i);
-            
-        }
+        this.list = list;
     }
 
     @Override
@@ -57,10 +54,8 @@ public class Myfollowadapter extends RecyclerView.Adapter<Myfollowadapter.Myview
                          }
                      });
                  }
-            holder.text_username.setText(list.get(position).toString());
-        
-           
-
+            holder.text_username.setText(list.get(position).getNickName());
+           Glide.with(context).load(list.get(position).getPic()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
     }
 
     @Override

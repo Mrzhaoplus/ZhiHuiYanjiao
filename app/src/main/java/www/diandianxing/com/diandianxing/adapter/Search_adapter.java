@@ -3,16 +3,21 @@ package www.diandianxing.com.diandianxing.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.ZixunDitailsActivity;
+import www.diandianxing.com.diandianxing.bean.Evebtbus_fragment;
+import www.diandianxing.com.diandianxing.fragment.mainfragment.LuKuangActivity;
 
 /**
  * Created by Mr赵 on 2018/4/9.
@@ -39,7 +44,10 @@ public class Search_adapter extends RecyclerView.Adapter<Search_adapter.ViewHode
     holder.view.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent1 = new Intent(context, ZixunDitailsActivity.class);
+            EventBus.getDefault().postSticky(new Evebtbus_fragment(1));
+            String content = holder.ladel.getText().toString().trim();
+            Intent intent1 = new Intent(context, LuKuangActivity.class);
+            intent1.putExtra("content",content);
             context.startActivity(intent1);
         }
     });

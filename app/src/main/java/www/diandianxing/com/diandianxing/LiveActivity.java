@@ -49,9 +49,6 @@ public class LiveActivity extends AppCompatActivity implements Live_Presenter_in
         //引用
         live_presenter = new Live_presenter(this);
         live_presenter.getpath(Api.token);
-
-
-
     }
     @Override
     public void getsuccess(final Live_Bean live_bean) {

@@ -11,6 +11,10 @@ import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +23,10 @@ import www.diandianxing.com.diandianxing.ShujuBean.LuKuang_Bean;
 import www.diandianxing.com.diandianxing.adapter.LuKuangAdapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.bean.Evebtbus_fragment;
 import www.diandianxing.com.diandianxing.interfase.Lukuang_presenter_interfase;
 import www.diandianxing.com.diandianxing.presenter.Lukuang_presenter;
+import www.diandianxing.com.diandianxing.presenter.Search_lukuang_presenter;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 
@@ -31,12 +37,22 @@ import www.diandianxing.com.diandianxing.util.ToastUtils;
 public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_interfase {
 
 
+    private  String content;
     private SpringView sv;
     private ListView lv;
-    private Lukuang_presenter lukuang_presenter;
+    private Lukuang_presenter lukuang_presenter= new Lukuang_presenter(this);
+    private Search_lukuang_presenter sear_lukuang= new Search_lukuang_presenter(this);
     private int type=1;
     private LuKuangAdapter luKuangAdapter;
     List<LuKuang_Bean.DatasBean>list=new ArrayList<>();
+     private boolean flag=true;
+    private int typeid;
+
+    public LuKuangFragment() {
+    }
+    public LuKuangFragment(String content) {
+        this.content = content;
+    }
     @Override
     protected int setContentView() {
         return R.layout.fragment_shishilukuang;
@@ -47,10 +63,18 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
         View contentView = getContentView();
         sv = contentView.findViewById(R.id.lu_sv);
         lv = contentView.findViewById(R.id.list_view);
-         //创建引用
-        lukuang_presenter = new Lukuang_presenter(this);
-        lukuang_presenter.getpath(type, Api.token);
 
+        if(flag==true){
+            //注册
+            EventBus.getDefault().register(this);
+            flag=false;
+        }
+
+        if(typeid==1){
+            sear_lukuang.getpath(type,Api.token,content);
+        }else{
+            lukuang_presenter.getpath(type, Api.token);
+        }
 
 
         //适配器
@@ -100,7 +124,11 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
         sv.setFooter(new DefaultFooter(getActivity()));
         sv.setHeader(new DefaultHeader(getActivity()));
     }
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void fangfa(Evebtbus_fragment eveen){
+        typeid = eveen.getTypeid();
 
+    }
     @Override
     public void getsuccess(LuKuang_Bean luKuang_bean) {
         if(luKuang_bean.getCode().equals("200")){
@@ -122,5 +150,9 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
     public void onDestroy() {
         super.onDestroy();
         lukuang_presenter.getkong();
+        sear_lukuang.getkong();
+        //注销
+        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().removeAllStickyEvents();
     }
 }

@@ -29,6 +29,7 @@ import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.ShujuBean.Fenlei_Bean;
 import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
+import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 import www.diandianxing.com.diandianxing.interfase.List_view;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.ShareListener;
@@ -41,7 +42,7 @@ import www.diandianxing.com.diandianxing.util.ToastUtils;
 public class MeiJiaodianAdapter extends BaseAdapter {
     private Context context;
     List<Fenlei_Bean.DatasBean>lists;
-    private TextView text_sure;
+
     private ShareListener shareListener;
     private GuanzhuJD guanzhuJD;
     private List_view jiekou;
@@ -126,7 +127,7 @@ public class MeiJiaodianAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 click.guanzhu_click(position);
-                shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+
             }
         });
         //分享
@@ -168,6 +169,15 @@ public class MeiJiaodianAdapter extends BaseAdapter {
         holder.item_recycler.setAdapter(tpAdapter1);
         //添加数据
         Glide.with(context).load(lists.get(position).getPic()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
+           holder.img_tou.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   Intent intent = new Intent(context, MydynamicActivity.class);
+                   intent.putExtra("uid",lists.get(position).getUserId());
+                   context.startActivity(intent);
+               }
+           });
+
         String dateToString = getDateToString(String.valueOf(lists.get(position).getCreateTime() / 1000));
         holder.item_count.setText(lists.get(position).getPostContent());
         holder.text_dengji.setText(lists.get(position).getUserLevel());
@@ -227,41 +237,7 @@ public class MeiJiaodianAdapter extends BaseAdapter {
     }
 
 
-    private void shumaDialog(int grary, int animationStyle) {
-        BaseDialog.Builder builder = new BaseDialog.Builder(context);
-        final BaseDialog dialog = builder.setViewId(R.layout.dialog_guanzhu)
-                //设置dialogpadding
-                .setPaddingdp(0, 10, 0, 10)
-                //设置显示位置
-                .setGravity(grary)
-                //设置动画
-                .setAnimation(animationStyle)
-                //设置dialog的宽高
-                .setWidthHeightpx(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                //设置触摸dialog外围是否关闭
-                .isOnTouchCanceled(false)
-                //设置监听事件
-                .builder();
-        dialog.show();
-        text_sure = dialog.getView(R.id.text_sure);
 
-        TextView text_pause = dialog.getView(R.id.text_pause);
-        //知道了
-        text_sure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        //取消
-        text_pause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
 
 
     private LinearLayout ll_wx,ll_pyq,ll_qq,ll_kj,ll_wb;

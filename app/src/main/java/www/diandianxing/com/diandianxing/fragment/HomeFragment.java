@@ -20,6 +20,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,7 @@ import www.diandianxing.com.diandianxing.ZixunDitailsActivity;
 import www.diandianxing.com.diandianxing.adapter.Homeadapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.ShujuBean.Lunbo_Bean;
+import www.diandianxing.com.diandianxing.bean.Evebtbus_fragment;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaodianActivity;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.LuKuangActivity;
 import www.diandianxing.com.diandianxing.interfase.Zixun_presenterinterfase;
@@ -183,6 +186,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 startActivity(jiao);
                 break;
             case R.id.text_lu:
+                EventBus.getDefault().postSticky(new Evebtbus_fragment(0));
                 Intent lu=new Intent(getActivity(), LuKuangActivity.class);
                 startActivity(lu);
                 break;

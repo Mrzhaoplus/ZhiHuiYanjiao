@@ -11,9 +11,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.ShujuBean.Fenlei_Bean;
+import www.diandianxing.com.diandianxing.ShujuBean.Fensi_Bean;
+import www.diandianxing.com.diandianxing.interfase.GZ_state;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.R;
 
@@ -23,35 +30,28 @@ import www.diandianxing.com.diandianxing.R;
  */
 
 public class MyFansadapter extends RecyclerView.Adapter<MyFansadapter.MyviewHolder> {
-
-       private Context context;
-    private List<String> list=new ArrayList<>();
+    private Context context;
+    private List<Fensi_Bean.DatasBean> list=new ArrayList<>();
     private OnItemClickLister mOnItemClickListener;
     private TextView text_sure;
+    private GZ_state state;
 
-    public MyFansadapter(Context context) {
+    public void getstate(GZ_state state){
+         this.state=state;
+     }
+    public MyFansadapter(Context context, List<Fensi_Bean.DatasBean> list) {
         this.context = context;
-        data();
+        this.list = list;
     }
-
-    private void data() {
-
-        for (int i = 0; i < 10; i++) {
-               list.add("我真的好喜欢你"+i);
-            
-        }
-    }
-
     @Override
     public MyviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         MyviewHolder myviewHolder=new MyviewHolder(LayoutInflater.from(context).inflate(R.layout.recycler_itemfensi,parent,false));
-
         return myviewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final  MyviewHolder holder, int position) {
+    public void onBindViewHolder(final  MyviewHolder holder, final int position) {
         if(mOnItemClickListener!=null){
             holder.itemView.setOnClickListener(  new View.OnClickListener() {
                 @Override
@@ -62,12 +62,19 @@ public class MyFansadapter extends RecyclerView.Adapter<MyFansadapter.MyviewHold
                 }
             });
         }
-            holder.text_username.setText(list.get(position).toString());
+            holder.text_username.setText(list.get(position).getNickName());
+        Glide.with(context).load(list.get(position).getPic()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
+          if(list.get(position).getIsGz()==0){
+                holder.liner_guanzhu.setVisibility(View.VISIBLE);
+          }else if(list.get(position).getIsGz()==1){
+              holder.liner_guanzhu.setVisibility(View.GONE);
+          }
 
         holder.liner_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+
+                 state.getsuccess(position,list.get(position).getIsGz(),list.get(position).getUid());
             }
         });
 
@@ -104,39 +111,5 @@ public class MyFansadapter extends RecyclerView.Adapter<MyFansadapter.MyviewHold
 
     }
 
-    private void shumaDialog(int grary, int animationStyle) {
-        BaseDialog.Builder builder = new BaseDialog.Builder(context);
-        final BaseDialog dialog = builder.setViewId(R.layout.dialog_guanzhu)
-                //设置dialogpadding
-                .setPaddingdp(0, 10, 0, 10)
-                //设置显示位置
-                .setGravity(grary)
-                //设置动画
-                .setAnimation(animationStyle)
-                //设置dialog的宽高
-                .setWidthHeightpx(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                //设置触摸dialog外围是否关闭
-                .isOnTouchCanceled(false)
-                //设置监听事件
-                .builder();
-        dialog.show();
-        text_sure = dialog.getView(R.id.text_sure);
 
-        TextView text_pause = dialog.getView(R.id.text_pause);
-        //知道了
-        text_sure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        //取消
-        text_pause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
 }

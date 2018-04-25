@@ -12,9 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.adapter.Search_adapter;
+import www.diandianxing.com.diandianxing.bean.Evebtbus_fragment;
+import www.diandianxing.com.diandianxing.fragment.mainfragment.LuKuangActivity;
 import www.diandianxing.com.diandianxing.interfase.SouLadel_presenter_interfise;
 import www.diandianxing.com.diandianxing.model.SouLabel_bean;
 import www.diandianxing.com.diandianxing.presenter.SouLabel_Presenter;
@@ -51,10 +55,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         souLabel_presenter = new SouLabel_Presenter(this);
         souLabel_presenter.getpath(Api.token);
 
-
-
-
-
     }
 
 
@@ -65,15 +65,18 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.search:
+                EventBus.getDefault().postSticky(new Evebtbus_fragment(1));
                 //获取输入框内容
                 String content = ed_seach.getText().toString().trim();
                 if (TextUtils.isEmpty(content)) {
-                    Toast.makeText(SearchActivity.this, "输入内容为空", Toast.LENGTH_SHORT).show();
-                } else {
-
-                    Intent intent1 = new Intent(SearchActivity.this, ZixunDitailsActivity.class);
+                    Intent intent1 = new Intent(SearchActivity.this, LuKuangActivity.class);
+                    intent1.putExtra("content",content);
                     startActivity(intent1);
-
+                } else {
+                    Intent intent1 = new Intent(SearchActivity.this, LuKuangActivity.class);
+                    intent1.putExtra("content",content);
+                    startActivity(intent1);
+                    ed_seach.setText("");
                 }
                 break;
         }
@@ -92,9 +95,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         recycler_view.setNestedScrollingEnabled(false);
         Search_adapter search_adapter = new Search_adapter(SearchActivity.this,datas);
         recycler_view.setAdapter(search_adapter);
-
-
-
 
     }
 }

@@ -5,9 +5,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.liaoinstan.springview.container.DefaultFooter;
@@ -28,6 +31,7 @@ import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.ShujuBean.DianzanAndFenxiang_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Fenlei_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.QuxiaozanAndFenxiang_Bean;
+import www.diandianxing.com.diandianxing.ShujuBean.User_guanzhu_Bean;
 import www.diandianxing.com.diandianxing.adapter.MeiJiaodianAdapter;
 import www.diandianxing.com.diandianxing.adapter.onlick;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
@@ -37,12 +41,15 @@ import www.diandianxing.com.diandianxing.interfase.Dianzan_presenter_interfase;
 import www.diandianxing.com.diandianxing.interfase.Fenlei_model_interfase;
 import www.diandianxing.com.diandianxing.interfase.List_view;
 import www.diandianxing.com.diandianxing.interfase.Quxiaozan_presenter_interfase;
+import www.diandianxing.com.diandianxing.interfase.Userguanzhu_presenter_interfase;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
 import www.diandianxing.com.diandianxing.presenter.Dianzan_presenter;
 import www.diandianxing.com.diandianxing.presenter.FenLei_presenter;
 import www.diandianxing.com.diandianxing.presenter.Quxiaozan_presenter;
+import www.diandianxing.com.diandianxing.presenter.User_Guanzhu_presenter;
 import www.diandianxing.com.diandianxing.util.Api;
+import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.SpUtils;
@@ -51,8 +58,7 @@ import www.diandianxing.com.diandianxing.util.ToastUtils;
 /**
  * Created by Mr赵 on 2018/4/3.
  */
-@SuppressLint("ValidFragment")
-public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_interfase, List_view, Dianzan_presenter_interfase, Quxiaozan_presenter_interfase, onlick {
+public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_interfase, List_view, Dianzan_presenter_interfase, Quxiaozan_presenter_interfase, onlick, Userguanzhu_presenter_interfase {
 
     private  int id;
     private ListView lv;
@@ -63,9 +69,14 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
     private int what;
     private int postion;
     private int flag;
-    Dianzan_presenter dianzan_presenter = new Dianzan_presenter(this);
-    Quxiaozan_presenter quxiaozan_presenter = new Quxiaozan_presenter(this);
-    private FenLei_presenter fenLei_presenter;
+    private TextView text_sure;
+    private User_Guanzhu_presenter user_guanzhu_presenter= new User_Guanzhu_presenter(this);
+    private Dianzan_presenter dianzan_presenter= new Dianzan_presenter(this);
+    private Quxiaozan_presenter quxiaozan_presenter= new Quxiaozan_presenter(this);
+    private FenLei_presenter fenLei_presenter= new FenLei_presenter(this);
+
+
+
     public MeiJiaidianFragment(int id) {
         this.id = id;
     }
@@ -104,7 +115,8 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
         /*
         * 引用
         * */
-        fenLei_presenter = new FenLei_presenter(this);
+
+
         fenLei_presenter.getpath(Api.token,id,page);
         /*
         * 刷新
@@ -328,8 +340,6 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
             }
             chowuAdapter.notifyDataSetChanged();
         }
-
-
     }
 
     @Override
@@ -354,11 +364,61 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
        // fenLei_presenter.getkong();
         dianzan_presenter.getkong();
         quxiaozan_presenter.getkong();
+        user_guanzhu_presenter.getkong();
     }
-
     @Override
     public void guanzhu_click(int postion) {
         int userId = list.get(postion).getUserId();
-        Log.i("==============",userId+"");
+        user_guanzhu_presenter.getpath(Api.token,userId);
+    }
+
+
+    @Override
+    public void getsuccess(User_guanzhu_Bean user_guanzhu_bean) {
+        if(user_guanzhu_bean.getCode().equals("200")){
+            shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+        }else if(user_guanzhu_bean.getCode().equals("201")){
+            ToastUtils.showShort(getActivity(),user_guanzhu_bean.getMsg());
+        }else if(user_guanzhu_bean.getCode().equals("203")){
+            ToastUtils.showShort(getActivity(),user_guanzhu_bean.getMsg());
+        }else if(user_guanzhu_bean.getCode().equals("500")){
+            ToastUtils.showShort(getActivity(),user_guanzhu_bean.getMsg());
+        }
+    }
+
+    private void shumaDialog(int grary, int animationStyle) {
+        BaseDialog.Builder builder = new BaseDialog.Builder(getActivity());
+        final BaseDialog dialog = builder.setViewId(R.layout.dialog_guanzhu)
+                //设置dialogpadding
+                .setPaddingdp(0, 10, 0, 10)
+                //设置显示位置
+                .setGravity(grary)
+                //设置动画
+                .setAnimation(animationStyle)
+                //设置dialog的宽高
+                .setWidthHeightpx(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                //设置触摸dialog外围是否关闭
+                .isOnTouchCanceled(false)
+                //设置监听事件
+                .builder();
+        dialog.show();
+        text_sure = dialog.getView(R.id.text_sure);
+
+        TextView text_pause = dialog.getView(R.id.text_pause);
+        //知道了
+        text_sure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        //取消
+        text_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }
