@@ -1,5 +1,6 @@
 package www.diandianxing.com.diandianxing.fragment;
 
+import android.annotation.SuppressLint;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -35,6 +36,7 @@ import www.diandianxing.com.diandianxing.R;
  * author:衣鹏宇(ypu)
  */
 
+@SuppressLint("ValidFragment")
 public class PaikewFragment extends BaseFragment implements View.OnClickListener {
     private Fragment currentf;
     public View rootView;
@@ -57,6 +59,7 @@ public class PaikewFragment extends BaseFragment implements View.OnClickListener
 
     String msg;
 
+    @SuppressLint("ValidFragment")
     public PaikewFragment(String msg){
 
         this.msg=msg;

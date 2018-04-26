@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
+              android:background="@color/white"
     android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_marginLeft="10dp"
@@ -13,7 +14,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="5dp"
-        android:src="@drawable/icon_tou"
         android:layout_width="60dp"
         android:layout_height="60dp" />
     <RelativeLayout
@@ -27,7 +27,7 @@
             android:textColor="@color/black_san"
             android:textSize="16sp"
             android:layout_marginTop="10dp"
-            android:text="我的昵称"
+            android:text=""
             android:id="@+id/text_name"
             android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -35,7 +35,7 @@
             android:id="@+id/da_address"
             android:textSize="14sp"
             android:drawablePadding="10dp"
-            android:text="天安门  12-24"
+            android:text=""
             android:layout_marginTop="5dp"
             android:layout_below="@id/text_name"
             android:layout_width="wrap_content"
@@ -80,11 +80,25 @@
         <TextView
             android:id="@+id/pinglun"
             android:textSize="14sp"
-            android:text="今年买房建议一二线城市，三四线随现..四线城市随现.四线城市垂涎"
-            android:padding="10dp"
+            android:text=""
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_zj"
+        android:background="#fafafa"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:padding="5dp"
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
     <View
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"

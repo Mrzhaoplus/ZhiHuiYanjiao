@@ -475,7 +475,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
                                     JSONObject jo = datas.getJSONObject(i);
 
                                     PingLunInfo pingLunInfo = new PingLunInfo();
-                                    pingLunInfo.id=jo.getString("");
+                                    pingLunInfo.id=jo.getString("id");
                                     pingLunInfo.userId=jo.getString("userId");
                                     pingLunInfo.userName=jo.getString("userName");
                                     pingLunInfo.objId=jo.getString("objId");
@@ -492,7 +492,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
                                         JSONObject jo1 = ja.getJSONObject(j);
                                         CustomReplayList crl = new CustomReplayList();
-                                        crl.id=jo1.getString("");
+                                        crl.id=jo1.getString("id");
                                         crl.commentFatherId=jo1.getString("commentFatherId");
                                         crl.replyId=jo1.getString("replyId");
                                         crl.beReturnedId=jo1.getString("beReturnedId");
@@ -532,9 +532,13 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
 
 
-                                if(jiaoLiuyanAdapter!=null){
-                                    jiaoLiuyanAdapter.notifyDataSetChanged();
+                                if(jiaoLiuyanAdapter==null){
 
+                                    jiaoLiuyanAdapter = new JiaoLiuyanAdapter(getActivity(),list);
+                                    recy_view.setAdapter(jiaoLiuyanAdapter);
+
+                                }else{
+                                    jiaoLiuyanAdapter.notifyDataSetChanged();
                                 }
 
                                 pinglun.setText(allCount+"评论");
@@ -896,7 +900,13 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacks(runnable);
+        if(pk.imagesUrl.length()>0) {//轮播图
+
+
+
+        }else{
+            handler.removeCallbacks(runnable);
+        }
     }
 
     private LinearLayout ll_wx,ll_pyq,ll_qq,ll_kj,ll_wb;

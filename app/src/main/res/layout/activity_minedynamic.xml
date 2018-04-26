@@ -26,13 +26,14 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="220dp">
-                    <RelativeLayout
+                    <ImageView
                         android:id="@+id/rl_bg"
-                        android:background="@drawable/icon_mine"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/icon_mine"
                         android:layout_width="match_parent"
                         android:layout_height="180dp">
 
-                    </RelativeLayout>
+                    </ImageView>
                     <ImageView
                         android:id="@+id/img_tou"
                         android:layout_marginLeft="20dp"
@@ -66,6 +67,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/imageView2" />
                         <TextView
+                            android:id="@+id/tv_zy_xq"
                             android:textColor="@color/system_bar_color"
                             android:textSize="5sp"
                             android:text="1"
@@ -86,7 +88,7 @@
                     <TextView
                         android:id="@+id/text_name"
                         android:textColor="@color/black_san"
-                        android:text="琉璃余下的女孩"
+                        android:text=""
                         android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -114,7 +116,7 @@
                                 android:layout_gravity="center"
                                 android:textColor="@color/bg_color"
                                 android:textSize="17sp"
-                                android:text="36"
+                                android:text="0"
                                 android:id="@+id/guan_num"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
@@ -137,7 +139,7 @@
                                 android:layout_gravity="center"
                                 android:textColor="@color/bg_color"
                                 android:textSize="17sp"
-                                android:text="25"
+                                android:text="0"
                                 android:id="@+id/fen_num"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
@@ -161,7 +163,7 @@
                                 android:layout_gravity="center"
                                 android:textColor="@color/bg_color"
                                 android:textSize="17sp"
-                                android:text="40"
+                                android:text="0"
                                 android:id="@+id/collect_num"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
@@ -186,7 +188,7 @@
                         android:paddingBottom="10dp"
                         android:paddingLeft="10dp"
                         android:textSize="15sp"
-                        android:text="简介:若想遇到一个和你同行的人，你必须先上路，才可以..."
+                        android:text=""
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -217,7 +219,7 @@
                             android:padding="8dp"
                             android:textColor="@color/text_orage"
                             android:textSize="16sp"
-                            android:text="帖子（12）"
+                            android:text="帖子（0）"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <View
@@ -243,7 +245,7 @@
                             android:padding="8dp"
                             android:textColor="@color/black_san"
                             android:textSize="16sp"
-                            android:text="动态（20）"
+                            android:text="动态（0）"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <View

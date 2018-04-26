@@ -22,17 +22,19 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_nian"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="15"
+                android:text=""
                 android:textSize="16sp"
                 android:textColor="#FFFF6602"/>
 
 
             <TextView
+                android:id="@+id/tv_yue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12月"
+                android:text=""
                 android:textColor="#999"/>
 
         </LinearLayout>
@@ -82,7 +84,7 @@
                     android:lineSpacingMultiplier="1.2"
                     android:textColor="@color/black_san"
                     android:textSize="14sp"
-                    android:text="迪迪热巴和关晓彤机场对比，一个美上天一个涂掉查，鹿晗哭了"
+                    android:text=""
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -130,7 +132,7 @@
                     android:drawablePadding="10dp"
                     android:drawableLeft="@drawable/icon_collect"
                     android:padding="10dp"
-                    android:text="收藏"
+                    android:text="0"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
                 <TextView
@@ -141,7 +143,7 @@
                     android:drawablePadding="10dp"
                     android:drawableLeft="@drawable/icon_dianzan"
                     android:padding="10dp"
-                    android:text="点赞"
+                    android:text="0"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
             </LinearLayout>

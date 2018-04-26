@@ -2,10 +2,12 @@ package www.diandianxing.com.diandianxing.fragment.mainfragment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -147,6 +150,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
             text_name.setText(guanzhuJD.userName);
             da_address.setText(MyUtils.stampToDate(guanzhuJD.updateTime)+" "+guanzhuJD.address);
             text_dengji.setText(guanzhuJD.userLevel);
+            Log.e("TAG","关注是否：：："+guanzhuJD.is_focus);
             if(Integer.parseInt(guanzhuJD.is_focus)==0){
                 rela_guanzhu.setVisibility(View.VISIBLE);
             }else{
@@ -195,6 +199,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
         text_share.setOnClickListener(this);
         img_collect.setOnClickListener(this);
         text_zan.setOnClickListener(this);
+        button_fabu.setOnClickListener(this);
         if(guanzhuJD!=null){
             finishFreshAndLoad();
         }
@@ -257,6 +262,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.img_tou:
                 Intent intent = new Intent(JiaoDetailActivity.this, MydynamicActivity.class);
+                intent.putExtra("uid",guanzhuJD.userId);
                 startActivity(intent);
                 break;
             case R.id.tv_jdxq_gz:
@@ -287,9 +293,68 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
                 }
 
                 break;
+            case R.id.button_fabu:
+
+                content=ed_text.getText().toString().trim();
+
+                if(content!=null&&content.length()>0){
+
+                    networkFB();
+
+                }else {
+                    Toast.makeText(JiaoDetailActivity.this,"请输入评论内容",Toast.LENGTH_SHORT).show();
+                }
+
+                break;
         }
     }
 
+
+    private String content="";
+
+    private void networkFB() {
+
+        HttpParams params = new HttpParams();
+        params.put("objId", guanzhuJD.id);
+//
+        params.put("content", content);
+
+        params.put("objType",0);
+
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/isertCommentFather")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "数据" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                if (imm != null) {
+                                    imm.hideSoftInputFromWindow(ed_text.getWindowToken(), 0);
+                                }
+
+                                ed_text.setText("");
+
+                            } else {
+                                Toast.makeText(JiaoDetailActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
 
     private void network(int objId , int obj_type, final int operation_type) {
 
@@ -450,7 +515,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
                                     JSONObject jo = datas.getJSONObject(i);
 
                                     PingLunInfo pingLunInfo = new PingLunInfo();
-                                    pingLunInfo.id=jo.getString("");
+                                    pingLunInfo.id=jo.getString("id");
                                     pingLunInfo.userId=jo.getString("userId");
                                     pingLunInfo.userName=jo.getString("userName");
                                     pingLunInfo.objId=jo.getString("objId");
@@ -467,7 +532,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 
                                         JSONObject jo1 = ja.getJSONObject(j);
                                         CustomReplayList crl = new CustomReplayList();
-                                        crl.id=jo1.getString("");
+                                        crl.id=jo1.getString("id");
                                         crl.commentFatherId=jo1.getString("commentFatherId");
                                         crl.replyId=jo1.getString("replyId");
                                         crl.beReturnedId=jo1.getString("beReturnedId");

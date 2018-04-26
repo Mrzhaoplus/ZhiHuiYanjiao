@@ -1,10 +1,12 @@
 package www.diandianxing.com.diandianxing.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2018/4/24.
  */
 
-public class UserInfo {
+public class UserInfo implements Serializable{
 
 
     public String  dtNum;

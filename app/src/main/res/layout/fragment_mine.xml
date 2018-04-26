@@ -21,9 +21,16 @@
         android:layout_width="match_parent"
         android:layout_height="200dp">
         <RelativeLayout
-            android:background="@drawable/icon_mine"
             android:layout_width="match_parent"
             android:layout_height="180dp">
+
+            <ImageView
+                android:id="@+id/iv_bg_my"
+                android:src="@drawable/icon_mine"
+                android:layout_width="match_parent"
+                android:scaleType="fitXY"
+                android:layout_height="match_parent"/>
+
             <RelativeLayout
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"

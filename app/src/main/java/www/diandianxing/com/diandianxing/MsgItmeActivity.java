@@ -48,7 +48,6 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
 
     private int pageNo=1;
     MsgitmeAdapter msgitmeAdapter;
-    private TextView tv_fb;
 
 
     @Override
@@ -63,7 +62,6 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
         img_back = (ImageView) findViewById(R.id.img_back);
         list_view = (ListView) findViewById(R.id.list_view);
         sv_sj= (SpringView) findViewById(R.id.sv_sj);
-        tv_fb= (TextView) findViewById(R.id.tv_fb);
         initRefresh();
 
         img_back.setOnClickListener(this);
@@ -84,14 +82,14 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        tv_fb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-
-            }
-        });
+//        tv_fb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//
+//
+//            }
+//        });
 
         list_view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

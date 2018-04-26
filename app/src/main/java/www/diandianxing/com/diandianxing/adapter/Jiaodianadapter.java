@@ -209,6 +209,7 @@ holder.ll_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(context,MydynamicActivity.class);
+                intent.putExtra("uid",guanzhuJD.userId);
                 context.startActivity(intent);
             }
         });

@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,16 +21,26 @@ import com.luck.picture.lib.compress.Luban;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.HttpParams;
+import com.lzy.okgo.model.Response;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.adapter.GridViewAddImgesAdpter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.bean.FragEventBug;
+import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaodianActivity;
+import www.diandianxing.com.diandianxing.util.Api;
+import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyGridView;
 import www.diandianxing.com.diandianxing.R;
@@ -102,9 +115,27 @@ public class IssueReportActivity extends BaseActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.wenti_put:
-                EventBus.getDefault().postSticky(new FragEventBug(3, null));
-                finish();
+
+                content=et_wtnr.getText().toString().trim();
+
+                if(content!=null&&content.length()>0){
+
+                    if(listAll.size()>0){
+                        shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+                        network();
+                    }else{
+                        Toast.makeText(IssueReportActivity.this,"请选择图片",Toast.LENGTH_SHORT).show();
+                    }
+
+                }else{
+                    Toast.makeText(IssueReportActivity.this,"请输入内容",Toast.LENGTH_SHORT).show();
+                }
+
+
                 break;
+
+
+
         }
     }
 
@@ -168,6 +199,78 @@ public class IssueReportActivity extends BaseActivity implements View.OnClickLis
                     break;
             }
         }
+    }
+
+    private String content="";
+
+    private void network() {
+
+        List<File> fileList = new ArrayList<>();
+        for(int i=0;i<listAll.size();i++){
+
+            File file = new File(listAll.get(i).getPath());
+
+            fileList.add(file);
+
+        }
+
+        HttpParams params = new HttpParams();
+        params.put("content", content);
+        params.putFileParams("images", fileList);
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/feedBack")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        dialog.dismiss();
+                        String body = response.body();
+                        Log.d("TAG", "更新图片上传成功：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+
+                                EventBus.getDefault().postSticky(new FragEventBug(3, null));
+                                finish();
+
+                            } else {
+                                Toast.makeText(IssueReportActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+    BaseDialog dialog;
+    /*
+* 对话框
+* */
+    private void shumaDialog(int grary, int animationStyle) {
+        BaseDialog.Builder builder = new BaseDialog.Builder(this);
+        dialog = builder.setViewId(R.layout.view_tips_loading)
+                //设置dialogpadding
+                .setPaddingdp(0, 10, 0, 10)
+                //设置显示位置
+                .setGravity(grary)
+                //设置动画
+                .setAnimation(animationStyle)
+                //设置dialog的宽高
+                .setWidthHeightpx(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                //设置触摸dialog外围是否关闭
+                .isOnTouchCanceled(false)
+                //设置监听事件
+                .builder();
+        dialog.show();
+        TextView tips_loading_msg = dialog.getView(R.id.tips_loading_msg);
+        tips_loading_msg.setText("提交中...");
     }
 
 }

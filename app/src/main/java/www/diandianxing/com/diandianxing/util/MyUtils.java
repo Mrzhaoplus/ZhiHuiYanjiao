@@ -48,6 +48,15 @@ public class MyUtils {
         return res;
     }
 
+    public static String stampNYToDate(String s) {
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+
     public static String dateDiff(String startTime, String endTime, String format,String data) {
         // 按照传入的格式生成一个simpledateformate对象
         SimpleDateFormat sd = new SimpleDateFormat(format);

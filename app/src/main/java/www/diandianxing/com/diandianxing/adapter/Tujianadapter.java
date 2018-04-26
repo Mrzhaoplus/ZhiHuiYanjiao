@@ -74,7 +74,7 @@ public class Tujianadapter extends BaseAdapter {
         Glide.with(context).load(paiKeInfo.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.tui_tou);
 
 
-        holder.tui_zan.setText(paiKeInfo.collectCount);
+        holder.tui_zan.setText(paiKeInfo.dianZanCount);
 
 
 

@@ -142,6 +142,7 @@ public class ZiXunFragment extends BaseFragment implements Zixun_presenterinterf
         if(zixun.getCode().equals("200")){
             List<zixun_Bean.DatasBean> datas = zixun.getDatas();
             if(typeNo>1){
+                Log.e("TAG","=====sj========="+datas.size());
                 if(datas.size()>0){
                     list.addAll(datas);
                 }else{
@@ -150,6 +151,7 @@ public class ZiXunFragment extends BaseFragment implements Zixun_presenterinterf
             }else{
                 list.addAll(datas);
             }
+
             ziXunAdapter.notifyDataSetChanged();
         }
     }

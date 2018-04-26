@@ -24,8 +24,11 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.widget.SpringView;
@@ -35,8 +38,15 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.decoration.RecycleViewDivider;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.HttpParams;
+import com.lzy.okgo.model.Response;
 import com.umeng.socialize.UMShareAPI;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.zackratos.ultimatebar.UltimateBar;
 
 import java.io.File;
@@ -47,13 +57,21 @@ import java.util.List;
 
 import www.diandianxing.com.diandianxing.Login.UmshareActivity;
 import www.diandianxing.com.diandianxing.MyCollectionActivity;
+import www.diandianxing.com.diandianxing.ReleaseShootoffActivity;
 import www.diandianxing.com.diandianxing.TopRuleActivity;
 import www.diandianxing.com.diandianxing.VideoActivity;
 import www.diandianxing.com.diandianxing.adapter.DongTaiAdapter;
 import www.diandianxing.com.diandianxing.adapter.TieziAdapter;
+import www.diandianxing.com.diandianxing.adapter.Tuijiantieadapter;
+import www.diandianxing.com.diandianxing.adapter.Tujianadapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
+import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
+import www.diandianxing.com.diandianxing.bean.UserInfo;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
+import www.diandianxing.com.diandianxing.my.MyActivityActivity;
 import www.diandianxing.com.diandianxing.my.PersonActivity;
+import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.SharingPop;
 import www.diandianxing.com.diandianxing.util.ZDPop;
@@ -84,9 +102,9 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
     private LinearLayout liner_dongtai;
     private SpringView sv_tz;
     private RecyclerView recy_card;
-    private RelativeLayout rl_bg;
-    ArrayList<String> mList=new ArrayList<>();
-
+    private ImageView rl_bg;
+    ArrayList<GuanzhuJD> mList=new ArrayList<>();
+    private List<PaiKeInfo> list = new ArrayList<>();
     private ZDPop zdPop;
     private SharingPop sharingPop;
     private TextView tv_jfzd,tv_sc,tv_close;
@@ -101,7 +119,15 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
     private NestedScrollView sv_zy;
     private int height;
     private RelativeLayout rl_bt;
+    private TextView tv_zy_xq;
+    private UserInfo userInfo;
+    private File file;
+    private int pageNo=1;
+    private TieziAdapter tieziAdapter;
+    private DongTaiAdapter tagAdapter;
 
+    private int qh=0;
+    private String uid;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,13 +156,16 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
         text_pin = (TextView) findViewById(R.id.text_pin);
         recy_card= (RecyclerView) findViewById(R.id.recy_card);
         sv_tz= (SpringView) findViewById(R.id.sv_tz);
-        rl_bg= (RelativeLayout) findViewById(R.id.rl_bg);
+        rl_bg= (ImageView) findViewById(R.id.rl_bg);
         v1 = (View) findViewById(R.id.v1);
         rl_bt= (RelativeLayout) findViewById(R.id.rl_bt);
         liner_tiezi = (LinearLayout) findViewById(R.id.liner_tiezi);
         text_zan = (TextView) findViewById(R.id.text_zan);
+        tv_zy_xq= (TextView) findViewById(R.id.tv_zy_xq);
         v2 = (View) findViewById(R.id.v2);
         liner_dongtai = (LinearLayout) findViewById(R.id.liner_dongtai);
+
+        userInfo= (UserInfo) getIntent().getSerializableExtra("userInfo");
         ViewTreeObserver vto = rl_bg.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -151,37 +180,32 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
             tv_dt_title.setText(title);
         }
 
+
+
         if("我的主页".equals(title)){
             iv_gz.setVisibility(View.INVISIBLE);
             img_tou.setOnClickListener(this);
             rl_bg.setOnClickListener(this);
-        }
+            uid=Api.userid;
+        }else{
 
+
+            uid=getIntent().getStringExtra("uid");
+
+
+
+        }
+        networkGR();
+        finishFreshAndLoad();
         zdPop = new ZDPop(MydynamicActivity.this,R.layout.zd_pop_item_view);
         sharingPop = new SharingPop(MydynamicActivity.this,R.layout.sharing_pop_item_view);
         recycleViewDivider = new RecycleViewDivider(MydynamicActivity.this, GridLayoutManager.HORIZONTAL, 5, getResources().getColor(R.color.transparent));
           /*
            设置监听
          */
-        if (mList.size()<=0){
-            mList.add("");
-            mList.add("");
-            mList.add("");
-            mList.add("");
-            mList.add("");
-        }
         recy_card.setLayoutManager(new LinearLayoutManager(MydynamicActivity.this));
         recy_card.setNestedScrollingEnabled(false);
-        TieziAdapter tieziAdapter= new TieziAdapter(R.layout.tz_item_view, mList);
-        recy_card.setAdapter(tieziAdapter);
 
-        if("我的主页".equals(title)){
-            tieziAdapter.setXS(true);
-            tieziAdapter.notifyDataSetChanged();
-        }
-
-        tieziAdapter.setOnDianClickListener(dianClickListener);
-        tieziAdapter.SetOnItemClickListener(onItemClickListener);
         initRefresh();
         liner_dongtai.setOnClickListener(this);
         liner_tiezi.setOnClickListener(this);
@@ -215,7 +239,9 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
         @Override
         public void ItemClick(View view, int position) {
 
+
             Intent intent=new Intent(MydynamicActivity.this,JiaoDetailActivity.class);
+            intent.putExtra("guanzhu",mList.get(position));
             startActivity(intent);
 
         }
@@ -391,12 +417,24 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                 recy_card.setLayoutManager(new LinearLayoutManager(MydynamicActivity.this));
                 recy_card.removeItemDecoration(recycleViewDivider);
                 recy_card.setNestedScrollingEnabled(false);
-                TieziAdapter tieziAdapter= new TieziAdapter(R.layout.tz_item_view, mList);
-                recy_card.setAdapter(tieziAdapter);
-                if("我的主页".equals(title)){
-                    tieziAdapter.setXS(true);
-                    tieziAdapter.notifyDataSetChanged();
+//                TieziAdapter tieziAdapter= new TieziAdapter(R.layout.tz_item_view, mList);
+//                recy_card.setAdapter(tieziAdapter);
+//                if("我的主页".equals(title)){
+//                    tieziAdapter.setXS(true);
+//                    tieziAdapter.notifyDataSetChanged();
+//                }
+
+                qh=0;
+                pageNo=1;
+                mList.clear();
+                list.clear();
+                if(tagAdapter!=null){
+                    tagAdapter.notifyDataSetChanged();
                 }
+                tieziAdapter=null;
+                finishFreshAndLoad();
+
+
                 break;
 
             case R.id.liner_dongtai://动态
@@ -411,11 +449,17 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
 //                recy_card.addItemDecoration(new GridDivider(MydynamicActivity.this, 20, this.getResources().getColor(R.color.white)));
                 recy_card.setNestedScrollingEnabled(false);
 
-                final DongTaiAdapter tagAdapter  = new DongTaiAdapter(R.layout.tui_recyitem, mList);
+                qh=1;
 
-                recy_card.setAdapter(tagAdapter);
+                pageNo=1;
+                list.clear();
+                mList.clear();
+                if(tieziAdapter!=null){
+                    tieziAdapter.notifyDataSetChanged();
+                }
+                tagAdapter=null;
+                finishFreshAndLoad();
 
-                tagAdapter.setOnItemClickListener(onItemClickListener1);
                 break;
 
             case R.id.tv_jfzd:
@@ -637,11 +681,10 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                     // 图片选择结果回调
                     selectList = PictureSelector.obtainMultipleResult(data);
                     cutPath = selectList.get(0).getCutPath();
-                    File file = new File(cutPath);
+                    file = new File(cutPath);
                     Log.d("TAg",cutPath);
+                    networkImg();
 //                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                    Drawable fromPath = Drawable.createFromPath(cutPath);
-                    rl_bg.setBackground(fromPath);
                     /*
                        质量压缩
                      */
@@ -677,12 +720,17 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                 // 网络请求;
                 // mStarFragmentPresenter.queryData();
                 //一分钟之后关闭刷新的方法
+
+                mList.clear();
+                pageNo=1;
                 finishFreshAndLoad();
+
             }
 
             @Override
             public void onLoadmore() {
 //                Toast.makeText(mContext,"玩命加载中...",Toast.LENGTH_SHORT).show();
+                pageNo++;
                 finishFreshAndLoad();
             }
         });
@@ -695,6 +743,18 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
+
+                if(qh==0){
+                    networkTiezi();
+
+                }else if(qh==1){
+
+                    networkPaiKe();
+
+                }
+
+
                 sv_tz.onFinishFreshAndLoad();
             }
         }, 2000);
@@ -763,5 +823,311 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                 .builder();
         dialog.show();
     }
+
+    private void networkImg() {
+        HttpParams params = new HttpParams();
+        params.put("file", file);
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/user/backimagebyuser")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        Log.d("TAG", "上传图片成功：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+
+                            if (code == 200) {
+
+                                Drawable fromPath = Drawable.createFromPath(cutPath);
+                                rl_bg.setBackground(fromPath);
+
+                            } else {
+                                Toast.makeText(MydynamicActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+
+    private void networkTiezi() {
+        HttpParams params = new HttpParams();
+
+        params.put("userId", uid);
+        params.put("pageNo", pageNo);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/user/postbyuser")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        Log.d("TAG", "帖子成功：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            JSONArray datas = jsonobj.getJSONArray("datas");
+                            List<GuanzhuJD> guanzhuJDs = new ArrayList<GuanzhuJD>();
+                            if (code == 200) {
+                                for(int i=0;i<datas.length();i++){
+
+                                    JSONObject jo = datas.getJSONObject(i);
+
+                                    GuanzhuJD guanzhu = new GuanzhuJD();
+                                    guanzhu.id=jo.getString("id");
+                                    guanzhu.userId=jo.getString("userId");
+                                    guanzhu.postType=jo.getString("postType");
+                                    guanzhu.postTitle=jo.getString("postTitle");
+                                    guanzhu.postContent=jo.getString("postContent");
+                                    guanzhu.createTime=jo.getString("createTime");
+                                    guanzhu.updateTime=jo.getString("updateTime");
+                                    guanzhu.address=jo.getString("address");
+                                    guanzhu.postFlage=jo.getString("postFlage");
+                                    guanzhu.postStatus=jo.getString("postStatus");
+                                    guanzhu.isDeleted=jo.getString("isDeleted");
+                                    guanzhu.userName=jo.getString("userName");
+                                    guanzhu.userLevel=jo.getString("userLevel");
+                                    guanzhu.postImge=jo.getString("postImge");
+                                    guanzhu.commentCount=jo.getString("commentCount");
+                                    guanzhu.dianZanCount=jo.getString("dianZanCount");
+                                    guanzhu.collectCount=jo.getString("collectCount");
+                                    guanzhu.relayCount=jo.getString("relayCount");
+                                    guanzhu.pic=jo.getString("pic");
+                                    guanzhu.is_collect=jo.getString("is_collect");
+                                    guanzhu.is_zan=jo.getString("is_zan");
+                                    guanzhu.is_fx=jo.getString("is_fx");
+                                    guanzhu.is_focus=jo.getString("is_focus");
+                                    JSONArray ja=jo.getJSONArray("imagesList");
+
+                                    guanzhu.imagesList = new ArrayList<String>();
+                                    for(int j=0;j<ja.length();j++){
+                                        guanzhu.imagesList.add(ja.getString(j));
+                                    }
+
+                                    guanzhuJDs.add(guanzhu);
+
+
+                                }
+                                if(pageNo>1){
+
+                                    if(guanzhuJDs.size()<=0){
+
+                                        Toast.makeText(MydynamicActivity.this,Api.TOAST,Toast.LENGTH_SHORT).show();
+
+                                    }else{
+                                        mList.addAll(guanzhuJDs);
+                                    }
+
+                                }else{
+
+                                    mList.addAll(guanzhuJDs);
+
+                                }
+
+                                if(tieziAdapter==null){
+                                    tieziAdapter =new TieziAdapter(R.layout.tz_item_view,mList);
+                                    recy_card.setAdapter(tieziAdapter);
+                                    if("我的主页".equals(title)){
+                                        tieziAdapter.setXS(true);
+                                        tieziAdapter.notifyDataSetChanged();
+                                    }
+                                    tieziAdapter.setOnDianClickListener(dianClickListener);
+                                    tieziAdapter.SetOnItemClickListener(onItemClickListener);
+                                }else{
+
+                                    if("我的主页".equals(title)){
+                                        tieziAdapter.setXS(true);
+
+                                    }
+                                    tieziAdapter.notifyDataSetChanged();
+                                }
+
+
+
+                            } else {
+                                Toast.makeText(MydynamicActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+
+    private void networkPaiKe() {
+        HttpParams params = new HttpParams();
+
+            params.put("userId", uid);
+        params.put("pageNo", pageNo);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/user/paikebyuser")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        Log.d("TAG", "拍客成功：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            JSONArray datas = jsonobj.getJSONArray("datas");
+                            List<PaiKeInfo> paiKeInfos = new ArrayList<PaiKeInfo>();
+                            if (code == 200) {
+                                for (int i = 0; i < datas.length(); i++) {
+
+                                    JSONObject jo = datas.getJSONObject(i);
+                                    PaiKeInfo paiKeInfo = new PaiKeInfo();
+                                    paiKeInfo.id = jo.getString("id");
+                                    paiKeInfo.imageUrl = jo.getString("imageUrl");
+                                    paiKeInfo.mvUrl = jo.getString("mvUrl");
+                                    paiKeInfo.userId = jo.getString("userId");
+                                    paiKeInfo.address = jo.getString("address");
+                                    paiKeInfo.userName = jo.getString("userName");
+                                    paiKeInfo.userLevel = jo.getString("userLevel");
+                                    paiKeInfo.isRecommend = jo.getString("isRecommend");
+                                    paiKeInfo.pkOperation = jo.getString("pkOperation");
+                                    paiKeInfo.createTime = jo.getString("createTime");
+                                    paiKeInfo.isDeleted = jo.getString("isDeleted");
+                                    paiKeInfo.pkTitle = jo.getString("pkTitle");
+                                    paiKeInfo.imagesUrl = jo.getString("imagesUrl");
+                                    paiKeInfo.pkContent = jo.getString("pkContent");
+                                    paiKeInfo.commentCount = jo.getString("commentCount");
+                                    paiKeInfo.dianZanCount = jo.getString("dianZanCount");
+                                    paiKeInfo.collectCount = jo.getString("collectCount");
+                                    paiKeInfo.relayCount = jo.getString("relayCount");
+                                    paiKeInfo.nickName = jo.getString("nickName");
+                                    paiKeInfo.pic = jo.getString("pic");
+                                    paiKeInfo.nickName = jo.getString("nickName");
+
+
+                                    paiKeInfo.paths = new ArrayList<String>();
+                                    if (paiKeInfo.imagesUrl.length() > 0) {
+
+                                        JSONArray ja = jo.getJSONArray("paths");
+                                        for (int j = 0; j < ja.length(); j++) {
+
+                                            paiKeInfo.paths.add(ja.getString(j));
+
+                                        }
+
+                                    }
+
+                                    paiKeInfos.add(paiKeInfo);
+
+
+                                }
+                                if (pageNo > 1) {
+
+                                    if (paiKeInfos.size() <= 0) {
+
+                                        Toast.makeText(MydynamicActivity.this, Api.TOAST, Toast.LENGTH_SHORT).show();
+
+                                    } else {
+                                        list.addAll(paiKeInfos);
+                                    }
+                                } else {
+
+                                    list.addAll(paiKeInfos);
+
+                                }
+
+                                Log.e("TAG", "推荐数据：：" + list.size());
+
+                                if (tagAdapter == null) {
+                                    tagAdapter = new DongTaiAdapter(R.layout.tui_recyitem, list);
+
+                                    recy_card.setAdapter(tagAdapter);
+
+                                    tagAdapter.setOnItemClickListener(onItemClickListener1);
+                                } else {
+
+                                    tagAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+
+    private void networkGR() {
+        HttpParams params = new HttpParams();
+
+        params.put("userId", uid);
+        params.put("myuserId", Api.userid);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/user/personalcenter")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        Log.d("TAG", "个人成功：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            JSONObject datas = jsonobj.getJSONObject("datas");
+                            if (code == 200) {
+
+                                JSONObject jo1 = datas.getJSONObject("user");
+                                JSONObject jo2 = datas.getJSONObject("userinfo");
+
+                                text_name.setText(jo1.getString("nickname"));
+                                Glide.with(MydynamicActivity.this).load(jo2.getString("pic")).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(img_tou);
+                                tv_zy_xq.setText(jo2.getString("userLevel"));
+                                guan_num.setText(datas.getString("gznum"));
+                                fen_num.setText(datas.getString("fsnum"));
+                                collect_num.setText(datas.getString("dznum"));
+
+                                Log.e("TAG","背景图片：：："+datas.getString("imageUrl"));
+                                Glide.with(MydynamicActivity.this).load(datas.getString("imageUrl")).into(rl_bg);
+
+
+                                if(Integer.parseInt(jo2.getString("userSex"))==0){//男
+
+                                    text_sex.setImageResource(R.drawable.icon_boy);
+
+
+                                }else{
+
+                                    text_sex.setImageResource(R.drawable.icon_girl);
+
+                                }
+
+                                text_pin.setText("帖子（"+datas.getString("tznum")+"）");
+
+                                text_zan.setText("动态（"+datas.getString("pknum")+"）");
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
 
 }

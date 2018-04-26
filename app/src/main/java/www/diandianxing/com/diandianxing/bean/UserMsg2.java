@@ -1,10 +1,12 @@
 package www.diandianxing.com.diandianxing.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2018/4/24.
  */
 
-public class UserMsg2 {
+public class UserMsg2 implements Serializable{
 
     public String id;
     public String uid;

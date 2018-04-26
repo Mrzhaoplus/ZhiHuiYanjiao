@@ -76,6 +76,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     private TextView tv_zy_name;
     private ImageView iv_sex;
     private TextView tv_zy_dj;
+    private ImageView iv_bg_my;
     @Override
     protected int setContentView() {
 
@@ -106,6 +107,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         tv_zy_name=contentView.findViewById(R.id.tv_zy_name);
         iv_sex=contentView.findViewById(R.id.iv_sex);
         tv_zy_dj=contentView.findViewById(R.id.tv_zy_dj);
+        iv_bg_my=contentView.findViewById(R.id.iv_bg_my);
         this.real_kefu = (RelativeLayout) contentView.findViewById(R.id.real_kefu);
         this.text_yaoqing = (TextView) contentView.findViewById(R.id.text_yaoqing);
         this.real_yaoqing = (RelativeLayout) contentView.findViewById(R.id.real_yaoqing);
@@ -141,8 +143,12 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                  startActivity(intent1);
                  break;
              case R.id.text_dongtai:
-                  Intent intent2=new Intent(getActivity(), MydynamicActivity.class);
-                 startActivity(intent2);
+                 if(userInfo!=null){
+                     Intent intent2=new Intent(getActivity(), MydynamicActivity.class);
+                     intent2.putExtra("title","我的主页");
+                     intent2.putExtra("userInfo",userInfo);
+                     startActivity(intent2);
+                 }
                  break;
              case R.id.text_collect:
                  Intent intent3=new Intent(getActivity(), MyCollectionActivity.class);
@@ -153,9 +159,12 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                  startActivity(intent4);
                  break;
              case R.id.iv_grtx:
-                 Intent intent5=new Intent(getActivity(), MydynamicActivity.class);
-                 intent5.putExtra("title","我的主页");
-                 startActivity(intent5);
+                if(userInfo!=null){
+                         Intent intent5=new Intent(getActivity(), MydynamicActivity.class);
+                         intent5.putExtra("title","我的主页");
+                    intent5.putExtra("userInfo",userInfo);
+                         startActivity(intent5);
+                }
                  break;
              case R.id.real_car:
                  Intent intent6=new Intent(getActivity(),JourActivity.class);
@@ -220,7 +229,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         dialog.show();
     }
 
-
+    UserInfo userInfo;
     private void network() {
 
         HttpParams params = new HttpParams();
@@ -241,7 +250,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                             JSONObject datas = jsonobj.getJSONObject("datas");
                             if (code == 200) {
 
-                                UserInfo userInfo = new UserInfo();
+                                userInfo = new UserInfo();
                                 userInfo.dtNum=datas.getString("dtNum");
                                 userInfo.scnum=datas.getString("scnum");
                                 userInfo.gznum=datas.getString("gznum");
@@ -300,6 +309,18 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                                 tv_zy_name.setText(userInfo.userMsg1.nickname);
                                 tv_zy_dj.setText(userInfo.userMsg2.userLevel);
 
+                                if(Integer.parseInt(jo2.getString("userSex"))==0){//男
+
+                                    iv_sex.setImageResource(R.drawable.icon_boy);
+
+
+                                }else{
+
+                                    iv_sex.setImageResource(R.drawable.icon_girl);
+
+                                }
+
+                                Glide.with(getActivity()).load(datas.getString("imageurl")).into(iv_bg_my);
 
                             } else {
                                 Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
