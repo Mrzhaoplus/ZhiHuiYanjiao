@@ -18,8 +18,8 @@ public class Zan_Msg_presenter implements Zan_msg_model_interfase {
         this.jiekou=jiekou;
         zan_msg_model = new Zan_Msg_model(this);
     }
-    public void getpath(String token,int type){
-        zan_msg_model.getpath(token,type);
+    public void getpath(String token,int type,int pageNo){
+        zan_msg_model.getpath(token,type,pageNo);
     }
     public void getkong(){
        if(jiekou!=null){

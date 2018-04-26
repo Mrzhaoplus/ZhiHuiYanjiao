@@ -19,8 +19,8 @@ public class Zan_Msg_model {
         this.jiekou=jiekou;
 
     }
-    public void getpath(String token,int type){
-        Observable<Zan_msg_Bean> zan_msg = MyRetrofit.getSerViceAPI().zan_msg(token, type);
+    public void getpath(String token,int type,int pageNo){
+        Observable<Zan_msg_Bean> zan_msg = MyRetrofit.getSerViceAPI().zan_msg(token, type,pageNo);
         zan_msg.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Zan_msg_Bean>() {
                     @Override

@@ -18,8 +18,8 @@ public class Fensi_presenter implements FenSi_model_interfase {
         this.jiekou=jiekou;
         fensi_model = new Fensi_model(this);
     }
-    public void getpath(int pageNo,String uid){
-        fensi_model.getpath(pageNo,uid);
+    public void getpath(int pageNo,String userid,String uid){
+        fensi_model.getpath(pageNo,userid,uid);
     }
     public void getkong(){
        if(jiekou!=null){

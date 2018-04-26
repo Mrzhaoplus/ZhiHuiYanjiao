@@ -40,7 +40,7 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
     private SpringView springView;
     private int pageNo=1;
     private GZ_person_presenter gz_person_presenter = new GZ_person_presenter(this);
-    List<GZ_person_Bean.DatesBean>list=new ArrayList<>();
+    List<GZ_person_Bean.DatasBean>list=new ArrayList<>();
     private Myfollowadapter myfollowadapter;
     private TextView perpho;
 
@@ -53,7 +53,6 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
-
         include_back = (ImageView) findViewById(R.id.include_back);
         recycle_guan = (RecyclerView) findViewById(R.id.recycle_guan);
         include_title = (TextView) findViewById(R.id.include_title);
@@ -74,6 +73,7 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
             public void onItemClick(View view, int position) {
                     //根据position 跳转道不同用户的主页
                 Intent  intent=new Intent(MyFllowActivity.this,MydynamicActivity.class);
+                  intent.putExtra("uid",list.get(position).getUid()+"");
                  startActivity(intent);
             }
         });
@@ -126,7 +126,7 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void getsuccess(GZ_person_Bean guanzhu) {
           if(guanzhu.getCode().equals("200")){
-              List<GZ_person_Bean.DatesBean> dates = guanzhu.getDates();
+              List<GZ_person_Bean.DatasBean> dates = guanzhu.getDatas();
               if(pageNo>1){
                    if(dates.size()>0){
                      list.addAll(dates);

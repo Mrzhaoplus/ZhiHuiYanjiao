@@ -14,7 +14,6 @@ import www.diandianxing.com.diandianxing.util.MyRetrofit;
 
 public class Zixun_model {
     private final Zixun_modelinterfase home_zixun_modelinterfase;
-
     public Zixun_model(Zixun_modelinterfase jiekou) {
         home_zixun_modelinterfase =jiekou;
     }

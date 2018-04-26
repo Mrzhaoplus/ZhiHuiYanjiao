@@ -3,6 +3,7 @@ package www.diandianxing.com.diandianxing.fragment.messagefragment;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -16,16 +17,20 @@ import com.liaoinstan.springview.widget.SpringView;
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.ShujuBean.Shanchu_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Zan_msg_Bean;
 import www.diandianxing.com.diandianxing.adapter.Commentadapter;
 import www.diandianxing.com.diandianxing.adapter.Praiseadapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
+import www.diandianxing.com.diandianxing.interfase.Shanchu_presenter_interfase;
 import www.diandianxing.com.diandianxing.interfase.Zan_msg_presenter_interfase;
+import www.diandianxing.com.diandianxing.presenter.Shanchu_presenter;
 import www.diandianxing.com.diandianxing.presenter.Zan_Msg_presenter;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.ToastUtils;
 
 /**
  * date : ${Date}
@@ -34,15 +39,19 @@ import www.diandianxing.com.diandianxing.R;
 /*
    点赞消息
  */
-public class Praisefragment extends BaseFragment implements Zan_msg_presenter_interfase {
+public class Praisefragment extends BaseFragment implements Zan_msg_presenter_interfase, Shanchu_presenter_interfase {
 
     private RecyclerView praise_recycle;
     private SpringView spring_view;
     private TextView text_sure;
-    private Zan_Msg_presenter zan_msg_presenter;
+
+    private Zan_Msg_presenter zan_msg_presenter= new Zan_Msg_presenter(this);
     List<Zan_msg_Bean.DatasBean> list=new ArrayList<>();
     private Praiseadapter praiseadapter;
-
+    Shanchu_presenter shanchu_presenter = new Shanchu_presenter(this);
+    private int id;
+    private int postion;
+    private int pageNo=1;
     @Override
     protected int setContentView() {
         return R.layout.fragment_praise;
@@ -53,9 +62,7 @@ public class Praisefragment extends BaseFragment implements Zan_msg_presenter_in
         praise_recycle = contentView.findViewById(R.id.praise_recycle);
         spring_view = contentView.findViewById(R.id.spring_view);
 
-        //引用
-        zan_msg_presenter = new Zan_Msg_presenter(this);
-        zan_msg_presenter.getpath(Api.token,1);
+        zan_msg_presenter.getpath(Api.token,1,pageNo);
 
         praiseadapter = new Praiseadapter(getActivity(),list);
         praise_recycle.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -72,9 +79,12 @@ public class Praisefragment extends BaseFragment implements Zan_msg_presenter_in
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+                        list.clear();
+                        pageNo=1;
+                        zan_msg_presenter.getpath(Api.token,1,pageNo);
+                        praiseadapter.notifyDataSetChanged();
                     }
-                },5000);
+                },0);
                spring_view.onFinishFreshAndLoad();
             }
 
@@ -83,24 +93,29 @@ public class Praisefragment extends BaseFragment implements Zan_msg_presenter_in
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+                        pageNo++;
+                        zan_msg_presenter.getpath(Api.token,1,pageNo);
+                        praiseadapter.notifyDataSetChanged();
                     }
-                },5000);
+                },0);
                 spring_view.onFinishFreshAndLoad();
             }
         });
-
          spring_view.setHeader(new DefaultHeader(getActivity()));
         spring_view.setFooter(new DefaultFooter(getActivity()));
         praiseadapter.setOnLongDeleteListener(longDeleteListener);
     }
-
+    //删除
     private Commentadapter.LongDeleteListener longDeleteListener = new Commentadapter.LongDeleteListener() {
+
+
+
+
         @Override
         public void OnLongDeleteListener(int pos) {
-
+            postion = pos;
             shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
-
+            id = list.get(pos).getId();
         }
     };
 
@@ -127,6 +142,8 @@ public class Praisefragment extends BaseFragment implements Zan_msg_presenter_in
         text_sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //引用
+                shanchu_presenter.getpath(Api.token,id);
                 dialog.dismiss();
             }
         });
@@ -144,19 +161,39 @@ public class Praisefragment extends BaseFragment implements Zan_msg_presenter_in
     public void onDestroy() {
         super.onDestroy();
         zan_msg_presenter.getkong();
+        shanchu_presenter.getkong();
     }
 
     @Override
     public void getsuccess(Zan_msg_Bean zan) {
         if(zan.getCode().equals("200")){
             List<Zan_msg_Bean.DatasBean> datas = zan.getDatas();
-            if(datas.size()>0){
-                list.addAll(datas);
+            if(pageNo>1){
+                if(datas.size()>0){
+                    list.addAll(datas);
+                }else{
+                    Toast.makeText(getActivity(),Api.TOAST,Toast.LENGTH_SHORT).show();
+                }
             }else{
-                Toast.makeText(getActivity(),Api.TOAST,Toast.LENGTH_SHORT).show();
+                list.addAll(datas);
             }
             praiseadapter.notifyDataSetChanged();
 
         }
+    }
+
+    @Override
+    public void getsuccess(Shanchu_Bean shanchu_bean) {
+        if(shanchu_bean.getCode().equals("200")){
+            list.remove(postion);
+        }else if(shanchu_bean.getCode().equals("201")){
+            ToastUtils.showShort(getActivity(),shanchu_bean.getMsg());
+        }else if(shanchu_bean.getCode().equals("203")){
+            ToastUtils.showShort(getActivity(),shanchu_bean.getMsg());
+        }
+        else if(shanchu_bean.getCode().equals("500")){
+            ToastUtils.showShort(getActivity(),shanchu_bean.getMsg());
+        }
+        praiseadapter.notifyDataSetChanged();
     }
 }

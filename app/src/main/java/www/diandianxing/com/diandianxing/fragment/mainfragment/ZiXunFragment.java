@@ -97,7 +97,11 @@ public class ZiXunFragment extends BaseFragment implements Zixun_presenterinterf
                     public void run() {
                         list.clear();
                         typeNo=1;
-                        zixun_presenter.getpath(2, Api.token,typeNo);
+                        if(typeid==1){
+                            search_zixun.getpath(2, Api.token,typeNo,content);
+                        }else{
+                            zixun_presenter.getpath(2, Api.token,typeNo);
+                        }
                         ziXunAdapter.notifyDataSetChanged();
                     }
                 }, 0);
@@ -110,7 +114,11 @@ public class ZiXunFragment extends BaseFragment implements Zixun_presenterinterf
                     @Override
                     public void run() {
                          typeNo++;
-                        zixun_presenter.getpath(2, Api.token,typeNo);
+                        if(typeid==1){
+                            search_zixun.getpath(2, Api.token,typeNo,content);
+                        }else{
+                            zixun_presenter.getpath(2, Api.token,typeNo);
+                        }
                         ziXunAdapter.notifyDataSetChanged();
                     }
                 }, 0);

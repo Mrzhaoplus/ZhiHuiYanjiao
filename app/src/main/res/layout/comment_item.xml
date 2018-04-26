@@ -16,7 +16,6 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:src="@drawable/icon_tou"
             android:layout_width="60dp"
             android:layout_height="60dp" />
 
@@ -27,19 +26,21 @@
             android:layout_toRightOf="@id/img_tou"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
-                android:textColor="@color/black_san"
-                android:textSize="16sp"
-                android:layout_marginTop="10dp"
-                android:text="我的昵称"
                 android:id="@+id/text_name"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/relativeLayout2"
+                android:layout_toEndOf="@+id/shanchu"
+                android:text="我的昵称"
+                android:textColor="@color/black_san"
+                android:textSize="16sp" />
             <TextView
                 android:id="@+id/da_zan"
                 android:textSize="14sp"
                 android:drawablePadding="10dp"
-                android:text="天安门  12-24"
+                android:text="12-24"
                 android:layout_marginTop="5dp"
                 android:layout_below="@id/text_name"
                 android:layout_width="wrap_content"
@@ -49,13 +50,15 @@
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@id/text_name"
                 android:layout_width="20dp"
-                android:layout_height="20dp">
+                android:layout_height="20dp"
+                android:id="@+id/relativeLayout2">
                 <ImageView
                     android:src="@drawable/img_dengji"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView2" />
                 <TextView
+                    android:id="@+id/text_dengji"
                     android:textColor="#f8b804"
                     android:textSize="5sp"
                     android:text="1"
@@ -116,6 +119,7 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/yuantie"
                 android:textSize="14sp"
                 android:text="原帖:今年买房建议一二线城市，三四线随现.."
                 android:padding="10dp"

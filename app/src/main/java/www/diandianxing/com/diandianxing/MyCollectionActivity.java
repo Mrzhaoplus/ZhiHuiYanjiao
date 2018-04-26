@@ -19,25 +19,38 @@ import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import www.diandianxing.com.diandianxing.ShujuBean.Coll_Bean;
+import www.diandianxing.com.diandianxing.ShujuBean.User_guanzhu_Bean;
 import www.diandianxing.com.diandianxing.adapter.MyCollectionAdapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
+import www.diandianxing.com.diandianxing.fragment.minefragment.MyFansiActivity;
+import www.diandianxing.com.diandianxing.interfase.Coll_presenter_interfase;
+import www.diandianxing.com.diandianxing.interfase.Userguanzhu_presenter_interfase;
+import www.diandianxing.com.diandianxing.presenter.Coll_presenter;
+import www.diandianxing.com.diandianxing.presenter.User_Guanzhu_presenter;
+import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.MyContants;
+import www.diandianxing.com.diandianxing.util.ToastUtils;
 
 /**
  * Created by Administrator on 2018/4/3.
  */
 
-public class MyCollectionActivity extends BaseActivity {
+public class MyCollectionActivity extends BaseActivity implements Coll_presenter_interfase, Userguanzhu_presenter_interfase {
 
     private ImageView include_back;
     private SpringView springView;
     private RecyclerView mRecycler_wdsc;
     private TextView tv_bj;
-    ArrayList<String> mList=new ArrayList<>();
+    private int pageNo=1;
+    Coll_presenter coll_presenter = new Coll_presenter(this);
+    User_Guanzhu_presenter user_guanzhu_presenter = new User_Guanzhu_presenter(this);
+    ArrayList<Coll_Bean.DatasBean> mList=new ArrayList<>();
     MyCollectionAdapter changegameAdapter;
     boolean isqh;
     private TextView text_sure;
@@ -46,29 +59,20 @@ public class MyCollectionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         MyContants.windows(this);
         setContentView(R.layout.activity_my_collection);
+        //引用
+        coll_presenter.getpath(pageNo, Api.token);
+
+
         include_back= (ImageView) findViewById(R.id.include_back);
         springView= (SpringView) findViewById(R.id.springView);
         mRecycler_wdsc= (RecyclerView) findViewById(R.id.mRecycler_wdsc);
         tv_bj= (TextView) findViewById(R.id.tv_bj);
-        if (mList.size()<=0){
-            mList.add("");
-            mList.add("");
-            mList.add("");
-            mList.add("");
-            mList.add("");
-            mList.add("");
-            mList.add("");
-            mList.add("");
-            mList.add("");
-            mList.add("");
-            mList.add("");
-        }
+
         mRecycler_wdsc.setLayoutManager(new LinearLayoutManager(MyCollectionActivity.this));
         mRecycler_wdsc.setNestedScrollingEnabled(false);
         changegameAdapter  = new MyCollectionAdapter(R.layout.my_collection_item_view, mList);
         mRecycler_wdsc.setAdapter(changegameAdapter);
         changegameAdapter.setonGZClickListener(gzClickListener);
-
         initRefresh();
 
         include_back.setOnClickListener(new View.OnClickListener() {
@@ -95,18 +99,20 @@ public class MyCollectionActivity extends BaseActivity {
 
     }
 
-
+/*
+* 关注
+* */
     private MyCollectionAdapter.GZClickListener gzClickListener = new MyCollectionAdapter.GZClickListener() {
         @Override
         public void onGZClickListener(int pos) {
             Log.e("TAG","pos==="+pos);
-            shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+            int userId = mList.get(pos).getUserId();
+            user_guanzhu_presenter.getpath(Api.token,userId);
         }
           //点击删除条目刷新适配器
         @Override
         public void onSCClickListener(int pos) {
             mList.remove(pos);
-
             changegameAdapter.notifyDataSetChanged();
         }
           //跳转详情页
@@ -191,4 +197,40 @@ public class MyCollectionActivity extends BaseActivity {
         }, 2000);
     }
 
+    @Override
+    public void getsuccess(Coll_Bean coll_bean) {
+        if(coll_bean.getCode().equals("200")){
+            List<Coll_Bean.DatasBean> datas = coll_bean.getDatas();
+            if(pageNo>1){
+                if(datas.size()>0){
+                    mList.addAll(datas);
+                }else{
+                    Toast.makeText(MyCollectionActivity.this,Api.TOAST,Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                mList.addAll(datas);
+            }
+            changegameAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void getsuccess(User_guanzhu_Bean user_guanzhu_bean) {
+        if(user_guanzhu_bean.getCode().equals("200")){
+            shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+        }else if(user_guanzhu_bean.getCode().equals("201")){
+            ToastUtils.showShort(MyCollectionActivity.this,user_guanzhu_bean.getMsg());
+        }else if(user_guanzhu_bean.getCode().equals("203")){
+            ToastUtils.showShort(MyCollectionActivity.this,user_guanzhu_bean.getMsg());
+        }else if(user_guanzhu_bean.getCode().equals("500")){
+            ToastUtils.showShort(MyCollectionActivity.this,user_guanzhu_bean.getMsg());
+        }
+        changegameAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        coll_presenter.getkong();
+    }
 }

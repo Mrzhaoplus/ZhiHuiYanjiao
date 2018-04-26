@@ -99,7 +99,11 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
                     public void run() {
                         list.clear();
                         type=1;
-                        lukuang_presenter.getpath(type,Api.token);
+                        if(typeid==1){
+                            sear_lukuang.getpath(type,Api.token,content);
+                        }else{
+                            lukuang_presenter.getpath(type, Api.token);
+                        }
                         luKuangAdapter.notifyDataSetChanged();
 
                     }
@@ -113,7 +117,11 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
                     @Override
                     public void run() {
                         type++;
-                        lukuang_presenter.getpath(type,Api.token);
+                        if(typeid==1){
+                            sear_lukuang.getpath(type,Api.token,content);
+                        }else{
+                            lukuang_presenter.getpath(type, Api.token);
+                        }
                         luKuangAdapter.notifyDataSetChanged();
                     }
                 }, 0);

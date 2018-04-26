@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -54,14 +55,15 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
     private MyFansadapter myFansadapter;
     private int postion;
     private int state;
-    private int uid;
+    private int userid;
+    private String uid;
 
     @Override
-    public void getsuccess(int postion, int state, int uid) {
+    public void getsuccess(int postion, int state, int userid) {
        this.postion=postion;
        this.state=state;
-       this.uid=uid;
-        user_guanzhu_presenter.getpath(Api.token,uid);
+       this.userid=userid;
+        user_guanzhu_presenter.getpath(Api.token,userid);
 
     }
     @Override
@@ -73,7 +75,7 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
-
+        uid = getIntent().getStringExtra("uid");
         include_back = (ImageView) findViewById(R.id.include_back);
         include_title = (TextView) findViewById(R.id.include_title);
         recycle_guan = (RecyclerView) findViewById(R.id.recycle_guan);
@@ -81,9 +83,7 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
         spring_view = (SpringView) findViewById(R.id.spring_view);
 
           //引用
-        fensi_presenter.getpath(pageNo, Api.userid);
-
-
+        fensi_presenter.getpath(pageNo,uid, Api.userid);
         include_title.setText("我的粉丝");
         include_back.setOnClickListener(this);
         //设置适配器
@@ -101,6 +101,7 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
                @Override
                public void onItemClick(View view, int position) {
                    Intent intent=new Intent(MyFansiActivity.this,MydynamicActivity.class);
+                   intent.putExtra("uid",list.get(position).getUid()+"");
                     startActivity(intent);
                }
            });
@@ -114,7 +115,7 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
                     public void run() {
                         list.clear();
                         pageNo=1;
-                        fensi_presenter.getpath(pageNo,Api.userid);
+                        fensi_presenter.getpath(pageNo,uid,Api.userid);
                         myFansadapter.notifyDataSetChanged();
                     }
                 }, 0);
@@ -127,7 +128,7 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void run() {
                         pageNo++;
-                        fensi_presenter.getpath(pageNo,Api.userid);
+                        fensi_presenter.getpath(pageNo,uid,Api.userid);
                         myFansadapter.notifyDataSetChanged();
                     }
                 }, 0);

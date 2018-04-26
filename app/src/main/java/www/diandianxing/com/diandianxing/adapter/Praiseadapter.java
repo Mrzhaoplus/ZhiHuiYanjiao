@@ -57,6 +57,7 @@ public class Praiseadapter extends RecyclerView.Adapter<Praiseadapter.Myviewhold
         String dateToString = getDateToString(String.valueOf(list.get(position).getCreateTime() / 1000));
         holder.da_zan.setText(dateToString);
         holder.dengji.setText(list.get(position).getOperationType()+"");
+        holder.text_username.setText(list.get(position).getNickName());
         holder.text_name.setText(list.get(position).getNickName());
          holder.title.setText("原帖："+list.get(position).getTitle());
         //长按事件
@@ -94,6 +95,7 @@ public class Praiseadapter extends RecyclerView.Adapter<Praiseadapter.Myviewhold
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, MydynamicActivity.class);
+                intent.putExtra("uid",list.get(position).getUserId()+"");
                 context.startActivity(intent);
             }
         });

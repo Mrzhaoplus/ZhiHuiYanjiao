@@ -18,8 +18,8 @@ public class Fensi_model {
     public Fensi_model(FenSi_model_interfase jiekou) {
         this.jiekou=jiekou;
     }
-    public void getpath(int pageNo,String uid){
-        Observable<Fensi_Bean> fensi = MyRetrofit.getSerViceAPI().fensi(pageNo, uid);
+    public void getpath(int pageNo,String userid,String uid){
+        Observable<Fensi_Bean> fensi = MyRetrofit.getSerViceAPI().fensi(pageNo,userid, uid);
         fensi.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Fensi_Bean>() {
                     @Override

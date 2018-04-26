@@ -173,11 +173,10 @@ public class MeiJiaodianAdapter extends BaseAdapter {
                @Override
                public void onClick(View view) {
                    Intent intent = new Intent(context, MydynamicActivity.class);
-                   intent.putExtra("uid",lists.get(position).getUserId());
+                   intent.putExtra("uid",lists.get(position).getUserId()+"");
                    context.startActivity(intent);
                }
            });
-
         String dateToString = getDateToString(String.valueOf(lists.get(position).getCreateTime() / 1000));
         holder.item_count.setText(lists.get(position).getPostContent());
         holder.text_dengji.setText(lists.get(position).getUserLevel());

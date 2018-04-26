@@ -4,12 +4,14 @@ import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
+import www.diandianxing.com.diandianxing.ShujuBean.Coll_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.DianzanAndFenxiang_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Fenlei_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Fensi_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.GZ_person_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Live_gunzhu_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.QuxiaozanAndFenxiang_Bean;
+import www.diandianxing.com.diandianxing.ShujuBean.Shanchu_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.User_guanzhu_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Zan_msg_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.zixun_Bean;
@@ -30,7 +32,7 @@ public interface SerViceAPI {
       //资讯
       @FormUrlEncoded
       @POST("app/home/getInformation")
-      Observable<zixun_Bean> zixun(@Field("type") int type,@Field("token") String token,@Field("pageNo") int typeNo);
+      Observable<zixun_Bean> zixun(@Field("type") int type,@Field("token") String token,@Field("typeNo") int typeNo);
       //生活服务
       @FormUrlEncoded
       @POST("app/home/getClassificationList")
@@ -43,7 +45,6 @@ public interface SerViceAPI {
       @FormUrlEncoded
       @POST("app/home/searchLabel")
       Observable<SouLabel_bean> soulabel(@Field("token") String token);
-
       //生活服务下关注
       @FormUrlEncoded
       @POST("app/home/focusAttention")
@@ -59,7 +60,7 @@ public interface SerViceAPI {
        //点赞消息
       @FormUrlEncoded
       @POST("app/information/getMyCommentOrZan")
-      Observable<Zan_msg_Bean> zan_msg(@Field("token") String token,@Field("type")int type);
+      Observable<Zan_msg_Bean> zan_msg(@Field("token") String token,@Field("type")int type,@Field("pageNo")int pageNo);
       //分类下的帖子
       @FormUrlEncoded
       @POST("app/home/getClassificationPostList")
@@ -71,7 +72,7 @@ public interface SerViceAPI {
       //精确搜索资讯
       @FormUrlEncoded
       @POST("app/home/getInformation")
-      Observable<zixun_Bean> sear_zixun(@Field("type")int type,@Field("token") String token,@Field("typeNo") int typeNo,@Field("searchText")String searText);
+      Observable<zixun_Bean> sear_zixun(@Field("type")int type,@Field("token") String token,@Field("pageNo") int typeNo,@Field("searchText")String searText);
       //精确路况
       @FormUrlEncoded
       @POST("app/home/getShowTrafficList")
@@ -80,10 +81,18 @@ public interface SerViceAPI {
       @FormUrlEncoded
       @POST("app/user/concernusered")
       Observable<GZ_person_Bean>gz_person(@Field("pageNo")int pageNo,@Field("userId")String uid);
-      //关注的人
+      //粉丝
       @FormUrlEncoded
       @POST("app/user/concernuser")
-      Observable<Fensi_Bean>fensi(@Field("pageNo")int pageNo, @Field("userId")String uid);
+      Observable<Fensi_Bean>fensi(@Field("pageNo")int pageNo,@Field("isuserId") String userid, @Field("userId")String uid);
+      //收藏
+      @FormUrlEncoded
+      @POST("app/user/collectpostinfo")
+      Observable<Coll_Bean>coll(@Field("pageNo")int pageNo, @Field("token")String token);
+      //删除
+      @FormUrlEncoded
+      @POST("app/information/deleteCommentOrZan")
+      Observable<Shanchu_Bean>shanchu(@Field("token")String token, @Field("id")int id);
 
 
 }

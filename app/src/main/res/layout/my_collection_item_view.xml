@@ -34,11 +34,12 @@
                 android:src="@drawable/wdsc_sc_3x"/>
 
             <ImageView
+                android:id="@+id/img_tou"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/icon_tou"/>
+                android:layout_height="50dp"/>
 
             <TextView
+                android:id="@+id/uname"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -89,14 +90,14 @@
                 android:src="@drawable/wdsc_sc_3x"/>
 
 
-
             <ImageView
+                android:id="@+id/img_Ztou"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_ka"/>
+                android:scaleType="fitXY" />
 
             <TextView
+                android:id="@+id/zixun"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

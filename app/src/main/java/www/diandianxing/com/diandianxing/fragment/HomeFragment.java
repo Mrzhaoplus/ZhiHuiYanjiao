@@ -80,7 +80,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private TextView zan;
      List<zixun_Bean.DatasBean> list=new ArrayList<>();
     private Lunbo_presenter lunbo_presenter;
-    private Zixun_presenter home_zixun_presenter;
+    private Zixun_presenter home_zixun_presenter = new Zixun_presenter(this);
     private int typeNo=1;
     private Homeadapter homeadapter;
 
@@ -116,9 +116,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         //获取引用
         lunbo_presenter = new Lunbo_presenter(this);
         lunbo_presenter.getString(Api.token);
-        home_zixun_presenter = new Zixun_presenter(this);
         home_zixun_presenter.getpath(1,Api.token,typeNo);
-
         text_jiao.setOnClickListener(this);
         text_lu.setOnClickListener(this);
         life.setOnClickListener(this);
@@ -130,7 +128,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
          /*
              适配器
           */
-
         homeadapter = new Homeadapter(list,getActivity());
         homeadapter.getthis(this);
         //创建管理器
@@ -170,14 +167,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                      }
                  }, 0);
                  spring_view.onFinishFreshAndLoad();
-
              }
          });
         spring_view.setFooter(new DefaultFooter(getActivity()));
         spring_view.setHeader(new DefaultHeader(getActivity()));
     }
-
-
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -216,15 +210,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     Intent dd = new Intent(getActivity(), DianDianActivity.class);
                     startActivity(dd);
                 }
-
-
-
                 break;
             case R.id.img_tu:
-
                 Intent gy=new Intent(getActivity(),AboutweActivity.class);
                 startActivity(gy);
-
                 break;
         }
     }

@@ -215,7 +215,7 @@ public class GuanzhuAdapter extends BaseAdapter {
             public void onClick(View view) {
 
                 Intent intent = new Intent(context, MydynamicActivity.class);
-                intent.putExtra("uid",lists.get(position).getUserId());
+                intent.putExtra("uid",lists.get(position).getUserId()+"");
                 context.startActivity(intent);
 
             }

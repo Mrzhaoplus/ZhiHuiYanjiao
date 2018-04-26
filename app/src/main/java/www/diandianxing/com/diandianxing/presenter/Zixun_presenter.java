@@ -12,17 +12,19 @@ import www.diandianxing.com.diandianxing.model.Zixun_model;
 public class Zixun_presenter implements Zixun_modelinterfase {
 
     private final Zixun_model home_zixun_model;
-    private final Zixun_presenterinterfase jiekou;
+    private  Zixun_presenterinterfase jiekou;
 
     public Zixun_presenter(Zixun_presenterinterfase jiekou) {
         this.jiekou=jiekou;
         home_zixun_model = new Zixun_model(this);
     }
     public void getpath(int type,String token,int typeNo){
-        home_zixun_model.getpath(1,token,typeNo);
+        home_zixun_model.getpath(type,token,typeNo);
     }
     public void kong(){
-
+         if(jiekou!=null){
+             jiekou=null;
+         }
     }
 
     @Override

@@ -8,16 +8,16 @@ import java.util.List;
 
 public class GZ_person_Bean {
 
+
     /**
      * msg : 请求成功
      * code : 200
-     * dates : [{"id":1,"uid":0,"pic":"http://47.93.45.38/server/uploads/head/20180328/5abb7c8abee96.jpg","wechat":"","tencentQq":"","microblog":"","wechatName":"","qqName":"","sinaName":"","uname":"","identPic":"","identNum":"","ddxUser":{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524647111644,"encrypt":"","lastTime":1524647111644,"ridingState":false,"userId":0,"pic":"","nickName":"","postImage":"","postTitle":"","postId":0,"isGz":0},"nickName":"啊咯","sort":0,"zan":0,"userLevel":"","userSex":0,"isGz":0},{"id":1047,"uid":0,"pic":"http://47.93.45.38/server/uploads/head/timg.jpg","wechat":"","tencentQq":"","microblog":"","wechatName":"","qqName":"","sinaName":"","uname":"","identPic":"","identNum":"","ddxUser":{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524647111644,"encrypt":"","lastTime":1524647111644,"ridingState":false,"userId":0,"pic":"","nickName":"","postImage":"","postTitle":"","postId":0,"isGz":0},"nickName":"test","sort":0,"zan":0,"userLevel":"","userSex":0,"isGz":0}]
+     * datas : [{"id":0,"uid":1,"pic":"http://47.93.45.38/server/uploads/head/20180328/5abb7c8abee96.jpg","wechat":"","tencentQq":"","microblog":"","wechatName":"","qqName":"","sinaName":"","uname":"","identPic":"","identNum":"","ddxUser":{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524712985582,"encrypt":"","lastTime":1524712985582,"ridingState":false,"userId":0,"pic":"","nickName":"","postImage":"","postTitle":"","postId":0,"isGz":0,"postImagePaths":[]},"nickName":"啊咯","sort":0,"zan":0,"userLevel":"","userSex":0,"isGz":0},{"id":0,"uid":1047,"pic":"http://47.93.45.38/server/uploads/head/timg.jpg","wechat":"","tencentQq":"","microblog":"","wechatName":"","qqName":"","sinaName":"","uname":"","identPic":"","identNum":"","ddxUser":{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524712985582,"encrypt":"","lastTime":1524712985582,"ridingState":false,"userId":0,"pic":"","nickName":"","postImage":"","postTitle":"","postId":0,"isGz":0,"postImagePaths":[]},"nickName":"test","sort":0,"zan":0,"userLevel":"","userSex":0,"isGz":0}]
      */
 
     private String msg;
     private String code;
-    private List<DatesBean> dates;
-
+    private List<DatasBean> datas;
     public String getMsg() {
         return msg;
     }
@@ -34,18 +34,18 @@ public class GZ_person_Bean {
         this.code = code;
     }
 
-    public List<DatesBean> getDates() {
-        return dates;
+    public List<DatasBean> getDatas() {
+        return datas;
     }
 
-    public void setDates(List<DatesBean> dates) {
-        this.dates = dates;
+    public void setDatas(List<DatasBean> datas) {
+        this.datas = datas;
     }
 
-    public static class DatesBean {
+    public static class DatasBean {
         /**
-         * id : 1
-         * uid : 0
+         * id : 0
+         * uid : 1
          * pic : http://47.93.45.38/server/uploads/head/20180328/5abb7c8abee96.jpg
          * wechat :
          * tencentQq :
@@ -56,7 +56,7 @@ public class GZ_person_Bean {
          * uname :
          * identPic :
          * identNum :
-         * ddxUser : {"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524647111644,"encrypt":"","lastTime":1524647111644,"ridingState":false,"userId":0,"pic":"","nickName":"","postImage":"","postTitle":"","postId":0,"isGz":0}
+         * ddxUser : {"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524712985582,"encrypt":"","lastTime":1524712985582,"ridingState":false,"userId":0,"pic":"","nickName":"","postImage":"","postTitle":"","postId":0,"isGz":0,"postImagePaths":[]}
          * nickName : 啊咯
          * sort : 0
          * zan : 0
@@ -252,9 +252,9 @@ public class GZ_person_Bean {
              * doubles : 0
              * idIdent : 0
              * type : 0
-             * addTime : 1524647111644
+             * addTime : 1524712985582
              * encrypt :
-             * lastTime : 1524647111644
+             * lastTime : 1524712985582
              * ridingState : false
              * userId : 0
              * pic :
@@ -263,6 +263,7 @@ public class GZ_person_Bean {
              * postTitle :
              * postId : 0
              * isGz : 0
+             * postImagePaths : []
              */
 
             private int id;
@@ -289,6 +290,7 @@ public class GZ_person_Bean {
             private String postTitle;
             private int postId;
             private int isGz;
+            private List<?> postImagePaths;
 
             public int getId() {
                 return id;
@@ -480,6 +482,14 @@ public class GZ_person_Bean {
 
             public void setIsGz(int isGz) {
                 this.isGz = isGz;
+            }
+
+            public List<?> getPostImagePaths() {
+                return postImagePaths;
+            }
+
+            public void setPostImagePaths(List<?> postImagePaths) {
+                this.postImagePaths = postImagePaths;
             }
         }
     }

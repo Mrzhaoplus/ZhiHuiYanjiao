@@ -7,17 +7,29 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import www.diandianxing.com.diandianxing.ShujuBean.Shanchu_Bean;
+import www.diandianxing.com.diandianxing.ShujuBean.Zan_msg_Bean;
 import www.diandianxing.com.diandianxing.adapter.Commentadapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
+import www.diandianxing.com.diandianxing.interfase.Shanchu_presenter_interfase;
+import www.diandianxing.com.diandianxing.interfase.Zan_msg_presenter_interfase;
+import www.diandianxing.com.diandianxing.presenter.Shanchu_presenter;
+import www.diandianxing.com.diandianxing.presenter.Zan_Msg_presenter;
+import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.ToastUtils;
 
 /**
  * date : ${Date}
@@ -26,12 +38,18 @@ import www.diandianxing.com.diandianxing.R;
 /*
      评论消息
  */
-public class Commentfragment extends BaseFragment {
+public class Commentfragment extends BaseFragment implements Zan_msg_presenter_interfase, Shanchu_presenter_interfase {
 
     private RecyclerView comment_relycle;
     private SpringView spring_view;
     private TextView text_sure;
-
+    private int pageNo=1;
+    List<Zan_msg_Bean.DatasBean> list=new ArrayList<>();
+    private Zan_Msg_presenter zan_msg_presenter= new Zan_Msg_presenter(this);
+    private Commentadapter commentadapter;
+    Shanchu_presenter shanchu_presenter = new Shanchu_presenter(this);
+    private int id;
+    private int postion;
     @Override
     protected int setContentView() {
         return R.layout.fragment_comment;
@@ -39,12 +57,13 @@ public class Commentfragment extends BaseFragment {
 
     @Override
     protected void lazyLoad() {
+        zan_msg_presenter.getpath(Api.token,0,pageNo);
         View contentView = getContentView();
         comment_relycle = contentView.findViewById(R.id.comment_recycle);
         spring_view = contentView.findViewById(R.id.spring_view);
 
         comment_relycle.setNestedScrollingEnabled(false);
-        Commentadapter commentadapter=new Commentadapter(getActivity());
+        commentadapter = new Commentadapter(getActivity(),list);
         comment_relycle.setLayoutManager(new LinearLayoutManager(getActivity()));
         comment_relycle.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         comment_relycle.setAdapter(commentadapter);
@@ -55,9 +74,12 @@ public class Commentfragment extends BaseFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+                      list.clear();
+                      pageNo=1;
+                        zan_msg_presenter.getpath(Api.token,0,pageNo);
+                        commentadapter.notifyDataSetChanged();
                     }
-                },5000);
+                },0);
                 spring_view.onFinishFreshAndLoad();
             }
 
@@ -66,9 +88,11 @@ public class Commentfragment extends BaseFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+                        pageNo++;
+                        zan_msg_presenter.getpath(Api.token,0,pageNo);
+                        commentadapter.notifyDataSetChanged();
                     }
-                },5000);
+                },0);
                 spring_view.onFinishFreshAndLoad();
             }
         });
@@ -82,9 +106,9 @@ public class Commentfragment extends BaseFragment {
     private Commentadapter.LongDeleteListener longDeleteListener = new Commentadapter.LongDeleteListener() {
         @Override
         public void OnLongDeleteListener(int pos) {
-
+            postion = pos;
             shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
-
+            id = list.get(pos).getId();
         }
     };
     private void shumaDialog(int grary, int animationStyle) {
@@ -110,6 +134,8 @@ public class Commentfragment extends BaseFragment {
         text_sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //引用
+                shanchu_presenter.getpath(Api.token,id);
                 dialog.dismiss();
             }
         });
@@ -123,4 +149,45 @@ public class Commentfragment extends BaseFragment {
         dialog.show();
     }
 
+    @Override
+    public void getsuccess(Zan_msg_Bean zan) {
+        if(zan.getCode().equals("200")){
+            List<Zan_msg_Bean.DatasBean> datas = zan.getDatas();
+            if(pageNo>1){
+                if(datas.size()>0){
+                    list.addAll(datas);
+                }else{
+                    Toast.makeText(getActivity(),Api.TOAST,Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                list.addAll(datas);
+            }
+
+
+            commentadapter.notifyDataSetChanged();
+
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        zan_msg_presenter.getkong();
+        shanchu_presenter.getkong();
+    }
+
+    @Override
+    public void getsuccess(Shanchu_Bean shanchu_bean) {
+        if(shanchu_bean.getCode().equals("200")){
+            list.remove(postion);
+        }else if(shanchu_bean.getCode().equals("201")){
+            ToastUtils.showShort(getActivity(),shanchu_bean.getMsg());
+        }else if(shanchu_bean.getCode().equals("203")){
+            ToastUtils.showShort(getActivity(),shanchu_bean.getMsg());
+        }
+        else if(shanchu_bean.getCode().equals("500")){
+            ToastUtils.showShort(getActivity(),shanchu_bean.getMsg());
+        }
+        commentadapter.notifyDataSetChanged();
+    }
 }

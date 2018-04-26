@@ -140,6 +140,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 
              case R.id.text_fensi://粉丝
                  Intent intent1=new Intent(getActivity(), MyFansiActivity.class);
+                 intent1.putExtra("uid",Api.userid);
                  startActivity(intent1);
                  break;
              case R.id.text_dongtai:

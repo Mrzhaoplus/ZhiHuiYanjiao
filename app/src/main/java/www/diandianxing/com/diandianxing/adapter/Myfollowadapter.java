@@ -27,9 +27,9 @@ import www.diandianxing.com.diandianxing.ShujuBean.GZ_person_Bean;
 public class Myfollowadapter extends RecyclerView.Adapter<Myfollowadapter.MyviewHolder> {
     private OnItemClickLister mOnItemClickListener = null;
        private Context context;
-    private List<GZ_person_Bean.DatesBean> list=new ArrayList<>();
+    private List<GZ_person_Bean.DatasBean> list=new ArrayList<>();
 
-    public Myfollowadapter(Context context, List<GZ_person_Bean.DatesBean> list) {
+    public Myfollowadapter(Context context, List<GZ_person_Bean.DatasBean> list) {
         this.context = context;
         this.list = list;
     }
