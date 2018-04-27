@@ -55,7 +55,13 @@ public class Commentadapter extends RecyclerView.Adapter<Commentadapter.Myviewho
         String dateToString = getDateToString(String.valueOf(list.get(position).getCreateTime() / 1000));
         holder.da_zan.setText(dateToString);
         holder.text_username.setText("评论："+list.get(position).getContent());
-         holder.yuantie.setText("原帖："+list.get(position).getTitle());
+        int objType = list.get(position).getObjType();
+        if(objType==0){
+            holder.yuantie.setText("原帖："+list.get(position).getTitle());
+        }else if (objType==1){
+            holder.yuantie.setText("拍客："+list.get(position).getTitle());
+        }
+
         //长按删除
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

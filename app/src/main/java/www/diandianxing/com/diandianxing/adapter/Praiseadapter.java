@@ -59,7 +59,14 @@ public class Praiseadapter extends RecyclerView.Adapter<Praiseadapter.Myviewhold
         holder.dengji.setText(list.get(position).getOperationType()+"");
         holder.text_username.setText(list.get(position).getNickName());
         holder.text_name.setText(list.get(position).getNickName());
-         holder.title.setText("原帖："+list.get(position).getTitle());
+        int objType = list.get(position).getObjType();
+        String title = list.get(position).getTitle();
+        if(objType==0){
+            holder.title.setText("原帖："+title);
+        }else if(objType==1){
+            holder.title.setText("拍客："+title);
+        }
+
         //长按事件
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

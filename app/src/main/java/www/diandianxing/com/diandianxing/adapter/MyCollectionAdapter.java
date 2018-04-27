@@ -50,7 +50,7 @@ public class MyCollectionAdapter extends BaseQuickAdapter<Coll_Bean.DatasBean, B
         uname.setText(item.getNickName());
         zixun.setText(item.getPostTitle());
 
-        ImageLoader.getInstance().displayImage(item.getPostImagePaths().get(1),img_ztou, ImageLoder.getDefaultOption());
+        ImageLoader.getInstance().displayImage(item.getPostImagePaths().get(0),img_ztou, ImageLoder.getDefaultOption());
         if(isqh){
             iv_wdsc_sc.setVisibility(View.VISIBLE);
             iv_wdsc_zw.setVisibility(View.INVISIBLE);
