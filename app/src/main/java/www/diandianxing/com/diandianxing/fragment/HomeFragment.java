@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import java.util.List;
 import www.diandianxing.com.diandianxing.DianDianActivity;
 import www.diandianxing.com.diandianxing.LiveActivity;
 import www.diandianxing.com.diandianxing.Login.LoginActivity;
+import www.diandianxing.com.diandianxing.MainActivity;
 import www.diandianxing.com.diandianxing.MsgItmeActivity;
 import www.diandianxing.com.diandianxing.SearchActivity;
 import www.diandianxing.com.diandianxing.ShujuBean.zixun_Bean;
@@ -36,6 +38,7 @@ import www.diandianxing.com.diandianxing.adapter.Homeadapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.ShujuBean.Lunbo_Bean;
 import www.diandianxing.com.diandianxing.bean.Evebtbus_fragment;
+import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaodianActivity;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.LuKuangActivity;
 import www.diandianxing.com.diandianxing.interfase.Zixun_presenterinterfase;
@@ -174,23 +177,40 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     }
     @Override
     public void onClick(View view) {
+        int guid = SpUtils.getInt(getActivity(), "guid", 0);
         switch (view.getId()){
             case R.id.text_jiao:
-                Intent jiao=new Intent(getActivity(), JiaodianActivity.class);
-                startActivity(jiao);
+                if(guid!=2){
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                }else{
+                    Intent jiao=new Intent(getActivity(), JiaodianActivity.class);
+                    startActivity(jiao);
+                }
                 break;
             case R.id.text_lu:
-                EventBus.getDefault().postSticky(new Evebtbus_fragment(0));
-                Intent lu=new Intent(getActivity(), LuKuangActivity.class);
-                startActivity(lu);
+                if(guid!=2){
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                }else{
+                    EventBus.getDefault().postSticky(new Evebtbus_fragment(0));
+                    Intent lu=new Intent(getActivity(), LuKuangActivity.class);
+                    startActivity(lu);
+                }
                 break;
             case R.id.life:
-                Intent live=new Intent(getActivity(), LiveActivity.class);
-                startActivity(live);
+                if(guid!=2){
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                }else{
+                    Intent live=new Intent(getActivity(), LiveActivity.class);
+                    startActivity(live);
+                }
                 break;
             case R.id.ll_msg:
-                Intent intent = new Intent(getActivity(), MsgItmeActivity.class);
-                startActivity(intent);
+                if(guid!=2){
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                }else{
+                    Intent intent = new Intent(getActivity(), MsgItmeActivity.class);
+                    startActivity(intent);
+                }
                 break;
             case R.id.tv_search:
                 Intent search = new Intent(getActivity(), SearchActivity.class);
@@ -202,7 +222,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.text_diandian:
 
-                int guid = SpUtils.getInt(getActivity(), "guid", 1);
+                guid = SpUtils.getInt(getActivity(), "guid", 1);
                 if(guid!=2){
                     startActivity(new Intent(getActivity(),LoginActivity.class));
                 }

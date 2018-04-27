@@ -3,6 +3,7 @@ package www.diandianxing.com.diandianxing.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,9 @@ import java.util.Date;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.ShujuBean.Zan_msg_Bean;
+import www.diandianxing.com.diandianxing.VideoActivity;
 import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
+import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
@@ -78,22 +81,19 @@ public class Praiseadapter extends RecyclerView.Adapter<Praiseadapter.Myviewhold
         final Zan_msg_Bean.DatasBean datasBean = list.get(position);
         //点击跳转详情页
         holder.view.setOnClickListener(new View.OnClickListener() {
-
-            private GuanzhuJD guanzhuJD;
-
             @Override
             public void onClick(View view) {
-                /*guanzhuJD = new GuanzhuJD();
-                guanzhuJD.id= String.valueOf(datasBean.getId());
-                guanzhuJD.createTime= String.valueOf(datasBean.getCreateTime());
-                guanzhuJD.isDeleted= String.valueOf(datasBean.getIsDeleted());
-                guanzhuJD.pic=datasBean.getPic();
-                guanzhuJD.userId= String.valueOf(datasBean.getUserId());
-                guanzhuJD.userLevel= String.valueOf(datasBean.getOperationType());
-                guanzhuJD.userName=datasBean.getNickName();*/
+                Intent intent=null;
+                if(datasBean.objType==0){//原贴
+                    intent= new Intent(context, JiaoDetailActivity.class);
+                    intent.putExtra("id",datasBean.getSponsorId()+"");
+                }else if (datasBean.objType==1){//拍客
+                    intent= new Intent(context, VideoActivity.class);
+                    PaiKeInfo paiKeInfo = new PaiKeInfo();
+                    paiKeInfo.id=list.get(position).getObjId()+"";
+                    intent.putExtra("pk",paiKeInfo);
+                }
 
-                Intent intent = new Intent(context, JiaoDetailActivity.class);
-               // intent.putExtra("guanzhu",guanzhuJD);
                 context.startActivity(intent);
             }
         });

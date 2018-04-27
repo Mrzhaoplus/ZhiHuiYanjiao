@@ -27,6 +27,7 @@ import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.MyGridView;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 
 /**
  * date : ${Date}
@@ -50,8 +51,11 @@ public class TuijianFragment extends BaseFragment {
         View contentView =getContentView();
         tui_recycler = contentView.findViewById(R.id.tui_recycler);
         spring_view = contentView.findViewById(R.id.spring_view);
-
-        networklist();
+        if(NetUtil.checkNet(getActivity())){
+            networklist();
+        }else{
+            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
 
         spring_view.setType(SpringView.Type.FOLLOW);
         spring_view.setListener(new SpringView.OnFreshListener() {
@@ -62,7 +66,11 @@ public class TuijianFragment extends BaseFragment {
                     public void run() {
                         list.clear();
                         pageNo=1;
-                        networklist();
+                        if(NetUtil.checkNet(getActivity())){
+                            networklist();
+                        }else{
+                            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 },0);
                 spring_view.onFinishFreshAndLoad();
@@ -74,7 +82,11 @@ public class TuijianFragment extends BaseFragment {
                     @Override
                     public void run() {
                         pageNo++;
-                        networklist();
+                        if(NetUtil.checkNet(getActivity())){
+                            networklist();
+                        }else{
+                            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 },0);
                 spring_view.onFinishFreshAndLoad();

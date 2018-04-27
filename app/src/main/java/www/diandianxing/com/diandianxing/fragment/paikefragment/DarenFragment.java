@@ -30,6 +30,7 @@ import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 
 /**
  * date : ${Date}
@@ -53,7 +54,11 @@ public class DarenFragment extends BaseFragment {
         View contentView = getContentView();
         daren_recycler = contentView.findViewById(R.id.daren_recycler);
         spring_view = contentView.findViewById(R.id.spring_view);
-        networklist();
+        if(NetUtil.checkNet(getActivity())){
+            networklist();
+        }else{
+            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
         daren_recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         daren_recycler.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         spring_view.setType(SpringView.Type.FOLLOW);
@@ -66,7 +71,11 @@ public class DarenFragment extends BaseFragment {
                     public void run() {
                         list.clear();
                         pageNo=1;
-                        networklist();
+                        if(NetUtil.checkNet(getActivity())){
+                            networklist();
+                        }else{
+                            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 },0);
                  spring_view.onFinishFreshAndLoad();
@@ -78,7 +87,11 @@ public class DarenFragment extends BaseFragment {
                     @Override
                     public void run() {
                         pageNo++;
-                        networklist();
+                        if(NetUtil.checkNet(getActivity())){
+                            networklist();
+                        }else{
+                            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 },0);
                 spring_view.onFinishFreshAndLoad();
@@ -154,7 +167,6 @@ public class DarenFragment extends BaseFragment {
                                     masteradapter =new Masteradapter(getActivity(),list);
                                     daren_recycler.setAdapter(masteradapter);
                                 }else{
-
                                     masteradapter.notifyDataSetChanged();
                                 }
                             } else {

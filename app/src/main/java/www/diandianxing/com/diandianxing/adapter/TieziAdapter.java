@@ -1,6 +1,7 @@
 package www.diandianxing.com.diandianxing.adapter;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,6 +25,7 @@ import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.TPDetailActivity;
 import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.util.MyUtils;
+import www.diandianxing.com.diandianxing.util.StateClickListener;
 
 /**
  * Created by Administrator on 2018/4/3.
@@ -37,12 +39,17 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
 
     private boolean isxs;
 
+    private String title;
 
-    public TieziAdapter(@LayoutRes int layoutResId, @Nullable List<GuanzhuJD> data) {
+    private StateClickListener stateClickListener;
+
+    public TieziAdapter(@LayoutRes int layoutResId, @Nullable List<GuanzhuJD> data,String title,StateClickListener stateClickListener) {
         super(layoutResId, data);
+        this.title=title;
+        this.stateClickListener=stateClickListener;
     }
     @Override
-    protected void convert(final BaseViewHolder helper, GuanzhuJD item) {
+    protected void convert(final BaseViewHolder helper, final GuanzhuJD item) {
 
         RecyclerView rv_tp = helper.getView(R.id.rv_tp);
         final ImageView iv_ddd = helper.getView(R.id.iv_ddd);
@@ -54,7 +61,6 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
         TextView text_zan=helper.getView(R.id.text_zan);
         TextView tv_nian=helper.getView(R.id.tv_nian);
         TextView tv_yue=helper.getView(R.id.tv_yue);
-
         item_count.setText(item.postContent);
 
         text_collect.setText(item.collectCount);
@@ -79,16 +85,58 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
         rv_tp.setNestedScrollingEnabled(false);
         TPAdapter1 tpAdapter1 = new TPAdapter1(mContext,item.imagesList);
         rv_tp.setAdapter(tpAdapter1);
-//        changegameAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                        Intent intent = new Intent(mContext, TPDetailActivity.class);
-//                        intent.putExtra("size",mList.size());
-//                        intent.putExtra("position",position);
-//                mContext.startActivity(intent);
-//
-//            }
-//        });
+
+        if(!"我的主页".equals(title)){
+            if(Integer.parseInt(item.is_collect)==0){
+                Drawable nav_up=mContext.getResources().getDrawable(R.drawable.icon_collect);
+                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+                text_collect.setCompoundDrawables(nav_up, null, null, null);
+            }else{
+                Drawable nav_up=mContext.getResources().getDrawable(R.drawable.shouchang_xz_icon_3x);
+                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+                text_collect.setCompoundDrawables(nav_up, null, null, null);
+            }
+
+            if(Integer.parseInt(item.is_zan)==0){
+                Drawable nav_up=mContext.getResources().getDrawable(R.drawable.icon_dianzan);
+                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+                text_zan.setCompoundDrawables(nav_up, null, null, null);
+            }else{
+                Drawable nav_up=mContext.getResources().getDrawable(R.drawable.dianzan_xz_icon_3x);
+                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+                text_zan.setCompoundDrawables(nav_up, null, null, null);
+            }
+
+            //收藏
+            text_collect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(Integer.parseInt(item.is_collect)==0){
+
+                        stateClickListener.ShouCangClickListener(Integer.parseInt(item.id),0,1,-1,helper.getAdapterPosition());
+
+                    }else{
+                        stateClickListener.QuXiaoShouCangClickListener(Integer.parseInt(item.id),0,1,helper.getAdapterPosition());
+                    }
+
+                }
+            });
+            //点赞
+            text_zan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(Integer.parseInt(item.is_zan)==0){
+                        stateClickListener.DianZanClickListener(Integer.parseInt(item.id),0,0,-1,helper.getAdapterPosition());
+                    }else{
+                        stateClickListener.QuXiaoDianZanClickListener(Integer.parseInt(item.id),0,0,helper.getAdapterPosition());
+                    }
+                }
+            });
+
+        }
+
         iv_ddd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,6 +155,8 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
                 mOnItemClickListener.ItemClick(null,helper.getAdapterPosition());
             }
         });
+
+
     }
     public class TPAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 

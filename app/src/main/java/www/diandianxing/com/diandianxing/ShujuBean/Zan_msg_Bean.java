@@ -65,7 +65,7 @@ public class Zan_msg_Bean {
         private int objId;
         private String content;
         private long createTime;
-        private int objType;
+        public int objType;
         private int isDeleted;
         private int operationType;
         private String nickName;

@@ -62,6 +62,7 @@ import www.diandianxing.com.diandianxing.ReleaseShootoffActivity;
 import www.diandianxing.com.diandianxing.TopRuleActivity;
 import www.diandianxing.com.diandianxing.VideoActivity;
 import www.diandianxing.com.diandianxing.adapter.DongTaiAdapter;
+import www.diandianxing.com.diandianxing.adapter.Jiaodianadapter;
 import www.diandianxing.com.diandianxing.adapter.TieziAdapter;
 import www.diandianxing.com.diandianxing.adapter.Tuijiantieadapter;
 import www.diandianxing.com.diandianxing.adapter.Tujianadapter;
@@ -75,7 +76,9 @@ import www.diandianxing.com.diandianxing.my.PersonActivity;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.EventMessage;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.SharingPop;
+import www.diandianxing.com.diandianxing.util.StateClickListener;
 import www.diandianxing.com.diandianxing.util.ZDPop;
 import www.diandianxing.com.diandianxing.R;
 /*
@@ -181,8 +184,6 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
             tv_dt_title.setText(title);
         }
 
-
-
         if("我的主页".equals(title)){
             iv_gz.setVisibility(View.INVISIBLE);
             img_tou.setOnClickListener(this);
@@ -190,13 +191,15 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
             uid=Api.userid;
         }else{
 
-
             uid=getIntent().getStringExtra("uid");
 
-
         }
-        networkGR();
-        finishFreshAndLoad();
+        if(NetUtil.checkNet(MydynamicActivity.this)){
+            networkGR();
+            finishFreshAndLoad();
+        }else{
+            Toast.makeText(MydynamicActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
         zdPop = new ZDPop(MydynamicActivity.this,R.layout.zd_pop_item_view);
         sharingPop = new SharingPop(MydynamicActivity.this,R.layout.sharing_pop_item_view);
         recycleViewDivider = new RecycleViewDivider(MydynamicActivity.this, GridLayoutManager.HORIZONTAL, 5, getResources().getColor(R.color.transparent));
@@ -475,7 +478,11 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
 
                 break;
             case R.id.tv_sc:
-                networkdele(postId);
+                if(NetUtil.checkNet(MydynamicActivity.this)){
+                    networkdele(postId);
+                }else{
+                    Toast.makeText(MydynamicActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
                 DDdialog.dismiss();
                 break;
             case R.id.tv_close:
@@ -731,7 +738,12 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
 
                 mList.clear();
                 pageNo=1;
-                finishFreshAndLoad();
+                if(NetUtil.checkNet(MydynamicActivity.this)){
+
+                    finishFreshAndLoad();
+                }else{
+                    Toast.makeText(MydynamicActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
 
             }
 
@@ -739,7 +751,11 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
             public void onLoadmore() {
 //                Toast.makeText(mContext,"玩命加载中...",Toast.LENGTH_SHORT).show();
                 pageNo++;
-                finishFreshAndLoad();
+                if(NetUtil.checkNet(MydynamicActivity.this)){
+                    finishFreshAndLoad();
+                }else{
+                    Toast.makeText(MydynamicActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -988,7 +1004,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                                 }
 
                                 if(tieziAdapter==null){
-                                    tieziAdapter =new TieziAdapter(R.layout.tz_item_view,mList);
+                                    tieziAdapter =new TieziAdapter(R.layout.tz_item_view,mList,title,stateClickListener);
                                     recy_card.setAdapter(tieziAdapter);
                                     if("我的主页".equals(title)){
                                         tieziAdapter.setXS(true);
@@ -997,16 +1013,161 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                                     tieziAdapter.setOnDianClickListener(dianClickListener);
                                     tieziAdapter.SetOnItemClickListener(onItemClickListener);
                                 }else{
-
                                     if("我的主页".equals(title)){
                                         tieziAdapter.setXS(true);
-
                                     }
                                     tieziAdapter.notifyDataSetChanged();
                                 }
 
 
 
+                            } else {
+                                Toast.makeText(MydynamicActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+
+
+    private StateClickListener stateClickListener = new StateClickListener() {
+        @Override
+        public void ShouCangClickListener(int objId, int obj_type, int operation_type, int fx,int  pos) {
+
+            network(objId,obj_type,operation_type,pos);
+        }
+
+        @Override
+        public void DianZanClickListener(int objId, int obj_type, int operation_type, int fx,int pos) {
+
+            network(objId,obj_type,operation_type,pos);
+        }
+
+        @Override
+        public void QuXiaoShouCangClickListener(int objId, int obj_type, int operation_type, int pos) {
+
+            QXnetwork(objId,obj_type,operation_type,pos);
+
+        }
+
+        @Override
+        public void QuXiaoDianZanClickListener(int objId, int obj_type, int operation_type, int pos) {
+            QXnetwork(objId,obj_type,operation_type,pos);
+        }
+    };
+
+    private void network(int objId , int obj_type, final int operation_type, final int pos) {
+
+        HttpParams params = new HttpParams();
+        params.put("objId", objId);
+
+        params.put("obj_type", obj_type);
+
+        params.put("operation_type",operation_type);
+
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/userOperation")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "数据" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+
+                                if(operation_type==0){
+                                    mList.get(pos).is_zan="1";
+                                    mList.get(pos).dianZanCount=Integer.parseInt(mList.get(pos).dianZanCount)+1+"";
+                                }else{
+                                    mList.get(pos).is_collect="1";
+                                    mList.get(pos).collectCount=Integer.parseInt(mList.get(pos).collectCount)+1+"";
+                                }
+                                if(tieziAdapter==null){
+                                    tieziAdapter =new TieziAdapter(R.layout.tz_item_view,mList,title,stateClickListener);
+                                    recy_card.setAdapter(tieziAdapter);
+                                    if("我的主页".equals(title)){
+                                        tieziAdapter.setXS(true);
+                                        tieziAdapter.notifyDataSetChanged();
+                                    }
+                                    tieziAdapter.setOnDianClickListener(dianClickListener);
+                                    tieziAdapter.SetOnItemClickListener(onItemClickListener);
+                                }else{
+                                    if("我的主页".equals(title)){
+                                        tieziAdapter.setXS(true);
+                                    }
+                                    tieziAdapter.notifyDataSetChanged();
+                                }
+                            } else {
+                                Toast.makeText(MydynamicActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+    private void QXnetwork(int objId , int obj_type, final int operation_type, final int pos) {
+
+        HttpParams params = new HttpParams();
+        params.put("objId", objId);
+
+        params.put("obj_type", obj_type);
+
+        params.put("operation_type",operation_type);
+
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/userCancelOperation")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "取消数据" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+
+                                if(operation_type==0){
+                                    mList.get(pos).is_zan="0";
+                                    mList.get(pos).dianZanCount=Integer.parseInt(mList.get(pos).dianZanCount)-1+"";
+                                }else{
+                                    mList.get(pos).is_collect="0";
+                                    mList.get(pos).collectCount=Integer.parseInt(mList.get(pos).collectCount)-1+"";
+                                }
+                                if(tieziAdapter==null){
+                                    tieziAdapter =new TieziAdapter(R.layout.tz_item_view,mList,title,stateClickListener);
+                                    recy_card.setAdapter(tieziAdapter);
+                                    if("我的主页".equals(title)){
+                                        tieziAdapter.setXS(true);
+                                        tieziAdapter.notifyDataSetChanged();
+                                    }
+                                    tieziAdapter.setOnDianClickListener(dianClickListener);
+                                    tieziAdapter.SetOnItemClickListener(onItemClickListener);
+                                }else{
+                                    if("我的主页".equals(title)){
+                                        tieziAdapter.setXS(true);
+                                    }
+                                    tieziAdapter.notifyDataSetChanged();
+                                }
                             } else {
                                 Toast.makeText(MydynamicActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
 
@@ -1170,6 +1331,14 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
 
                                 text_zan.setText("动态（"+datas.getString("pknum")+"）");
 
+
+                                if(Integer.parseInt(datas.getString("isGz"))==0){
+
+                                    iv_gz.setVisibility(View.INVISIBLE);
+
+                                }else{
+                                    iv_gz.setVisibility(View.VISIBLE);
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

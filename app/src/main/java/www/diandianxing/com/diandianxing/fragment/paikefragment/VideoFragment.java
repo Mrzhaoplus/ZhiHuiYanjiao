@@ -85,6 +85,7 @@ import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyUtils;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /**
@@ -179,9 +180,12 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
                 height = kongjian.getHeight();
             }
         });
-
-        networkxq();
-        finishFreshAndLoad();
+        if(NetUtil.checkNet(getActivity())){
+            networkxq();
+            finishFreshAndLoad();
+        }else{
+            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
         initRefresh();
 
         img_back.setOnClickListener(this);
@@ -218,8 +222,13 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
                 list.clear();
                 pageNo=1;
-                if(pk!=null){
-                    finishFreshAndLoad();
+                if(NetUtil.checkNet(getActivity())){
+                    if(pk!=null){
+                        finishFreshAndLoad();
+                    }
+
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -227,8 +236,12 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
             public void onLoadmore() {
 //                Toast.makeText(mContext,"玩命加载中...",Toast.LENGTH_SHORT).show();
                 pageNo++;
-                if(pk!=null){
-                    finishFreshAndLoad();
+                if(NetUtil.checkNet(getActivity())){
+                    if(pk!=null){
+                        finishFreshAndLoad();
+                    }
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -241,9 +254,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 networklist();
-
                 sv_pk.onFinishFreshAndLoad();
             }
         }, 0);
@@ -295,6 +306,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
             HttpParams params = new HttpParams();
             params.put("token", Api.token);
             params.put("pkId", pk.id);
+
             OkGo.<String>post(Api.BASE_URL +"app/paike/paikeinfo")
                     .tag(this)
                     .params(params)
@@ -692,7 +704,11 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
                 getActivity().finish();
                 break;
             case R.id.guanzhu:
-                networkGZ(Integer.parseInt(pk.userId));
+                if(NetUtil.checkNet(getActivity())){
+                    networkGZ(Integer.parseInt(pk.userId));
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.video_tou:
                 Intent intent = new Intent(getActivity(), MydynamicActivity.class);
@@ -739,12 +755,15 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
                 dialog.dismiss();
                 break;
             case R.id.video_zan:
-
-                if(Integer.parseInt(pk.iszan)==0){
-                    Log.e("TAG","点击点赞");
-                    network(Integer.parseInt(pk.id),0,0);
+                if(NetUtil.checkNet(getActivity())){
+                    if(Integer.parseInt(pk.iszan)==0){
+                        Log.e("TAG","点击点赞");
+                        network(Integer.parseInt(pk.id),0,0);
+                    }else{
+                        QXnetwork(Integer.parseInt(pk.id),0,0);
+                    }
                 }else{
-                    QXnetwork(Integer.parseInt(pk.id),0,0);
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -754,10 +773,14 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
                 if(content!=null&&content.length()>0){
 
-                    if(isHf){
-                        networkZJPL(commentFatherId,beReturnedId);
+                    if(NetUtil.checkNet(getActivity())){
+                        if(isHf){
+                            networkZJPL(commentFatherId,beReturnedId);
+                        }else{
+                            networkFB();
+                        }
                     }else{
-                        networkFB();
+                        Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -1062,12 +1085,15 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(pk.imagesUrl.length()>0) {//轮播图
+        if(pk!=null){
+            if(pk.imagesUrl.length()>0) {//轮播图
 
 
 
-        }else{
-            handler.removeCallbacks(runnable);
+            }else{
+                handler.removeCallbacks(runnable);
+            }
+
         }
     }
 

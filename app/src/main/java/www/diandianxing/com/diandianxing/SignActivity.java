@@ -32,6 +32,7 @@ import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.MyContants;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 
 /**
  * Created by Administrator on 2018/4/3.
@@ -69,16 +70,11 @@ public class SignActivity extends BaseActivity {
             mList.add("");
             mList.add("");
         }
-networkQD();
-        shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
-        handler = new Handler();
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                dialog.dismiss();
-            }
-        },2000);
+        if(NetUtil.checkNet(SignActivity.this)){
+            networkQD();
+        }else{
+            Toast.makeText(SignActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
         rv_dj.setLayoutManager(new LinearLayoutManager(SignActivity.this));
         rv_dj.setNestedScrollingEnabled(false);
         SignAdapter wccAdapter = new SignAdapter(R.layout.sign_item_view, mList);
@@ -100,7 +96,7 @@ networkQD();
 
     }
 
-    private void shumaDialog(int grary, int animationStyle) {
+    private void shumaDialog(int grary, int animationStyle,String integral) {
         BaseDialog.Builder builder = new BaseDialog.Builder(SignActivity.this);
         dialog = builder.setViewId(R.layout.dialog_qdjf)
                 //设置dialogpadding
@@ -116,8 +112,8 @@ networkQD();
                 //设置监听事件
                 .builder();
 
-        TextView tv_jf_zhi = dialog.findViewById(R.id.tv_jf_zhi);
-
+        TextView tv_jf_zhi = dialog.getView(R.id.tv_jf_zhi);
+        tv_jf_zhi.setText(integral);
 
         dialog.show();
     }
@@ -127,7 +123,7 @@ networkQD();
         HttpParams params = new HttpParams();
         params.put("token", Api.token);
         Log.d("TAG","数据内容"+params.toString());
-        OkGo.<String>post(Api.BASE_URL +"app/usersignin/selectsigninfo")
+        OkGo.<String>post(Api.BASE_URL +"app/usersignin/insertusersign")
                 .tag(this)
                 .params(params)
                 .execute(new StringCallback() {
@@ -182,6 +178,20 @@ networkQD();
                                     tv_sw.setText((shi/10)+"");
 
                                 }
+
+
+                                if(Integer.parseInt(datas.getString("isqd"))==0){
+                                    shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion,datas.getString("integral"));
+                                    handler = new Handler();
+
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            dialog.dismiss();
+                                        }
+                                    },2000);
+                                }
+
 
                             } else {
                                 Toast.makeText(SignActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();

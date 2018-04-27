@@ -36,6 +36,7 @@ import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 
 public class MsgItmeActivity extends AppCompatActivity implements View.OnClickListener {
@@ -140,8 +141,11 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void run() {
 
-                networkmoney();
-
+                if(NetUtil.checkNet(MsgItmeActivity.this)){
+                    networkmoney();
+                }else{
+                    Toast.makeText(MsgItmeActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
                 sv_sj.onFinishFreshAndLoad();
             }
         }, 0);
@@ -293,7 +297,13 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
         text_sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                networkdelete(position);
+
+                if(NetUtil.checkNet(MsgItmeActivity.this)){
+                    networkdelete(position);
+                }else{
+                    Toast.makeText(MsgItmeActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+
                 dialog.dismiss();
             }
         });

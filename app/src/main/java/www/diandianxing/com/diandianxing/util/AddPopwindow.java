@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.MainActivity;
 import www.diandianxing.com.diandianxing.ReleaseFocusActivity;
 import www.diandianxing.com.diandianxing.VideoRecordingActivity;
@@ -160,7 +162,8 @@ public class AddPopwindow extends PopupWindow implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Intent intent;
-          switch (v.getId()){
+        int guid = SpUtils.getInt(mContext, "guid", 0);
+        switch (v.getId()){
               case R.id.r_close:
                   if (isShowing()) {
                       closeAnimation(contentView);
@@ -168,17 +171,24 @@ public class AddPopwindow extends PopupWindow implements View.OnClickListener {
                   break;
               case R.id.btn_paike:
 //                  Toast.makeText(mContext, "aad", Toast.LENGTH_SHORT).show();
-                  intent = new Intent(mContext, VideoRecordingActivity.class);
-                  mContext.startActivity(intent);
+                  if(guid!=2){
+                      mContext.startActivity(new Intent(mContext,LoginActivity.class));
+                  }else{
+                      intent = new Intent(mContext, VideoRecordingActivity.class);
+                      mContext.startActivity(intent);
+                  }
+
                   dismiss();
                   break;
               case R.id.btn_jiaodian:
 //                  Toast.makeText(mContext, "assad", Toast.LENGTH_SHORT).show();
-
-                  intent = new Intent(mContext, ReleaseFocusActivity.class);
-                  mContext.startActivity(intent);
+                  if(guid!=2){
+                      mContext.startActivity(new Intent(mContext,LoginActivity.class));
+                  }else{
+                      intent = new Intent(mContext, ReleaseFocusActivity.class);
+                      mContext.startActivity(intent);
+                  }
                   dismiss();
-
                   break;
 
           }

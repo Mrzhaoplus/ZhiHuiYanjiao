@@ -40,7 +40,7 @@ public class TieziFragment extends BaseFragment {
         sv_tz=contentView.findViewById(R.id.sv_tz);
         recy_card.setLayoutManager(new LinearLayoutManager(getActivity()));
         recy_card.setNestedScrollingEnabled(false);
-        TieziAdapter tieziAdapter= new TieziAdapter(R.layout.tz_item_view,mList);
+        TieziAdapter tieziAdapter= new TieziAdapter(R.layout.tz_item_view,mList,"",null);
         recy_card.setAdapter(tieziAdapter);
 
         initRefresh();

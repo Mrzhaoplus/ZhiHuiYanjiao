@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.util.MyContants;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 import www.diandianxing.com.diandianxing.R;
@@ -132,6 +133,10 @@ public class Feedback extends BaseActivity implements View.OnClickListener {
             ToastUtils.showShort(Feedback.this,"请输入反馈内容");
             return;
         }
-        network();
+        if(NetUtil.checkNet(Feedback.this)){
+            network();
+        }else{
+            Toast.makeText(Feedback.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
     }
 }

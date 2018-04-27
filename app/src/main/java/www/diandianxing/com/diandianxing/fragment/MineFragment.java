@@ -46,6 +46,7 @@ import www.diandianxing.com.diandianxing.set.SetActivity;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.EventMessage;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 
 /**
  * date : ${Date}
@@ -118,7 +119,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         this.real_yaoqing = (RelativeLayout) contentView.findViewById(R.id.real_yaoqing);
         iv_sz=contentView.findViewById(R.id.iv_sz);
         iv_grtx=contentView.findViewById(R.id.iv_grtx);
-        network();
+        if(NetUtil.checkNet(getActivity())){
+            network();
+        }else{
+            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
         text_guanzhu.setOnClickListener(this);//设置监听
         text_fensi.setOnClickListener(this);
         text_dongtai.setOnClickListener(this);
@@ -328,7 +333,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                                 if(Integer.parseInt(jo2.getString("userSex"))==0){//男
 
                                     iv_sex.setImageResource(R.drawable.icon_boy);
-
 
                                 }else{
 

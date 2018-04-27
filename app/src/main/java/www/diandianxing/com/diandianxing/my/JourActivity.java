@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.liaoinstan.springview.container.DefaultFooter;
@@ -36,6 +37,7 @@ import www.diandianxing.com.diandianxing.bean.Stringbean;
 import www.diandianxing.com.diandianxing.bean.Xingchengbean;
 import www.diandianxing.com.diandianxing.bean.databean;
 import www.diandianxing.com.diandianxing.util.MyContants;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 import www.diandianxing.com.diandianxing.R;
@@ -77,7 +79,13 @@ public class JourActivity extends BaseActivity {
         MyContants.windows(this);
         setContentView(R.layout.activity_journey);
         initView();
-        networkmore();
+
+        if(NetUtil.checkNet(JourActivity.this)){
+            networkmore();
+        }else{
+            Toast.makeText(JourActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
+
 
 
         data();
@@ -204,7 +212,12 @@ public class JourActivity extends BaseActivity {
                     @Override
                     public void run() {
                         i = 1;
-                        network();
+                        if(NetUtil.checkNet(JourActivity.this)){
+                            network();
+
+                        }else{
+                            Toast.makeText(JourActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
                         springView.onFinishFreshAndLoad();
                     }
                 }, 5000);
@@ -217,9 +230,11 @@ public class JourActivity extends BaseActivity {
                     @Override
                     public void run() {
                         i++;
-                        networkmore();
-
-
+                        if(NetUtil.checkNet(JourActivity.this)){
+                            networkmore();
+                        }else{
+                            Toast.makeText(JourActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }, 0);
 

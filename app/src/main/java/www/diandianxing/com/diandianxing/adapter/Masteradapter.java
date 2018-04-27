@@ -53,7 +53,7 @@ public class Masteradapter extends RecyclerView.Adapter<Masteradapter.Myviewhold
     public void onBindViewHolder(Myviewholder holder, final int position) {
         Log.d("TAG",list.size()+"");
 
-        PaiKeDRInfo paiKeDRInfo=list.get(position);
+        final PaiKeDRInfo paiKeDRInfo=list.get(position);
 
         Glide.with(context).load(paiKeDRInfo.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
         holder.text_name.setText(paiKeDRInfo.nickName);
@@ -85,6 +85,7 @@ public class Masteradapter extends RecyclerView.Adapter<Masteradapter.Myviewhold
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, MydynamicActivity.class);
+                intent.putExtra("uid",paiKeDRInfo.uid);
                 context.startActivity(intent);
             }
         });

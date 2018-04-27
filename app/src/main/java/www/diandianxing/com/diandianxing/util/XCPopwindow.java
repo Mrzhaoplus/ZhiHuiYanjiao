@@ -20,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.MainActivity;
 import www.diandianxing.com.diandianxing.VideoRecordingActivity;
 import www.diandianxing.com.diandianxing.R;
@@ -168,10 +169,13 @@ public class XCPopwindow extends PopupWindow implements View.OnClickListener {
                   break;
               case R.id.btn_paike:
 //                  Toast.makeText(mContext, "aad", Toast.LENGTH_SHORT).show();
-
-                  intent = new Intent(mContext, VideoRecordingActivity.class);
-                  mContext.startActivity(intent);
-
+                  int guid = SpUtils.getInt(mContext, "guid", 0);
+                  if(guid!=2){
+                      mContext.startActivity(new Intent(mContext,LoginActivity.class));
+                  }else{
+                      intent = new Intent(mContext, VideoRecordingActivity.class);
+                      mContext.startActivity(intent);
+                  }
 
                   dismiss();
 

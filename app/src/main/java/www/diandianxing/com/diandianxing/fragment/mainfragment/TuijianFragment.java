@@ -42,6 +42,7 @@ import www.diandianxing.com.diandianxing.network.RetrofitManager;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.GuanzhuClickListener;
 import www.diandianxing.com.diandianxing.util.MyContants;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.StateClickListener;
@@ -67,7 +68,11 @@ public class TuijianFragment extends BaseFragment {
         View contentView = getContentView();
         jiao_list = contentView.findViewById(R.id.jiaodan_list);
         jiao_spring = contentView.findViewById(R.id.jiao_springview);
-        networklist();
+        if(NetUtil.checkNet(getActivity())){
+            networklist();
+        }else{
+            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
         jiao_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -85,7 +90,11 @@ public class TuijianFragment extends BaseFragment {
                     public void run() {
                         lists.clear();
                         pageNo=1;
-                        networklist();
+                        if(NetUtil.checkNet(getActivity())){
+                            networklist();
+                        }else{
+                            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 }, 0);
@@ -98,7 +107,11 @@ public class TuijianFragment extends BaseFragment {
                     @Override
                     public void run() {
                         pageNo++;
-                        networklist();
+                        if(NetUtil.checkNet(getActivity())){
+                            networklist();
+                        }else{
+                            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 }, 0);
@@ -213,7 +226,11 @@ public class TuijianFragment extends BaseFragment {
     private GuanzhuClickListener guanzhuClickListener = new GuanzhuClickListener() {
         @Override
         public void OnGuanzhuClickListener(int concernedId,int pos) {
-            networkGZ(concernedId,pos);
+            if(NetUtil.checkNet(getActivity())){
+                networkGZ(concernedId,pos);
+            }else{
+                Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
@@ -227,26 +244,38 @@ public class TuijianFragment extends BaseFragment {
     private StateClickListener stateClickListener = new StateClickListener() {
         @Override
         public void ShouCangClickListener(int objId, int obj_type, int operation_type, int fx,int  pos) {
-
-            network(objId,obj_type,operation_type,pos);
+            if(NetUtil.checkNet(getActivity())){
+                network(objId,obj_type,operation_type,pos);
+            }else{
+                Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
         public void DianZanClickListener(int objId, int obj_type, int operation_type, int fx,int pos) {
-
-            network(objId,obj_type,operation_type,pos);
+            if(NetUtil.checkNet(getActivity())){
+                network(objId,obj_type,operation_type,pos);
+            }else{
+                Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
         public void QuXiaoShouCangClickListener(int objId, int obj_type, int operation_type, int pos) {
-
-            QXnetwork(objId,obj_type,operation_type,pos);
-
+            if(NetUtil.checkNet(getActivity())){
+                QXnetwork(objId,obj_type,operation_type,pos);
+            }else{
+                Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
         public void QuXiaoDianZanClickListener(int objId, int obj_type, int operation_type, int pos) {
-            QXnetwork(objId,obj_type,operation_type,pos);
+            if(NetUtil.checkNet(getActivity())){
+                QXnetwork(objId,obj_type,operation_type,pos);
+            }else{
+                Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 

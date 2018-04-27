@@ -50,6 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.MyCollectionActivity;
 import www.diandianxing.com.diandianxing.adapter.JiaoLiuyanAdapter;
 import www.diandianxing.com.diandianxing.adapter.Jiaodianadapter;
@@ -71,6 +72,7 @@ import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.MyUtils;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /**
@@ -107,7 +109,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
     private List<PingLunInfo> list = new ArrayList<>();
 
     private SpringView sv_pj;
-
+    private String id;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,6 +147,8 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 
         guanzhuJD = (GuanzhuJD) getIntent().getSerializableExtra("guanzhu");
 
+        id=getIntent().getStringExtra("id");
+
         if(guanzhuJD!=null){
             text_title.setText(guanzhuJD.postTitle);
             Glide.with(JiaoDetailActivity.this).load(guanzhuJD.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(img_tou);
@@ -176,22 +180,18 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
             }
             TPAdapter1 tpAdapter1 = new TPAdapter1(this,guanzhuJD.imagesList);
             jiao_Recycler.setAdapter(tpAdapter1);
+        }else if(id!=null){
+            if(NetUtil.checkNet(JiaoDetailActivity.this)){
+                networkXX();
+            }else{
+                Toast.makeText(JiaoDetailActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+            }
         }
-
-
-
-
-
-
 
 
         jiao_pinglun.setLayoutManager(new LinearLayoutManager(this));
         jiao_pinglun.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         jiao_pinglun.setNestedScrollingEnabled(false);
-        if(guanzhuJD!=null){
-            jiaoLiuyanAdapter = new JiaoLiuyanAdapter(this,list,this,guanzhuJD.userId,guanzhuJD.userName);
-            jiao_pinglun.setAdapter(jiaoLiuyanAdapter);
-        }
         initRefresh();
         /**
          *点击事件
@@ -204,7 +204,14 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
         text_zan.setOnClickListener(this);
         button_fabu.setOnClickListener(this);
         if(guanzhuJD!=null){
-            finishFreshAndLoad();
+            id=guanzhuJD.id;
+            jiaoLiuyanAdapter = new JiaoLiuyanAdapter(JiaoDetailActivity.this,list,JiaoDetailActivity.this,guanzhuJD.userId,guanzhuJD.userName);
+            jiao_pinglun.setAdapter(jiaoLiuyanAdapter);
+            if(NetUtil.checkNet(JiaoDetailActivity.this)){
+                finishFreshAndLoad();
+            }else{
+                Toast.makeText(JiaoDetailActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -226,8 +233,12 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 
                 list.clear();
                 pageNo=1;
-                if(guanzhuJD!=null){
-                    finishFreshAndLoad();
+                if(NetUtil.checkNet(JiaoDetailActivity.this)){
+                    if(guanzhuJD!=null){
+                        finishFreshAndLoad();
+                    }
+                }else{
+                    Toast.makeText(JiaoDetailActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -236,7 +247,11 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 //                Toast.makeText(mContext,"玩命加载中...",Toast.LENGTH_SHORT).show();
                 pageNo++;
                 if(guanzhuJD!=null){
-                    finishFreshAndLoad();
+                    if(NetUtil.checkNet(JiaoDetailActivity.this)){
+                        finishFreshAndLoad();
+                    }else{
+                        Toast.makeText(JiaoDetailActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -249,9 +264,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
-                networklist();
-
+                    networklist();
                 sv_pj.onFinishFreshAndLoad();
             }
         }, 0);
@@ -259,6 +272,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
+        int guid = SpUtils.getInt(JiaoDetailActivity.this, "guid", 0);
         switch(view.getId()){
             case R.id.tv_back:
                 finish();
@@ -269,30 +283,51 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
                 startActivity(intent);
                 break;
             case R.id.tv_jdxq_gz:
-                shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+
+                if(guid!=2){
+                    startActivity(new Intent(JiaoDetailActivity.this,LoginActivity.class));
+                }else{
+                    shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+                }
                 break;
             case R.id.text_share:
                 showFXDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion);
                 break;
             case R.id.img_collect:
-
-                if(Integer.parseInt(guanzhuJD.is_collect)==0){
-
-                    network(Integer.parseInt(guanzhuJD.id),0,1);
-
+                if(guid!=2){
+                    startActivity(new Intent(JiaoDetailActivity.this,LoginActivity.class));
                 }else{
-                    QXnetwork(Integer.parseInt(guanzhuJD.id),0,1);
+                    if(NetUtil.checkNet(JiaoDetailActivity.this)){
+                        if(Integer.parseInt(guanzhuJD.is_collect)==0){
+                            network(Integer.parseInt(guanzhuJD.id),0,1);
+                        }else{
+                            QXnetwork(Integer.parseInt(guanzhuJD.id),0,1);
+                        }
+
+                    }else{
+                        Toast.makeText(JiaoDetailActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                    }
                 }
+
 
                 break;
             case R.id.text_zan:
-
-                if(Integer.parseInt(guanzhuJD.is_zan)==0){
-
-                    network(Integer.parseInt(guanzhuJD.id),0,0);
-
+                if(guid!=2){
+                    startActivity(new Intent(JiaoDetailActivity.this,LoginActivity.class));
                 }else{
-                    QXnetwork(Integer.parseInt(guanzhuJD.id),0,0);
+                    if(NetUtil.checkNet(JiaoDetailActivity.this)){
+                        if(Integer.parseInt(guanzhuJD.is_zan)==0){
+
+                            network(Integer.parseInt(guanzhuJD.id),0,0);
+
+                        }else{
+                            QXnetwork(Integer.parseInt(guanzhuJD.id),0,0);
+                        }
+
+                    }else{
+                        Toast.makeText(JiaoDetailActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
 
                 break;
@@ -301,13 +336,15 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
                 content=ed_text.getText().toString().trim();
 
                 if(content!=null&&content.length()>0){
-
-                    if(isHf){
-                        networkZJPL(commentFatherId,beReturnedId);
+                    if(NetUtil.checkNet(JiaoDetailActivity.this)){
+                        if(isHf){
+                            networkZJPL(commentFatherId,beReturnedId);
+                        }else{
+                            networkFB();
+                        }
                     }else{
-                        networkFB();
+                        Toast.makeText(JiaoDetailActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                     }
-
 
                 }else {
                     Toast.makeText(JiaoDetailActivity.this,"请输入评论内容",Toast.LENGTH_SHORT).show();
@@ -319,6 +356,113 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 
 
     private String content="";
+
+
+
+    private void networkXX() {
+
+        HttpParams params = new HttpParams();
+        params.put("postId", id);
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/getPostById")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "关注焦点" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            JSONObject jo = jsonobj.getJSONObject("datas");
+                            if (code == 200) {
+
+                                    guanzhuJD= new GuanzhuJD();
+                                guanzhuJD.id=jo.getString("id");
+                                guanzhuJD.userId=jo.getString("userId");
+                                guanzhuJD.postType=jo.getString("postType");
+                                guanzhuJD.postTitle=jo.getString("postTitle");
+                                guanzhuJD.postContent=jo.getString("postContent");
+                                guanzhuJD.createTime=jo.getString("createTime");
+                                guanzhuJD.updateTime=jo.getString("updateTime");
+                                guanzhuJD.address=jo.getString("address");
+                                guanzhuJD.postFlage=jo.getString("postFlage");
+                                guanzhuJD.postStatus=jo.getString("postStatus");
+                                guanzhuJD.isDeleted=jo.getString("isDeleted");
+                                guanzhuJD.userName=jo.getString("userName");
+                                guanzhuJD.userLevel=jo.getString("userLevel");
+                                guanzhuJD.postImge=jo.getString("postImge");
+                                guanzhuJD.commentCount=jo.getString("commentCount");
+                                guanzhuJD.dianZanCount=jo.getString("dianZanCount");
+                                guanzhuJD.collectCount=jo.getString("collectCount");
+                                guanzhuJD.relayCount=jo.getString("relayCount");
+                                guanzhuJD.pic=jo.getString("pic");
+                                guanzhuJD.is_collect=jo.getString("is_collect");
+                                guanzhuJD.is_zan=jo.getString("is_zan");
+                                guanzhuJD.is_fx=jo.getString("is_fx");
+                                guanzhuJD.is_focus=jo.getString("is_focus");
+                                    JSONArray ja=jo.getJSONArray("imagesList");
+
+                                guanzhuJD.imagesList = new ArrayList<String>();
+                                    for(int j=0;j<ja.length();j++){
+                                        guanzhuJD.imagesList.add(ja.getString(j));
+                                    }
+
+                                if(guanzhuJD!=null){
+                                    text_title.setText(guanzhuJD.postTitle);
+                                    Glide.with(JiaoDetailActivity.this).load(guanzhuJD.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(img_tou);
+                                    text_name.setText(guanzhuJD.userName);
+                                    da_address.setText(MyUtils.stampToDate(guanzhuJD.updateTime)+" "+guanzhuJD.address);
+                                    text_dengji.setText(guanzhuJD.userLevel);
+                                    Log.e("TAG","关注是否：：："+guanzhuJD.is_focus);
+                                    if(Integer.parseInt(guanzhuJD.is_focus)==0){
+                                        rela_guanzhu.setVisibility(View.VISIBLE);
+                                    }else{
+                                        rela_guanzhu.setVisibility(View.INVISIBLE);
+                                    }
+                                    text_count.setText(guanzhuJD.postContent);
+
+                                    if(Integer.parseInt(guanzhuJD.is_collect)==0){
+                                        img_collect.setImageResource(R.drawable.icon_collect);
+                                    }else{
+                                        img_collect.setImageResource(R.drawable.shouchang_xz_icon_3x);
+                                    }
+                                    text_zan.setText(guanzhuJD.dianZanCount);
+                                    if(Integer.parseInt(guanzhuJD.is_zan)==0){
+                                        Drawable nav_up=getResources().getDrawable(R.drawable.icon_dianzan);
+                                        nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+                                        text_zan.setCompoundDrawables(nav_up, null, null, null);
+                                    }else{
+                                        Drawable nav_up=getResources().getDrawable(R.drawable.dianzan_xz_icon_3x);
+                                        nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+                                        text_zan.setCompoundDrawables(nav_up, null, null, null);
+                                    }
+                                    TPAdapter1 tpAdapter1 = new TPAdapter1(JiaoDetailActivity.this,guanzhuJD.imagesList);
+                                    jiao_Recycler.setAdapter(tpAdapter1);
+                                }
+                                jiaoLiuyanAdapter = new JiaoLiuyanAdapter(JiaoDetailActivity.this,list,JiaoDetailActivity.this,guanzhuJD.userId,guanzhuJD.userName);
+                                jiao_pinglun.setAdapter(jiaoLiuyanAdapter);
+                                if(NetUtil.checkNet(JiaoDetailActivity.this)){
+                                    finishFreshAndLoad();
+                                }else{
+                                    Toast.makeText(JiaoDetailActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(JiaoDetailActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
 
     private void networkFB() {
 
@@ -504,7 +648,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
         HttpParams params = new HttpParams();
         params.put("pageNo", pageNo);
         params.put("token", Api.token);
-        params.put("objId", guanzhuJD.id);
+        params.put("objId", id);
         params.put("objType", 0);
         OkGo.<String>post(Api.BASE_URL +"app/home/getCommentList")
                 .tag(this)
@@ -901,8 +1045,12 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 
                                 list.clear();
                                 pageNo=1;
-                                if(guanzhuJD!=null){
-                                    finishFreshAndLoad();
+                                if(NetUtil.checkNet(JiaoDetailActivity.this)){
+                                    if(guanzhuJD!=null){
+                                        finishFreshAndLoad();
+                                    }
+                                }else{
+                                    Toast.makeText(JiaoDetailActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                                 }
 
                             } else {

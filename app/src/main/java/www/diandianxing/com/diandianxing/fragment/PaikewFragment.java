@@ -1,6 +1,7 @@
 package www.diandianxing.com.diandianxing.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -21,6 +22,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.MainActivity;
 import www.diandianxing.com.diandianxing.ReleaseShootoffVidoActivity;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
@@ -28,6 +30,7 @@ import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.fragment.paikefragment.DarenFragment;
 import www.diandianxing.com.diandianxing.fragment.paikefragment.GuanzhuFragment;
 import www.diandianxing.com.diandianxing.fragment.paikefragment.TuijianFragment;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.XCPopwindow;
 import www.diandianxing.com.diandianxing.R;
 
@@ -196,9 +199,12 @@ public class PaikewFragment extends BaseFragment implements View.OnClickListener
     private XCPopwindow.AlbumClickListener albumClickListener = new XCPopwindow.AlbumClickListener() {
         @Override
         public void OnAlbumClickListener() {
-
-            requestPhoto();
-
+            int guid = SpUtils.getInt(mContext, "guid", 0);
+            if(guid!=2){
+                mContext.startActivity(new Intent(mContext,LoginActivity.class));
+            }else{
+                requestPhoto();
+            }
         }
     };
 

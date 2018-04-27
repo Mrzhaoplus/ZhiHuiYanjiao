@@ -32,6 +32,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.MsgItmeActivity;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
@@ -42,6 +43,7 @@ import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.MyUtils;
 import www.diandianxing.com.diandianxing.util.ShareListener;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.StateClickListener;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 
@@ -154,13 +156,16 @@ holder.item_count.setText(guanzhuJD.postContent);
                 holder.text_colltet.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        if(Integer.parseInt(guanzhuJD.is_collect)==0){
-
-                            stateClickListener.ShouCangClickListener(Integer.parseInt(guanzhuJD.id),0,1,-1,position);
-
+                        int guid = SpUtils.getInt(context, "guid", 0);
+                        if(guid!=2){
+                            context.startActivity(new Intent(context,LoginActivity.class));
                         }else{
-                            stateClickListener.QuXiaoShouCangClickListener(Integer.parseInt(guanzhuJD.id),0,1,position);
+                            if(Integer.parseInt(guanzhuJD.is_collect)==0){
+                                stateClickListener.ShouCangClickListener(Integer.parseInt(guanzhuJD.id),0,1,-1,position);
+
+                            }else{
+                                stateClickListener.QuXiaoShouCangClickListener(Integer.parseInt(guanzhuJD.id),0,1,position);
+                            }
                         }
 
                     }
@@ -169,13 +174,16 @@ holder.item_count.setText(guanzhuJD.postContent);
                 holder.text_zan.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        if(Integer.parseInt(guanzhuJD.is_zan)==0){
-
-                            stateClickListener.DianZanClickListener(Integer.parseInt(guanzhuJD.id),0,0,-1,position);
-
+                        int guid = SpUtils.getInt(context, "guid", 0);
+                        if(guid!=2){
+                            context.startActivity(new Intent(context,LoginActivity.class));
                         }else{
-                            stateClickListener.QuXiaoDianZanClickListener(Integer.parseInt(guanzhuJD.id),0,0,position);
+                            if(Integer.parseInt(guanzhuJD.is_zan)==0){
+                                stateClickListener.DianZanClickListener(Integer.parseInt(guanzhuJD.id),0,0,-1,position);
+
+                            }else{
+                                stateClickListener.QuXiaoDianZanClickListener(Integer.parseInt(guanzhuJD.id),0,0,position);
+                            }
                         }
                     }
                 });
