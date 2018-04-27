@@ -62,6 +62,7 @@ import www.diandianxing.com.diandianxing.bean.Info;
 import www.diandianxing.com.diandianxing.bean.PingLunInfo;
 import www.diandianxing.com.diandianxing.bean.Sharebean;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
+import www.diandianxing.com.diandianxing.interfase.HuiFuClickListener;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
 import www.diandianxing.com.diandianxing.util.Api;
@@ -77,7 +78,7 @@ import www.diandianxing.com.diandianxing.util.SpUtils;
  * author:衣鹏宇(ypu)
  */
 
-public class JiaoDetailActivity extends BaseActivity implements View.OnClickListener {
+public class JiaoDetailActivity extends BaseActivity implements View.OnClickListener ,HuiFuClickListener{
 
 
     private ImageView tv_back;
@@ -187,8 +188,10 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
         jiao_pinglun.setLayoutManager(new LinearLayoutManager(this));
         jiao_pinglun.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         jiao_pinglun.setNestedScrollingEnabled(false);
-        jiaoLiuyanAdapter = new JiaoLiuyanAdapter(this,list);
-        jiao_pinglun.setAdapter(jiaoLiuyanAdapter);
+        if(guanzhuJD!=null){
+            jiaoLiuyanAdapter = new JiaoLiuyanAdapter(this,list,this,guanzhuJD.userId,guanzhuJD.userName);
+            jiao_pinglun.setAdapter(jiaoLiuyanAdapter);
+        }
         initRefresh();
         /**
          *点击事件
@@ -299,7 +302,12 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 
                 if(content!=null&&content.length()>0){
 
-                    networkFB();
+                    if(isHf){
+                        networkZJPL(commentFatherId,beReturnedId);
+                    }else{
+                        networkFB();
+                    }
+
 
                 }else {
                     Toast.makeText(JiaoDetailActivity.this,"请输入评论内容",Toast.LENGTH_SHORT).show();
@@ -343,6 +351,13 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
                                 }
 
                                 ed_text.setText("");
+                                ed_text.setHint("请说说您的看法...");
+
+                                list.clear();
+                                pageNo=1;
+                                if(guanzhuJD!=null){
+                                    finishFreshAndLoad();
+                                }
 
                             } else {
                                 Toast.makeText(JiaoDetailActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
@@ -819,5 +834,88 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
         super.onDestroy();
         UMShareAPI.get(this).release();
     }
+
+    private boolean isHf=false;
+    private String commentFatherId,beReturnedId;
+
+    @Override
+    public void OnHuiFuClickListener(String commentFatherId, String beReturnedId,String name) {
+        ed_text.setFocusable(true);
+        ed_text.setFocusableInTouchMode(true);
+        ed_text.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        ed_text.setHint("回复"+name);
+        this.commentFatherId=commentFatherId;
+        this.beReturnedId=beReturnedId;
+        isHf=true;
+
+
+    }
+
+    @Override
+    public void OnHYDataClickListener() {
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(ed_text.getWindowToken(), 0);
+        }
+        ed_text.setText("");
+        ed_text.setHint("请说说您的看法...");
+        isHf=false;
+
+    }
+
+    private void networkZJPL(String commentFatherId,String beReturnedId) {
+
+        HttpParams params = new HttpParams();
+        params.put("commentFatherId", commentFatherId);
+//
+        params.put("replyContent", content);
+
+        params.put("beReturnedId",beReturnedId);
+
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/isertReplay")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "数据" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                if (imm != null) {
+                                    imm.hideSoftInputFromWindow(ed_text.getWindowToken(), 0);
+                                }
+                                ed_text.setText("");
+                                ed_text.setHint("请说说您的看法...");
+                                isHf=false;
+
+                                list.clear();
+                                pageNo=1;
+                                if(guanzhuJD!=null){
+                                    finishFreshAndLoad();
+                                }
+
+                            } else {
+                                Toast.makeText(JiaoDetailActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
 
 }

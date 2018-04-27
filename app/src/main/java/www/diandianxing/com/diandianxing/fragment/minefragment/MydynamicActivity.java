@@ -44,6 +44,7 @@ import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Response;
 import com.umeng.socialize.UMShareAPI;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,6 +74,7 @@ import www.diandianxing.com.diandianxing.my.MyActivityActivity;
 import www.diandianxing.com.diandianxing.my.PersonActivity;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
+import www.diandianxing.com.diandianxing.util.EventMessage;
 import www.diandianxing.com.diandianxing.util.SharingPop;
 import www.diandianxing.com.diandianxing.util.ZDPop;
 import www.diandianxing.com.diandianxing.R;
@@ -136,7 +138,6 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
         setContentView(R.layout.activity_minedynamic);
         initView();
     }
-
     private void initView() {
         img_tou = (ImageView) findViewById(R.id.img_tou);
         iv_gz= (ImageView) findViewById(R.id.iv_gz);
@@ -193,7 +194,6 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
             uid=getIntent().getStringExtra("uid");
 
 
-
         }
         networkGR();
         finishFreshAndLoad();
@@ -224,7 +224,6 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
     private NestedScrollView.OnScrollChangeListener scrollChangeListener = new NestedScrollView.OnScrollChangeListener() {
         @Override
         public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
             Log.e("TAG","数据：：：："+(scrollY/height));
             if(scrollY>=height){
             rl_bt.getBackground().mutate().setAlpha(230);
@@ -384,12 +383,18 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
         }
     };
 
+    private String postId;
+
     private TieziAdapter.DianClickListener dianClickListener = new TieziAdapter.DianClickListener() {
         @Override
         public void onDianClickListener(int pos) {
 
 //            setShowPop(zdPop,liner_tiezi);
 //            zdPop.showAtLocation(liner_tiezi, Gravity.BOTTOM, 0, 0);
+
+            Log.e("TAG","点的位置：：："+pos);
+
+            postId=mList.get(pos).id;
 
             showDDDDialog(Gravity.BOTTOM,R.style.Bottom_Top_aniamtion);
 
@@ -470,6 +475,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
 
                 break;
             case R.id.tv_sc:
+                networkdele(postId);
                 DDdialog.dismiss();
                 break;
             case R.id.tv_close:
@@ -493,6 +499,9 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                 break;
             case R.id.text_fensi://粉丝
                 intent=new Intent(MydynamicActivity.this, MyFansiActivity.class);
+
+                intent.putExtra("uid",uid);
+
                 startActivity(intent);
                 break;
             case R.id.text_collect:
@@ -696,7 +705,6 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
 //                    } catch (FileNotFoundException e) {
 //                        e.printStackTrace();
 //                    }
-
 //                    list.clear();
 //                    list.add(cutPath);
 //                    photoworks();
@@ -824,6 +832,46 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
         dialog.show();
     }
 
+    private void networkdele(String postId) {
+        HttpParams params = new HttpParams();
+        params.put("postId", postId);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/postinfo/deletepostinfo")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        Log.d("TAG", "删除成功：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+
+                            if (code == 200) {
+                                qh=0;
+                                pageNo=1;
+                                mList.clear();
+                                list.clear();
+                                if(tagAdapter!=null){
+                                    tagAdapter.notifyDataSetChanged();
+                                }
+                                tieziAdapter=null;
+                                finishFreshAndLoad();
+
+                            } else {
+                                Toast.makeText(MydynamicActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
     private void networkImg() {
         HttpParams params = new HttpParams();
         params.put("file", file);
@@ -845,7 +893,10 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                             if (code == 200) {
 
                                 Drawable fromPath = Drawable.createFromPath(cutPath);
-                                rl_bg.setBackground(fromPath);
+                                rl_bg.setImageDrawable(fromPath);
+
+                                EventMessage eventMessage = new EventMessage(cutPath);
+                                EventBus.getDefault().postSticky(eventMessage);
 
                             } else {
                                 Toast.makeText(MydynamicActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
@@ -1101,8 +1152,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                                 fen_num.setText(datas.getString("fsnum"));
                                 collect_num.setText(datas.getString("dznum"));
 
-                                Log.e("TAG","背景图片：：："+datas.getString("imageUrl"));
-                                Glide.with(MydynamicActivity.this).load(datas.getString("imageUrl")).into(rl_bg);
+                                Glide.with(MydynamicActivity.this).load(datas.getString("imageurl")).into(rl_bg);
 
 
                                 if(Integer.parseInt(jo2.getString("userSex"))==0){//男

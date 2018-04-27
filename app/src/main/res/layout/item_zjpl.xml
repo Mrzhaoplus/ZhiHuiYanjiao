@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:background="#fafafa"
+              android:clickable="false"
+              android:id="@+id/ll_item_hf"
               android:layout_height="wrap_content">
 
     <LinearLayout
@@ -11,6 +13,7 @@
         android:paddingRight="10dp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
+        android:clickable="false"
         android:orientation="horizontal">
 
 
@@ -19,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
+            android:clickable="false"
             android:textSize="14sp"
             android:textColor="#5cb3eb"
             />
@@ -28,6 +32,7 @@
             android:layout_height="wrap_content"
             android:text="回复"
             android:textSize="14sp"
+            android:clickable="false"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             />
@@ -37,6 +42,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="14sp"
+            android:clickable="false"
             android:textColor="#5cb3eb"
             />
 
@@ -46,6 +52,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="14sp"
+            android:clickable="false"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             />

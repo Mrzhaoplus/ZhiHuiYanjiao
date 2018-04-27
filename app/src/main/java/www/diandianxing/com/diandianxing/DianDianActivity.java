@@ -2156,6 +2156,8 @@ public class DianDianActivity extends BaseActivity implements View.OnClickListen
         SpUtils.putString(this,"la",latitude+"");
         SpUtils.putString(this,"lo",longitude+"");
 
+
+
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.app.Notification;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -33,7 +34,7 @@ import www.diandianxing.com.diandianxing.R;
  * Created by ASUS on 2018/3/19.
  */
 
-public class Myapplication extends Application {
+public class Myapplication extends MultiDexApplication {
 
     public static Myapplication application;
 

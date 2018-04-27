@@ -2,6 +2,7 @@ package www.diandianxing.com.diandianxing.fragment.paikefragment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
@@ -19,7 +20,10 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
@@ -72,6 +76,7 @@ import www.diandianxing.com.diandianxing.bean.PingLunInfo;
 import www.diandianxing.com.diandianxing.bean.Sharebean;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
+import www.diandianxing.com.diandianxing.interfase.HuiFuClickListener;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
 import www.diandianxing.com.diandianxing.util.Api;
@@ -86,7 +91,7 @@ import www.diandianxing.com.diandianxing.util.SpUtils;
  * Created by Mr赵 on 2018/4/8.
  */
 
-public class VideoFragment extends BaseFragment implements View.OnClickListener {
+public class VideoFragment extends BaseFragment implements View.OnClickListener ,HuiFuClickListener{
 
     private ImageView video;
     private RecyclerView recy_view;
@@ -124,6 +129,8 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
     private List<PingLunInfo> list = new ArrayList<>();
     JiaoLiuyanAdapter jiaoLiuyanAdapter;
     private SpringView sv_pk;
+    private EditText ed_text;
+    private Button button_fabu;
     @Override
     protected int setContentView() {
         return R.layout.fragment_video;
@@ -148,6 +155,8 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
         rl_img=contentView.findViewById(R.id.rl_img);
         nsc_pm=contentView.findViewById(R.id.nsc_pm);
         rl_sp=contentView.findViewById(R.id.rl_sp);
+        ed_text = (EditText) contentView.findViewById(R.id.ed_text);
+        button_fabu = (Button) contentView.findViewById(R.id.button_fabu);
         frnxiang = contentView.findViewById(R.id.video_fenxiang);
         text_time = contentView.findViewById(R.id.text_time);
         pinglun = contentView.findViewById(R.id.text_pinglun);
@@ -181,6 +190,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
         frnxiang.setOnClickListener(this);
         rl_sp.setOnClickListener(this);
         zan.setOnClickListener(this);
+        button_fabu.setOnClickListener(this);
         nsc_pm.setOnScrollChangeListener(scrollChangeListener);
         recy_view.setLayoutManager(new LinearLayoutManager(getActivity()));
         recy_view.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
@@ -534,7 +544,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
                                 if(jiaoLiuyanAdapter==null){
 
-                                    jiaoLiuyanAdapter = new JiaoLiuyanAdapter(getActivity(),list);
+                                    jiaoLiuyanAdapter = new JiaoLiuyanAdapter(getActivity(),list,VideoFragment.this,pk.userId,pk.userName);
                                     recy_view.setAdapter(jiaoLiuyanAdapter);
 
                                 }else{
@@ -543,6 +553,88 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
                                 pinglun.setText(allCount+"评论");
 
+
+                            } else {
+                                Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+    private boolean isHf=false;
+    private String commentFatherId,beReturnedId;
+
+    @Override
+    public void OnHuiFuClickListener(String commentFatherId, String beReturnedId,String name) {
+        ed_text.setFocusable(true);
+        ed_text.setFocusableInTouchMode(true);
+        ed_text.requestFocus();
+        InputMethodManager imm = (InputMethodManager)  getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        ed_text.setHint("回复"+name);
+        this.commentFatherId=commentFatherId;
+        this.beReturnedId=beReturnedId;
+        isHf=true;
+
+
+    }
+
+    @Override
+    public void OnHYDataClickListener() {
+
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(ed_text.getWindowToken(), 0);
+        }
+        ed_text.setText("");
+        ed_text.setHint("请说说您的看法...");
+        isHf=false;
+
+    }
+
+    private void networkZJPL(String commentFatherId,String beReturnedId) {
+
+        HttpParams params = new HttpParams();
+        params.put("commentFatherId", commentFatherId);
+//
+        params.put("replyContent", content);
+
+        params.put("beReturnedId",beReturnedId);
+
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/isertReplay")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "数据" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+                                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                if (imm != null) {
+                                    imm.hideSoftInputFromWindow(ed_text.getWindowToken(), 0);
+                                }
+                                ed_text.setText("");
+                                ed_text.setHint("请说说您的看法...");
+                                isHf=false;
+
+                                list.clear();
+                                pageNo=1;
+                                if(pk!=null){
+                                    finishFreshAndLoad();
+                                }
 
                             } else {
                                 Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
@@ -656,8 +748,78 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
                 }
 
                 break;
+            case R.id.button_fabu:
+
+                content=ed_text.getText().toString().trim();
+
+                if(content!=null&&content.length()>0){
+
+                    if(isHf){
+                        networkZJPL(commentFatherId,beReturnedId);
+                    }else{
+                        networkFB();
+                    }
+
+
+                }else {
+                    Toast.makeText(getActivity(),"请输入评论内容",Toast.LENGTH_SHORT).show();
+                }
+
+                break;
 
         }
+    }
+    private String content="";
+
+    private void networkFB() {
+
+        HttpParams params = new HttpParams();
+        params.put("objId", pk.id);
+//
+        params.put("content", content);
+
+        params.put("objType",1);
+
+        params.put("token", Api.token);
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/isertCommentFather")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "数据" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+                                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                if (imm != null) {
+                                    imm.hideSoftInputFromWindow(ed_text.getWindowToken(), 0);
+                                }
+
+                                ed_text.setText("");
+                                ed_text.setHint("请说说您的看法...");
+
+                                list.clear();
+                                pageNo=1;
+                                if(pk!=null){
+                                    finishFreshAndLoad();
+                                }
+
+                            } else {
+                                Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
     }
     private void network(int objId , int obj_type, final int operation_type) {
 

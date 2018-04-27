@@ -85,7 +85,7 @@ public class GuidePageActivity extends BaseActivity {
         public void run() {
 
             SpUtils.putBoolean(GuidePageActivity.this,"sousou",false);
-//            SpUtils.putInt(GuidePageActivity.this, "guid", 1);
+            SpUtils.putInt(GuidePageActivity.this, "guid", 1);
             Intent intent = new Intent(GuidePageActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -109,7 +109,7 @@ public class GuidePageActivity extends BaseActivity {
                      */
 
                         SpUtils.putBoolean(GuidePageActivity.this,"sousou",false);
-//                        SpUtils.putInt(GuidePageActivity.this, "guid", 1);
+                        SpUtils.putInt(GuidePageActivity.this, "guid", 1);
                         Intent intent = new Intent(GuidePageActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();

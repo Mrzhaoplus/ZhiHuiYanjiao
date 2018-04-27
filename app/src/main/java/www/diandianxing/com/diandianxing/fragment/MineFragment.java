@@ -1,6 +1,7 @@
 package www.diandianxing.com.diandianxing.fragment;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
 import android.view.Gravity;
@@ -20,6 +21,8 @@ import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Response;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,6 +45,7 @@ import www.diandianxing.com.diandianxing.set.Feedback;
 import www.diandianxing.com.diandianxing.set.SetActivity;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
+import www.diandianxing.com.diandianxing.util.EventMessage;
 
 /**
  * date : ${Date}
@@ -86,6 +90,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     @Override
     protected void lazyLoad() {
         View contentView = getContentView();
+        EventBus.getDefault().register(this);
         this.text_day = (TextView) contentView.findViewById(R.id.text_day);
         this.imageView2 = (ImageView) contentView.findViewById(R.id.imageView2);
         this.guan_num = (TextView) contentView.findViewById(R.id.guan_num);
@@ -128,7 +133,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         iv_sz.setOnClickListener(this);
     }
 
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void XXX(EventMessage messageEvent) {
+        Drawable fromPath = Drawable.createFromPath(messageEvent.getMsg());
+        iv_bg_my.setImageDrawable(fromPath);
+    }
     @Override
     public void onClick(View view) {
 
@@ -228,6 +237,12 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         });
 
         dialog.show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     UserInfo userInfo;

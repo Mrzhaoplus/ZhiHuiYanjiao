@@ -24,13 +24,12 @@ public class VideoActivity extends AppCompatActivity {
 
     private FrameLayout fl;
     private View view;
-    private EditText ed_text;
-    private Button button_fabu;
     private Fragment currfit;
     private VideoFragment videoFragment;
 List<String>list=new ArrayList<>();
 
     private PaiKeInfo pk;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +43,6 @@ List<String>list=new ArrayList<>();
     private void initView() {
         fl = (FrameLayout) findViewById(R.id.fl);
         view = (View) findViewById(R.id.view);
-        ed_text = (EditText) findViewById(R.id.ed_text);
-        button_fabu = (Button) findViewById(R.id.button_fabu);
-
         PaiKeInfo pk = (PaiKeInfo) getIntent().getSerializableExtra("pk");
 
         if(videoFragment==null){

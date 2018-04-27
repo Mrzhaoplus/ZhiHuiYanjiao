@@ -38,14 +38,14 @@ public class LancherActivity extends BaseActivity {
             @Override
             public void run() {
                 int guid = SpUtils.getInt(LancherActivity.this, "guid", 0);
-//                if (guid==1) {
-//                    startActivity(new Intent(LancherActivity.this,MainActivity.class));
-//                }else if(guid==2){
-//                    startActivity(new Intent(LancherActivity.this,MainActivity.class));
-//                }
-//                else if(guid==0){
+                if (guid==1) {
+                    startActivity(new Intent(LancherActivity.this,MainActivity.class));
+                }else if(guid==2){
+                    startActivity(new Intent(LancherActivity.this,MainActivity.class));
+                }
+                else if(guid==0){
                     startActivity(new Intent(LancherActivity.this, GuidePageActivity.class));
-//                }
+                }
                 finish();
             }
         }, 1500);

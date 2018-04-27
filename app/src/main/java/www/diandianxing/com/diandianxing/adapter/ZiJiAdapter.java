@@ -2,6 +2,7 @@ package www.diandianxing.com.diandianxing.adapter;
 
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -13,16 +14,15 @@ import java.util.List;
 
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.bean.CustomReplayList;
+import www.diandianxing.com.diandianxing.interfase.HuiFuClickListener;
 
 /**
  * Created by Administrator on 2018/4/25.
  */
 
 public class ZiJiAdapter extends BaseQuickAdapter<CustomReplayList, BaseViewHolder> {
-
     public ZiJiAdapter(@LayoutRes int layoutResId, @Nullable List<CustomReplayList> data) {
         super(layoutResId, data);
-
     }
 
     @Override
@@ -32,11 +32,10 @@ public class ZiJiAdapter extends BaseQuickAdapter<CustomReplayList, BaseViewHold
         TextView tv_name1=helper.getView(R.id.tv_name1);
         TextView tv_name2=helper.getView(R.id.tv_name2);
         TextView tv_content_text=helper.getView(R.id.tv_content_text);
-
+        LinearLayout ll_item_hf=helper.getView(R.id.ll_item_hf);
         tv_name1.setText(item.replName);
         tv_name2.setText(item.beReturnedName);
-        tv_content_text.setText(item.replyContent);
-
+        tv_content_text.setText("："+item.replyContent);
 
     }
 }

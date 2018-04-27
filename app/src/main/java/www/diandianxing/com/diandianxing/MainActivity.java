@@ -4,12 +4,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -18,6 +20,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.LocationSource;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -49,7 +57,8 @@ import www.diandianxing.com.diandianxing.util.SpUtils;
 /*
   zhuye
  */
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener ,AMapLocationListener,LocationSource
+        ,AMap.OnMapTouchListener{
     private FrameLayout fl;
     private RadioButton rb_home;
     private RadioButton rb_find;
@@ -68,6 +77,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private int tag;
 
+    //声明mlocationClient对象
+    public AMapLocationClient mlocationClient;
+    //声明mLocationOption对象
+    public AMapLocationClientOption mLocationOption = null;
+
+
     //hahahahahha
 
     @Override
@@ -80,6 +95,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         homeFragment = new HomeFragment();
         addFragments(homeFragment);
+        mlocationClient = new AMapLocationClient(this);
+//初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+//设置定位监听
+        mlocationClient.setLocationListener(this);
+//设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+//设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(2000);
+//设置定位参数
+        mlocationClient.setLocationOption(mLocationOption);
+// 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+// 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+// 在定位结束后，在合适的生命周期调用onDestroy()方法
+// 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
+//启动定位
+        mlocationClient.startLocation();
         initView();
 
     }
@@ -119,6 +151,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         rb_message.setOnClickListener(this);
         rb_mine.setOnClickListener(this);
         frag_add.setOnClickListener(this);
+    }
+
+    @Override
+    public void activate(LocationSource.OnLocationChangedListener onLocationChangedListener) {
+
+        if (mlocationClient == null) {
+            mlocationClient = new AMapLocationClient(this);
+            mLocationOption = new AMapLocationClientOption();
+            //设置定位监听
+            mlocationClient.setLocationListener(this);
+            //设置为高精度定位模式
+            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+            //设置定位参数
+            mlocationClient.setLocationOption(mLocationOption);
+            // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+            // 注意设置合适的定位时间的间隔（最小间隔支持为2000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+            // 在定位结束后，在合适的生命周期调用onDestroy()方法
+            // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
+            mlocationClient.startLocation();
+        }
+    }
+
+    @Override
+    public void deactivate() {
+        if (mlocationClient != null) {
+            mlocationClient.stopLocation();
+            mlocationClient.onDestroy();
+        }
+        mlocationClient = null;
     }
 
     private void addFragments(Fragment f) {
@@ -254,6 +315,50 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         }
     };
+
+
+    @Override
+    public void onTouch(MotionEvent motionEvent) {
+        mlocationClient.stopLocation();
+    }
+
+
+    @Override
+    public void onLocationChanged(AMapLocation amapLocation) {
+
+//        if (mListener != null && aMapLocation != null) {
+//            if (aMapLocation != null
+//                    && aMapLocation.getErrorCode() == 0) {
+//                mListener.onLocationChanged(aMapLocation);// 显示系统小蓝点
+//                SpUtils.putString(this,"la",  aMapLocation.getLatitude()+"");
+//                SpUtils.putString(this,"lo",aMapLocation.getLongitude()+"");
+//                Log.d("ass", aMapLocation.getLatitude()+"dddd"+aMapLocation.getLongitude()+"") ;
+//
+//
+//            } else {
+//                String errText = "定位失败," + aMapLocation.getErrorCode()+ ": " + aMapLocation.getErrorInfo();
+//                Log.e("AmapErr",errText);
+//            }
+//        }
+
+        if (amapLocation != null) {
+            if (amapLocation.getErrorCode() == 0) {
+                //定位成功回调信息，设置相关消息
+//                amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+//                amapLocation.getLatitude();//获取纬度
+//                amapLocation.getLongitude();//获取经度
+//                amapLocation.getAccuracy();//获取精度信息
+                SpUtils.putString(this,"la",  amapLocation.getLatitude()+"");
+                SpUtils.putString(this,"lo",amapLocation.getLongitude()+"");
+            } else {
+                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                Log.e("TAG","location Error, ErrCode:"
+                        + amapLocation.getErrorCode() + ", errInfo:"
+                        + amapLocation.getErrorInfo());
+            }
+        }
+
+    }
 
 
 }
