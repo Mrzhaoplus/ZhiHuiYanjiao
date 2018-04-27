@@ -20,6 +20,8 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +34,7 @@ import www.diandianxing.com.diandianxing.adapter.GuanzhuAdapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.base.Myapplication;
+import www.diandianxing.com.diandianxing.bean.Event_coll_size;
 import www.diandianxing.com.diandianxing.bean.Sharebean;
 import www.diandianxing.com.diandianxing.interfase.Dianzan_presenter_interfase;
 import www.diandianxing.com.diandianxing.interfase.List_view;
@@ -45,6 +48,7 @@ import www.diandianxing.com.diandianxing.presenter.Live_guanzhu_presenter;
 import www.diandianxing.com.diandianxing.presenter.Quxiaozan_presenter;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.MyContants;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 
@@ -74,15 +78,39 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
         if (state == 0) {
             Log.i("===============", flag + "");
             if(flag==1){
-                dianzan_presenter.setpath(Api.token, id, 0, 0);
+                if(NetUtil.checkNet(getActivity())){
+                    //获取引用
+                    dianzan_presenter.setpath(Api.token, id, 0, 0);
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+
             }else{
-                quxiaozan_presenter.setpath(Api.token, id, 0, 0);
+                if(NetUtil.checkNet(getActivity())){
+                    //获取引用
+                    quxiaozan_presenter.setpath(Api.token, id, 0, 0);
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+
             }
         } else if (state == 1) {
               if (flag == 0) {
-                dianzan_presenter.setpath(Api.token, id, 0, 1);
+                  if(NetUtil.checkNet(getActivity())){
+                      //获取引用
+                      dianzan_presenter.setpath(Api.token, id, 0, 1);
+                  }else{
+                      Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                  }
+
             } else if (flag == 1) {
-                quxiaozan_presenter.setpath(Api.token, id, 0, 1);
+                  if(NetUtil.checkNet(getActivity())){
+                      //获取引用
+                      quxiaozan_presenter.setpath(Api.token, id, 0, 1);
+                  }else{
+                      Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                  }
+
             }
         }
     }
@@ -100,7 +128,13 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
         springView = contentView.findViewById(R.id.spring_view);
         //引用
         live_guanzhu_presenter = new Live_guanzhu_presenter(this);
-        live_guanzhu_presenter.getpath(Api.token, pageNo);
+        if(NetUtil.checkNet(getActivity())){
+            //获取引用
+            live_guanzhu_presenter.getpath(Api.token, pageNo);
+        }else{
+            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
+
 
 
         guanzhuAdapter = new GuanzhuAdapter(getActivity(), shareListener, list);
@@ -124,7 +158,13 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
                     public void run() {
                         list.clear();
                         pageNo = 1;
-                        live_guanzhu_presenter.getpath(Api.token, pageNo);
+                        if(NetUtil.checkNet(getActivity())){
+                            //获取引用
+                            live_guanzhu_presenter.getpath(Api.token, pageNo);
+                        }else{
+                            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
+
                         guanzhuAdapter.notifyDataSetChanged();
                     }
                 }, 0);
@@ -137,7 +177,13 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
                     @Override
                     public void run() {
                         pageNo++;
-                        live_guanzhu_presenter.getpath(Api.token, pageNo);
+                        if(NetUtil.checkNet(getActivity())){
+                            //获取引用
+                            live_guanzhu_presenter.getpath(Api.token, pageNo);
+                        }else{
+                            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
+
                         guanzhuAdapter.notifyDataSetChanged();
                     }
                 }, 0);
@@ -317,9 +363,11 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
               list.get(postion).setIs_zan(1);
                 guanzhuAdapter.notifyDataSetChanged();
             } else if (what == 1) {
+                EventBus.getDefault().postSticky(new Event_coll_size(4,0));
                     list.get(postion).setCollectCount(zanCount + 1);
                 list.get(postion).setIs_collect(1);
                 guanzhuAdapter.notifyDataSetChanged();
+
                 }
             guanzhuAdapter.notifyDataSetChanged();
             }
@@ -336,9 +384,11 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
                     list.get(postion).setIs_zan(0);
                 guanzhuAdapter.notifyDataSetChanged();
             } else if (what == 1) {
+                EventBus.getDefault().postSticky(new Event_coll_size(4,0));
                     list.get(postion).setCollectCount(list.get(postion).getCollectCount() - 1);
                     list.get(postion).setIs_collect(0);
                 guanzhuAdapter.notifyDataSetChanged();
+
             }
             guanzhuAdapter.notifyDataSetChanged();
         }

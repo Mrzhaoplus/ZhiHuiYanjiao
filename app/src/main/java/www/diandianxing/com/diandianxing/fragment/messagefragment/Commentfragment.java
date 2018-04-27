@@ -29,6 +29,7 @@ import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 
 /**
@@ -57,7 +58,13 @@ public class Commentfragment extends BaseFragment implements Zan_msg_presenter_i
 
     @Override
     protected void lazyLoad() {
-        zan_msg_presenter.getpath(Api.token,0,pageNo);
+        if(NetUtil.checkNet(getActivity())){
+            //获取引用
+            zan_msg_presenter.getpath(Api.token,0,pageNo);
+        }else{
+            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
+
         View contentView = getContentView();
         comment_relycle = contentView.findViewById(R.id.comment_recycle);
         spring_view = contentView.findViewById(R.id.spring_view);
@@ -76,7 +83,13 @@ public class Commentfragment extends BaseFragment implements Zan_msg_presenter_i
                     public void run() {
                       list.clear();
                       pageNo=1;
-                        zan_msg_presenter.getpath(Api.token,0,pageNo);
+                        if(NetUtil.checkNet(getActivity())){
+                            //获取引用
+                            zan_msg_presenter.getpath(Api.token,0,pageNo);
+                        }else{
+                            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
+
                         commentadapter.notifyDataSetChanged();
                     }
                 },0);
@@ -89,7 +102,13 @@ public class Commentfragment extends BaseFragment implements Zan_msg_presenter_i
                     @Override
                     public void run() {
                         pageNo++;
-                        zan_msg_presenter.getpath(Api.token,0,pageNo);
+                        if(NetUtil.checkNet(getActivity())){
+                            //获取引用
+                            zan_msg_presenter.getpath(Api.token,0,pageNo);
+                        }else{
+                            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
+
                         commentadapter.notifyDataSetChanged();
                     }
                 },0);
@@ -135,7 +154,13 @@ public class Commentfragment extends BaseFragment implements Zan_msg_presenter_i
             @Override
             public void onClick(View view) {
                 //引用
-                shanchu_presenter.getpath(Api.token,id);
+                if(NetUtil.checkNet(getActivity())){
+                    //获取引用
+                    shanchu_presenter.getpath(Api.token,id);
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+
                 dialog.dismiss();
             }
         });

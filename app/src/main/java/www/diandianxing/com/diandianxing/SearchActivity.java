@@ -25,6 +25,7 @@ import www.diandianxing.com.diandianxing.presenter.SouLabel_Presenter;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener, SouLadel_presenter_interfise {
 
@@ -53,7 +54,13 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         search.setOnClickListener(this);
         //引用
         souLabel_presenter = new SouLabel_Presenter(this);
-        souLabel_presenter.getpath(Api.token);
+        if(NetUtil.checkNet(this)){
+            //获取引用
+            souLabel_presenter.getpath(Api.token);
+        }else{
+            Toast.makeText(this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
+
 
     }
 

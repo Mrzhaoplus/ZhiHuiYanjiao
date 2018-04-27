@@ -53,6 +53,7 @@ import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.util.ImageLoder;
 import www.diandianxing.com.diandianxing.util.MyUtils;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /**
@@ -82,7 +83,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private TextView zixun_itme;
     private TextView zan;
      List<zixun_Bean.DatasBean> list=new ArrayList<>();
-    private Lunbo_presenter lunbo_presenter;
+    private Lunbo_presenter lunbo_presenter = new Lunbo_presenter(this);
     private Zixun_presenter home_zixun_presenter = new Zixun_presenter(this);
     private int typeNo=1;
     private Homeadapter homeadapter;
@@ -95,6 +96,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     protected void lazyLoad() {
+        if(NetUtil.checkNet(getActivity())){
+            //获取引用
+            lunbo_presenter.getString(Api.token);
+            home_zixun_presenter.getpath(1,Api.token,typeNo);
+        }else{
+            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
+
+
         View contentView = getContentView();
         this.rootView = contentView;
         this.img_tu = (ImageView) rootView.findViewById(R.id.img_tu);
@@ -116,10 +126,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
         //获取id
         banner = contentView.findViewById(R.id.banner);
-        //获取引用
-        lunbo_presenter = new Lunbo_presenter(this);
-        lunbo_presenter.getString(Api.token);
-        home_zixun_presenter.getpath(1,Api.token,typeNo);
+
         text_jiao.setOnClickListener(this);
         text_lu.setOnClickListener(this);
         life.setOnClickListener(this);
@@ -152,7 +159,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                      public void run() {
                          list.clear();
                          typeNo=1;
-                         home_zixun_presenter.getpath(1, Api.token,typeNo);
+                         if(NetUtil.checkNet(getActivity())){
+                             //获取引用
+                             home_zixun_presenter.getpath(1,Api.token,typeNo);
+                         }else{
+                             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                         }
                          homeadapter.notifyDataSetChanged();
                      }
                  }, 0);
@@ -165,7 +177,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                      @Override
                      public void run() {
                        typeNo++;
-                         home_zixun_presenter.getpath(1, Api.token,typeNo);
+                         if(NetUtil.checkNet(getActivity())){
+                             //获取引用
+                             home_zixun_presenter.getpath(1,Api.token,typeNo);
+                         }else{
+                             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                         }
                          homeadapter.notifyDataSetChanged();
                      }
                  }, 0);
@@ -267,7 +284,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
     }
-
     @Override
     public void getsuccess(zixun_Bean zixun) {
         if(zixun.getCode().equals("200")){

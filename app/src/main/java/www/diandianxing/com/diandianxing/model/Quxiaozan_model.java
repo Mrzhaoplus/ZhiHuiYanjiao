@@ -31,8 +31,6 @@ public class Quxiaozan_model {
                         jiekou.setsuccess(quxiao);
                     }
                 });
-
-
     }
 
 

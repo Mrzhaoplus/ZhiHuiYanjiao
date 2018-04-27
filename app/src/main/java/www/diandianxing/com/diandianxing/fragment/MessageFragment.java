@@ -82,7 +82,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 vi.setVisibility(View.INVISIBLE);
                 if(praisefragment==null){
                     praisefragment=new Praisefragment();
-
                 }
                 addFagment(praisefragment);
 

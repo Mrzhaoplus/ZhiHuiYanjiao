@@ -18,30 +18,38 @@ import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.ShujuBean.Coll_Bean;
+import www.diandianxing.com.diandianxing.ShujuBean.QuxiaozanAndFenxiang_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.User_guanzhu_Bean;
 import www.diandianxing.com.diandianxing.adapter.MyCollectionAdapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.bean.Event_coll_size;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MyFansiActivity;
+import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 import www.diandianxing.com.diandianxing.interfase.Coll_presenter_interfase;
+import www.diandianxing.com.diandianxing.interfase.Quxiaozan_presenter_interfase;
 import www.diandianxing.com.diandianxing.interfase.Userguanzhu_presenter_interfase;
 import www.diandianxing.com.diandianxing.presenter.Coll_presenter;
+import www.diandianxing.com.diandianxing.presenter.Quxiaozan_presenter;
 import www.diandianxing.com.diandianxing.presenter.User_Guanzhu_presenter;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.MyContants;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 
 /**
  * Created by Administrator on 2018/4/3.
  */
 
-public class MyCollectionActivity extends BaseActivity implements Coll_presenter_interfase, Userguanzhu_presenter_interfase {
+public class MyCollectionActivity extends BaseActivity implements Coll_presenter_interfase, Userguanzhu_presenter_interfase, Quxiaozan_presenter_interfase {
 
     private ImageView include_back;
     private SpringView springView;
@@ -50,17 +58,25 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
     private int pageNo=1;
     Coll_presenter coll_presenter = new Coll_presenter(this);
     User_Guanzhu_presenter user_guanzhu_presenter = new User_Guanzhu_presenter(this);
+    Quxiaozan_presenter quxiaozan_presenter = new Quxiaozan_presenter(this);
     ArrayList<Coll_Bean.DatasBean> mList=new ArrayList<>();
     MyCollectionAdapter changegameAdapter;
     boolean isqh;
     private TextView text_sure;
+    private int postion;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MyContants.windows(this);
         setContentView(R.layout.activity_my_collection);
         //引用
-        coll_presenter.getpath(pageNo, Api.token);
+        if(NetUtil.checkNet(MyCollectionActivity.this)){
+            //获取引用
+            coll_presenter.getpath(pageNo, Api.token);
+        }else{
+            Toast.makeText(MyCollectionActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
 
 
         include_back= (ImageView) findViewById(R.id.include_back);
@@ -105,23 +121,36 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
     private MyCollectionAdapter.GZClickListener gzClickListener = new MyCollectionAdapter.GZClickListener() {
         @Override
         public void onGZClickListener(int pos) {
-            Log.e("TAG","pos==="+pos);
             int userId = mList.get(pos).getUserId();
-            user_guanzhu_presenter.getpath(Api.token,userId);
+            if(NetUtil.checkNet(MyCollectionActivity.this)){
+                //获取引用
+                user_guanzhu_presenter.getpath(Api.token,userId);
+            }else{
+                Toast.makeText(MyCollectionActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+            }
+
         }
           //点击删除条目刷新适配器
         @Override
         public void onSCClickListener(int pos) {
-            mList.remove(pos);
+            postion = pos;
+            quxiaozan_presenter.setpath(Api.token,mList.get(pos).getPostId(),0,1);
             changegameAdapter.notifyDataSetChanged();
         }
           //跳转详情页
         @Override
         public void onItemClickLisener(int pos) {
-             startActivity(new Intent(MyCollectionActivity.this, JiaoDetailActivity.class));
+            Intent intent = new Intent(MyCollectionActivity.this, JiaoDetailActivity.class);
+               intent.putExtra("id",mList.get(pos).getPostId()+"");
+                startActivity(intent);
         }
-    };
-
+        @Override
+        public void onTOUClickLinstener(int pos) {
+            Intent intent = new Intent(MyCollectionActivity.this, MydynamicActivity.class);
+            intent.putExtra("uid",mList.get(pos).getUserId()+"");
+            startActivity(intent);
+        }
+};
     private void shumaDialog(int grary, int animationStyle) {
         BaseDialog.Builder builder = new BaseDialog.Builder(MyCollectionActivity.this);
         final BaseDialog dialog = builder.setViewId(R.layout.dialog_guanzhu)
@@ -227,10 +256,25 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
         }
         changegameAdapter.notifyDataSetChanged();
     }
+    @Override
+    public void setsuccess(QuxiaozanAndFenxiang_Bean zan) {
+        if(zan.getCode().equals("200")){
+            mList.remove(postion);
+        }else if(zan.getCode().equals("201")){
+            ToastUtils.showShort(MyCollectionActivity.this,zan.getMsg());
+        }else if(zan.getCode().equals("203")){
+            ToastUtils.showShort(MyCollectionActivity.this,zan.getMsg());
+        } else if(zan.getCode().equals("500")){
+            ToastUtils.showShort(MyCollectionActivity.this,zan.getMsg());
+        }
+        changegameAdapter.notifyDataSetChanged();
 
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
         coll_presenter.getkong();
+        quxiaozan_presenter.getkong();
+        EventBus.getDefault().postSticky(new Event_coll_size(3,mList.size()));
     }
 }

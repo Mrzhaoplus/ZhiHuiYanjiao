@@ -30,6 +30,7 @@ import www.diandianxing.com.diandianxing.MyCollectionActivity;
 import www.diandianxing.com.diandianxing.ReleaseShootoffVidoActivity;
 import www.diandianxing.com.diandianxing.SignActivity;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
+import www.diandianxing.com.diandianxing.bean.Event_coll_size;
 import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.bean.UserInfo;
 import www.diandianxing.com.diandianxing.bean.UserMsg1;
@@ -82,6 +83,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     private ImageView iv_sex;
     private TextView tv_zy_dj;
     private ImageView iv_bg_my;
+    private boolean flag=true;
     @Override
     protected int setContentView() {
 
@@ -136,6 +138,15 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         real_kefu.setOnClickListener(this);
         real_yaoqing.setOnClickListener(this);
         iv_sz.setOnClickListener(this);
+
+        //注册eventbus
+        /*if(flag){
+            //注册
+            EventBus.getDefault().register(this);
+            flag=false;
+        }*/
+
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -143,6 +154,24 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         Drawable fromPath = Drawable.createFromPath(messageEvent.getMsg());
         iv_bg_my.setImageDrawable(fromPath);
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void fff(Event_coll_size msg) {
+        int state = msg.getState();
+        int size = msg.getSize();
+        if(state==3){
+            collect_num.setText(size+"");
+        }else if(state==2){
+            fen_num.setText(size+"");
+        }else if(state==1){
+            guan_num.setText(size+"");
+        }else if(state==4){
+            network();
+        }
+
+
+    }
+
+
     @Override
     public void onClick(View view) {
 
@@ -248,6 +277,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        EventBus.getDefault().removeAllStickyEvents();
     }
 
     UserInfo userInfo;

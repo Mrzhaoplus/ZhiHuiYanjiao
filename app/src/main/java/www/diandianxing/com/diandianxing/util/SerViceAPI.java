@@ -93,6 +93,9 @@ public interface SerViceAPI {
       @FormUrlEncoded
       @POST("app/information/deleteCommentOrZan")
       Observable<Shanchu_Bean>shanchu(@Field("token")String token, @Field("id")int id);
-
+      //取消收藏
+      @FormUrlEncoded
+      @POST("/app/home/userCancelOperation")
+      Observable<QuxiaozanAndFenxiang_Bean>quxiaoshoucang(@Field("token") String token, @Field("objId") int objId, @Field("obj_type")int obj_type, @Field("operation_type")int operation_type);
 
 }

@@ -18,6 +18,8 @@ import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,7 @@ import www.diandianxing.com.diandianxing.ShujuBean.Fensi_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.User_guanzhu_Bean;
 import www.diandianxing.com.diandianxing.adapter.MyFansadapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.bean.Event_coll_size;
 import www.diandianxing.com.diandianxing.interfase.FenSi_presenter_interfase;
 import www.diandianxing.com.diandianxing.interfase.GZ_state;
 import www.diandianxing.com.diandianxing.interfase.Userguanzhu_presenter_interfase;
@@ -35,6 +38,7 @@ import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.MyContants;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 
 /**
@@ -63,7 +67,13 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
        this.postion=postion;
        this.state=state;
        this.userid=userid;
-        user_guanzhu_presenter.getpath(Api.token,userid);
+        if(NetUtil.checkNet(MyFansiActivity.this)){
+            //获取引用
+            user_guanzhu_presenter.getpath(Api.token,userid);
+        }else{
+            Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
+
 
     }
     @Override
@@ -83,7 +93,13 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
         spring_view = (SpringView) findViewById(R.id.spring_view);
 
           //引用
-        fensi_presenter.getpath(pageNo,uid, Api.userid);
+        if(NetUtil.checkNet(MyFansiActivity.this)){
+            //获取引用
+            fensi_presenter.getpath(pageNo,uid, Api.userid);
+        }else{
+            Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
+
         include_title.setText("我的粉丝");
         include_back.setOnClickListener(this);
         //设置适配器
@@ -115,7 +131,12 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
                     public void run() {
                         list.clear();
                         pageNo=1;
-                        fensi_presenter.getpath(pageNo,uid,Api.userid);
+                        if(NetUtil.checkNet(MyFansiActivity.this)){
+                            //获取引用
+                            fensi_presenter.getpath(pageNo,uid, Api.userid);
+                        }else{
+                            Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
                         myFansadapter.notifyDataSetChanged();
                     }
                 }, 0);
@@ -128,7 +149,12 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void run() {
                         pageNo++;
-                        fensi_presenter.getpath(pageNo,uid,Api.userid);
+                        if(NetUtil.checkNet(MyFansiActivity.this)){
+                            //获取引用
+                            fensi_presenter.getpath(pageNo,uid, Api.userid);
+                        }else{
+                            Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
                         myFansadapter.notifyDataSetChanged();
                     }
                 }, 0);
@@ -216,5 +242,13 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
             }
         });
         dialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        fensi_presenter.getkong();
+        user_guanzhu_presenter.getkong();
+        EventBus.getDefault().postSticky(new Event_coll_size(2,list.size()));
     }
 }

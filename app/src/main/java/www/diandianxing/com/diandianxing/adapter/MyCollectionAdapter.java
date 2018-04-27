@@ -1,5 +1,6 @@
 package www.diandianxing.com.diandianxing.adapter;
 
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.ShujuBean.Coll_Bean;
@@ -46,11 +48,24 @@ public class MyCollectionAdapter extends BaseQuickAdapter<Coll_Bean.DatasBean, B
         TextView zixun = helper.getView(R.id.zixun);
         ImageView img_ztou = helper.getView(R.id.img_Ztou);
 
+        img_tou.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                 gzClickListener.onTOUClickLinstener(helper.getAdapterPosition());
+            }
+        });
+
+
+
         Glide.with(helper.itemView).load(item.getPic()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(img_tou);
         uname.setText(item.getNickName());
         zixun.setText(item.getPostTitle());
+        List<String> postImagePaths = item.getPostImagePaths();
+        if(postImagePaths.size()<1){
+        }else{
+            ImageLoader.getInstance().displayImage(item.getPostImagePaths().get(0),img_ztou, ImageLoder.getDefaultOption());
+        }
 
-        ImageLoader.getInstance().displayImage(item.getPostImagePaths().get(0),img_ztou, ImageLoder.getDefaultOption());
         if(isqh){
             iv_wdsc_sc.setVisibility(View.VISIBLE);
             iv_wdsc_zw.setVisibility(View.INVISIBLE);
@@ -88,14 +103,12 @@ public class MyCollectionAdapter extends BaseQuickAdapter<Coll_Bean.DatasBean, B
         void onGZClickListener(int pos);
         void onSCClickListener(int pos);
         void  onItemClickLisener(int pos);
+        void  onTOUClickLinstener(int pos);
     }
 
     public  void setonGZClickListener(GZClickListener gzClickListener){
         this.gzClickListener=gzClickListener;
     }
-
-
-
     public  void setZT(boolean isqh){
         this.isqh=isqh;
     }

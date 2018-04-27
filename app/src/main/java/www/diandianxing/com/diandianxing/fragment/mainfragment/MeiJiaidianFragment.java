@@ -51,6 +51,7 @@ import www.diandianxing.com.diandianxing.presenter.User_Guanzhu_presenter;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.MyContants;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
@@ -91,15 +92,39 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
 
         if (state == 0) {
             if(flag==1){
-                dianzan_presenter.setpath(Api.token, id, 0, 0);
+                if(NetUtil.checkNet(getActivity())){
+                    //获取引用
+                    dianzan_presenter.setpath(Api.token, id, 0, 0);
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+
             }else{
-                quxiaozan_presenter.setpath(Api.token, id, 0, 0);
+                if(NetUtil.checkNet(getActivity())){
+                    //获取引用
+                    quxiaozan_presenter.setpath(Api.token, id, 0, 0);
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+
             }
         } else if (state == 1) {
             if (flag == 0) {
-                dianzan_presenter.setpath(Api.token, id, 0, 1);
+                if(NetUtil.checkNet(getActivity())){
+                    //获取引用
+                    dianzan_presenter.setpath(Api.token, id, 0, 1);
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+
             } else if (flag == 1) {
-                quxiaozan_presenter.setpath(Api.token, id, 0, 1);
+                if(NetUtil.checkNet(getActivity())){
+                    //获取引用
+                    quxiaozan_presenter.setpath(Api.token, id, 0, 1);
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+
             }
         }
     }
@@ -116,8 +141,13 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
         * 引用
         * */
 
+        if(NetUtil.checkNet(getActivity())){
+            //获取引用
+            fenLei_presenter.getpath(Api.token,id,page);
+        }else{
+            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
 
-        fenLei_presenter.getpath(Api.token,id,page);
         /*
         * 刷新
         * */
@@ -130,7 +160,13 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
                     public void run() {
                         list.clear();
                         page = 1;
-                        fenLei_presenter.getpath(Api.token,id, page);
+                        if(NetUtil.checkNet(getActivity())){
+                            //获取引用
+                            fenLei_presenter.getpath(Api.token,id, page);
+                        }else{
+                            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
+
                         chowuAdapter.notifyDataSetChanged();
                     }
                 }, 0);
@@ -143,7 +179,13 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
                     @Override
                     public void run() {
                         page ++;
-                        fenLei_presenter.getpath(Api.token,id, page);
+                        if(NetUtil.checkNet(getActivity())){
+                            //获取引用
+                            fenLei_presenter.getpath(Api.token,id, page);
+                        }else{
+                            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                        }
+
                         chowuAdapter.notifyDataSetChanged();
                     }
                 }, 0);

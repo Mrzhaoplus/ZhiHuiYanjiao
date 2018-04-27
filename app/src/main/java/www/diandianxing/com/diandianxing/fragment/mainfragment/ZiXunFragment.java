@@ -30,6 +30,7 @@ import www.diandianxing.com.diandianxing.interfase.Zixun_presenterinterfase;
 import www.diandianxing.com.diandianxing.presenter.Search_Zixun_presenter;
 import www.diandianxing.com.diandianxing.presenter.Zixun_presenter;
 import www.diandianxing.com.diandianxing.util.Api;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 
 /**
  * Created by Mr赵 on 2018/4/2.
@@ -70,9 +71,21 @@ public class ZiXunFragment extends BaseFragment implements Zixun_presenterinterf
         }
 
         if(typeid==1){
-            search_zixun.getpath(2, Api.token,typeNo,content);
+            if(NetUtil.checkNet(getActivity())){
+                //获取引用
+                search_zixun.getpath(2, Api.token,typeNo,content);
+            }else{
+                Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+            }
+
         }else{
-            zixun_presenter.getpath(2, Api.token,typeNo);
+            if(NetUtil.checkNet(getActivity())){
+                //获取引用
+                zixun_presenter.getpath(2, Api.token,typeNo);
+            }else{
+                Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+            }
+
         }
 
         //创建适配器
@@ -98,9 +111,21 @@ public class ZiXunFragment extends BaseFragment implements Zixun_presenterinterf
                         list.clear();
                         typeNo=1;
                         if(typeid==1){
-                            search_zixun.getpath(2, Api.token,typeNo,content);
+                            if(NetUtil.checkNet(getActivity())){
+                                //获取引用
+                                search_zixun.getpath(2, Api.token,typeNo,content);
+                            }else{
+                                Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                            }
+
                         }else{
-                            zixun_presenter.getpath(2, Api.token,typeNo);
+                            if(NetUtil.checkNet(getActivity())){
+                                //获取引用
+                                zixun_presenter.getpath(2, Api.token,typeNo);
+                            }else{
+                                Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                         ziXunAdapter.notifyDataSetChanged();
                     }
@@ -115,9 +140,21 @@ public class ZiXunFragment extends BaseFragment implements Zixun_presenterinterf
                     public void run() {
                          typeNo++;
                         if(typeid==1){
-                            search_zixun.getpath(2, Api.token,typeNo,content);
+                            if(NetUtil.checkNet(getActivity())){
+                                //获取引用
+                                search_zixun.getpath(2, Api.token,typeNo,content);
+                            }else{
+                                Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                            }
+
                         }else{
-                            zixun_presenter.getpath(2, Api.token,typeNo);
+                            if(NetUtil.checkNet(getActivity())){
+                                //获取引用
+                                zixun_presenter.getpath(2, Api.token,typeNo);
+                            }else{
+                                Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                         ziXunAdapter.notifyDataSetChanged();
                     }

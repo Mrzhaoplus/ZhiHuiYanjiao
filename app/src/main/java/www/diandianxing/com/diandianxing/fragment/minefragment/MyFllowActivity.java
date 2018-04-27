@@ -15,18 +15,22 @@ import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.ShujuBean.GZ_person_Bean;
 import www.diandianxing.com.diandianxing.adapter.Myfollowadapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.bean.Event_coll_size;
 import www.diandianxing.com.diandianxing.interfase.GZ_person_presenter_interfase;
 import www.diandianxing.com.diandianxing.presenter.GZ_person_presenter;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.MyContants;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 
 /**
  * Created by ASUS on 2018/3/20.
@@ -59,7 +63,13 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
         perpho = (TextView) findViewById(R.id.person_pho);
         springView = (SpringView) findViewById(R.id.spring_view);
         //引用
-        gz_person_presenter.getpath(pageNo, Api.userid);
+        if(NetUtil.checkNet(this)){
+            //获取引用
+            gz_person_presenter.getpath(pageNo, Api.userid);
+        }else{
+            Toast.makeText(this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        }
+
         //设置模式
         springView.setType(SpringView.Type.FOLLOW);
         //设置是适配器
@@ -90,7 +100,13 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
                    public void run() {
                        list.clear();
                        pageNo=1;
-                       gz_person_presenter.getpath(pageNo, Api.userid);
+                       if(NetUtil.checkNet(MyFllowActivity.this)){
+                           //获取引用
+                           gz_person_presenter.getpath(pageNo, Api.userid);
+                       }else{
+                           Toast.makeText(MyFllowActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                       }
+
                        myfollowadapter.notifyDataSetChanged();
                    }
                }, 0);
@@ -103,7 +119,12 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
                    @Override
                    public void run() {
                        pageNo++;
-                       gz_person_presenter.getpath(pageNo, Api.userid);
+                       if(NetUtil.checkNet(MyFllowActivity.this)){
+                           //获取引用
+                           gz_person_presenter.getpath(pageNo, Api.userid);
+                       }else{
+                           Toast.makeText(MyFllowActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                       }
                        myfollowadapter.notifyDataSetChanged();
                    }
                }, 0);
@@ -145,5 +166,6 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
     protected void onDestroy() {
         super.onDestroy();
         gz_person_presenter.getkong();
+        EventBus.getDefault().postSticky(new Event_coll_size(1,list.size()));
     }
 }
