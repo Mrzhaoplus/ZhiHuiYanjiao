@@ -184,10 +184,7 @@ public class XCPopwindow extends PopupWindow implements View.OnClickListener {
               case R.id.btn_jiaodian:
 //                  Toast.makeText(mContext, "assad", Toast.LENGTH_SHORT).show();
                   albumClickListener.OnAlbumClickListener();
-
-
                   dismiss();
-
                   break;
 
           }

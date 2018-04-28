@@ -257,7 +257,6 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
 
         @Override
         public void ScClickListener(int pos) {
-
         }
 
         @Override

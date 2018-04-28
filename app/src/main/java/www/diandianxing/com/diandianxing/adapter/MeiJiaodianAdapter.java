@@ -74,7 +74,7 @@ public class MeiJiaodianAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup viewGroup) {
-        Tuijiantieadapter.ViewHolder holder;
+        final Tuijiantieadapter.ViewHolder holder;
         int type = getItemViewType(position);
         if (convertView == null) {
             holder = new Tuijiantieadapter.ViewHolder();
@@ -98,28 +98,28 @@ public class MeiJiaodianAdapter extends BaseAdapter {
             holder = (Tuijiantieadapter.ViewHolder) convertView.getTag();
         }
 
-
+        holder.text_colltet.setText(lists.get(position).getCollectCount()+"");
+        holder.text_zan.setText(lists.get(position).getDianZanCount()+"");
         if(lists.get(position).getIs_collect()==0){
             Drawable nav_up=context.getResources().getDrawable(R.drawable.icon_collect);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
             holder.text_colltet.setCompoundDrawables(nav_up, null, null, null);
-            holder.text_colltet.setText(lists.get(position).getCollectCount()+"");
+
         }else{
             Drawable nav_up=context.getResources().getDrawable(R.drawable.shouchang_xz_icon_3x);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
             holder.text_colltet.setCompoundDrawables(nav_up, null, null, null);
-            holder.text_colltet.setText(lists.get(position).getCollectCount()+"");
         }
         if(lists.get(position).getIs_zan()==0){
             Drawable nav_up=context.getResources().getDrawable(R.drawable.icon_dianzan);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
             holder.text_zan.setCompoundDrawables(nav_up, null, null, null);
-            holder.text_zan.setText(lists.get(position).getDianZanCount()+"");
+
         }else{
             Drawable nav_up=context.getResources().getDrawable(R.drawable.dianzan_xz_icon_3x);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
             holder.text_zan.setCompoundDrawables(nav_up, null, null, null);
-            holder.text_zan.setText(lists.get(position).getDianZanCount()+"");
+
         }
 
         //关注
@@ -141,24 +141,29 @@ public class MeiJiaodianAdapter extends BaseAdapter {
         holder.text_colltet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int collectCount = lists.get(position).getCollectCount();
                 if(lists.get(position).getIs_collect()==0){
-                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getIs_collect());
-                    lists.get(position).setIs_collect(1);
+                    holder.text_colltet.setText(collectCount+"");
+                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getCollectCount(),collectCount);
+                    //lists.get(position).setIs_collect(1);
                 }else if(lists.get(position).getIs_collect()==1){
-                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getIs_collect());
-                    lists.get(position).setIs_collect(0);
+                    holder.text_colltet.setText(collectCount+"");
+                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getCollectCount(),collectCount);
+                    // lists.get(position).setIs_collect(0);
                 }
-
             }
         });
         //点赞
         holder.text_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int dianZanCount = lists.get(position).getDianZanCount();
                 if(lists.get(position).getIs_zan()==0){
-                    jiekou.onclick(position,0,lists.get(position).getId(),1);
+                    holder.text_zan.setText(dianZanCount+"");
+                    jiekou.onclick(position,0,lists.get(position).getId(),1,dianZanCount);
                 }else if(lists.get(position).getIs_zan()==1){
-                    jiekou.onclick(position,0,lists.get(position).getId(),0);
+                    holder.text_zan.setText(dianZanCount+"");
+                    jiekou.onclick(position,0,lists.get(position).getId(),0,dianZanCount);
                 }
             }
         });

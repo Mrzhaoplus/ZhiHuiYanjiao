@@ -5,5 +5,5 @@ package www.diandianxing.com.diandianxing.interfase;
  */
 
 public interface List_view {
-    void onclick(int position,int stye,int id,int state);
+    void onclick(int position,int stye,int id,int state,int itemconten);
 }

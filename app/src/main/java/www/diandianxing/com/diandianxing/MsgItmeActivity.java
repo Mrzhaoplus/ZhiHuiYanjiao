@@ -23,6 +23,9 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Response;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.adapter.MsgitmeAdapter;
+import www.diandianxing.com.diandianxing.bean.Event_dian;
+import www.diandianxing.com.diandianxing.bean.FragEventBug;
 import www.diandianxing.com.diandianxing.bean.MessInfo;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
@@ -44,11 +49,11 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView img_back;
     private ListView list_view;
    private List<MessInfo> list=new ArrayList<>();
-   private Boolean flag=false;
+   private Boolean flag=true;
     private SpringView sv_sj;
-
     private int pageNo=1;
     MsgitmeAdapter msgitmeAdapter;
+    private int postion;
 
 
     @Override
@@ -60,6 +65,11 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initView() {
+        if(flag){
+            //注册
+            EventBus.getDefault().register(this);
+            flag=false;
+        }
         img_back = (ImageView) findViewById(R.id.img_back);
         list_view = (ListView) findViewById(R.id.list_view);
         sv_sj= (SpringView) findViewById(R.id.sv_sj);
@@ -77,7 +87,7 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                postion = i;
                 Intent intent = new Intent(MsgItmeActivity.this, MagXiangqingActivity.class);
                 startActivity(intent);
             }
@@ -103,6 +113,14 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void fangfa(Event_dian eveen){
+        int dian = eveen.getDian();
+        if(dian==1){
+            list.get(postion).is_read=1+"";
+            msgitmeAdapter.notifyDataSetChanged();
+        }
+    }
     //下拉刷新
     private void initRefresh() {
         //DefaultHeader/Footer是SpringView已经实现的默认头/尾之一
@@ -120,10 +138,8 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
                 //一分钟之后关闭刷新的方法
                 list.clear();
                 pageNo=1;
-
                 finishFreshAndLoad();
             }
-
             @Override
             public void onLoadmore() {
 //                Toast.makeText(mContext,"玩命加载中...",Toast.LENGTH_SHORT).show();
@@ -173,7 +189,6 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-
                         String body = response.body();
                         Log.d("TAG", "消息列表删除" + body);
                         JSONObject jsonobj = null;
@@ -220,6 +235,7 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
                             int code = jsonobj.getInt("code");
                             JSONArray datas = jsonobj.getJSONArray("datas");
                             List<MessInfo> messInfos = new ArrayList<MessInfo>();
+
                             if (code == 200) {
                                 for(int i=0;i<datas.length();i++){
 
@@ -315,5 +331,13 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
         dialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //注销
+        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().removeAllStickyEvents();
     }
 }

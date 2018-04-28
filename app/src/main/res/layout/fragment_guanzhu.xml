@@ -9,26 +9,31 @@
          android:id="@+id/spring_view"
          android:layout_width="match_parent"
          android:layout_height="match_parent">
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+      <LinearLayout
+          android:orientation="vertical"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+          <View
+              android:background="@color/back_color"
+              android:layout_width="match_parent"
+              android:layout_height="5dp"></View>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <View
-        android:background="@color/back_color"
-        android:layout_width="match_parent"
-        android:layout_height="5dp"></View>
+          <www.diandianxing.com.diandianxing.util.MyGridView
+              android:horizontalSpacing="5dp"
+              android:verticalSpacing="5dp"
+              android:gravity="center"
+              android:numColumns="2"
+              android:id="@+id/tui_recycler"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"></www.diandianxing.com.diandianxing.util.MyGridView>
 
-    <www.diandianxing.com.diandianxing.util.MyGridView
-        android:horizontalSpacing="5dp"
-        android:verticalSpacing="5dp"
-        android:gravity="center"
-        android:numColumns="2"
-        android:id="@+id/tui_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></www.diandianxing.com.diandianxing.util.MyGridView>
+      </LinearLayout>
 
-    </LinearLayout>
+  </ScrollView>
+
 
      </com.liaoinstan.springview.widget.SpringView>
 </LinearLayout>

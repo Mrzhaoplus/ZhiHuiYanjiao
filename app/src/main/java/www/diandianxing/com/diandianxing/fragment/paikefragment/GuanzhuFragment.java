@@ -38,9 +38,8 @@ import www.diandianxing.com.diandianxing.util.NetUtil;
 
 /**
  * date : ${Date}
- * author:衣鹏宇(ypu)
- */
-
+ * author:衣鹏
+*/
 public class GuanzhuFragment extends BaseFragment {
     private MyGridView tui_recycler;
     private SpringView spring_view;

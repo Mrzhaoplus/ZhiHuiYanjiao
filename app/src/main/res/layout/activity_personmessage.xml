@@ -159,18 +159,18 @@ v
                 android:textColor="@color/black_san"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            v
+
 
             <RadioGroup
+                android:id="@+id/rg"
                 android:layout_width="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
                 android:layout_alignParentRight="true"
                 android:orientation="horizontal"
                 android:layout_height="wrap_content">
-
-
                 <RadioButton
+                    android:id="@+id/nan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:button="@drawable/selector_xb_xz"
@@ -180,6 +180,7 @@ v
                     android:text="男"/>
 
                 <RadioButton
+                    android:id="@+id/nv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:button="@drawable/selector_xb_xz"

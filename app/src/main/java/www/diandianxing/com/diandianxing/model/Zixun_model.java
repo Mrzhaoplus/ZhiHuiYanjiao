@@ -23,7 +23,10 @@ public class Zixun_model {
                 .subscribe(new Consumer<zixun_Bean>() {
                     @Override
                     public void accept(zixun_Bean home_zixun_bean) throws Exception {
-                        home_zixun_modelinterfase.getsuccess(home_zixun_bean);
+                              home_zixun_modelinterfase.getsuccess(home_zixun_bean);
+
+
+
                     }
                 });
     }

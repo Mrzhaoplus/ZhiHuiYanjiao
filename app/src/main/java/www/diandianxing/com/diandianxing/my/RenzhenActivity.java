@@ -162,7 +162,6 @@ public class RenzhenActivity extends BaseActivity implements View.OnClickListene
         if(file==null){
             ToastUtils.showShort(this,"请上传照片");
             return;
-
         }
         // validate
         String name = yanzhneg_name.getText().toString().trim();

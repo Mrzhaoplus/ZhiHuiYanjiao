@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -88,13 +89,22 @@ public class AlterpwdActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void submit() {
+
+
+
+
         // validate
         String oldpwd = alter_oldpwd.getText().toString().trim();
         if (TextUtils.isEmpty(oldpwd)) {
             Toast.makeText(this, "请输入旧密码", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        String password = SpUtils.getString(AlterpwdActivity.this, "password", "");
+        Log.i("================",password);
+        if(!oldpwd.equals(password)){
+            Toast.makeText(this, "旧密码不正确", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String pwd = alter_pwd.getText().toString().trim();
         if (TextUtils.isEmpty(pwd)) {
             Toast.makeText(this, "请输入新密码", Toast.LENGTH_SHORT).show();
@@ -129,7 +139,6 @@ public class AlterpwdActivity extends BaseActivity implements View.OnClickListen
             //确认
             case R.id.alter_ok:
                 submit();
-
                 break;
         }
     }

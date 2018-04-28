@@ -449,7 +449,6 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
                                         //开始播放视频
                                         vv_sp.start();
                                         handler.postDelayed(runnable,1000);
-
                                     }
 
                                 } else {
@@ -1087,9 +1086,6 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
         super.onDestroy();
         if(pk!=null){
             if(pk.imagesUrl.length()>0) {//轮播图
-
-
-
             }else{
                 handler.removeCallbacks(runnable);
             }

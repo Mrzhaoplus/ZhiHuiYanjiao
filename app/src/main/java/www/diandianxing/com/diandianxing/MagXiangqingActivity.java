@@ -5,6 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import org.greenrobot.eventbus.EventBus;
+
+import www.diandianxing.com.diandianxing.bean.Event_dian;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
 
@@ -29,5 +32,11 @@ public class MagXiangqingActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().postSticky(new Event_dian(1));
     }
 }

@@ -55,6 +55,7 @@ import www.diandianxing.com.diandianxing.util.MyUtils;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.SpUtils;
+import www.diandianxing.com.diandianxing.util.ToastUtils;
 
 /**
  * date : ${Date}
@@ -210,6 +211,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 }else{
                     EventBus.getDefault().postSticky(new Evebtbus_fragment(0));
                     Intent lu=new Intent(getActivity(), LuKuangActivity.class);
+                    ToastUtils.showShort(getActivity(),"每日郊点");
                     startActivity(lu);
                 }
                 break;
@@ -263,45 +265,55 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void getsuccess(Lunbo_Bean lunbo) {
-        if(lunbo.getCode().equals("200")){
-            List<Lunbo_Bean.DatasBean> datas = lunbo.getDatas();
-            for (int i=0;i<datas.size();i++){
-                banlist.add(datas.get(i).getImageUrl());
+        Log.i("==================",lunbo.getMsg());
+        if(lunbo!=null){
+            if(lunbo.getCode().equals("200")){
+                List<Lunbo_Bean.DatasBean> datas = lunbo.getDatas();
+                for (int i=0;i<datas.size();i++){
+                    banlist.add(datas.get(i).getImageUrl());
+                }
             }
-        }
-        //动态设置banner的高度
-        ViewGroup.LayoutParams layoutParams = banner.getLayoutParams();
-        layoutParams.height = MyUtils.getScreenWidth(mContext) * 7 / 15;
-        banner.setLayoutParams(layoutParams);
-        banner.setDelayTime(3000);
+            //动态设置banner的高度
+            ViewGroup.LayoutParams layoutParams = banner.getLayoutParams();
+            layoutParams.height = MyUtils.getScreenWidth(mContext) * 7 / 15;
+            banner.setLayoutParams(layoutParams);
+            banner.setDelayTime(3000);
 
-        BannerUtils.startBanner(banner, banlist);
-        //轮播图点击事件
-        banner.setOnBannerListener(new OnBannerListener() {
-            @Override
-            public void OnBannerClick(int position) {
-                startActivity(new Intent(getActivity(),ZixunDitailsActivity.class));
-            }
-        });
+            BannerUtils.startBanner(banner, banlist);
+            //轮播图点击事件
+            banner.setOnBannerListener(new OnBannerListener() {
+                @Override
+                public void OnBannerClick(int position) {
+                    startActivity(new Intent(getActivity(),ZixunDitailsActivity.class));
+                }
+            });
+
+
+        }
+
+
     }
     @Override
     public void getsuccess(zixun_Bean zixun) {
-        if(zixun.getCode().equals("200")){
-            List<zixun_Bean.DatasBean> datas = zixun.getDatas();
-            ImageLoader.getInstance().displayImage(datas.get(0).getBigImage(),imageView, ImageLoder.getDefaultOption());
-            zixun_itme.setText(datas.get(0).getInfoTitle());
-            zan.setText(datas.get(0).getDianZanCount()+"");
-            if(typeNo>1){
-                if(datas.size()>0){
-                    list.addAll(datas);
+        if(zixun!=null){
+            if(zixun.getCode().equals("200")){
+                List<zixun_Bean.DatasBean> datas = zixun.getDatas();
+                ImageLoader.getInstance().displayImage(datas.get(0).getBigImage(),imageView, ImageLoder.getDefaultOption());
+                zixun_itme.setText(datas.get(0).getInfoTitle());
+                zan.setText(datas.get(0).getDianZanCount()+"");
+                if(typeNo>1){
+                    if(datas.size()>0){
+                        list.addAll(datas);
+                    }else{
+                        Toast.makeText(getActivity(),Api.TOAST,Toast.LENGTH_SHORT).show();
+                    }
                 }else{
-                    Toast.makeText(getActivity(),Api.TOAST,Toast.LENGTH_SHORT).show();
+                    list.addAll(datas);
                 }
-            }else{
-                list.addAll(datas);
+                homeadapter.notifyDataSetChanged();
             }
-            homeadapter.notifyDataSetChanged();
         }
+
         }
     @Override
     public void onDestroy() {

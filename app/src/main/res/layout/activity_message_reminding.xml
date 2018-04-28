@@ -44,7 +44,6 @@
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 app:sb_checked="false"
-                app:sb_uncheck_color="#fff"
                 app:sb_checked_color="#FFF8B702"
                 app:sb_show_indicator="false" />
         </RelativeLayout>
@@ -74,7 +73,6 @@
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 app:sb_checked="false"
-                app:sb_uncheck_color="#fff"
                 app:sb_checked_color="#FFF8B702"
                 app:sb_show_indicator="false" />
         </RelativeLayout>
@@ -113,7 +111,6 @@
                 android:layout_height="30dp"
                 app:sb_checked="true"
                 app:sb_show_indicator="false"
-                app:sb_uncheck_color="#fff"
                 app:sb_checked_color="#FFF8B702"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"/>
@@ -260,12 +257,9 @@
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 app:sb_checked="false"
-                app:sb_uncheck_color="#fff"
                 app:sb_checked_color="#FFF8B702"
                 app:sb_show_indicator="false" />
         </RelativeLayout>
-
-
     </LinearLayout>
 
 

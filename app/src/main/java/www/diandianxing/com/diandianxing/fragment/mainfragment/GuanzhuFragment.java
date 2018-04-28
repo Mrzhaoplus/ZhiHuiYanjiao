@@ -69,12 +69,14 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
     private int flag;
     Dianzan_presenter   dianzan_presenter = new Dianzan_presenter(this);
     Quxiaozan_presenter  quxiaozan_presenter = new Quxiaozan_presenter(this);
+    private int conten;
+
     @Override
-    public void onclick(int position, int state, int id, int flag) {
+    public void onclick(int position, int state, int id, int flag,int itmeconten) {
         this.postion = position;
         this.what = state;
         this.flag = flag;
-
+        this.conten=itmeconten;
         if (state == 0) {
             Log.i("===============", flag + "");
             if(flag==1){
@@ -359,12 +361,12 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
         if (zan.getCode().equals("200")) {
             int zanCount = zan.getDatas().getZanCount();
             if (what == 0) {
-                list.get(postion).setDianZanCount(zanCount+1);
+                list.get(postion).setDianZanCount(list.get(postion).getDianZanCount()+1);
               list.get(postion).setIs_zan(1);
                 guanzhuAdapter.notifyDataSetChanged();
             } else if (what == 1) {
                 EventBus.getDefault().postSticky(new Event_coll_size(4,0));
-                    list.get(postion).setCollectCount(zanCount + 1);
+                    list.get(postion).setCollectCount(list.get(postion).getCollectCount() + 1);
                 list.get(postion).setIs_collect(1);
                 guanzhuAdapter.notifyDataSetChanged();
 

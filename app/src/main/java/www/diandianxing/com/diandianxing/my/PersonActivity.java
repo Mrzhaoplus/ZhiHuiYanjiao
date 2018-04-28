@@ -13,6 +13,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -60,7 +62,7 @@ import www.diandianxing.com.diandianxing.R;
  * author:衣鹏宇(ypu)
  */
 
-public class PersonActivity extends BaseActivity implements View.OnClickListener {
+public class PersonActivity extends BaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
     private Shouyebean.DatasBean datas;
      List<String> list=new ArrayList<>();
     private ImageView iv_callback;
@@ -95,6 +97,9 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
     private File file;
     private BaseDialog dialog;
     private File filess = new File(Environment.getExternalStorageDirectory().getPath() + "/crop_photo.jpg");;
+    private RadioGroup rg;
+    private RadioButton nan;
+    private RadioButton nv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -152,7 +157,11 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
         per_pho = (CircleImageView) findViewById(R.id.person_pho);
         real_renzheng = (RelativeLayout) findViewById(R.id.real_renzheng);
         id_card = (TextView) findViewById(R.id.idcard_zhuangtai);
+        nan = (RadioButton) findViewById(R.id.nan);
+        nv = (RadioButton) findViewById(R.id.nv);
+        rg = (RadioGroup) findViewById(R.id.rg);
         iv_callback.setOnClickListener(this);
+        rg.setOnCheckedChangeListener(this);
         real_pho.setOnClickListener(this);
         zhong.setText("个人信息");
         real_name.setOnClickListener(this);
@@ -171,34 +180,12 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
             int idc = Integer.parseInt(iDcrad.trim());
             if(idc==0){
                 id_card.setText("未认证");
-                real_renzheng.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent its=new Intent(PersonActivity.this,RenzhenActivity.class);
-                        startActivity(its);
-                    }
-                });
             }
             else if(idc==1){
                 id_card.setText("审核中");
-                real_renzheng.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent its=new Intent(PersonActivity.this,RenzhenActivity.class);
-                        startActivity(its);
-                    }
-                });
-
             }
             else if(idc==2){
                 id_card.setText("审核不通过");
-                real_renzheng.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent its=new Intent(PersonActivity.this,RenzhenActivity.class);
-                        startActivity(its);
-                    }
-                });
             }
             else if(idc==3){
                 id_card.setText("已认证");
@@ -226,9 +213,10 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
                 startActivity(it);
                 break;
             //实名认证
-//            case R.id.real_renzheng:
-//
-//                break;
+            case R.id.real_renzheng:
+                Intent its=new Intent(PersonActivity.this,RenzhenActivity.class);
+                startActivity(its);
+                break;
 
         }
     }
@@ -440,5 +428,19 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
         super.onBackPressed();
         EventMessage eventMessage = new EventMessage("personphoto");
         EventBus.getDefault().postSticky(eventMessage);
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        switch (radioGroup.getCheckedRadioButtonId()){
+            case R.id.nan:
+                nan.setChecked(true);
+                nv.setChecked(false);
+                break;
+                 case R.id.nv:
+                     nv.setChecked(true);
+                     nan.setChecked(false);
+            break;
+        }
     }
 }

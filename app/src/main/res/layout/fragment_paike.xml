@@ -102,14 +102,15 @@
             android:layout_height="3dp"></View>
     </LinearLayout>
 </LinearLayout>
-     <ImageView
-         android:id="@+id/tv_pai"
-         android:layout_marginRight="15dp"
-         android:layout_centerVertical="true"
-         android:layout_alignParentRight="true"
-         android:src="@drawable/icon_pitcure"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/tv_pai"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/icon_pitcure" />
 </RelativeLayout>
     <FrameLayout
         android:layout_below="@id/relar"

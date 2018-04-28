@@ -363,7 +363,6 @@ public class JIaodianFragment extends BaseFragment {
                             jsonobj = new JSONObject(body);
                             int code = jsonobj.getInt("code");
                             if (code == 200) {
-
                                 if(operation_type==0){
                                     lists.get(pos).is_zan="0";
                                     lists.get(pos).dianZanCount=Integer.parseInt(lists.get(pos).dianZanCount)-1+"";
@@ -379,7 +378,6 @@ public class JIaodianFragment extends BaseFragment {
                                 }
                             } else {
                                 Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
-
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

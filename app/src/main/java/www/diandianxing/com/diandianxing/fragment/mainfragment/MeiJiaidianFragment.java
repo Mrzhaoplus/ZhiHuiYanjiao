@@ -75,7 +75,7 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
     private Dianzan_presenter dianzan_presenter= new Dianzan_presenter(this);
     private Quxiaozan_presenter quxiaozan_presenter= new Quxiaozan_presenter(this);
     private FenLei_presenter fenLei_presenter= new FenLei_presenter(this);
-
+    private int conten;
 
 
     public MeiJiaidianFragment(int id) {
@@ -85,11 +85,11 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
     }
 
     @Override
-    public void onclick(int position, int state, int id, int flag) {
+    public void onclick(int position, int state, int id, int flag,int itmeconten) {
         this.postion = position;
         this.what = state;
         this.flag = flag;
-
+        this.conten=itmeconten;
         if (state == 0) {
             if(flag==1){
                 if(NetUtil.checkNet(getActivity())){
@@ -371,12 +371,13 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
     public void setsuccess(DianzanAndFenxiang_Bean zan) {
         if(zan.getCode().equals("200")){
             int zanCount = zan.getDatas().getZanCount();
+
             if (what == 0) {
-                list.get(postion).setDianZanCount(zanCount+1);
+                list.get(postion).setDianZanCount((list.get(postion).getDianZanCount()+1));
                 list.get(postion).setIs_zan(1);
                 chowuAdapter.notifyDataSetChanged();
             }else if (what == 1) {
-                list.get(postion).setCollectCount(zanCount + 1);
+                list.get(postion).setCollectCount(list.get(postion).getCollectCount() + 1);
                 list.get(postion).setIs_collect(1);
                 chowuAdapter.notifyDataSetChanged();
             }

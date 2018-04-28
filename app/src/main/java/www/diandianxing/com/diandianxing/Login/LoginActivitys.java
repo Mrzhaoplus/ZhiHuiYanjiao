@@ -109,6 +109,7 @@ public class LoginActivitys extends UMLoginActivity implements View.OnClickListe
              map.put("mobile",login_phone.getText().toString().trim());
              map.put("password",login_pwd.getText().toString().trim());
         SpUtils.putString(LoginActivitys.this,"contact",login_phone.getText().toString());
+        SpUtils.putString(LoginActivitys.this,"password",login_pwd.getText().toString());
         RetrofitManager.post(MyContants.BASEURL + "s=Login/login", map, new BaseObserver1<Loginbean>("") {
             @Override
             public void onSuccess(Loginbean result, String tag) {

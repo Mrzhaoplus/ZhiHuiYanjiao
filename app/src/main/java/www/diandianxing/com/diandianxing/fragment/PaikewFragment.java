@@ -252,8 +252,6 @@ public class PaikewFragment extends BaseFragment implements View.OnClickListener
                 //.recordVideoSecond()//录制视频秒数 默认60s
                 .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
     }
-
-
 //    @Override
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);

@@ -168,31 +168,29 @@ public class GuanzhuAdapter extends BaseAdapter {
         holder.text_colltet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int collectCount = lists.get(position).getCollectCount();
                 if(lists.get(position).getIs_collect()==0){
-                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getIs_collect());
-                    lists.get(position).setIs_collect(1);
+                    holder.text_colltet.setText(collectCount+"");
+                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getCollectCount(),collectCount);
+                    //lists.get(position).setIs_collect(1);
                 }else if(lists.get(position).getIs_collect()==1){
-                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getIs_collect());
-                    lists.get(position).setIs_collect(0);
+                    holder.text_colltet.setText(collectCount+"");
+                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getCollectCount(),collectCount);
+                    // lists.get(position).setIs_collect(0);
                 }
-
             }
         });
-
-
-
-
-
-
         //点赞
         holder.text_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                int dianZanCount = lists.get(position).getDianZanCount();
                 if(lists.get(position).getIs_zan()==0){
-                    jiekou.onclick(position,0,lists.get(position).getId(),1);
+                    holder.text_zan.setText(dianZanCount+"");
+                    jiekou.onclick(position,0,lists.get(position).getId(),1,dianZanCount);
                 }else if(lists.get(position).getIs_zan()==1){
-                    jiekou.onclick(position,0,lists.get(position).getId(),0);
+                    holder.text_zan.setText(dianZanCount+"");
+                    jiekou.onclick(position,0,lists.get(position).getId(),0,dianZanCount);
                 }
             }
         });

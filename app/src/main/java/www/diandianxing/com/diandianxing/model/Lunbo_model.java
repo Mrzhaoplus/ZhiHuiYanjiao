@@ -1,5 +1,7 @@
 package www.diandianxing.com.diandianxing.model;
 
+import android.util.Log;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -26,7 +28,9 @@ public class Lunbo_model {
                 .subscribe(new Consumer<Lunbo_Bean>() {
                     @Override
                     public void accept(Lunbo_Bean lunbo_bean) throws Exception {
-                        jiekou.getsuccess(lunbo_bean);
+                            jiekou.getsuccess(lunbo_bean);
+
+
                     }
                 });
 
