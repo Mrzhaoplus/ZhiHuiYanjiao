@@ -37,4 +37,11 @@ public class GlobalParams {
 																	// 保存名称
 
 	public static final String CARTS = "carts";// 购物�?
+
+	public static final String JDSX = "jdsx";// 购物�?
+
+	public static final String TOU_SX = "touxiang";
+
+	public static final String LOGING_SX = "denglu_sx";
+
 }

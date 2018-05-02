@@ -94,7 +94,7 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
             if(flag==1){
                 if(NetUtil.checkNet(getActivity())){
                     //获取引用
-                    dianzan_presenter.setpath(Api.token, id, 0, 0);
+                    dianzan_presenter.setpath(SpUtils.getString(getActivity(),"token",null), id, 0, 0);
                 }else{
                     Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                 }
@@ -102,7 +102,7 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
             }else{
                 if(NetUtil.checkNet(getActivity())){
                     //获取引用
-                    quxiaozan_presenter.setpath(Api.token, id, 0, 0);
+                    quxiaozan_presenter.setpath(SpUtils.getString(getActivity(),"token",null), id, 0, 0);
                 }else{
                     Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                 }
@@ -112,7 +112,7 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
             if (flag == 0) {
                 if(NetUtil.checkNet(getActivity())){
                     //获取引用
-                    dianzan_presenter.setpath(Api.token, id, 0, 1);
+                    dianzan_presenter.setpath(SpUtils.getString(getActivity(),"token",null), id, 0, 1);
                 }else{
                     Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                 }
@@ -120,7 +120,7 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
             } else if (flag == 1) {
                 if(NetUtil.checkNet(getActivity())){
                     //获取引用
-                    quxiaozan_presenter.setpath(Api.token, id, 0, 1);
+                    quxiaozan_presenter.setpath(SpUtils.getString(getActivity(),"token",null), id, 0, 1);
                 }else{
                     Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                 }
@@ -143,7 +143,7 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
 
         if(NetUtil.checkNet(getActivity())){
             //获取引用
-            fenLei_presenter.getpath(Api.token,id,page);
+            fenLei_presenter.getpath(SpUtils.getString(getActivity(),"token",null),id,page);
         }else{
             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
         }
@@ -162,7 +162,7 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
                         page = 1;
                         if(NetUtil.checkNet(getActivity())){
                             //获取引用
-                            fenLei_presenter.getpath(Api.token,id, page);
+                            fenLei_presenter.getpath(SpUtils.getString(getActivity(),"token",null),id, page);
                         }else{
                             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                         }
@@ -181,7 +181,7 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
                         page ++;
                         if(NetUtil.checkNet(getActivity())){
                             //获取引用
-                            fenLei_presenter.getpath(Api.token,id, page);
+                            fenLei_presenter.getpath(SpUtils.getString(getActivity(),"token",null),id, page);
                         }else{
                             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                         }
@@ -412,7 +412,7 @@ public class MeiJiaidianFragment extends BaseFragment implements Fenlei_model_in
     @Override
     public void guanzhu_click(int postion) {
         int userId = list.get(postion).getUserId();
-        user_guanzhu_presenter.getpath(Api.token,userId);
+        user_guanzhu_presenter.getpath(SpUtils.getString(getActivity(),"token",null),userId);
     }
 
 

@@ -41,6 +41,7 @@ import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.LoadingDialog;
 import www.diandianxing.com.diandianxing.util.MyContants;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /**
  * Created by Administrator on 2018/4/8.
@@ -198,7 +199,7 @@ public class ReleaseShootoffVidoActivity extends BaseActivity {
         params.put("content", content);
         params.put("address", address);
         params.put("file", file);
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/paike/uppaikesource")
                 .tag(this)

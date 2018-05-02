@@ -43,6 +43,7 @@ import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.NetUtil;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 
 /**
@@ -73,7 +74,7 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
         //引用
         if(NetUtil.checkNet(MyCollectionActivity.this)){
             //获取引用
-            coll_presenter.getpath(pageNo, Api.token);
+            coll_presenter.getpath(pageNo, SpUtils.getString(this,"token",null));
         }else{
             Toast.makeText(MyCollectionActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
         }
@@ -124,7 +125,7 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
             int userId = mList.get(pos).getUserId();
             if(NetUtil.checkNet(MyCollectionActivity.this)){
                 //获取引用
-                user_guanzhu_presenter.getpath(Api.token,userId);
+                user_guanzhu_presenter.getpath(SpUtils.getString(MyCollectionActivity.this,"token",null),userId);
             }else{
                 Toast.makeText(MyCollectionActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
             }
@@ -134,7 +135,7 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
         @Override
         public void onSCClickListener(int pos) {
             postion = pos;
-            quxiaozan_presenter.setpath(Api.token,mList.get(pos).getPostId(),0,1);
+            quxiaozan_presenter.setpath(SpUtils.getString(MyCollectionActivity.this,"token",null),mList.get(pos).getPostId(),0,1);
             changegameAdapter.notifyDataSetChanged();
         }
           //跳转详情页

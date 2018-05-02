@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -127,6 +128,7 @@ public class RegisterActivity extends UMLoginActivity implements View.OnClickLis
         RetrofitManager.post(MyContants.BASEURL + "s=Sms/verify", map, new BaseObserver1<Successbean>("") {
             @Override
             public void onSuccess(Successbean result, String tag) {
+                Log.e("TAG","code====="+result.getCode());
                 if(result.getCode()==200){
                      /*
                        注册

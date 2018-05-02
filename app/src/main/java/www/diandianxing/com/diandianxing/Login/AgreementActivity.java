@@ -20,6 +20,7 @@ import www.diandianxing.com.diandianxing.bean.Loginsuccess;
 import www.diandianxing.com.diandianxing.bean.Successbean;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
@@ -144,9 +145,13 @@ public class AgreementActivity extends BaseActivity implements View.OnClickListe
                     SpUtils.putString(AgreementActivity.this,"userid",result.getDatas().getId());
                     SpUtils.putString(AgreementActivity.this,"token",result.getDatas().getToken());
                     SpUtils.putInt(AgreementActivity.this, "guid", 2);
+                    Intent gb = new Intent();
+                    gb.setAction(GlobalParams.LOGING_SX);
+                    sendBroadcast(gb);
                     //绑定成功跳登录
                     Intent intent=new Intent(AgreementActivity.this, MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }
                 else if(result.getCode()==404){
                     ToastUtils.show(AgreementActivity.this,"手机号已注册",1);

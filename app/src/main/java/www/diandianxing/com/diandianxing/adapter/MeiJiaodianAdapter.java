@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.ShujuBean.Fenlei_Bean;
 import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
@@ -33,6 +34,7 @@ import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity
 import www.diandianxing.com.diandianxing.interfase.List_view;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.ShareListener;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 
 /**
@@ -126,7 +128,12 @@ public class MeiJiaodianAdapter extends BaseAdapter {
         holder.rela_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                click.guanzhu_click(position);
+                int guid = SpUtils.getInt(context, "guid", 0);
+                if(guid!=2){
+                    context.startActivity(new Intent(context,LoginActivity.class));
+                }else{
+                    click.guanzhu_click(position);
+                }
 
             }
         });
@@ -141,29 +148,40 @@ public class MeiJiaodianAdapter extends BaseAdapter {
         holder.text_colltet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int collectCount = lists.get(position).getCollectCount();
-                if(lists.get(position).getIs_collect()==0){
-                    holder.text_colltet.setText(collectCount+"");
-                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getCollectCount(),collectCount);
-                    //lists.get(position).setIs_collect(1);
-                }else if(lists.get(position).getIs_collect()==1){
-                    holder.text_colltet.setText(collectCount+"");
-                    jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getCollectCount(),collectCount);
-                    // lists.get(position).setIs_collect(0);
+                int guid = SpUtils.getInt(context, "guid", 0);
+                if(guid!=2){
+                    context.startActivity(new Intent(context,LoginActivity.class));
+                }else{
+                    int collectCount = lists.get(position).getCollectCount();
+                    if(lists.get(position).getIs_collect()==0){
+                        holder.text_colltet.setText(collectCount+"");
+                        jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getCollectCount(),collectCount);
+                        //lists.get(position).setIs_collect(1);
+                    }else if(lists.get(position).getIs_collect()==1){
+                        holder.text_colltet.setText(collectCount+"");
+                        jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getCollectCount(),collectCount);
+                        // lists.get(position).setIs_collect(0);
+                    }
                 }
+
             }
         });
         //点赞
         holder.text_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int dianZanCount = lists.get(position).getDianZanCount();
-                if(lists.get(position).getIs_zan()==0){
-                    holder.text_zan.setText(dianZanCount+"");
-                    jiekou.onclick(position,0,lists.get(position).getId(),1,dianZanCount);
-                }else if(lists.get(position).getIs_zan()==1){
-                    holder.text_zan.setText(dianZanCount+"");
-                    jiekou.onclick(position,0,lists.get(position).getId(),0,dianZanCount);
+                int guid = SpUtils.getInt(context, "guid", 0);
+                if(guid!=2){
+                    context.startActivity(new Intent(context,LoginActivity.class));
+                }else{
+                    int dianZanCount = lists.get(position).getDianZanCount();
+                    if(lists.get(position).getIs_zan()==0){
+                        holder.text_zan.setText(dianZanCount+"");
+                        jiekou.onclick(position,0,lists.get(position).getId(),1,dianZanCount);
+                    }else if(lists.get(position).getIs_zan()==1){
+                        holder.text_zan.setText(dianZanCount+"");
+                        jiekou.onclick(position,0,lists.get(position).getId(),0,dianZanCount);
+                    }
                 }
             }
         });

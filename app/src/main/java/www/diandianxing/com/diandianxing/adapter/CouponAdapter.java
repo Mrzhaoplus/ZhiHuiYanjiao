@@ -12,29 +12,30 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.ArrayList;
 
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.bean.CouponInfo;
 
 /**
  * Created by Administrator on 2018/4/11.
  */
 
-public class CouponAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+public class CouponAdapter extends BaseQuickAdapter<CouponInfo, BaseViewHolder> {
 
 
     private int type;
 
-    public CouponAdapter(@LayoutRes int layoutResId, @Nullable ArrayList<String> data) {
+    public CouponAdapter(@LayoutRes int layoutResId, @Nullable ArrayList<CouponInfo> data) {
         super(layoutResId, data);
 
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, String item) {
+    protected void convert(BaseViewHolder helper, CouponInfo item) {
 
 
         LinearLayout ll_zt = helper.getView(R.id.ll_zt);
         TextView tv_zt = helper.getView(R.id.tv_zt);
-
-
+        TextView tv_money=helper.getView(R.id.tv_money);
+        TextView tv_time_yxq=helper.getView(R.id.tv_time_yxq);
         switch (type){
             case 0:
                 ll_zt.setBackgroundResource(R.drawable.yhj_ys_3x);
@@ -55,6 +56,12 @@ public class CouponAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
                 break;
         }
+
+
+        tv_money.setText(item.money);
+        String[] split1 = item.finish_time.split(" ");
+        String[] split2 = split1[0].split("-");
+        tv_time_yxq.setText("有效期至："+split2[0]+"."+split2[1]+"."+split2[2]);
 
 
 

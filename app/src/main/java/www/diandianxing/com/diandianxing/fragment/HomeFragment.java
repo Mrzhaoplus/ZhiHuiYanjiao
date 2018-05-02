@@ -99,8 +99,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     protected void lazyLoad() {
         if(NetUtil.checkNet(getActivity())){
             //获取引用
-            lunbo_presenter.getString(Api.token);
-            home_zixun_presenter.getpath(1,Api.token,typeNo);
+            lunbo_presenter.getString(SpUtils.getString(getActivity(),"token",null));
+            home_zixun_presenter.getpath(1,SpUtils.getString(getActivity(),"token",null),typeNo);
         }else{
             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
         }
@@ -162,7 +162,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                          typeNo=1;
                          if(NetUtil.checkNet(getActivity())){
                              //获取引用
-                             home_zixun_presenter.getpath(1,Api.token,typeNo);
+                             home_zixun_presenter.getpath(1,SpUtils.getString(getActivity(),"token",null),typeNo);
                          }else{
                              Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                          }
@@ -180,7 +180,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                        typeNo++;
                          if(NetUtil.checkNet(getActivity())){
                              //获取引用
-                             home_zixun_presenter.getpath(1,Api.token,typeNo);
+                             home_zixun_presenter.getpath(1,SpUtils.getString(getActivity(),"token",null),typeNo);
                          }else{
                              Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                          }
@@ -198,30 +198,18 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         int guid = SpUtils.getInt(getActivity(), "guid", 0);
         switch (view.getId()){
             case R.id.text_jiao:
-                if(guid!=2){
-                    startActivity(new Intent(getActivity(),LoginActivity.class));
-                }else{
                     Intent jiao=new Intent(getActivity(), JiaodianActivity.class);
                     startActivity(jiao);
-                }
                 break;
             case R.id.text_lu:
-                if(guid!=2){
-                    startActivity(new Intent(getActivity(),LoginActivity.class));
-                }else{
                     EventBus.getDefault().postSticky(new Evebtbus_fragment(0));
                     Intent lu=new Intent(getActivity(), LuKuangActivity.class);
                     ToastUtils.showShort(getActivity(),"每日郊点");
                     startActivity(lu);
-                }
                 break;
             case R.id.life:
-                if(guid!=2){
-                    startActivity(new Intent(getActivity(),LoginActivity.class));
-                }else{
                     Intent live=new Intent(getActivity(), LiveActivity.class);
                     startActivity(live);
-                }
                 break;
             case R.id.ll_msg:
                 if(guid!=2){

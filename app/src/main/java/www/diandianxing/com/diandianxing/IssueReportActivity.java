@@ -44,6 +44,7 @@ import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyGridView;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /**
  * Created by Administrator on 2018/4/8.
@@ -217,7 +218,7 @@ public class IssueReportActivity extends BaseActivity implements View.OnClickLis
         HttpParams params = new HttpParams();
         params.put("content", content);
         params.putFileParams("images", fileList);
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/feedBack")
                 .tag(this)

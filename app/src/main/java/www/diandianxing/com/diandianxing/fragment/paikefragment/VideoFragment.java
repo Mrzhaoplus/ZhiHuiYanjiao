@@ -62,6 +62,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.OnTouch;
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.adapter.JiaoLiuyanAdapter;
 import www.diandianxing.com.diandianxing.adapter.Jiaodianadapter;
 import www.diandianxing.com.diandianxing.adapter.MyPagerAdapter;
@@ -304,7 +305,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
         {
 
             HttpParams params = new HttpParams();
-            params.put("token", Api.token);
+            params.put("token", SpUtils.getString(getActivity(),"token",null));
             params.put("pkId", pk.id);
 
             OkGo.<String>post(Api.BASE_URL +"app/paike/paikeinfo")
@@ -469,7 +470,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
         HttpParams params = new HttpParams();
         params.put("pageNo", pageNo);
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
         params.put("objId", pk.id);
         params.put("objType", 1);
         OkGo.<String>post(Api.BASE_URL +"app/home/getCommentList")
@@ -617,7 +618,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
         params.put("beReturnedId",beReturnedId);
 
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/isertReplay")
                 .tag(this)
@@ -697,20 +698,26 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
     * */
     @Override
     public void onClick(View view) {
+        int guid = SpUtils.getInt(getActivity(), "guid", 0);
         switch(view.getId()){
             //点击返回
             case R.id.img_back:
                 getActivity().finish();
                 break;
             case R.id.guanzhu:
-                if(NetUtil.checkNet(getActivity())){
-                    networkGZ(Integer.parseInt(pk.userId));
+                if(guid!=2){
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
                 }else{
-                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                    if(NetUtil.checkNet(getActivity())){
+                        networkGZ(Integer.parseInt(pk.userId));
+                    }else{
+                        Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
             case R.id.video_tou:
                 Intent intent = new Intent(getActivity(), MydynamicActivity.class);
+                intent.putExtra("uid",pk.userId);
                 startActivity(intent);
                 break;
             case R.id.video_fenxiang:
@@ -754,15 +761,20 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
                 dialog.dismiss();
                 break;
             case R.id.video_zan:
-                if(NetUtil.checkNet(getActivity())){
-                    if(Integer.parseInt(pk.iszan)==0){
-                        Log.e("TAG","点击点赞");
-                        network(Integer.parseInt(pk.id),0,0);
-                    }else{
-                        QXnetwork(Integer.parseInt(pk.id),0,0);
-                    }
+                if(guid!=2){
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
                 }else{
-                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                    if(NetUtil.checkNet(getActivity())){
+                        if(Integer.parseInt(pk.iszan)==0){
+                            Log.e("TAG","点击点赞");
+                            network(Integer.parseInt(pk.id),0,0);
+                        }else{
+                            QXnetwork(Integer.parseInt(pk.id),0,0);
+                        }
+                    }else{
+                        Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
 
                 break;
@@ -802,7 +814,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
         params.put("objType",1);
 
-        params.put("token", Api.token);
+        params.put("token",SpUtils.getString(getActivity(),"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/isertCommentFather")
                 .tag(this)
@@ -852,7 +864,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
         params.put("operation_type",operation_type);
 
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/userOperation")
                 .tag(this)
@@ -895,7 +907,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
         params.put("operation_type",operation_type);
 
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/userCancelOperation")
                 .tag(this)
@@ -933,7 +945,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener 
 
         params.put("concernedId",concernedId);
 
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/insertFollowUser")
                 .tag(this)

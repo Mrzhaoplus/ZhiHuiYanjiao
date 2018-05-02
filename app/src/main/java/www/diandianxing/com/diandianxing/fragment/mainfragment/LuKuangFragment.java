@@ -29,6 +29,7 @@ import www.diandianxing.com.diandianxing.presenter.Lukuang_presenter;
 import www.diandianxing.com.diandianxing.presenter.Search_lukuang_presenter;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.NetUtil;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 
 /**
@@ -74,7 +75,7 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
         if(typeid==1){
             if(NetUtil.checkNet(getActivity())){
                 //获取引用
-                sear_lukuang.getpath(type,Api.token,content);
+                sear_lukuang.getpath(type, SpUtils.getString(getActivity(),"token",null),content);
             }else{
                 Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
             }
@@ -82,7 +83,7 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
         }else{
             if(NetUtil.checkNet(getActivity())){
                 //获取引用
-                lukuang_presenter.getpath(type, Api.token);
+                lukuang_presenter.getpath(type, SpUtils.getString(getActivity(),"token",null));
             }else{
                 Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
             }
@@ -115,7 +116,7 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
                         if(typeid==1){
                             if(NetUtil.checkNet(getActivity())){
                                 //获取引用
-                                sear_lukuang.getpath(type,Api.token,content);
+                                sear_lukuang.getpath(type,SpUtils.getString(getActivity(),"token",null),content);
                             }else{
                                 Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                             }
@@ -123,7 +124,7 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
                         }else{
                             if(NetUtil.checkNet(getActivity())){
                                 //获取引用
-                                lukuang_presenter.getpath(type, Api.token);
+                                lukuang_presenter.getpath(type, SpUtils.getString(getActivity(),"token",null));
                             }else{
                                 Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                             }
@@ -145,7 +146,7 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
                         if(typeid==1){
                             if(NetUtil.checkNet(getActivity())){
                                 //获取引用
-                                sear_lukuang.getpath(type,Api.token,content);
+                                sear_lukuang.getpath(type,SpUtils.getString(getActivity(),"token",null),content);
                             }else{
                                 Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                             }
@@ -153,7 +154,7 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
                         }else{
                             if(NetUtil.checkNet(getActivity())){
                                 //获取引用
-                                lukuang_presenter.getpath(type, Api.token);
+                                lukuang_presenter.getpath(type, SpUtils.getString(getActivity(),"token",null));
                             }else{
                                 Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                             }

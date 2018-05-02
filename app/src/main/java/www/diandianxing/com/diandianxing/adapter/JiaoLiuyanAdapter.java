@@ -20,13 +20,16 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.bean.PingLunInfo;
+import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 import www.diandianxing.com.diandianxing.interfase.HuiFuClickListener;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.util.MyUtils;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /**
  * Created by Mr赵 on 2018/4/9.
@@ -79,25 +82,30 @@ public class JiaoLiuyanAdapter extends RecyclerView.Adapter<JiaoLiuyanAdapter.Vi
             ziJiAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    if(tzId.equals(pingLunInfo.userId)){//是否是自己
-                        huiFuClickListener.OnHYDataClickListener();
-                    }else {
-                        String userid = Api.userid;
-
-                        Log.e("TAG", "不是自己==userid===" + userid + ",tzId===" + tzId + ",pingLunInfo.userId=" + pingLunInfo.userId);
-                        if (userid.equals(pingLunInfo.userId)) {//回复贴子的主人
-
-                            huiFuClickListener.OnHuiFuClickListener(pingLunInfo.id, tzId, zrname);
-
-                        } else if (userid.equals(tzId)) {//主人回复别人
-
-                            huiFuClickListener.OnHuiFuClickListener(pingLunInfo.id, pingLunInfo.userId, pingLunInfo.nickName);
-
-                        } else {//第三者不评论
-                            Log.e("TAG", "第三者");
+                    int guid = SpUtils.getInt(context, "guid", 0);
+                    if(guid!=2){
+                        context.startActivity(new Intent(context,LoginActivity.class));
+                    }else{
+                        if(tzId.equals(pingLunInfo.userId)){//是否是自己
                             huiFuClickListener.OnHYDataClickListener();
+                        }else {
+                            String userid = SpUtils.getString(context,"userid",null);
+                            Log.e("TAG", "不是自己==userid===" + userid + ",tzId===" + tzId + ",pingLunInfo.userId=" + pingLunInfo.userId);
+                            if (userid.equals(pingLunInfo.userId)) {//回复贴子的主人
+
+                                huiFuClickListener.OnHuiFuClickListener(pingLunInfo.id, tzId, zrname);
+
+                            } else if (userid.equals(tzId)) {//主人回复别人
+
+                                huiFuClickListener.OnHuiFuClickListener(pingLunInfo.id, pingLunInfo.userId, pingLunInfo.nickName);
+
+                            } else {//第三者不评论
+                                Log.e("TAG", "第三者");
+                                huiFuClickListener.OnHYDataClickListener();
+                            }
                         }
                     }
+
                 }
             });
         }else{
@@ -125,7 +133,7 @@ public class JiaoLiuyanAdapter extends RecyclerView.Adapter<JiaoLiuyanAdapter.Vi
                 if(tzId.equals(pingLunInfo.userId)){//是否是自己
                     huiFuClickListener.OnHYDataClickListener();
                 }else{
-                    String userid = Api.userid;
+                    String userid = SpUtils.getString(context,"userid",null);
 
                     Log.e("TAG","不是自己==userid==="+userid+",tzId==="+tzId+",pingLunInfo.userId="+pingLunInfo.userId);
                     if(userid.equals(pingLunInfo.userId)){//回复贴子的主人

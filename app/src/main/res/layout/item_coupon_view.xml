@@ -23,6 +23,7 @@
             android:layout_marginLeft="10dp"
             android:orientation="horizontal">
             <TextView
+                android:id="@+id/tv_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
@@ -57,11 +58,12 @@
                 />
 
             <TextView
+                android:id="@+id/tv_time_yxq"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:layout_marginTop="10dp"
-                android:text="有效期至：2017.12.20"/>
+                android:text="有效期至："/>
 
         </LinearLayout>
 

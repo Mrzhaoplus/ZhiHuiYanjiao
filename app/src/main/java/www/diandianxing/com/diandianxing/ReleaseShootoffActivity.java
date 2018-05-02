@@ -42,6 +42,7 @@ import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyGridView;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /**
  * Created by Administrator on 2018/4/8.
@@ -232,7 +233,7 @@ public class ReleaseShootoffActivity extends BaseActivity {
 
         HttpParams params = new HttpParams();
         params.putFileParams("files", fileList);
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/paike/uppaikeimages")
                 .tag(this)
@@ -271,8 +272,8 @@ public class ReleaseShootoffActivity extends BaseActivity {
         params.put("content", title);
         params.put("address", address);
         params.put("paths", paths);
-        params.put("token", Api.token);
-        params.put("userId", Api.userid);
+        params.put("token", SpUtils.getString(this,"token",null));
+        params.put("userId", SpUtils.getString(this,"userid",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/paike/insertpaikeimage")
                 .tag(this)

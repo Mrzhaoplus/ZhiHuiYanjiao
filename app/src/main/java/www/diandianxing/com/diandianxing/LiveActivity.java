@@ -19,6 +19,7 @@ import www.diandianxing.com.diandianxing.interfase.Live_Presenter_interfase;
 import www.diandianxing.com.diandianxing.presenter.Live_presenter;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.MyContants;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 
 public class LiveActivity extends AppCompatActivity implements Live_Presenter_interfase {
     private ImageView img_back;
@@ -48,7 +49,7 @@ public class LiveActivity extends AppCompatActivity implements Live_Presenter_in
 
         //引用
         live_presenter = new Live_presenter(this);
-        live_presenter.getpath(Api.token);
+        live_presenter.getpath(SpUtils.getString(this,"token",null));
     }
     @Override
     public void getsuccess(final Live_Bean live_bean) {

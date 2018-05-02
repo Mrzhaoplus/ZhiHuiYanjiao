@@ -41,6 +41,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,6 +56,7 @@ import www.diandianxing.com.diandianxing.MyCollectionActivity;
 import www.diandianxing.com.diandianxing.adapter.JiaoLiuyanAdapter;
 import www.diandianxing.com.diandianxing.adapter.Jiaodianadapter;
 import www.diandianxing.com.diandianxing.adapter.TPAdapter1;
+import www.diandianxing.com.diandianxing.adapter.Tuijiantieadapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.base.Myapplication;
 import www.diandianxing.com.diandianxing.bean.CustomReplayList;
@@ -69,6 +71,8 @@ import www.diandianxing.com.diandianxing.network.RetrofitManager;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
+import www.diandianxing.com.diandianxing.util.EventMessage;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.MyUtils;
@@ -287,6 +291,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
                 if(guid!=2){
                     startActivity(new Intent(JiaoDetailActivity.this,LoginActivity.class));
                 }else{
+                    networkGZ();
                     shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
                 }
                 break;
@@ -303,7 +308,6 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
                         }else{
                             QXnetwork(Integer.parseInt(guanzhuJD.id),0,1);
                         }
-
                     }else{
                         Toast.makeText(JiaoDetailActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                     }
@@ -333,22 +337,21 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.button_fabu:
 
-                content=ed_text.getText().toString().trim();
-
-                if(content!=null&&content.length()>0){
-                    if(NetUtil.checkNet(JiaoDetailActivity.this)){
-                        if(isHf){
-                            networkZJPL(commentFatherId,beReturnedId);
+                    content=ed_text.getText().toString().trim();
+                    if(content!=null&&content.length()>0){
+                        if(NetUtil.checkNet(JiaoDetailActivity.this)){
+                            if(isHf){
+                                networkZJPL(commentFatherId,beReturnedId);
+                            }else{
+                                networkFB();
+                            }
                         }else{
-                            networkFB();
+                            Toast.makeText(JiaoDetailActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                         }
-                    }else{
-                        Toast.makeText(JiaoDetailActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
-                    }
 
-                }else {
-                    Toast.makeText(JiaoDetailActivity.this,"请输入评论内容",Toast.LENGTH_SHORT).show();
-                }
+                    }else {
+                        Toast.makeText(JiaoDetailActivity.this,"请输入评论内容",Toast.LENGTH_SHORT).show();
+                    }
 
                 break;
         }
@@ -363,7 +366,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 
         HttpParams params = new HttpParams();
         params.put("postId", id);
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/getPostById")
                 .tag(this)
@@ -473,7 +476,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 
         params.put("objType",0);
 
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/isertCommentFather")
                 .tag(this)
@@ -524,7 +527,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 
         params.put("operation_type",operation_type);
 
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/userOperation")
                 .tag(this)
@@ -565,6 +568,11 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
                                     text_zan.setCompoundDrawables(nav_up, null, null, null);
                                 }
 
+                                Intent intent = new Intent();
+                                intent.setAction(GlobalParams.JDSX);
+                                sendBroadcast(intent);
+
+
                             } else {
                                 Toast.makeText(JiaoDetailActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
 
@@ -587,7 +595,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 
         params.put("operation_type",operation_type);
 
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/userCancelOperation")
                 .tag(this)
@@ -628,7 +636,9 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
                                     nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
                                     text_zan.setCompoundDrawables(nav_up, null, null, null);
                                 }
-
+                                Intent intent = new Intent();
+                                intent.setAction(GlobalParams.JDSX);
+                                sendBroadcast(intent);
 
                             } else {
                                 Toast.makeText(JiaoDetailActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
@@ -647,7 +657,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 
         HttpParams params = new HttpParams();
         params.put("pageNo", pageNo);
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         params.put("objId", id);
         params.put("objType", 0);
         OkGo.<String>post(Api.BASE_URL +"app/home/getCommentList")
@@ -973,6 +983,48 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
+    private void networkGZ() {
+
+        HttpParams params = new HttpParams();
+
+        params.put("concernedId",guanzhuJD.userId);
+
+        params.put("token", SpUtils.getString(this,"token",null));
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/insertFollowUser")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "数据" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+
+                                rela_guanzhu.setVisibility(View.INVISIBLE);
+                                Intent intent = new Intent();
+                                intent.setAction(GlobalParams.JDSX);
+                                sendBroadcast(intent);
+
+
+                            } else {
+                                Toast.makeText(JiaoDetailActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -1019,7 +1071,7 @@ public class JiaoDetailActivity extends BaseActivity implements View.OnClickList
 
         params.put("beReturnedId",beReturnedId);
 
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/isertReplay")
                 .tag(this)

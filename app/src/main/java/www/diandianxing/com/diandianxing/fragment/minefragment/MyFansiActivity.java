@@ -39,6 +39,7 @@ import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.NetUtil;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
 
 /**
@@ -69,7 +70,7 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
        this.userid=userid;
         if(NetUtil.checkNet(MyFansiActivity.this)){
             //获取引用
-            user_guanzhu_presenter.getpath(Api.token,userid);
+            user_guanzhu_presenter.getpath(SpUtils.getString(this,"token",null),userid);
         }else{
             Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
         }
@@ -95,7 +96,7 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
           //引用
         if(NetUtil.checkNet(MyFansiActivity.this)){
             //获取引用
-            fensi_presenter.getpath(pageNo,uid, Api.userid);
+            fensi_presenter.getpath(pageNo,uid, SpUtils.getString(this,"token",null));
         }else{
             Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
         }
@@ -133,7 +134,7 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
                         pageNo=1;
                         if(NetUtil.checkNet(MyFansiActivity.this)){
                             //获取引用
-                            fensi_presenter.getpath(pageNo,uid, Api.userid);
+                            fensi_presenter.getpath(pageNo,uid, SpUtils.getString(MyFansiActivity.this,"token",null));
                         }else{
                             Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                         }
@@ -151,7 +152,7 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
                         pageNo++;
                         if(NetUtil.checkNet(MyFansiActivity.this)){
                             //获取引用
-                            fensi_presenter.getpath(pageNo,uid, Api.userid);
+                            fensi_presenter.getpath(pageNo,uid, SpUtils.getString(MyFansiActivity.this,"token",null));
                         }else{
                             Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                         }

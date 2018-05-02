@@ -8,15 +8,19 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -35,6 +39,7 @@ import com.lzy.okgo.model.Response;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,13 +49,18 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.adapter.Jiaodianadapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.base.Myapplication;
+import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.bean.Photobean;
 import www.diandianxing.com.diandianxing.bean.Shouyebean;
+import www.diandianxing.com.diandianxing.bean.UserMsgInfo;
+import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.CircleImageView;
 import www.diandianxing.com.diandianxing.util.EventMessage;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
@@ -62,7 +72,7 @@ import www.diandianxing.com.diandianxing.R;
  * author:衣鹏宇(ypu)
  */
 
-public class PersonActivity extends BaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+public class PersonActivity extends BaseActivity implements View.OnClickListener {
     private Shouyebean.DatasBean datas;
      List<String> list=new ArrayList<>();
     private ImageView iv_callback;
@@ -101,6 +111,11 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
     private RadioButton nan;
     private RadioButton nv;
 
+    private RadioGroup rg_xb;
+    private RadioButton rb_nan,rb_nv;
+    private TextView tv_phone;
+    private EditText et_qm;
+    private TextView tv_sf_xz;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +135,12 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
     public void myEvent(EventMessage eventMessage) {
         if (eventMessage.getMsg().equals("myname")) {
             String name = SpUtils.getString(this, "nickname", null);
+
+            Intent intent =new Intent();
+            intent.setAction(GlobalParams.TOU_SX);
+            intent.putExtra("name",name);
+            sendBroadcast(intent);
+
             alter_name.setText(name);
         }
          else if(eventMessage.getMsg().equals("idcard")){
@@ -155,13 +176,15 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
         back2 = (ImageView) findViewById(R.id.back2);
         alter_name = (TextView) findViewById(R.id.alter_name);
         per_pho = (CircleImageView) findViewById(R.id.person_pho);
+        tv_sf_xz= (TextView) findViewById(R.id.tv_sf_xz);
+        rb_nan= (RadioButton) findViewById(R.id.rb_nan);
+        rb_nv= (RadioButton) findViewById(R.id.rb_nv);
+        et_qm= (EditText) findViewById(R.id.et_qm);
+        tv_phone= (TextView) findViewById(R.id.tv_phone);
+        rg_xb= (RadioGroup) findViewById(R.id.rg_xb);
         real_renzheng = (RelativeLayout) findViewById(R.id.real_renzheng);
         id_card = (TextView) findViewById(R.id.idcard_zhuangtai);
-        nan = (RadioButton) findViewById(R.id.nan);
-        nv = (RadioButton) findViewById(R.id.nv);
-        rg = (RadioGroup) findViewById(R.id.rg);
         iv_callback.setOnClickListener(this);
-        rg.setOnCheckedChangeListener(this);
         real_pho.setOnClickListener(this);
         zhong.setText("个人信息");
         real_name.setOnClickListener(this);
@@ -192,6 +215,30 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
             }
         }
 
+        rb_nan.setOnClickListener(this);
+        rb_nv.setOnClickListener(this);
+
+        network();
+
+        et_qm.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                signature=editable.toString().trim();
+
+                networkupdata();
+            }
+        });
 
     }
 
@@ -216,6 +263,17 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
             case R.id.real_renzheng:
                 Intent its=new Intent(PersonActivity.this,RenzhenActivity.class);
                 startActivity(its);
+                break;
+            case R.id.rb_nan:
+
+                sex="0";
+                networkupdata();
+                break;
+            case R.id.rb_nv:
+
+                sex="1";
+                networkupdata();
+
                 break;
 
         }
@@ -376,10 +434,132 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    private String sex="0",area="",signature="";
+
+    private void networkupdata() {
+
+        HttpParams params = new HttpParams();
+        params.put("sex", Integer.parseInt(sex));
+
+        params.put("area",area);
+
+        params.put("signature",signature);
+
+        params.put("token", SpUtils.getString(this,"token",null));
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/updateUserInfo")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "修改" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+
+//                                Toast.makeText(PersonActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
+
+
+                                Intent intent =new Intent();
+                                intent.setAction(GlobalParams.TOU_SX);
+                                intent.putExtra("sex",sex);
+
+                                if(signature.length()>0){
+                                    intent.putExtra("signature",signature);
+                                }
+
+                                sendBroadcast(intent);
+
+
+                            } else {
+                                Toast.makeText(PersonActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+
+    private void network() {
+        HttpParams params = new HttpParams();
+        params.put("token", SpUtils.getString(this,"token",null));
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/home/getUserInfo")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "个人信息：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            JSONObject datas = jsonobj.getJSONObject("datas");
+                            if (code == 200) {
+
+                                Glide.with(PersonActivity.this).load(datas.getString("pic")).into(per_pho);
+
+                                tv_phone.setText(datas.getString("contact"));
+                                sex=datas.getString("userSex");
+                                if(Integer.parseInt(datas.getString("userSex"))==0){
+                                    rb_nan.setChecked(true);
+                                }else{
+                                    rb_nv.setChecked(true);
+                                }
+                                signature=datas.getString("signature");
+                                if(datas.getString("signature").length()>0){
+                                    et_qm.setText(datas.getString("signature"));
+                                }
+                                area=datas.getString("area");
+                                if(datas.getString("area").length()>0){
+                                    tv_sf_xz.setText(datas.getString("area"));
+                                }
+
+                                if(Integer.parseInt(datas.getString("id_ident"))==1){
+                                    id_card.setText("未认证");
+                                }
+                                else if(Integer.parseInt(datas.getString("id_ident"))==2){
+                                    id_card.setText("审核中");
+                                }
+                                else if(Integer.parseInt(datas.getString("id_ident"))==3){
+                                    id_card.setText("审核不通过");
+                                }
+                                else if(Integer.parseInt(datas.getString("id_ident"))==4){
+                                    id_card.setText("已认证");
+                                }
+
+
+                                alter_name.setText(datas.getString("nickname"));
+
+
+
+                            } else {
+                                Toast.makeText(PersonActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+
 
     public void photoworks(){
         HttpParams httpParams=new HttpParams();
-
         httpParams.put("file", filess);
         Log.d("ffff",file+"");
         httpParams.put("uid", SpUtils.getString(Myapplication.getApplication(),"userid",null));
@@ -407,6 +587,12 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
                                     Log.d("TAg",headImageUrl);
 
 
+                                    Intent intent =new Intent();
+                                    intent.setAction(GlobalParams.TOU_SX);
+                                    intent.putExtra("tou",MyContants.PHOTO+headImageUrl);
+                                    sendBroadcast(intent);
+
+
 
                                 }
                                 else {
@@ -423,6 +609,7 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
 
 
 
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -430,17 +617,17 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
         EventBus.getDefault().postSticky(eventMessage);
     }
 
-    @Override
-    public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        switch (radioGroup.getCheckedRadioButtonId()){
-            case R.id.nan:
-                nan.setChecked(true);
-                nv.setChecked(false);
-                break;
-                 case R.id.nv:
-                     nv.setChecked(true);
-                     nan.setChecked(false);
-            break;
-        }
-    }
+//    @Override
+//    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+//        switch (radioGroup.getCheckedRadioButtonId()){
+//            case R.id.nan:
+//                nan.setChecked(true);
+//                nv.setChecked(false);
+//                break;
+//                 case R.id.nv:
+//                     nv.setChecked(true);
+//                     nan.setChecked(false);
+//            break;
+//        }
+//    }
 }

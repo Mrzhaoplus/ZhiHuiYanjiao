@@ -2,7 +2,10 @@ package www.diandianxing.com.diandianxing.fragment.minefragment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
@@ -56,6 +59,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.Login.UmshareActivity;
 import www.diandianxing.com.diandianxing.MyCollectionActivity;
 import www.diandianxing.com.diandianxing.ReleaseShootoffActivity;
@@ -76,8 +80,10 @@ import www.diandianxing.com.diandianxing.my.PersonActivity;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.EventMessage;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.SharingPop;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.StateClickListener;
 import www.diandianxing.com.diandianxing.util.ZDPop;
 import www.diandianxing.com.diandianxing.R;
@@ -133,12 +139,16 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
 
     private int qh=0;
     private String uid;
+    private TextView tv_qm;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UltimateBar ultimateBar = new UltimateBar(this);
         ultimateBar.setImmersionBar();
         setContentView(R.layout.activity_minedynamic);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(GlobalParams.TOU_SX);
+        registerReceiver(broadcastReceiver,intentFilter);
         initView();
     }
     private void initView() {
@@ -159,6 +169,8 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
         text_collect = (LinearLayout) findViewById(R.id.text_collect);
         text_pin = (TextView) findViewById(R.id.text_pin);
         recy_card= (RecyclerView) findViewById(R.id.recy_card);
+
+        tv_qm= (TextView) findViewById(R.id.tv_qm);
         sv_tz= (SpringView) findViewById(R.id.sv_tz);
         rl_bg= (ImageView) findViewById(R.id.rl_bg);
         v1 = (View) findViewById(R.id.v1);
@@ -188,7 +200,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
             iv_gz.setVisibility(View.INVISIBLE);
             img_tou.setOnClickListener(this);
             rl_bg.setOnClickListener(this);
-            uid=Api.userid;
+            uid= SpUtils.getString(this,"userid",null);
         }else{
 
             uid=getIntent().getStringExtra("uid");
@@ -491,7 +503,13 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                 break;
             case R.id.iv_gz:
 
-                showGZDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion);
+                int guid = SpUtils.getInt(MydynamicActivity.this, "guid", 0);
+                if(guid!=2){
+                    startActivity(new Intent(MydynamicActivity.this,LoginActivity.class));
+                }else{
+                    showGZDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion);
+                }
+
 
                 break;
             case R.id.iv_zyfh:
@@ -551,6 +569,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
     protected void onDestroy() {
         super.onDestroy();
         UMShareAPI.get(this).release();
+        unregisterReceiver(broadcastReceiver);
     }
 
 
@@ -890,7 +909,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
     private void networkImg() {
         HttpParams params = new HttpParams();
         params.put("file", file);
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/user/backimagebyuser")
                 .tag(this)
@@ -1069,7 +1088,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
 
         params.put("operation_type",operation_type);
 
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/userOperation")
                 .tag(this)
@@ -1128,7 +1147,7 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
 
         params.put("operation_type",operation_type);
 
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/userCancelOperation")
                 .tag(this)
@@ -1281,11 +1300,52 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
     }
 
 
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+
+            if(GlobalParams.TOU_SX.equals(action)){
+
+                String tou = intent.getStringExtra("tou");
+
+                String name = intent.getStringExtra("name");
+                String sex = intent.getStringExtra("sex");
+                String signature=intent.getStringExtra("signature");
+                if(sex!=null&&sex.length()>0){
+                    if(Integer.parseInt(sex)==0){//男
+
+                        text_sex.setImageResource(R.drawable.icon_boy);
+
+                    }else{
+
+                        text_sex.setImageResource(R.drawable.icon_girl);
+
+                    }
+
+                }
+                if(name!=null&&name.length()>0){
+                    text_name.setText(name);
+                }
+                tv_qm.setText(signature);
+                if((tou!=null&&tou.length()>0)){
+                    Glide.with(MydynamicActivity.this).load(tou).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(img_tou);
+                }
+
+
+
+            }
+
+        }
+    };
+
+
     private void networkGR() {
         HttpParams params = new HttpParams();
 
         params.put("userId", uid);
-        params.put("myuserId", Api.userid);
+        params.put("myuserId", SpUtils.getString(this,"userid",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/user/personalcenter")
                 .tag(this)
@@ -1306,12 +1366,16 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
                                 JSONObject jo2 = datas.getJSONObject("userinfo");
 
                                 text_name.setText(jo1.getString("nickname"));
-                                Glide.with(MydynamicActivity.this).load(jo2.getString("pic")).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(img_tou);
+
+                                if(jo2.getString("pic").length()>0){
+                                    Glide.with(MydynamicActivity.this).load(jo2.getString("pic")).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(img_tou);
+                                }
+
                                 tv_zy_xq.setText(jo2.getString("userLevel"));
                                 guan_num.setText(datas.getString("gznum"));
                                 fen_num.setText(datas.getString("fsnum"));
                                 collect_num.setText(datas.getString("dznum"));
-
+                                tv_qm.setText(jo2.getString("signature"));
                                 Glide.with(MydynamicActivity.this).load(datas.getString("imageurl")).into(rl_bg);
 
 
@@ -1330,14 +1394,16 @@ public class MydynamicActivity extends UmshareActivity implements View.OnClickLi
 
                                 text_zan.setText("动态（"+datas.getString("pknum")+"）");
 
+                                if(!"我的主页".equals(title)){
+                                    if(Integer.parseInt(datas.getString("isGz"))==0){
 
-                                if(Integer.parseInt(datas.getString("isGz"))==0){
+                                        iv_gz.setVisibility(View.INVISIBLE);
 
-                                    iv_gz.setVisibility(View.INVISIBLE);
-
-                                }else{
-                                    iv_gz.setVisibility(View.VISIBLE);
+                                    }else{
+                                        iv_gz.setVisibility(View.VISIBLE);
+                                    }
                                 }
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

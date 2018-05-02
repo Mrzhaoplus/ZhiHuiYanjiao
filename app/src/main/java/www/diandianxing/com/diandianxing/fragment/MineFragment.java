@@ -1,8 +1,15 @@
 package www.diandianxing.com.diandianxing.fragment;
 
+import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -40,6 +47,7 @@ import www.diandianxing.com.diandianxing.fragment.minefragment.MyFllowActivity;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.my.JourActivity;
+import www.diandianxing.com.diandianxing.my.PersonActivity;
 import www.diandianxing.com.diandianxing.my.ShareActivity;
 import www.diandianxing.com.diandianxing.set.AboutweActivity;
 import www.diandianxing.com.diandianxing.set.Feedback;
@@ -47,7 +55,10 @@ import www.diandianxing.com.diandianxing.set.SetActivity;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.EventMessage;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
+import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.NetUtil;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /**
  * date : ${Date}
@@ -94,6 +105,12 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     protected void lazyLoad() {
         View contentView = getContentView();
         EventBus.getDefault().register(this);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(GlobalParams.TOU_SX);
+        intentFilter.addAction(GlobalParams.LOGING_SX);
+        getActivity().registerReceiver(broadcastReceiver,intentFilter);
+
         this.text_day = (TextView) contentView.findViewById(R.id.text_day);
         this.imageView2 = (ImageView) contentView.findViewById(R.id.imageView2);
         this.guan_num = (TextView) contentView.findViewById(R.id.guan_num);
@@ -151,8 +168,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void XXX(EventMessage messageEvent) {
-        Drawable fromPath = Drawable.createFromPath(messageEvent.getMsg());
-        iv_bg_my.setImageDrawable(fromPath);
+//        Drawable fromPath = Drawable.createFromPath(messageEvent.getMsg());
+//        iv_bg_my.setImageDrawable(fromPath);
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void fff(Event_coll_size msg) {
@@ -183,7 +200,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 
              case R.id.text_fensi://粉丝
                  Intent intent1=new Intent(getActivity(), MyFansiActivity.class);
-                 intent1.putExtra("uid",Api.userid);
+                 intent1.putExtra("uid", SpUtils.getString(getActivity(),"token",null));
                  startActivity(intent1);
                  break;
              case R.id.text_dongtai:
@@ -224,7 +241,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                  startActivity(yjfk);
                  break;
              case R.id.real_kefu:
-                 showphotoDialog(Gravity.BOTTOM,R.style.Bottom_Top_aniamtion);
+
+                 networkmoney();
+
 
                  break;
              case R.id.real_yaoqing:
@@ -242,7 +261,56 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 
     }
 
-    private void showphotoDialog(int grary, int animationStyle) {
+    private void networkmoney() {
+        OkGo.<String>get(MyContants.BASEURL +"s=Login/aboutContact")
+                .tag(this)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG","关于"+body);
+                        try {
+                            JSONObject jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            String datas = jsonobj.getString("datas");
+                            if (code == 200) {
+
+                                JSONObject jo = new JSONObject(datas);
+
+                                String tel=jo.getString("service_tel");
+                                showphotoDialog(Gravity.BOTTOM,R.style.Bottom_Top_aniamtion,tel);
+
+
+                            } else {
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                });
+//        Map<String,String> map=new HashMap<>();
+//         map.put("uid",SpUtils.getString(this,"userid",null));
+//         map.put("token",SpUtils.getString(this,"token",null));
+//        RetrofitManager.post(MyContants.BASEURL+"s=Payment/refundDeposit", map, new BaseObserver1<Tuikuanbean>("") {
+//            @Override
+//            public void onSuccess(Tuikuanbean result, String tag) {
+//                if(result.getCode()==200){
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailed(int code, String data) {
+//
+//            }
+//        });
+//    }
+    }
+
+    private void showphotoDialog(int grary, int animationStyle, final String tel) {
         BaseDialog.Builder builder = new BaseDialog.Builder(getActivity());
         final BaseDialog dialog = builder.setViewId(R.layout.dialog_kefu)
                 //设置dialogpadding
@@ -257,14 +325,25 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                 .isOnTouchCanceled(true)
                 //设置监听事件
                 .builder();
+
+
+        TextView text_kefu=dialog.getView(R.id.text_kefu);
+        text_kefu.setText(tel);
         //拍照
         dialog.getView(R.id.text_kefu).setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 //相机选取
 
                 dialog.dismiss();
-                Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "010-1234563245"));
+                if(getActivity().checkSelfPermission("android.permission.CALL_PHONE")!= PackageManager.PERMISSION_GRANTED){
+
+                    requestPermissions(new String[]{Manifest.permission.CALL_PHONE},1);
+
+                }
+
+                Intent dialIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + tel));
                 //跳转到拨号界面，同时传递电话号码
                 startActivity(dialIntent);
             }
@@ -272,19 +351,62 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 
         dialog.show();
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         EventBus.getDefault().removeAllStickyEvents();
+        getActivity().unregisterReceiver(broadcastReceiver);
     }
+
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+
+            if(GlobalParams.TOU_SX.equals(action)){
+
+                String tou = intent.getStringExtra("tou");
+                String name = intent.getStringExtra("name");
+                String sex = intent.getStringExtra("sex");
+                if(sex!=null&&sex.length()>0){
+                    if(Integer.parseInt(sex)==0){//男
+
+                        iv_sex.setImageResource(R.drawable.icon_boy);
+
+                    }else{
+
+                        iv_sex.setImageResource(R.drawable.icon_girl);
+
+                    }
+                }
+
+                if(name!=null&&name.length()>0){
+                    tv_zy_name.setText(name);
+                }
+                if(tou!=null&&tou.length()>0){
+                    Glide.with(getActivity()).load(tou).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_grtx);
+                }
+
+            }else if(GlobalParams.LOGING_SX.equals(action)){
+                if(NetUtil.checkNet(getActivity())){
+                    network();
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }
+    };
+
 
     UserInfo userInfo;
     private void network() {
 
         HttpParams params = new HttpParams();
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/user/myhome")
                 .tag(this)
@@ -355,7 +477,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                                 collect_num.setText(userInfo.scnum);
                                 text_day.setText("加入我们"+userInfo.days+"天");
 
-                                Glide.with(getActivity()).load(userInfo.userMsg2.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_grtx);
+                                if(userInfo.userMsg2.pic.length()>0){
+                                    Glide.with(getActivity()).load(userInfo.userMsg2.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_grtx);
+                                }
+
+
 
                                 tv_zy_name.setText(userInfo.userMsg1.nickname);
                                 tv_zy_dj.setText(userInfo.userMsg2.userLevel);
@@ -370,7 +496,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 
                                 }
 
-                                Glide.with(getActivity()).load(datas.getString("imageurl")).into(iv_bg_my);
+//                                Glide.with(getActivity()).load(datas.getString("imageurl")).into(iv_bg_my);
 
                             } else {
                                 Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();

@@ -1,5 +1,9 @@
 package www.diandianxing.com.diandianxing.fragment.paikefragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -33,8 +37,10 @@ import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
 import www.diandianxing.com.diandianxing.util.Api;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.MyGridView;
 import www.diandianxing.com.diandianxing.util.NetUtil;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /**
  * date : ${Date}
@@ -56,6 +62,9 @@ public class GuanzhuFragment extends BaseFragment {
     @Override
     protected void lazyLoad() {
         View contentView =getContentView();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(GlobalParams.LOGING_SX);
+        getActivity().registerReceiver(broadcastReceiver,intentFilter);
         tui_recycler = contentView.findViewById(R.id.tui_recycler);
         spring_view = contentView.findViewById(R.id.spring_view);
 
@@ -107,12 +116,39 @@ public class GuanzhuFragment extends BaseFragment {
         spring_view.setFooter(new DefaultFooter(getActivity()));
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(broadcastReceiver);
+    }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+
+            if(GlobalParams.LOGING_SX.equals(action)){
+
+                list.clear();
+                pageNo=1;
+                if(NetUtil.checkNet(getActivity())){
+                    networklist();
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+        }
+    };
+
 
     private void networklist() {
 
         HttpParams params = new HttpParams();
         params.put("pageNo", pageNo);
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/paike/follow")
                 .tag(this)

@@ -181,7 +181,7 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
 
         HttpParams params = new HttpParams();
         params.put("id", id);
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/information/deleteCommentOrZan")
                 .tag(this)
@@ -218,7 +218,7 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
 
         HttpParams params = new HttpParams();
         params.put("pageNo", pageNo);
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/pushMsg")
                 .tag(this)

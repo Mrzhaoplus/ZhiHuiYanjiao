@@ -48,6 +48,7 @@ import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyGridView;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /**
  * Created by Administrator on 2018/4/4.
@@ -291,7 +292,7 @@ public class ReleaseFocusActivity extends BaseActivity {
         params.put("postContent", postContent);
         params.put("address", address);
         params.put("images", images);
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         params.put("postTitle", postTitle);
         params.put("postType", postType);
         Log.d("TAG","数据内容"+params.toString());
@@ -332,7 +333,7 @@ public class ReleaseFocusActivity extends BaseActivity {
 
     private void networkType() {
         HttpParams params = new HttpParams();
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/getClassificationList")
                 .tag(this)

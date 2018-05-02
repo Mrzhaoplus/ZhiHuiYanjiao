@@ -199,7 +199,7 @@
         android:id="@+id/text_diandian"
         android:textColor="@color/text_orage"
         android:layout_toRightOf="@id/zhu"
-        android:text="《点点行用户协议》"
+        android:text="《智慧燕郊用户协议》"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     </LinearLayout>

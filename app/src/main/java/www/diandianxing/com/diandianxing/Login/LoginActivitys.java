@@ -22,6 +22,7 @@ import www.diandianxing.com.diandianxing.bean.Loginbean;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
 import www.diandianxing.com.diandianxing.util.CustomProgressDialog;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyUtils;
 import www.diandianxing.com.diandianxing.util.SpUtils;
@@ -121,15 +122,20 @@ public class LoginActivitys extends UMLoginActivity implements View.OnClickListe
                     SpUtils.putString(LoginActivitys.this,"token",token);
                     SpUtils.putString(LoginActivitys.this,"userid",id);
                     SpUtils.putInt(LoginActivitys.this, "guid", 2);
+
+                    Intent gb = new Intent();
+                    gb.setAction(GlobalParams.LOGING_SX);
+                    sendBroadcast(gb);
                     Intent intent=new Intent(LoginActivitys.this, MainActivity.class);
                     startActivity(intent);
                     finish();
-
                 }
                 else if(result.getCode()==404){
                     ToastUtils.show(LoginActivitys.this,"账号或密码错误",1);
                 }
             }
+
+
             @Override
             public void onFailed(int code,String data) {
                ToastUtils.show(LoginActivitys.this,data,1);

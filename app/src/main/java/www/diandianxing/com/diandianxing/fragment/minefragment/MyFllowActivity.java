@@ -31,6 +31,7 @@ import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.NetUtil;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 
 /**
  * Created by ASUS on 2018/3/20.
@@ -65,7 +66,7 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
         //引用
         if(NetUtil.checkNet(this)){
             //获取引用
-            gz_person_presenter.getpath(pageNo, Api.userid);
+            gz_person_presenter.getpath(pageNo, SpUtils.getString(this,"token",null));
         }else{
             Toast.makeText(this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
         }
@@ -102,7 +103,7 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
                        pageNo=1;
                        if(NetUtil.checkNet(MyFllowActivity.this)){
                            //获取引用
-                           gz_person_presenter.getpath(pageNo, Api.userid);
+                           gz_person_presenter.getpath(pageNo, SpUtils.getString(MyFllowActivity.this,"token",null));
                        }else{
                            Toast.makeText(MyFllowActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                        }
@@ -121,7 +122,7 @@ public class MyFllowActivity extends BaseActivity implements View.OnClickListene
                        pageNo++;
                        if(NetUtil.checkNet(MyFllowActivity.this)){
                            //获取引用
-                           gz_person_presenter.getpath(pageNo, Api.userid);
+                           gz_person_presenter.getpath(pageNo, SpUtils.getString(MyFllowActivity.this,"token",null));
                        }else{
                            Toast.makeText(MyFllowActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                        }

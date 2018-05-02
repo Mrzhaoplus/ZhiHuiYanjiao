@@ -29,9 +29,10 @@ android:paddingLeft="10dp"
                 android:textSize="14sp"/>
 
             <TextView
+                android:id="@+id/tv_hqsj"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="获取时间：2017-10-12"
+                android:text="获取时间："
                 android:layout_marginTop="5dp"
                 android:textColor="#999"
                 android:textSize="14sp"/>
@@ -39,10 +40,11 @@ android:paddingLeft="10dp"
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tv_hbqs"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="+1.00元"
+            android:text="+0.00元"
             android:gravity="right"
             android:textColor="#FFFF6602"
             android:textSize="14sp"/>

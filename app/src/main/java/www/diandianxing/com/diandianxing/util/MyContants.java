@@ -5,7 +5,7 @@ package www.diandianxing.com.diandianxing.util;
 
 public class MyContants {
     public static String FILENAME = "config.xml";
-    public static String BASEURL="http://47.93.45.38/server/api.php?";
+    public static String BASEURL="http://47.93.45.38/test/api.php?";
     public static String BASEURLS="http://114.215.83.139/danche/api.php?";
     public static String PHOTO="http://47.93.45.38";
     public static String HTML="http://47.93.45.38/server/html5/";

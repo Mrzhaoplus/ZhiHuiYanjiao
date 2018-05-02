@@ -42,7 +42,7 @@
 
     <application
         android:name=".base.Myapplication"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_tu"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity android:name=".LancherActivity">

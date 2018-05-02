@@ -82,7 +82,7 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
             if(flag==1){
                 if(NetUtil.checkNet(getActivity())){
                     //获取引用
-                    dianzan_presenter.setpath(Api.token, id, 0, 0);
+                    dianzan_presenter.setpath(SpUtils.getString(getActivity(),"token",null), id, 0, 0);
                 }else{
                     Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                 }
@@ -90,7 +90,7 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
             }else{
                 if(NetUtil.checkNet(getActivity())){
                     //获取引用
-                    quxiaozan_presenter.setpath(Api.token, id, 0, 0);
+                    quxiaozan_presenter.setpath(SpUtils.getString(getActivity(),"token",null), id, 0, 0);
                 }else{
                     Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                 }
@@ -100,7 +100,7 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
               if (flag == 0) {
                   if(NetUtil.checkNet(getActivity())){
                       //获取引用
-                      dianzan_presenter.setpath(Api.token, id, 0, 1);
+                      dianzan_presenter.setpath(SpUtils.getString(getActivity(),"token",null), id, 0, 1);
                   }else{
                       Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                   }
@@ -108,7 +108,7 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
             } else if (flag == 1) {
                   if(NetUtil.checkNet(getActivity())){
                       //获取引用
-                      quxiaozan_presenter.setpath(Api.token, id, 0, 1);
+                      quxiaozan_presenter.setpath(SpUtils.getString(getActivity(),"token",null), id, 0, 1);
                   }else{
                       Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                   }
@@ -132,7 +132,7 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
         live_guanzhu_presenter = new Live_guanzhu_presenter(this);
         if(NetUtil.checkNet(getActivity())){
             //获取引用
-            live_guanzhu_presenter.getpath(Api.token, pageNo);
+            live_guanzhu_presenter.getpath(SpUtils.getString(getActivity(),"token",null), pageNo);
         }else{
             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
         }
@@ -162,7 +162,7 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
                         pageNo = 1;
                         if(NetUtil.checkNet(getActivity())){
                             //获取引用
-                            live_guanzhu_presenter.getpath(Api.token, pageNo);
+                            live_guanzhu_presenter.getpath(SpUtils.getString(getActivity(),"token",null), pageNo);
                         }else{
                             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                         }
@@ -181,7 +181,7 @@ public class GuanzhuFragment extends BaseFragment implements Live_guanzhu_presen
                         pageNo++;
                         if(NetUtil.checkNet(getActivity())){
                             //获取引用
-                            live_guanzhu_presenter.getpath(Api.token, pageNo);
+                            live_guanzhu_presenter.getpath(SpUtils.getString(getActivity(),"token",null), pageNo);
                         }else{
                             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                         }

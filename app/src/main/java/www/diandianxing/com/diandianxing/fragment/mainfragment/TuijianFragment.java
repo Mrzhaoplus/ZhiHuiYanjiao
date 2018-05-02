@@ -1,7 +1,10 @@
 package www.diandianxing.com.diandianxing.fragment.mainfragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,6 +43,7 @@ import www.diandianxing.com.diandianxing.bean.Sharebean;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
 import www.diandianxing.com.diandianxing.util.Api;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.GuanzhuClickListener;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.NetUtil;
@@ -68,6 +72,9 @@ public class TuijianFragment extends BaseFragment {
         View contentView = getContentView();
         jiao_list = contentView.findViewById(R.id.jiaodan_list);
         jiao_spring = contentView.findViewById(R.id.jiao_springview);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(GlobalParams.JDSX);
+        getActivity().registerReceiver(broadcastReceiver,intentFilter);
         if(NetUtil.checkNet(getActivity())){
             networklist();
         }else{
@@ -123,12 +130,37 @@ public class TuijianFragment extends BaseFragment {
 
     }
 
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+            if(GlobalParams.JDSX.equals(action)){
+
+                lists.clear();
+                pageNo=1;
+                if(NetUtil.checkNet(getActivity())){
+                    networklist();
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(broadcastReceiver);
+    }
 
     private void networklist() {
 
         HttpParams params = new HttpParams();
         params.put("pageNo", pageNo);
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
         params.put("type",1);
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/postHotOrNew")
@@ -286,7 +318,7 @@ public class TuijianFragment extends BaseFragment {
 
         params.put("concernedId",concernedId);
 
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/insertFollowUser")
                 .tag(this)
@@ -333,7 +365,7 @@ public class TuijianFragment extends BaseFragment {
 
         params.put("operation_type",operation_type);
 
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/userOperation")
                 .tag(this)
@@ -385,7 +417,7 @@ public class TuijianFragment extends BaseFragment {
 
         params.put("operation_type",operation_type);
 
-        params.put("token", Api.token);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/userCancelOperation")
                 .tag(this)

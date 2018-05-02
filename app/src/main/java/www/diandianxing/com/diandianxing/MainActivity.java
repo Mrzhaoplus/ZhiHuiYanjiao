@@ -237,6 +237,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
 
     @Override
     public void onClick(View v) {
+        int guid = SpUtils.getInt(MainActivity.this, "guid", 0);
         switch (v.getId()) {
             case R.id.rb_home:
                 if (homeFragment == null) {
@@ -246,26 +247,38 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
                 tag=0;
                 break;
             case R.id.rb_find:
-                if (findFragment == null) {
-                    findFragment = new PaikewFragment("推荐");
+                if(guid!=2){
+                    startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                    rb_find.setChecked(false);
+                    RadioButton rb= (RadioButton) rgp.getChildAt(0);
+                    rb.setChecked(true);
+                }else{
+                    if (findFragment == null) {
+                        findFragment = new PaikewFragment("推荐");
+                    }
+                    addFragments(findFragment);
                 }
-                addFragments(findFragment);
-                tag=1;
+//                tag=1;
                 break;
             case R.id.rb_message:
-                if (messageFragment == null) {
-                    messageFragment = new MessageFragment();
+                if(guid!=2){
+                    startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                    rb_message.setChecked(false);
+                    RadioButton rb= (RadioButton) rgp.getChildAt(0);
+                    rb.setChecked(true);
+                }else{
+                    if (messageFragment == null) {
+                        messageFragment = new MessageFragment();
+                    }
+                    addFragments(messageFragment);
                 }
-                addFragments(messageFragment);
-                tag=3;
+//                tag=3;
                 break;
             case R.id.rb_mine:
-
-                int guid = SpUtils.getInt(MainActivity.this, "guid", 0);
                 if(guid!=2){
                     startActivity(new Intent(MainActivity.this,LoginActivity.class));
                     rb_mine.setChecked(false);
-                    RadioButton rb= (RadioButton) rgp.getChildAt(tag);
+                    RadioButton rb= (RadioButton) rgp.getChildAt(0);
                     rb.setChecked(true);
                 }
                 else {

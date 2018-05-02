@@ -21,10 +21,12 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.TPDetailActivity;
 import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.util.MyUtils;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.StateClickListener;
 
 /**
@@ -111,13 +113,17 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
             text_collect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    if(Integer.parseInt(item.is_collect)==0){
-
-                        stateClickListener.ShouCangClickListener(Integer.parseInt(item.id),0,1,-1,helper.getAdapterPosition());
-
+                    int guid = SpUtils.getInt(mContext, "guid", 0);
+                    if(guid!=2){
+                        mContext.startActivity(new Intent(mContext,LoginActivity.class));
                     }else{
-                        stateClickListener.QuXiaoShouCangClickListener(Integer.parseInt(item.id),0,1,helper.getAdapterPosition());
+                        if(Integer.parseInt(item.is_collect)==0){
+
+                            stateClickListener.ShouCangClickListener(Integer.parseInt(item.id),0,1,-1,helper.getAdapterPosition());
+
+                        }else{
+                            stateClickListener.QuXiaoShouCangClickListener(Integer.parseInt(item.id),0,1,helper.getAdapterPosition());
+                        }
                     }
 
                 }
@@ -126,11 +132,15 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
             text_zan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    if(Integer.parseInt(item.is_zan)==0){
-                        stateClickListener.DianZanClickListener(Integer.parseInt(item.id),0,0,-1,helper.getAdapterPosition());
+                    int guid = SpUtils.getInt(mContext, "guid", 0);
+                    if(guid!=2){
+                        mContext.startActivity(new Intent(mContext,LoginActivity.class));
                     }else{
-                        stateClickListener.QuXiaoDianZanClickListener(Integer.parseInt(item.id),0,0,helper.getAdapterPosition());
+                        if(Integer.parseInt(item.is_zan)==0){
+                            stateClickListener.DianZanClickListener(Integer.parseInt(item.id),0,0,-1,helper.getAdapterPosition());
+                        }else{
+                            stateClickListener.QuXiaoDianZanClickListener(Integer.parseInt(item.id),0,0,helper.getAdapterPosition());
+                        }
                     }
                 }
             });
