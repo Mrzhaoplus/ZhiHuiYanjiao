@@ -1,6 +1,7 @@
 package www.diandianxing.com.diandianxing.fragment.mainfragment;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -45,7 +46,7 @@ public class ZiXunFragment extends BaseFragment implements Zixun_presenterinterf
     private Zixun_presenter zixun_presenter = new Zixun_presenter(this);
     private Search_Zixun_presenter search_zixun = new Search_Zixun_presenter(this);
     private ZiXunAdapter ziXunAdapter;
-     public String content;
+     public String content="";
      public boolean flag=true;
     private int typeid;
 
@@ -57,6 +58,11 @@ public class ZiXunFragment extends BaseFragment implements Zixun_presenterinterf
 
     @Override
     protected int setContentView() {
+
+        Bundle arguments = getArguments();
+        if(arguments!=null){
+            content=arguments.getString("search");
+        }
         return R.layout.fragment_yanjiaozixun;
     }
 
@@ -97,6 +103,7 @@ public class ZiXunFragment extends BaseFragment implements Zixun_presenterinterf
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), ZixunDitailsActivity.class);
+                intent.putExtra("id",list.get(i).getId()+"");
                 startActivity(intent);
             }
         });

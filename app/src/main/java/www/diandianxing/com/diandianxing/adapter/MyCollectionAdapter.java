@@ -98,6 +98,8 @@ public class MyCollectionAdapter extends BaseQuickAdapter<Coll_Bean.DatasBean, B
                 gzClickListener.onItemClickLisener(helper.getAdapterPosition());
             }
         });
+
+
     }
     public interface GZClickListener{
         void onGZClickListener(int pos);

@@ -2,12 +2,16 @@ package www.diandianxing.com.diandianxing.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.text.SimpleDateFormat;
@@ -18,6 +22,7 @@ import www.diandianxing.com.diandianxing.ShujuBean.zixun_Bean;
 import www.diandianxing.com.diandianxing.interfase.RecyGetonclick;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.ImageLoder;
+import www.diandianxing.com.diandianxing.util.MyUtils;
 
 /**
  * date : ${Date}
@@ -49,11 +54,21 @@ public class Homeadapter extends RecyclerView.Adapter<Homeadapter.MyviewHolder> 
     @Override
     public void onBindViewHolder(MyviewHolder holder, final int position) {
 
-        ImageLoader.getInstance().displayImage(list.get(position).getSmallImage(),holder.img_pho,ImageLoder.getDefaultOption());
+//        ImageLoader.getInstance().displayImage(list.get(position).getSmallImage(),holder.img_pho,ImageLoder.getDefaultOption());
+        RequestOptions options = new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
+        Glide.with(context).load(list.get(position).getSmallImage()).
+                apply(options)
+                .into(holder.img_pho);
          holder.neirong.setText(list.get(position).getInfoTitle());
          //时间戳转换为日期
-        String dateToString = getDateToString(String.valueOf(list.get(position).getCreateTime()/1000));
-        holder.text_date.setText(dateToString);
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String end = sf.format(date);
+        String fb = MyUtils.stampToDate(list.get(position).getCreateTime()+"");
+
+        String time = MyUtils.dateDiff(fb, end, "yyyy-MM-dd HH:mm:ss",list.get(position).getCreateTime()+"");
+        holder.text_date.setText(time);
 
         holder.text_zan.setText(list.get(position).getDianZanCount()+"");
               //设置recycler点击事件

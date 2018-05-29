@@ -1,0 +1,5 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="add_height">80dp</dimen>
+    <dimen name="add_height_btn">25dp</dimen>
+</resources>

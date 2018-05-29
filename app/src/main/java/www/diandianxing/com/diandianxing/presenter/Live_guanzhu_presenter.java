@@ -18,8 +18,8 @@ public class Live_guanzhu_presenter implements Live_guanzhu_model_interfase {
         this.jiekou=jiekou;
         live_guanzhu_model = new Live_guanzhu_model(this);
     }
-    public void getpath(String token,int pageNo){
-        live_guanzhu_model.getpath(token,pageNo);
+    public void getpath(String token,int pageNo,int aaa){
+        live_guanzhu_model.getpath(token,pageNo,aaa);
     }
     public void getkong(){
     if(jiekou!=null){

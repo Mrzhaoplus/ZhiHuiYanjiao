@@ -19,8 +19,8 @@ public class Live_guanzhu_model {
     public Live_guanzhu_model(Live_guanzhu_model_interfase jiekou) {
         this.jiekou=jiekou;
     }
-    public void getpath(String token,int pageNo){
-        Observable<Live_gunzhu_Bean> guanzhu = MyRetrofit.getSerViceAPI().live_guanzhu(token, pageNo);
+    public void getpath(String token,int pageNo,int aaa){
+        Observable<Live_gunzhu_Bean> guanzhu = MyRetrofit.getSerViceAPI().live_guanzhu(token, pageNo,aaa);
         guanzhu.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Live_gunzhu_Bean>() {
                     @Override

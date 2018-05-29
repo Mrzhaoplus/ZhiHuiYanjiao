@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import www.diandianxing.com.diandianxing.LukuangDitailsActivity;
 import www.diandianxing.com.diandianxing.adapter.Tuijiantieadapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
 import www.diandianxing.com.diandianxing.R;
@@ -73,6 +76,7 @@ public class OldnewFragment extends BaseFragment {
         jiao_spring = contentView.findViewById(R.id.jiao_springview);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(GlobalParams.JDSX);
+        intentFilter.addAction(GlobalParams.GZ);
         getActivity().registerReceiver(broadcastReceiver,intentFilter);
         if(NetUtil.checkNet(getActivity())){
             networklist();
@@ -130,6 +134,8 @@ public class OldnewFragment extends BaseFragment {
 
     }
 
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -151,6 +157,14 @@ public class OldnewFragment extends BaseFragment {
                     Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                 }
 
+            }else if(GlobalParams.GZ.equals(action)){
+                lists.clear();
+                pageNo=1;
+                if(NetUtil.checkNet(getActivity())){
+                    networklist();
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
             }
 
         }
@@ -176,9 +190,9 @@ public class OldnewFragment extends BaseFragment {
                         try {
                             jsonobj = new JSONObject(body);
                             int code = jsonobj.getInt("code");
-                            JSONArray datas = jsonobj.getJSONArray("datas");
-                            List<GuanzhuJD> guanzhuJDs = new ArrayList<GuanzhuJD>();
                             if (code == 200) {
+                                JSONArray datas = jsonobj.getJSONArray("datas");
+                                List<GuanzhuJD> guanzhuJDs = new ArrayList<GuanzhuJD>();
                                 for(int i=0;i<datas.length();i++){
 
                                     JSONObject jo = datas.getJSONObject(i);
@@ -207,6 +221,7 @@ public class OldnewFragment extends BaseFragment {
                                     guanzhu.is_zan=jo.getString("is_zan");
                                     guanzhu.is_fx=jo.getString("is_fx");
                                     guanzhu.is_focus=jo.getString("is_focus");
+                                    guanzhu.objName=jo.getString("objName");
                                     JSONArray ja=jo.getJSONArray("imagesList");
 
                                     guanzhu.imagesList = new ArrayList<String>();
@@ -243,7 +258,9 @@ public class OldnewFragment extends BaseFragment {
                                 }
 
 
-                            } else {
+                            } else if (code == 201) {
+
+                            }else {
                                 Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
 
                             }
@@ -341,6 +358,11 @@ public class OldnewFragment extends BaseFragment {
                                 }else{
                                     jiaodianadapter.notifyDataSetChanged();
                                 }
+
+                                Intent intent = new Intent();
+                                intent.setAction(GlobalParams.GZ);
+                                getActivity().sendBroadcast(intent);
+
                             } else {
                                 Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
 
@@ -379,17 +401,23 @@ public class OldnewFragment extends BaseFragment {
                             int code = jsonobj.getInt("code");
                             if (code == 200) {
 
+                                JSONObject datas = jsonobj.getJSONObject("datas");
+
                                 if(operation_type==0){
                                     lists.get(pos).is_zan="1";
-                                    lists.get(pos).dianZanCount=Integer.parseInt(lists.get(pos).dianZanCount)+1+"";
+                                    lists.get(pos).dianZanCount=datas.getString("zanCount");
                                 }else{
                                     lists.get(pos).is_collect="1";
-                                    lists.get(pos).collectCount=Integer.parseInt(lists.get(pos).collectCount)+1+"";
+                                    lists.get(pos).collectCount=datas.getString("zanCount");
                                 }
+                                Intent gz = new Intent();
+                                gz.setAction(GlobalParams.DONGTAI_SX);
+                                getActivity().sendBroadcast(gz);
                                 if(jiaodianadapter==null){
                                     jiaodianadapter =new Tuijiantieadapter(getActivity(),shareListener,lists,stateClickListener,guanzhuClickListener);
                                     jiao_list.setAdapter(jiaodianadapter);
                                 }else{
+                                    jiaodianadapter.setEnable(true);
                                     jiaodianadapter.notifyDataSetChanged();
                                 }
                             } else {
@@ -431,20 +459,25 @@ public class OldnewFragment extends BaseFragment {
                             int code = jsonobj.getInt("code");
                             if (code == 200) {
 
+                                JSONObject datas = jsonobj.getJSONObject("datas");
                                 if(operation_type==0){
                                     lists.get(pos).is_zan="0";
-                                    lists.get(pos).dianZanCount=Integer.parseInt(lists.get(pos).dianZanCount)-1+"";
+                                    lists.get(pos).dianZanCount=datas.getString("zanCount");
                                 }else{
                                     lists.get(pos).is_collect="0";
-                                    lists.get(pos).collectCount=Integer.parseInt(lists.get(pos).collectCount)-1+"";
+                                    lists.get(pos).collectCount=datas.getString("zanCount");
                                 }
+                                Intent gz = new Intent();
+                                gz.setAction(GlobalParams.DONGTAI_SX);
+                                getActivity().sendBroadcast(gz);
                                 if(jiaodianadapter==null){
                                     jiaodianadapter =new Tuijiantieadapter(getActivity(),shareListener,lists,stateClickListener,guanzhuClickListener);
                                     jiao_list.setAdapter(jiaodianadapter);
                                 }else{
+                                    jiaodianadapter.setEnable(true);
                                     jiaodianadapter.notifyDataSetChanged();
                                 }
-                            } else {
+                            }else {
                                 Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
 
                             }
@@ -458,73 +491,189 @@ public class OldnewFragment extends BaseFragment {
 
     private ShareListener shareListener = new ShareListener() {
         @Override
-        public void OnShareListener(int poss) {
+        public void OnShareListener(int poss,int pos) {
+
+            bq=pos;
+
             switch (poss){
                 case 0:
                     SharebyWeixin(getActivity());
+                    networkFxTj("2");
                     break;
                 case 1:
                     SharebyWeixincenter(getActivity());
+                    networkFxTj("3");
                     break;
                 case 2:
                     SharebyQQ(getActivity());
+                    networkFxTj("0");
                     break;
                 case 3:
                     SharebyQzon(getActivity());
+                    networkFxTj("1");
                     break;
                 case 4:
+                    if(isWxInstall(getActivity())){
+                        SharebyWeiBo(getActivity());
+                        networkFxTj("4");
+                    }else {
+                        Toast.makeText(getActivity(),"请先安装微博",Toast.LENGTH_SHORT).show();
+                    }
+
                     break;
             }
+
+            networkFxJF();
+
         }
     };
 
+    /**
+     * 检测是否安装微信
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isWxInstall(Context context) {
+        final PackageManager packageManager = context.getPackageManager();// 获取packagemanager
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);// 获取所有已安装程序的包信息
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+                if (pn.equals("com.sina.weibo")) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void networkFxTj(String share_status) {
+
+        HttpParams params = new HttpParams();
+        Log.d("TAG","数据内容"+params.toString());
+        params.put("objId",lists.get(bq).id);
+        params.put("obj_type",0);
+        params.put("operation_type",2);
+        params.put("share_status",share_status);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
+        OkGo.<String>post(Api.BASE_URL +"app/home/userOperation")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "分享" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+
+                            }else {
+//                                Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+    private void networkFxJF() {
+
+        HttpParams params = new HttpParams();
+        Log.d("TAG","数据内容"+params.toString());
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
+        OkGo.<String>post(Api.BASE_URL +"app/home/shareAddMemberPoint")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "数据" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+
+                            }else if (code == 201) {
+
+                            }else {
+//                                Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+    int bq;
     protected  void SharebyQQ(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
-        web.setTitle("智慧燕郊-点点行");//标题
-        web.setThumb(new UMImage(context, R.drawable.img_diandianlogo));  //缩略图
-        web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+lists.get(bq).id);
+        web.setTitle(lists.get(bq).postContent);//标题
+        web.setThumb(new UMImage(context, R.drawable.icon_tu));  //缩略图
+        web.setDescription("每日郊点");//描述
 
         new ShareAction(context)
                 .withMedia(web)
                 .setPlatform(SHARE_MEDIA.QQ)//传入平台
-                .withText("点击下载“点点行”，开启燕郊骑行之旅~")//分享内容
                 .setCallback(umShareListener)//回调监听器
                 .share();
     }
 
     protected  void SharebyQzon(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
-        web.setTitle("智慧燕郊-点点行");//标题
-        web.setThumb(new UMImage(context,R.drawable.img_diandianlogo));  //缩略图
-        web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+lists.get(bq).id);
+        web.setTitle(lists.get(bq).postContent);//标题
+        web.setThumb(new UMImage(context,R.drawable.icon_tu));  //缩略图
+        web.setDescription("每日郊点");//描述
         new ShareAction(context)
                 .setPlatform(SHARE_MEDIA.QZONE)//传入平台
                 .withMedia(web)
-                .withText("点击下载“点点行”，开启燕郊骑行之旅~")//分享内容
+                .setCallback(umShareListener)//回调监听器
+                .share();
+    }
+
+    protected  void SharebyWeiBo(Activity context) {
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+lists.get(bq).id);
+        web.setTitle(lists.get(bq).postContent);//标题
+        web.setThumb(new UMImage(context,R.drawable.icon_tu));  //缩略图
+        web.setDescription("每日郊点");//描述
+        new ShareAction(context)
+                .setPlatform(SHARE_MEDIA.SINA)//传入平台
+                .withMedia(web)//分享内容
                 .setCallback(umShareListener)//回调监听器
                 .share();
     }
 
     protected  void SharebyWeixin(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
-        web.setTitle("智慧燕郊-点点行");//标题
-        web.setThumb(new UMImage(context,R.drawable.img_diandianlogo));  //缩略图
-        web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+lists.get(bq).id);
+        web.setTitle(lists.get(bq).postContent);//标题
+        web.setThumb(new UMImage(context,R.drawable.icon_tu));  //缩略图
+        web.setDescription("每日郊点");//描述
         new ShareAction(context)
                 .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
-                .withMedia(web)
-                .withText("点击下载“点点行”，开启燕郊骑行之旅~")//分享内容
+                .withMedia(web)//分享内容
                 .setCallback(umShareListener)//回调监听器
                 .share();
     }
     protected  void SharebyWeixincenter(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
-        web.setTitle("智慧燕郊-点点行");//标题
-        web.setThumb(new UMImage(context,R.drawable.img_diandianlogo));  //缩略图
-        web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+lists.get(bq).id);
+        web.setTitle(lists.get(bq).postContent);//标题
+        web.setThumb(new UMImage(context,R.drawable.icon_tu));  //缩略图
+        web.setDescription("每日郊点");//描述
         new ShareAction(context)
                 .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)//传入平台
-                .withText("点击下载“点点行”，开启燕郊骑行之旅~")//分享内容
+                .withMedia(web)//分享内容
                 .setCallback(umShareListener)//回调监听器
                 .share();
     }

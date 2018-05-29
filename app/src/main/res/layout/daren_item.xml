@@ -28,6 +28,9 @@
                 android:layout_marginTop="10dp"
                 android:text=""
                 android:id="@+id/text_name"
+                android:maxWidth="160dp"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
@@ -42,7 +45,8 @@
                 android:layout_height="wrap_content" />
             <RelativeLayout
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="13dp"
+
                 android:layout_toRightOf="@id/text_name"
                 android:layout_width="20dp"
                 android:layout_height="20dp">
@@ -69,10 +73,11 @@
                 android:src="@drawable/icon_back"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:layout_width="45dp"
-                android:layout_height="20dp" />
+                android:layout_width="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_height="15dp" />
             <TextView
-                android:textColor="#f8b804"
+                android:textColor="#FF6F11"
                 android:gravity="center"
                 android:background="@drawable/img_yuan"
                 android:layout_centerHorizontal="true"

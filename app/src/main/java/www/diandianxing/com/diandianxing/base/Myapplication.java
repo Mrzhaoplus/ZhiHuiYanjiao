@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -21,6 +22,7 @@ import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
 import org.greenrobot.eventbus.EventBus;
+import org.litepal.LitePalApplication;
 
 import java.util.Iterator;
 import java.util.List;
@@ -34,9 +36,10 @@ import www.diandianxing.com.diandianxing.R;
  * Created by ASUS on 2018/3/19.
  */
 
-public class Myapplication extends MultiDexApplication {
+public class Myapplication extends LitePalApplication {
 
     public static Myapplication application;
+
 
     public static Myapplication getInstance() {
         return application;
@@ -48,7 +51,7 @@ public class Myapplication extends MultiDexApplication {
     public static Context getGloableContext()    {
         return  application.getApplicationContext();
     }
-    private PushAgent mPushAgent;
+    public PushAgent mPushAgent;
 
     @Override
     public void onCreate() {
@@ -57,7 +60,7 @@ public class Myapplication extends MultiDexApplication {
         application = this;
         initUMShare();
         Config.DEBUG = true;
-//        initUMPush();
+        initUMPush();
 //        UMPush();
         ImageLoder.info(this);
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder() //
@@ -76,12 +79,13 @@ public class Myapplication extends MultiDexApplication {
         ImageLoader.getInstance().init(config);
     }
 
+
     private void initUMShare() {
         Config.DEBUG = true;
         UMShareAPI.get(this);
         PlatformConfig.setWeixin("wx6d0a0a32729dfd2c", "13fafd760421ce5b34f124d9cae2df21");
         PlatformConfig.setQQZone("1106567631", "QRCByySV1Wqbc93c");
-        PlatformConfig.setSinaWeibo("557964441", "b52b29e8a5393bd34e2315e509fb5842", "http://www.baidu.com");//回调地址要跟微博开放平台的一样
+        PlatformConfig.setSinaWeibo("2428027202", "7f76eb63e5bae34a8d5b8b6cf8ad78e0", "https://sns.whalecloud.com/sina2/callback");//回调地址要跟微博开放平台的一样
     }
 
     public static Myapplication getApplication() {

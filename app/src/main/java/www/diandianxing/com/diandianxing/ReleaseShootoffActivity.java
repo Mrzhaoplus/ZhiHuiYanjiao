@@ -1,7 +1,12 @@
 package www.diandianxing.com.diandianxing;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Gravity;
@@ -30,6 +35,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +44,11 @@ import www.diandianxing.com.diandianxing.adapter.GridViewAddImgesAdpter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.bean.Info;
 import www.diandianxing.com.diandianxing.bean.MsgBus;
+import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
+import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyGridView;
 import www.diandianxing.com.diandianxing.R;
@@ -52,7 +62,6 @@ public class ReleaseShootoffActivity extends BaseActivity {
 
 
     private ImageView include_back;
-
     private LinearLayout ll_szwz;
     private MyGridView mygridview;
     private GridViewAddImgesAdpter addImgesAdpter;
@@ -76,6 +85,8 @@ public class ReleaseShootoffActivity extends BaseActivity {
         mygridview= (MyGridView) findViewById(R.id.mygridview);
         textView2= (TextView) findViewById(R.id.textView2);
         et_img_content= (EditText) findViewById(R.id.et_img_content);
+        mygridview.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        textView2.setText(SpUtils.getString(ReleaseShootoffActivity.this,"PoiName","所在位置"));
         String path=getIntent().getStringExtra("img");
         info= (Info) getIntent().getSerializableExtra("list");
         if(path!=null){
@@ -122,14 +133,21 @@ public class ReleaseShootoffActivity extends BaseActivity {
             public void onClick(View view) {
 
 
-                String trim = et_img_content.getText().toString().trim();
+                final String trim = et_img_content.getText().toString().trim();
 
                 if(trim!=null&&trim.length()>0){
 
                     if(listAll.size()>0){
 
                         shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
-                        networkImg(trim,address);
+
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                networkImg(trim,address);
+                            }
+                        }).start();
 
                     }else{
                         Toast.makeText(ReleaseShootoffActivity.this,"请选择图片",Toast.LENGTH_SHORT).show();
@@ -161,7 +179,7 @@ public class ReleaseShootoffActivity extends BaseActivity {
         PictureSelector.create(ReleaseShootoffActivity.this)
                 .openGallery(PictureMimeType.ofImage())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                 .theme(R.style.picture_default_style1)// 主题样式设置 具体参考 values/styles   用法：R.style.picture.white.style
-                .maxSelectNum(9)// 最大图片选择数量
+                .maxSelectNum(9-listAll.size())// 最大图片选择数量
                 .minSelectNum(1)// 最小选择数量
                 .imageSpanCount(3)// 每行显示个数
                 .selectionMode(PictureConfig.MULTIPLE)// 多选 or 单选 PictureConfig.SINGLE
@@ -207,6 +225,7 @@ public class ReleaseShootoffActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
+                    Log.e("TAG","执行到了~~~~~=============~~");
                     // 图片选择结果回调
                     selectList = PictureSelector.obtainMultipleResult(data);
                     listAll.addAll(selectList);
@@ -218,15 +237,58 @@ public class ReleaseShootoffActivity extends BaseActivity {
         }
     }
 
-
+    private String name="img_scpp";
     private void networkImg(final String title, final String address) {
 
         List<File> fileList = new ArrayList<>();
         for(int i=0;i<listAll.size();i++){
 
-            File file = new File(listAll.get(i).getPath());
+//            File file = new File(listAll.get(i).getPath());
 
-            fileList.add(file);
+
+            Bitmap bitmap = BitmapFactory.decodeFile(listAll.get(i).getPath());
+
+
+            FileOutputStream fos = null;
+            try {
+
+                String substring = listAll.get(i).getPath().substring(listAll.get(i).getPath().lastIndexOf(".")+1, listAll.get(i).getPath().length());
+                Log.e("TAG","substring：：："+substring);
+
+                Log.e("TAG","压缩目录：：："+ Environment.getExternalStorageDirectory()+"/"+name+i+".png");
+                File file = null;
+                if("JPEG".equals(substring)||"jpg".equals(substring)){
+                    file=new File(Environment.getExternalStorageDirectory()+"/"+name+i+".jpg");
+                    fos = new FileOutputStream(file);
+
+                    bitmap.compress(Bitmap.CompressFormat.JPEG,50,fos);
+                }else if("png".equals(substring)){
+
+                    file=new File(Environment.getExternalStorageDirectory()+"/"+name+i+".png");
+                    fos = new FileOutputStream(file);
+
+                    bitmap.compress(Bitmap.CompressFormat.PNG,50,fos);
+                }else{
+                    file=new File(Environment.getExternalStorageDirectory()+"/"+name+i+".png");
+                    fos = new FileOutputStream(file);
+
+                    bitmap.compress(Bitmap.CompressFormat.PNG,50,fos);
+                }
+
+                if (bitmap != null && !bitmap.isRecycled()){
+                    bitmap.recycle();
+                    bitmap = null;
+                }
+                fileList.add(file);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+
 
         }
 
@@ -288,11 +350,20 @@ public class ReleaseShootoffActivity extends BaseActivity {
                         try {
                             jsonobj = new JSONObject(body);
                             int code = jsonobj.getInt("code");
-                            if (code == 200) {
-                                MsgBus msgBus = new MsgBus();
-                                msgBus.tiaozhuan="首页";
-                                EventBus.getDefault().postSticky(msgBus);
 
+
+                            if (code == 200) {
+
+                                String datas = jsonobj.getString("datas");
+
+                                Intent tz = new Intent(ReleaseShootoffActivity.this, VideoActivity.class);
+                                PaiKeInfo paiKeInfo = new PaiKeInfo();
+                                paiKeInfo.pkid=datas;
+                                tz.putExtra("pk",paiKeInfo);
+                                startActivity(tz);
+                                Intent intent = new Intent();
+                                intent.setAction(GlobalParams.DONGTAI_SX);
+                                sendBroadcast(intent);
                                 finish();
                             } else {
                                 Toast.makeText(ReleaseShootoffActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();

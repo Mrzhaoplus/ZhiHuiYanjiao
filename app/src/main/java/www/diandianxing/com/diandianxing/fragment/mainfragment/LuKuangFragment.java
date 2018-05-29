@@ -1,6 +1,7 @@
 package www.diandianxing.com.diandianxing.fragment.mainfragment;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
@@ -57,6 +58,10 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
     }
     @Override
     protected int setContentView() {
+        Bundle arguments = getArguments();
+        if(arguments!=null){
+            content=arguments.getString("search");
+        }
         return R.layout.fragment_shishilukuang;
     }
 
@@ -65,13 +70,11 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
         View contentView = getContentView();
         sv = contentView.findViewById(R.id.lu_sv);
         lv = contentView.findViewById(R.id.list_view);
-
         if(flag==true){
             //注册
             EventBus.getDefault().register(this);
             flag=false;
         }
-
         if(typeid==1){
             if(NetUtil.checkNet(getActivity())){
                 //获取引用
@@ -87,10 +90,7 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
             }else{
                 Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
             }
-
         }
-
-
         //适配器
         luKuangAdapter = new LuKuangAdapter(getActivity(),list);
         lv.setAdapter(luKuangAdapter);
@@ -98,7 +98,7 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), LukuangDitailsActivity.class);
-                intent.putExtra("id",list.get(i).getId());
+                intent.putExtra("id",list.get(i).getId()+"");
                 startActivity(intent);
             }
         });
@@ -120,7 +120,6 @@ public class LuKuangFragment extends BaseFragment implements Lukuang_presenter_i
                             }else{
                                 Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                             }
-
                         }else{
                             if(NetUtil.checkNet(getActivity())){
                                 //获取引用

@@ -55,15 +55,15 @@
             android:src="@drawable/img_motou"
             android:layout_height="60dp" />
         <!--<www.diandianxing.com.diandianxing.utils.CircleImageView-->
-            <!--android:scaleType="centerCrop"-->
-            <!--android:layout_marginTop="5dp"-->
-            <!--android:layout_below="@id/rela"-->
-            <!--android:id="@+id/my_photo"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_width="60dp"-->
-            <!--android:src="@drawable/img_motou"-->
-            <!--android:layout_height="60dp" />-->
+            <!--iphone:scaleType="centerCrop"-->
+            <!--iphone:layout_marginTop="5dp"-->
+            <!--iphone:layout_below="@id/rela"-->
+            <!--iphone:id="@+id/my_photo"-->
+            <!--iphone:layout_centerVertical="true"-->
+            <!--iphone:layout_centerHorizontal="true"-->
+            <!--iphone:layout_width="60dp"-->
+            <!--iphone:src="@drawable/img_motou"-->
+            <!--iphone:layout_height="60dp" />-->
         <TextView
            android:layout_marginTop="10dp"
             android:id="@+id/diandianxing"

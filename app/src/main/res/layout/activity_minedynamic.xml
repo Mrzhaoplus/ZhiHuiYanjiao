@@ -3,16 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     >
-
-
-
 
     <com.liaoinstan.springview.widget.SpringView
         android:id="@+id/sv_tz"
         android:layout_width="match_parent"
-        android:focusableInTouchMode="true"
         android:layout_height="match_parent">
+
 
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/sv_zy"
@@ -22,14 +20,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:orientation="vertical">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="220dp">
                     <ImageView
                         android:id="@+id/rl_bg"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/icon_mine"
+                        android:scaleType="centerCrop"
                         android:layout_width="match_parent"
                         android:layout_height="180dp">
 
@@ -82,8 +81,9 @@
 
                 <LinearLayout
                     android:layout_marginTop="10dp"
-                    android:layout_marginLeft="25dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_width="match_parent"
+                    android:gravity="center_vertical"
                     android:layout_height="wrap_content">
                     <TextView
                         android:id="@+id/text_name"
@@ -123,7 +123,7 @@
                             <TextView
                                 android:layout_marginTop="3dp"
                                 android:layout_gravity="center"
-                                android:textColor="@color/textcolcr"
+                                android:textColor="@color/color_xu"
                                 android:textSize="14sp"
                                 android:text="关注"
                                 android:layout_width="wrap_content"
@@ -146,7 +146,7 @@
                             <TextView
                                 android:layout_marginTop="3dp"
                                 android:layout_gravity="center"
-                                android:textColor="@color/textcolcr"
+                                android:textColor="@color/color_xu"
                                 android:textSize="14sp"
                                 android:text="粉丝"
                                 android:layout_width="wrap_content"
@@ -170,7 +170,7 @@
                             <TextView
                                 android:layout_marginTop="3dp"
                                 android:layout_gravity="center"
-                                android:textColor="@color/textcolcr"
+                                android:textColor="@color/color_xu"
                                 android:textSize="14sp"
                                 android:text="点赞"
                                 android:layout_width="wrap_content"
@@ -201,13 +201,37 @@
 
 
                 <LinearLayout
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/liner_dongtai"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/text_zan"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:textColor="@color/black_san"
+                            android:textSize="14sp"
+                            android:text="拍客（0）"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <View
+                            android:visibility="gone"
+                            android:id="@+id/v2"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:background="@color/text_orage"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"></View>
+                    </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/liner_tiezi"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginLeft="20dp"
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:layout_width="0dp"
@@ -219,61 +243,72 @@
                             android:layout_weight="1"
                             android:padding="8dp"
                             android:textColor="@color/text_orage"
-                            android:textSize="16sp"
-                            android:text="帖子（0）"
+                            android:textSize="14sp"
+                            android:text="郊点（0）"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <View
                             android:id="@+id/v1"
-                            android:layout_marginLeft="30dp"
-                            android:layout_marginRight="30dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
                             android:background="@color/text_orage"
                             android:layout_width="match_parent"
                             android:layout_height="2dp"></View>
                     </LinearLayout>
+
+
                     <LinearLayout
-                        android:id="@+id/liner_dongtai"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginLeft="30dp"
+                        android:id="@+id/liner_tz"
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content">
                         <TextView
-                            android:id="@+id/text_zan"
+
+                            android:id="@+id/text_tz"
                             android:gravity="center"
                             android:layout_weight="1"
                             android:padding="8dp"
                             android:textColor="@color/black_san"
-                            android:textSize="16sp"
-                            android:text="动态（0）"
+                            android:textSize="14sp"
+                            android:text="帖子（0）"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                         <View
-                            android:visibility="gone"
-                            android:id="@+id/v2"
-                            android:layout_marginLeft="30dp"
-                            android:layout_marginRight="30dp"
+                            android:id="@+id/v3"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
                             android:background="@color/text_orage"
                             android:layout_width="match_parent"
+                            android:visibility="gone"
                             android:layout_height="2dp"></View>
                     </LinearLayout>
+
+
                 </LinearLayout>
                 <View
                     android:background="@color/color_hui"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"></View>
+
+                <!--<FrameLayout
+                    iphone:id="@+id/fl_zy"
+                    iphone:layout_width="match_parent"
+                    iphone:layout_height="match_parent"></FrameLayout>-->
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recy_card"
                     android:layout_width="match_parent"
+                    android:layout_marginTop="5dp"
                     android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
             </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>
 
-
     </com.liaoinstan.springview.widget.SpringView>
+
+
 
     <RelativeLayout
         android:id="@+id/rl_bt"
@@ -286,6 +321,8 @@
             android:src="@drawable/back_fh_3x"
             android:textColor="@color/white"
             android:textSize="17sp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
@@ -303,12 +340,12 @@
 
         <ImageView
             android:id="@+id/iv_gz"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="20dp"
             android:src="@drawable/more_sz_3x"/>
 
     </RelativeLayout>

@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.adapter.Masteradapter;
 import www.diandianxing.com.diandianxing.adapter.Tujianadapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
@@ -205,7 +206,11 @@ public class DarenFragment extends BaseFragment {
                                 }else{
                                     masteradapter.notifyDataSetChanged();
                                 }
-                            } else {
+                            } else if(code==201){
+
+                                startActivity(new Intent(getActivity(),LoginActivity.class));
+
+                            }else {
                                 Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
 
                             }

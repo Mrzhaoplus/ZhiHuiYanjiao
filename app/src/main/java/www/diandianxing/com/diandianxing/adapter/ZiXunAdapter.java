@@ -60,7 +60,7 @@ public class ZiXunAdapter extends BaseAdapter {
               }
         ImageLoader.getInstance().displayImage(list.get(i).getSmallImage(),imagone.imag, ImageLoder.getDefaultOption());
               imagone.text_tile.setText(list.get(i).getInfoTitle());
-              imagone.text_zan.setText(list.get(i).getDianZanCount()+"点赞");
+              imagone.text_zan.setText(list.get(i).getDianZanCount()+"");
               String dateToString = getDateToString(String.valueOf(list.get(i).getUpdateTime()/1000));
               imagone.text_date.setText(dateToString);
         return view;

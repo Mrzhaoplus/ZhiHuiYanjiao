@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,8 +12,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -50,6 +55,7 @@ import www.diandianxing.com.diandianxing.fragment.MineFragment;
 import www.diandianxing.com.diandianxing.fragment.PaikewFragment;
 import www.diandianxing.com.diandianxing.util.AddPopwindow;
 import www.diandianxing.com.diandianxing.util.ConUtils;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.util.SpUtils;
@@ -112,9 +118,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
 // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
 //启动定位
         mlocationClient.startLocation();
+
+        float density = getResources().getDisplayMetrics().density;
+        Log.e("TAG","密度：：：：：：：："+density);
+
         initView();
 
     }
+
+    private static int getStatusBarHeight(Context context) {
+        int statusBarHeight = 0;
+        Resources res = context.getResources();
+        int resourceId = res.getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusBarHeight = res.getDimensionPixelSize(resourceId);
+        }
+        return statusBarHeight;
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void XXX(MsgBus messageEvent) {
 
@@ -144,6 +165,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConUtils.TAG_ZT);
+        intentFilter.addAction(GlobalParams.DL_QH);
         registerReceiver(broadcastReceiver,intentFilter);
 
         rb_home.setOnClickListener(this);
@@ -200,7 +222,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         //显示当前的fragment
         transaction.show(f);
         // 第四步：提交
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
         currentf = f;
     }
     List<LocalMedia> listAll = new ArrayList<>();
@@ -224,6 +246,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
                     Intent intent = new Intent(MainActivity.this,ReleaseShootoffActivity.class);
                     intent.putExtra("list",info);
                     startActivity(intent);
+                    listAll.clear();
                     break;
             }
         }
@@ -238,6 +261,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     @Override
     public void onClick(View v) {
         int guid = SpUtils.getInt(MainActivity.this, "guid", 0);
+        Log.e("TAG","值===="+guid);
         switch (v.getId()) {
             case R.id.rb_home:
                 if (homeFragment == null) {
@@ -247,24 +271,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
                 tag=0;
                 break;
             case R.id.rb_find:
-                if(guid!=2){
-                    startActivity(new Intent(MainActivity.this,LoginActivity.class));
-                    rb_find.setChecked(false);
-                    RadioButton rb= (RadioButton) rgp.getChildAt(0);
-                    rb.setChecked(true);
-                }else{
+//                if(guid!=2){
+//                    startActivity(new Intent(MainActivity.this,LoginActivity.class));
+//                    rb_find.setChecked(false);
+//                    RadioButton rb= (RadioButton) rgp.getChildAt(0);
+//                    rb.setChecked(true);
+//                }else{
                     if (findFragment == null) {
                         findFragment = new PaikewFragment("推荐");
                     }
                     addFragments(findFragment);
-                }
-//                tag=1;
+//                }
+                tag=1;
                 break;
             case R.id.rb_message:
                 if(guid!=2){
                     startActivity(new Intent(MainActivity.this,LoginActivity.class));
                     rb_message.setChecked(false);
-                    RadioButton rb= (RadioButton) rgp.getChildAt(0);
+                    RadioButton rb;
+                    if(tag==0||tag==1){
+
+                        rb = (RadioButton) rgp.getChildAt(tag);
+                    }else {
+                        rb=(RadioButton) rgp.getChildAt(0);
+                    }
                     rb.setChecked(true);
                 }else{
                     if (messageFragment == null) {
@@ -278,7 +308,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
                 if(guid!=2){
                     startActivity(new Intent(MainActivity.this,LoginActivity.class));
                     rb_mine.setChecked(false);
-                    RadioButton rb= (RadioButton) rgp.getChildAt(0);
+                    RadioButton rb;
+                    if(tag==0||tag==1){
+
+                        rb = (RadioButton) rgp.getChildAt(tag);
+                    }else {
+                        rb=(RadioButton) rgp.getChildAt(0);
+                    }
                     rb.setChecked(true);
                 }
                 else {
@@ -289,7 +325,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
                 }
                 break;
             case R.id.frag_add:
-                AddPopwindow popWindow = new AddPopwindow(MainActivity.this);
+                AddPopwindow popWindow = new AddPopwindow(MainActivity.this,getStatusBarHeight(MainActivity.this));
                 popWindow.showMoreWindow(v);
                 //加号
                 break;
@@ -325,6 +361,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
                 addFragments(homeFragment);
                 RadioButton rb= (RadioButton) rgp.getChildAt(tag);
                 rb.setChecked(true);
+            }else if(GlobalParams.DL_QH.equals(intent.getAction())){
+
+                tag=0;
+                if (homeFragment == null) {
+                    homeFragment = new HomeFragment();
+                }
+                addFragments(homeFragment);
+                RadioButton rb= (RadioButton) rgp.getChildAt(tag);
+                rb.setChecked(true);
+
             }
         }
     };
@@ -363,6 +409,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
 //                amapLocation.getAccuracy();//获取精度信息
                 SpUtils.putString(this,"la",  amapLocation.getLatitude()+"");
                 SpUtils.putString(this,"lo",amapLocation.getLongitude()+"");
+                SpUtils.putString(this,"PoiName",amapLocation.getPoiName()+"");
+
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 Log.e("TAG","location Error, ErrCode:"

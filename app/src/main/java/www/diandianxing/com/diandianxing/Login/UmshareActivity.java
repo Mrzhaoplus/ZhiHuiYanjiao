@@ -42,7 +42,7 @@ public class UmshareActivity extends BaseActivity {
 
     protected static void SharebyQQ(Activity context) {
         mContext = context;
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
+        UMWeb web = new UMWeb("http://iphone.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
         web.setTitle("智慧燕郊-点点行");//标题
         web.setThumb(new UMImage(mContext, R.drawable.img_diandianlogo));  //缩略图
         web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
@@ -57,7 +57,7 @@ public class UmshareActivity extends BaseActivity {
 
     protected static void SharebyQzon(Activity context) {
         mContext = context;
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
+        UMWeb web = new UMWeb("http://iphone.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
         web.setTitle("智慧燕郊-点点行");//标题
         web.setThumb(new UMImage(mContext,R.drawable.img_diandianlogo));  //缩略图
         web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
@@ -71,7 +71,7 @@ public class UmshareActivity extends BaseActivity {
 
     protected static void SharebyWeixin(Activity context) {
         mContext = context;
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
+        UMWeb web = new UMWeb("http://iphone.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
         web.setTitle("智慧燕郊-点点行");//标题
         web.setThumb(new UMImage(mContext,R.drawable.img_diandianlogo));  //缩略图
         web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
@@ -84,7 +84,7 @@ public class UmshareActivity extends BaseActivity {
     }
     protected static void SharebyWeixincenter(Activity context) {
         mContext = context;
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
+        UMWeb web = new UMWeb("http://iphone.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
         web.setTitle("智慧燕郊-点点行");//标题
         web.setThumb(new UMImage(mContext,R.drawable.img_diandianlogo));  //缩略图
         web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述

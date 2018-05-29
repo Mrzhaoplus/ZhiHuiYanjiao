@@ -30,7 +30,6 @@ public class Lunbo_model {
                     public void accept(Lunbo_Bean lunbo_bean) throws Exception {
                             jiekou.getsuccess(lunbo_bean);
 
-
                     }
                 });
 

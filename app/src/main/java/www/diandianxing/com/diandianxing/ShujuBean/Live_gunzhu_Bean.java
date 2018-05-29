@@ -93,7 +93,16 @@ public class Live_gunzhu_Bean {
         private int is_zan;
         private int is_fx;
         private int is_focus;
+        private String objName;
         private List<String> imagesList;
+
+        public String getObjName() {
+            return objName;
+        }
+
+        public void setObjName(String objName) {
+            this.objName = objName;
+        }
 
         public int getId() {
             return id;

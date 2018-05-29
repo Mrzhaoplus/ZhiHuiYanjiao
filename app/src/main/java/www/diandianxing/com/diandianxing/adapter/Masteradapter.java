@@ -54,12 +54,9 @@ public class Masteradapter extends RecyclerView.Adapter<Masteradapter.Myviewhold
         Log.d("TAG",list.size()+"");
 
         final PaiKeDRInfo paiKeDRInfo=list.get(position);
-
         Glide.with(context).load(paiKeDRInfo.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
         holder.text_name.setText(paiKeDRInfo.nickName);
-
         Log.e("TAG","点赞数：：："+paiKeDRInfo.zan);
-
         holder.da_zan.setText(paiKeDRInfo.zan);
         holder.tv_dj.setText(paiKeDRInfo.userLevel);
 

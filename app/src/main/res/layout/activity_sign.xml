@@ -51,8 +51,8 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="10dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:orientation="vertical">
 
         <TextView
@@ -60,6 +60,7 @@
             android:layout_height="wrap_content"
             android:text="已连续签到天数"
             android:textSize="14sp"
+            android:textColor="#333333"
             android:layout_gravity="center_horizontal"
             />
 
@@ -142,6 +143,7 @@
         android:layout_height="wrap_content"
         android:text="等级规则"
         android:textSize="14sp"
+        android:textColor="#666666"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"

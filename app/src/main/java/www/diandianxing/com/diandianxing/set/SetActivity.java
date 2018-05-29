@@ -1,9 +1,12 @@
 package www.diandianxing.com.diandianxing.set;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,10 +15,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.HttpParams;
+import com.lzy.okgo.model.Response;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.MsgConstant;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import util.UpdateAppUtils;
 import www.diandianxing.com.diandianxing.Login.LoginActivity;
+import www.diandianxing.com.diandianxing.Login.LoginActivitys;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.my.ProtocolActivity;
+import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.CacheDataManager;
 import www.diandianxing.com.diandianxing.util.ConUtils;
@@ -47,6 +64,7 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
     private RelativeLayout real_yijian;
     private TextView text_exit;
     private RelativeLayout real_xxts;
+    PushAgent mPushAgent;
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
 
@@ -103,6 +121,20 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
         text_exit.setOnClickListener(this);
         iv_callback.setOnClickListener(this);
         real_xxts.setOnClickListener(this);
+        mPushAgent = PushAgent.getInstance(this);
+        //注册推送服务，每次调用register方法都会回调该接口
+        mPushAgent.register(new IUmengRegisterCallback() {
+
+            @Override
+            public void onSuccess(String deviceToken) {
+                //注册成功会返回device token
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+
+            }
+        });
     }
 
     @Override
@@ -118,7 +150,8 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
                 break;
             //更新
             case R.id.real_gengxin:
-                update();
+                Log.e("TAG","版本根性操作=====");
+                networkBB();
                 break;
             //协议
             case R.id.real_xieyi:
@@ -151,21 +184,61 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
 
                 break;
         }
+
+    }
+
+    private void networkBB() {
+        HttpParams params = new HttpParams();
+        params.put("uid", SpUtils.getString(this, "userid", null));
+        params.put("token", SpUtils.getString(this, "token", null));
+        Log.d("TAG","参数："+params.toString());
+        OkGo.<String>post(MyContants.BASEURL +"s=LockBalance/getEditionSave")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG","版本"+body);
+                        try {
+                            JSONObject jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            String datas = jsonobj.getString("datas");
+                            if (code == 200) {
+
+                                JSONObject jo = new JSONObject(datas);
+
+                                String bbcode=jo.getString("EditionNum");
+                                String name = jo.getString("randNum");
+                                String url = jo.getString("appUrl");
+
+                                update(bbcode,name,url);
+
+                            } else {
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                });
     }
     //更新
-    private void update(){
-
-                    UpdateAppUtils.from(SetActivity.this)
-                             .checkBy(UpdateAppUtils.CHECK_BY_VERSION_CODE) //更新检测方式，默认为VersionCode
-                            .serverVersionCode(1) //服务器穿过来的
-                            .serverVersionName("2.0")//服务器传过来的
-                            .apkPath("http://issuecdn.baidupcs.com/issue/netdisk/apk/BaiduNetdisk_7.15.1.apk")//更新的连接
-                            .showNotification(true) //是否显示下载进度到通知栏，默认为true
-                            // .updateInfo()  //更新日志信息 String
-                            .downloadBy(UpdateAppUtils.DOWNLOAD_BY_APP) //下载方式：app下载、手机浏览器下载。默认app下载
-                            .isForce(false) //是否强制更新，默认false 强制更新情况下用户不同意更新则不能使用app
-                            .update();
-                }
+    private void update(String code,String name,String url){
+        UpdateAppUtils.from(SetActivity.this)
+                .checkBy(UpdateAppUtils.CHECK_BY_VERSION_CODE) //更新检测方式，默认为VersionCode
+                .serverVersionCode(Integer.parseInt(code)) //服务器穿过来的
+                .serverVersionName(name)//服务器传过来的
+                .apkPath(url)//更新的连接
+                .showNotification(true) //是否显示下载进度到通知栏，默认为true
+                // .updateInfo()  //更新日志信息 String
+                .downloadBy(UpdateAppUtils.DOWNLOAD_BY_APP) //下载方式：app下载、手机浏览器下载。默认app下载
+                .isForce(false) //是否强制更新，默认false 强制更新情况下用户不同意更新则不能使用app
+                .update();
+    }
     //退出登录
     private void tuichuDialog(int grary, int animationStyle) {
         BaseDialog.Builder builder = new BaseDialog.Builder(this);
@@ -206,6 +279,33 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
 //                realBack();
 //                Intent intent3=new Intent(SetActivity.this,LoginActivity.class);
 //                startActivity(intent3);
+                mPushAgent.removeAlias(SpUtils.getString(SetActivity.this,"userid",null),Api.TYPE, new UTrack.ICallBack(){
+                    @Override
+                    public void onMessage(boolean isSuccess, String message) {
+
+                    }
+                });
+
+//                SharedPreferences sharedPreferences = getSharedPreferences(MyContants.FILENAME, Context.MODE_PRIVATE);
+//                SharedPreferences.Editor edit = sharedPreferences.edit();
+//                edit.clear();
+//                edit.commit();
+
+                SpUtils.putString(SetActivity.this,"uuserid","");
+                SpUtils.putString(SetActivity.this,"token","");
+
+
+//                mPushAgent.deleteAlias(SpUtils.putString(SetActivity.this, "userid",null), Api.TYPE, new UTrack.ICallBack() {
+//
+//                    @Override
+//
+//                    public void onMessage(boolean isSuccess, String message) {
+//
+//                    }
+//
+//                });
+
+
                 Intent intent = new Intent();
                 intent.setAction(ConUtils.TAG_ZT);
                 sendBroadcast(intent);

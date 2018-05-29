@@ -87,7 +87,7 @@ public class ScreenUtils {
     public static int getStatusHeight(Context context) {
         int statusHeight = -1;
         try {
-            Class<?> clazz = Class.forName("com.android.internal.R$dimen");
+            Class<?> clazz = Class.forName("com.iphone.internal.R$dimen");
             Object object = clazz.newInstance();
             int height = Integer.parseInt(clazz.getField("status_bar_height")
                     .get(object).toString());

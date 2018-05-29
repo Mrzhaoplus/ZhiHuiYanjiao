@@ -1,7 +1,9 @@
 package www.diandianxing.com.diandianxing.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -30,6 +32,7 @@ import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.fragment.paikefragment.DarenFragment;
 import www.diandianxing.com.diandianxing.fragment.paikefragment.GuanzhuFragment;
 import www.diandianxing.com.diandianxing.fragment.paikefragment.TuijianFragment;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.XCPopwindow;
 import www.diandianxing.com.diandianxing.R;
@@ -96,24 +99,29 @@ public class PaikewFragment extends BaseFragment implements View.OnClickListener
          liner3.setOnClickListener(this);
          tv_pai.setOnClickListener(this);
 
-        if("关注".equals(msg)){
-            text_guanzhu.setTextColor(getResources().getColor(R.color.text_orage));
-            v1.setVisibility(View.VISIBLE);
-            v2.setVisibility(View.INVISIBLE);
-            v3.setVisibility(View.INVISIBLE);
-            text_daren.setTextColor(getResources().getColor(R.color.black_san));
-            text_tuijian.setTextColor(getResources().getColor(R.color.black_san));
-            if (guanzhuFragment == null) {
-                guanzhuFragment = new GuanzhuFragment();
-            }
-            addFragments(guanzhuFragment);
-        }else{
+//        if("关注".equals(msg)){
+//            text_guanzhu.setTextColor(getResources().getColor(R.color.text_orage));
+//            v1.setVisibility(View.VISIBLE);
+//            v2.setVisibility(View.INVISIBLE);
+//            v3.setVisibility(View.INVISIBLE);
+//            text_daren.setTextColor(getResources().getColor(R.color.black_san));
+//            text_tuijian.setTextColor(getResources().getColor(R.color.black_san));
+//            if (guanzhuFragment == null) {
+//                guanzhuFragment = new GuanzhuFragment();
+//            }else {
+//                Intent intent = new Intent();
+//                intent.setAction(GlobalParams.LOGING_SX);
+//                getActivity().sendBroadcast(intent);
+//            }
+//            addFragments(guanzhuFragment);
+//
+//        }else{
             text_guanzhu.setTextColor(getResources().getColor(R.color.black_san));
             if (tuijianFragment == null) {
                 tuijianFragment = new TuijianFragment();
             }
             addFragments(tuijianFragment);
-        }
+//        }
 
 
     }
@@ -128,16 +136,30 @@ public class PaikewFragment extends BaseFragment implements View.OnClickListener
 
     public void Qiehuan(){
         Log.e("TAG","发送到拍客方法");
-        text_guanzhu.setTextColor(getResources().getColor(R.color.text_orage));
-        v1.setVisibility(View.VISIBLE);
-        v2.setVisibility(View.INVISIBLE);
+//        text_guanzhu.setTextColor(getResources().getColor(R.color.text_orage));
+//        v1.setVisibility(View.VISIBLE);
+//        v2.setVisibility(View.INVISIBLE);
+//        v3.setVisibility(View.INVISIBLE);
+//        text_daren.setTextColor(getResources().getColor(R.color.black_san));
+//        text_tuijian.setTextColor(getResources().getColor(R.color.black_san));
+//        if (guanzhuFragment == null) {
+//            guanzhuFragment = new GuanzhuFragment();
+//        }else {
+//            Intent intent = new Intent();
+//            intent.setAction(GlobalParams.LOGING_SX);
+//            getActivity().sendBroadcast(intent);
+//        }
+//        addFragments(guanzhuFragment);
+        text_tuijian.setTextColor(getResources().getColor(R.color.text_orage));
+        v2.setVisibility(View.VISIBLE);
+        v1.setVisibility(View.INVISIBLE);
         v3.setVisibility(View.INVISIBLE);
         text_daren.setTextColor(getResources().getColor(R.color.black_san));
-        text_tuijian.setTextColor(getResources().getColor(R.color.black_san));
-        if (guanzhuFragment == null) {
-            guanzhuFragment = new GuanzhuFragment();
+        text_guanzhu.setTextColor(getResources().getColor(R.color.black_san));
+        if (tuijianFragment == null) {
+            tuijianFragment = new TuijianFragment();
         }
-        addFragments(guanzhuFragment);
+        addFragments(tuijianFragment);
 
     }
 
@@ -188,12 +210,22 @@ public class PaikewFragment extends BaseFragment implements View.OnClickListener
                 break;
                 case R.id.tv_pai:
                     //点击弹出Pop框
-                    XCPopwindow addPopwindow = new XCPopwindow((MainActivity) getActivity());
+                    XCPopwindow addPopwindow = new XCPopwindow((MainActivity) getActivity(),getStatusBarHeight(getActivity()));
                     addPopwindow.showMoreWindow(view);
                     addPopwindow.setOnAlbumClickListener(albumClickListener);
                     break;
 
         }
+    }
+
+    private static int getStatusBarHeight(Context context) {
+        int statusBarHeight = 0;
+        Resources res = context.getResources();
+        int resourceId = res.getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusBarHeight = res.getDimensionPixelSize(resourceId);
+        }
+        return statusBarHeight;
     }
 
     private XCPopwindow.AlbumClickListener albumClickListener = new XCPopwindow.AlbumClickListener() {

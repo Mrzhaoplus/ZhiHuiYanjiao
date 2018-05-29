@@ -30,9 +30,33 @@ import java.util.regex.Pattern;
 public class MyUtils {
     private static int mScreenWidth, mScreenHeight;
 
+    /** 判断是否是快速点击 */
+    private static long lastClickTime;
+
+    public static boolean isFastDoubleClick() {
+        long time = System.currentTimeMillis();
+        long timeD = time - lastClickTime;
+        if (0 < timeD && timeD < 1000) {
+
+            return true;
+        }
+        lastClickTime = time;
+        return false;
+
+    }
+
     public static String stampToDate(String s) {
         String res;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+
+    public static String stampsToDate(String s) {
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         long lt = new Long(s);
         Date date = new Date(lt);
         res = simpleDateFormat.format(date);
@@ -56,6 +80,15 @@ public class MyUtils {
         res = simpleDateFormat.format(date);
         return res;
     }
+    public static String stampNYrToDate(String s) {
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+
 
     public static String dateDiff(String startTime, String endTime, String format,String data) {
         // 按照传入的格式生成一个simpledateformate对象
@@ -96,7 +129,7 @@ public class MyUtils {
                             return min+"分钟前";
 
                         }else{
-                            return 0+"分钟前";
+                            return 1+"分钟前";
                         }
 
                     }

@@ -28,7 +28,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:textColor="@color/bg_color"
-            android:text="签到规则"
+            android:text="详细规则"
             android:textSize="17sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

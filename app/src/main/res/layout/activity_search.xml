@@ -12,14 +12,12 @@
         android:layout_marginTop="20dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="45dp">
 
         <ImageView
             android:id="@+id/img_back"
-            android:layout_marginLeft="10dp"
+            android:padding="10dp"
             android:src="@drawable/img_back"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
@@ -31,6 +29,8 @@
                  android:layout_centerInParent="true"
                  android:paddingTop="5dp"
                  android:paddingBottom="5dp"
+                 android:focusable="true"
+                 android:focusableInTouchMode="true"
                  android:background="@drawable/search_shousuo"
                  >
                  <ImageView
@@ -49,6 +49,7 @@
                            android:layout_height="wrap_content"
                            android:background="@null"
                            android:layout_toRightOf="@+id/sou"
+                           android:singleLine="true"
                            android:textSize="14sp"
                            android:hint="请输入搜索内容"
                            />
@@ -84,7 +85,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
@@ -104,6 +105,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/recycler_search"
+                android:layout_marginBottom="20dp"
                 ></android.support.v7.widget.RecyclerView>
 
         </LinearLayout>

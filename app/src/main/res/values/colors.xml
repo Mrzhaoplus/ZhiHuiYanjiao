@@ -37,6 +37,8 @@
 <color name="color_xu">#897c7e83</color>
     <color name="gr_xian">#9B9B9B</color>
 
+    <color name="js">#FFF05D14</color>
+
     <color name="gr_text_blue">#27ADFF</color>
     <color name="rb_blue">#0076FF</color>
     <color name="inforxia">#4a4945</color>
@@ -55,7 +57,7 @@
     <color name="red_packge_xian">#979797</color>
     <color name="xyjf">#44C12F</color>
     <color name="tv_xyjf">#2AD35E</color>
-    <color name="tui_xu">#300000</color>
+    <color name="tui_xu">#88000000</color>
 
     <color name="zong_rl">#D3E7F4</color>
    <color name="bei_color">#e5e5e5</color>
@@ -73,8 +75,8 @@
     <color name="system_bar_color">#FFFEC252</color>
     <color name="navpage">#FFE1E8EB</color>
 
-    <color name="ls_color">#FF9AC1FF</color>
+    <color name="ls_color">#4096ff</color>
 
-    <color name="ls_text">#FF6DACFF</color>
+    <color name="ls_text">#4096ff</color>
 
 </resources>

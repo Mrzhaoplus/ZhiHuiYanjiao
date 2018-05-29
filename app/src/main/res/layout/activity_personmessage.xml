@@ -206,6 +206,7 @@ v
 
 
         <RelativeLayout
+            android:id="@+id/rl_dqxz"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -317,6 +318,7 @@ v
                 android:layout_height="wrap_content"
                 android:hint="请输入您的签名"
                 android:textSize="16sp"
+                android:maxLength="30"
                 android:padding="10dp"
                 android:background="@android:color/transparent"/>
 

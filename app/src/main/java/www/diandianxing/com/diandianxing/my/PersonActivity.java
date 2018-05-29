@@ -3,6 +3,7 @@ package www.diandianxing.com.diandianxing.my;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bigkoo.pickerview.OptionsPickerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.RequestOptions;
@@ -61,6 +63,8 @@ import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.CircleImageView;
 import www.diandianxing.com.diandianxing.util.EventMessage;
 import www.diandianxing.com.diandianxing.util.GlobalParams;
+import www.diandianxing.com.diandianxing.util.JsonBean;
+import www.diandianxing.com.diandianxing.util.JsonFileReader;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
@@ -116,6 +120,7 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
     private TextView tv_phone;
     private EditText et_qm;
     private TextView tv_sf_xz;
+    private RelativeLayout rl_dqxz;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,25 +146,16 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
             intent.putExtra("name",name);
             sendBroadcast(intent);
 
+            Intent gz =new Intent();
+            gz.setAction(GlobalParams.GZ);
+            sendBroadcast(gz);
+
+
+
             alter_name.setText(name);
         }
          else if(eventMessage.getMsg().equals("idcard")){
-            String iDcrad = SpUtils.getString(this, "IDcard", null);
-            int idc = Integer.parseInt(iDcrad.trim());
-            if(idc==0){
-                id_card.setText("未认证");
-            }
-            else if(idc==1){
-                id_card.setText("审核中");
-            }
-            else if(idc==2){
-                id_card.setText("审核不通过");
-            }
-            else if(idc==3){
-                id_card.setText("已认证");
-            }
-
-
+            network();
         }
     }
     private void initView() {
@@ -176,6 +172,7 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
         back2 = (ImageView) findViewById(R.id.back2);
         alter_name = (TextView) findViewById(R.id.alter_name);
         per_pho = (CircleImageView) findViewById(R.id.person_pho);
+        rl_dqxz= (RelativeLayout) findViewById(R.id.rl_dqxz);
         tv_sf_xz= (TextView) findViewById(R.id.tv_sf_xz);
         rb_nan= (RadioButton) findViewById(R.id.rb_nan);
         rb_nv= (RadioButton) findViewById(R.id.rb_nv);
@@ -184,11 +181,11 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
         rg_xb= (RadioGroup) findViewById(R.id.rg_xb);
         real_renzheng = (RelativeLayout) findViewById(R.id.real_renzheng);
         id_card = (TextView) findViewById(R.id.idcard_zhuangtai);
+        initJsonData();
         iv_callback.setOnClickListener(this);
         real_pho.setOnClickListener(this);
         zhong.setText("个人信息");
         real_name.setOnClickListener(this);
-        real_renzheng.setOnClickListener(this);
         String paizhao = SpUtils.getString(this, "paiphoto", null);
         if(paizhao!=null&&paizhao.length()>0) {
             RequestOptions options = new RequestOptions()
@@ -198,26 +195,27 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
         }
         String nickname = SpUtils.getString(this, "nickname", null);
         alter_name.setText(nickname);
-        String iDcrad = SpUtils.getString(this, "IDcard",null);
-        if(iDcrad!=null){
-            int idc = Integer.parseInt(iDcrad.trim());
-            if(idc==0){
-                id_card.setText("未认证");
-            }
-            else if(idc==1){
-                id_card.setText("审核中");
-            }
-            else if(idc==2){
-                id_card.setText("审核不通过");
-            }
-            else if(idc==3){
-                id_card.setText("已认证");
-            }
-        }
+//        String iDcrad = SpUtils.getString(this, "IDcard",null);
+//        Log.e("TAG","个人iDcrad==="+iDcrad);
+//        if(iDcrad!=null){
+//            int idc = Integer.parseInt(iDcrad.trim());
+//            if(idc==0){
+//                id_card.setText("未认证");
+//            }
+//            else if(idc==1){
+//                id_card.setText("审核中");
+//            }
+//            else if(idc==2){
+//                id_card.setText("审核不通过");
+//            }
+//            else if(idc==3){
+//                id_card.setText("已认证");
+//            }
+//        }
 
         rb_nan.setOnClickListener(this);
         rb_nv.setOnClickListener(this);
-
+        rl_dqxz.setOnClickListener(this);
         network();
 
         et_qm.addTextChangedListener(new TextWatcher() {
@@ -242,12 +240,119 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
 
     }
 
+    private ArrayList<JsonBean> options1Items = new ArrayList<>();
+    private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
+    private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
+
+    private void showPickerView() {
+        OptionsPickerView pvOptions=new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                //返回的分别是三个级别的选中位置
+                String text = options1Items.get(options1).getPickerViewText() +" "+
+                        options2Items.get(options1).get(options2) +" "+
+                        options3Items.get(options1).get(options2).get(options3);
+                tv_sf_xz.setText(text);
+                tv_sf_xz.setTextColor(getResources().getColor(R.color.black_san));
+
+                area=text;
+
+
+                networkupdata();
+
+
+            }
+        }).setTitleText("")
+                .setDividerColor(Color.GRAY)
+                .setTextColorCenter(Color.GRAY)
+                .setContentTextSize(13)
+                .setOutSideCancelable(false)
+                .build();
+          /*pvOptions.setPicker(options1Items);//一级选择器
+        pvOptions.setPicker(options1Items, options2Items);//二级选择器*/
+        pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
+        pvOptions.show();
+    }
+
+
+    private void initJsonData() {   //解析数据
+
+        /**
+         * 注意：assets 目录下的Json文件仅供参考，实际使用可自行替换文件
+         * 关键逻辑在于循环体
+         *
+         * */
+        //  获取json数据
+        String JsonData = JsonFileReader.getJson(this, "province_data.json");
+        ArrayList<JsonBean> jsonBean = parseData(JsonData);//用Gson 转成实体
+
+        /**
+         * 添加省份数据
+         *
+         * 注意：如果是添加的JavaBean实体，则实体类需要实现 IPickerViewData 接口，
+         * PickerView会通过getPickerViewText方法获取字符串显示出来。
+         */
+        options1Items = jsonBean;
+
+        for (int i = 0; i < jsonBean.size(); i++) {//遍历省份
+            ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
+            ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
+
+            for (int c = 0; c < jsonBean.get(i).getCityList().size(); c++) {//遍历该省份的所有城市
+                String CityName = jsonBean.get(i).getCityList().get(c).getName();
+                CityList.add(CityName);//添加城市
+
+                ArrayList<String> City_AreaList = new ArrayList<>();//该城市的所有地区列表
+
+                //如果无地区数据，建议添加空字符串，防止数据为null 导致三个选项长度不匹配造成崩溃
+                if (jsonBean.get(i).getCityList().get(c).getArea() == null
+                        || jsonBean.get(i).getCityList().get(c).getArea().size() == 0) {
+                    City_AreaList.add("");
+                } else {
+
+                    for (int d = 0; d < jsonBean.get(i).getCityList().get(c).getArea().size(); d++) {//该城市对应地区所有数据
+                        String AreaName = jsonBean.get(i).getCityList().get(c).getArea().get(d);
+
+                        City_AreaList.add(AreaName);//添加该城市所有地区数据
+                    }
+                }
+                Province_AreaList.add(City_AreaList);//添加该省所有地区数据
+            }
+
+            /**
+             * 添加城市数据
+             */
+            options2Items.add(CityList);
+
+            /**
+             * 添加地区数据
+             */
+            options3Items.add(Province_AreaList);
+        }
+    }
+
+    public ArrayList<JsonBean> parseData(String result) {//Gson 解析
+        ArrayList<JsonBean> detail = new ArrayList<>();
+        try {
+            JSONArray data = new JSONArray(result);
+            Gson gson = new Gson();
+            for (int i = 0; i < data.length(); i++) {
+                JsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), JsonBean.class);
+                detail.add(entity);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // mHandler.sendEmptyMessage(MSG_LOAD_FAILED);
+        }
+        return detail;
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.iv_callback:
-                EventMessage eventMessage = new EventMessage("personphoto");
-                EventBus.getDefault().postSticky(eventMessage);
+//                EventMessage eventMessage = new EventMessage("personphoto");
+//                EventBus.getDefault().postSticky(eventMessage);
                 finish();
                 break;
             //修改头像
@@ -273,6 +378,11 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
 
                 sex="1";
                 networkupdata();
+
+                break;
+            case R.id.rl_dqxz:
+
+                showPickerView();
 
                 break;
 
@@ -419,7 +529,7 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
                     try {
 
                         baos = new FileOutputStream(filess);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 2, baos);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -440,9 +550,7 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
 
         HttpParams params = new HttpParams();
         params.put("sex", Integer.parseInt(sex));
-
         params.put("area",area);
-
         params.put("signature",signature);
 
         params.put("token", SpUtils.getString(this,"token",null));
@@ -524,20 +632,29 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
                                 area=datas.getString("area");
                                 if(datas.getString("area").length()>0){
                                     tv_sf_xz.setText(datas.getString("area"));
+                                    tv_sf_xz.setTextColor(getResources().getColor(R.color.black_san));
                                 }
 
-                                if(Integer.parseInt(datas.getString("id_ident"))==1){
+
+                                SpUtils.putString(PersonActivity.this,"IDcard",datas.getString("id_ident"));
+                                Log.e("TAG","认证！！！！！！==="+datas.getString("id_ident"));
+                                if(Integer.parseInt(datas.getString("id_ident"))==0){
                                     id_card.setText("未认证");
+                                    real_renzheng.setOnClickListener(PersonActivity.this);
+                                }
+                                else if(Integer.parseInt(datas.getString("id_ident"))==1){
+                                    id_card.setText("认证中");
+                                    real_renzheng.setOnClickListener(PersonActivity.this);
                                 }
                                 else if(Integer.parseInt(datas.getString("id_ident"))==2){
-                                    id_card.setText("审核中");
+                                    id_card.setText("认证失败");
+                                    real_renzheng.setOnClickListener(PersonActivity.this);
                                 }
                                 else if(Integer.parseInt(datas.getString("id_ident"))==3){
-                                    id_card.setText("审核不通过");
-                                }
-                                else if(Integer.parseInt(datas.getString("id_ident"))==4){
                                     id_card.setText("已认证");
                                 }
+
+
 
 
                                 alter_name.setText(datas.getString("nickname"));
@@ -613,8 +730,8 @@ public class PersonActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        EventMessage eventMessage = new EventMessage("personphoto");
-        EventBus.getDefault().postSticky(eventMessage);
+//        EventMessage eventMessage = new EventMessage("personphoto");
+//        EventBus.getDefault().postSticky(eventMessage);
     }
 
 //    @Override

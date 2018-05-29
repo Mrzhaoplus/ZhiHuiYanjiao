@@ -66,7 +66,7 @@ final class FlashlightManager {
   }
 
   private static Object getHardwareService() {
-    Class<?> serviceManagerClass = maybeForName("android.os.ServiceManager");
+    Class<?> serviceManagerClass = maybeForName("iphone.os.ServiceManager");
     if (serviceManagerClass == null) {
       return null;
     }
@@ -81,7 +81,7 @@ final class FlashlightManager {
       return null;
     }
 
-    Class<?> iHardwareServiceStubClass = maybeForName("android.os.IHardwareService$Stub");
+    Class<?> iHardwareServiceStubClass = maybeForName("iphone.os.IHardwareService$Stub");
     if (iHardwareServiceStubClass == null) {
       return null;
     }

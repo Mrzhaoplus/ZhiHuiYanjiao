@@ -12,12 +12,13 @@ public class GZ_person_Bean {
     /**
      * msg : 请求成功
      * code : 200
-     * datas : [{"id":0,"uid":1,"pic":"http://47.93.45.38/server/uploads/head/20180328/5abb7c8abee96.jpg","wechat":"","tencentQq":"","microblog":"","wechatName":"","qqName":"","sinaName":"","uname":"","identPic":"","identNum":"","ddxUser":{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524712985582,"encrypt":"","lastTime":1524712985582,"ridingState":false,"userId":0,"pic":"","nickName":"","postImage":"","postTitle":"","postId":0,"isGz":0,"postImagePaths":[]},"nickName":"啊咯","sort":0,"zan":0,"userLevel":"","userSex":0,"isGz":0},{"id":0,"uid":1047,"pic":"http://47.93.45.38/server/uploads/head/timg.jpg","wechat":"","tencentQq":"","microblog":"","wechatName":"","qqName":"","sinaName":"","uname":"","identPic":"","identNum":"","ddxUser":{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524712985582,"encrypt":"","lastTime":1524712985582,"ridingState":false,"userId":0,"pic":"","nickName":"","postImage":"","postTitle":"","postId":0,"isGz":0,"postImagePaths":[]},"nickName":"test","sort":0,"zan":0,"userLevel":"","userSex":0,"isGz":0}]
+     * datas : [{"id":0,"uid":4586,"pic":"http://47.93.45.38/test/uploads/head/20180510/5af39f7194af8.png","wechat":"","tencentQq":"","microblog":"","wechatName":"","qqName":"","sinaName":"","uname":"","identPic":"","identNum":"","ddxUser":{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":0,"doubles":0,"idIdent":0,"type":0,"addTime":1525935638344,"encrypt":"","lastTime":1525935638344,"ridingState":0,"userId":0,"pic":"","nickName":"","postImage":"","postTitle":"","postId":0,"isGz":0,"postImagePaths":[]},"nickName":"点点行104625","sort":0,"zan":0,"userLevel":"","userSex":0,"memberPoint":0,"isGz":0,"area":"","signature":""}]
      */
 
     private String msg;
     private String code;
     private List<DatasBean> datas;
+
     public String getMsg() {
         return msg;
     }
@@ -45,8 +46,8 @@ public class GZ_person_Bean {
     public static class DatasBean {
         /**
          * id : 0
-         * uid : 1
-         * pic : http://47.93.45.38/server/uploads/head/20180328/5abb7c8abee96.jpg
+         * uid : 4586
+         * pic : http://47.93.45.38/test/uploads/head/20180510/5af39f7194af8.png
          * wechat :
          * tencentQq :
          * microblog :
@@ -56,13 +57,16 @@ public class GZ_person_Bean {
          * uname :
          * identPic :
          * identNum :
-         * ddxUser : {"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524712985582,"encrypt":"","lastTime":1524712985582,"ridingState":false,"userId":0,"pic":"","nickName":"","postImage":"","postTitle":"","postId":0,"isGz":0,"postImagePaths":[]}
-         * nickName : 啊咯
+         * ddxUser : {"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":0,"doubles":0,"idIdent":0,"type":0,"addTime":1525935638344,"encrypt":"","lastTime":1525935638344,"ridingState":0,"userId":0,"pic":"","nickName":"","postImage":"","postTitle":"","postId":0,"isGz":0,"postImagePaths":[]}
+         * nickName : 点点行104625
          * sort : 0
          * zan : 0
          * userLevel :
          * userSex : 0
+         * memberPoint : 0
          * isGz : 0
+         * area :
+         * signature :
          */
 
         private int id;
@@ -83,7 +87,10 @@ public class GZ_person_Bean {
         private int zan;
         private String userLevel;
         private int userSex;
+        private int memberPoint;
         private int isGz;
+        private String area;
+        private String signature;
 
         public int getId() {
             return id;
@@ -229,12 +236,36 @@ public class GZ_person_Bean {
             this.userSex = userSex;
         }
 
+        public int getMemberPoint() {
+            return memberPoint;
+        }
+
+        public void setMemberPoint(int memberPoint) {
+            this.memberPoint = memberPoint;
+        }
+
         public int getIsGz() {
             return isGz;
         }
 
         public void setIsGz(int isGz) {
             this.isGz = isGz;
+        }
+
+        public String getArea() {
+            return area;
+        }
+
+        public void setArea(String area) {
+            this.area = area;
+        }
+
+        public String getSignature() {
+            return signature;
+        }
+
+        public void setSignature(String signature) {
+            this.signature = signature;
         }
 
         public static class DdxUserBean {
@@ -248,14 +279,14 @@ public class GZ_person_Bean {
              * mileage : 0
              * token :
              * deposit : 0
-             * depositStatus : false
+             * depositStatus : 0
              * doubles : 0
              * idIdent : 0
              * type : 0
-             * addTime : 1524712985582
+             * addTime : 1525935638344
              * encrypt :
-             * lastTime : 1524712985582
-             * ridingState : false
+             * lastTime : 1525935638344
+             * ridingState : 0
              * userId : 0
              * pic :
              * nickName :
@@ -275,14 +306,14 @@ public class GZ_person_Bean {
             private int mileage;
             private String token;
             private int deposit;
-            private boolean depositStatus;
+            private int depositStatus;
             private int doubles;
             private int idIdent;
             private int type;
             private long addTime;
             private String encrypt;
             private long lastTime;
-            private boolean ridingState;
+            private int ridingState;
             private int userId;
             private String pic;
             private String nickName;
@@ -364,11 +395,11 @@ public class GZ_person_Bean {
                 this.deposit = deposit;
             }
 
-            public boolean isDepositStatus() {
+            public int getDepositStatus() {
                 return depositStatus;
             }
 
-            public void setDepositStatus(boolean depositStatus) {
+            public void setDepositStatus(int depositStatus) {
                 this.depositStatus = depositStatus;
             }
 
@@ -420,11 +451,11 @@ public class GZ_person_Bean {
                 this.lastTime = lastTime;
             }
 
-            public boolean isRidingState() {
+            public int getRidingState() {
                 return ridingState;
             }
 
-            public void setRidingState(boolean ridingState) {
+            public void setRidingState(int ridingState) {
                 this.ridingState = ridingState;
             }
 

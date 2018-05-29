@@ -75,22 +75,22 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"></View>
     <!--<RelativeLayout-->
-      <!--android:id="@+id/real_qita"-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_marginLeft="15dp"-->
+      <!--iphone:id="@+id/real_qita"-->
+        <!--iphone:orientation="vertical"-->
+        <!--iphone:layout_marginLeft="15dp"-->
 
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="45dp">-->
+        <!--iphone:layout_width="match_parent"-->
+        <!--iphone:layout_height="45dp">-->
         <!--<TextView-->
-            <!--android:gravity="center"-->
-            <!--android:drawablePadding="10dp"-->
-            <!--android:drawableLeft="@drawable/img_qita"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:textSize="16sp"-->
-            <!--android:padding="10dp"-->
-            <!--android:text="其他问题"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content" />-->
+            <!--iphone:gravity="center"-->
+            <!--iphone:drawablePadding="10dp"-->
+            <!--iphone:drawableLeft="@drawable/img_qita"-->
+            <!--iphone:layout_centerVertical="true"-->
+            <!--iphone:textSize="16sp"-->
+            <!--iphone:padding="10dp"-->
+            <!--iphone:text="其他问题"-->
+            <!--iphone:layout_width="wrap_content"-->
+            <!--iphone:layout_height="wrap_content" />-->
     <!--</RelativeLayout>-->
     <View
         android:layout_marginRight="15dp"

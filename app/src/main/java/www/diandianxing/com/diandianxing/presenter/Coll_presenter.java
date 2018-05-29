@@ -1,5 +1,7 @@
 package www.diandianxing.com.diandianxing.presenter;
 
+import android.util.Log;
+
 import www.diandianxing.com.diandianxing.ShujuBean.Coll_Bean;
 import www.diandianxing.com.diandianxing.interfase.Coll_model_interfase;
 import www.diandianxing.com.diandianxing.interfase.Coll_presenter_interfase;

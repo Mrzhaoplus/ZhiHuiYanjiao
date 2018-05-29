@@ -1,5 +1,7 @@
 package www.diandianxing.com.diandianxing.ShujuBean;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.List;
 
 /**
@@ -42,7 +44,7 @@ public class Lunbo_Bean {
         this.datas = datas;
     }
 
-    public static class DatasBean {
+    public static class DatasBean extends DataSupport{
         /**
          * id : 46
          * imageName : 1
@@ -74,6 +76,33 @@ public class Lunbo_Bean {
         private int isActive;
         private String imageUrl;
         private int userId;
+        private String objIdType;
+        private String linkType;
+        private int objId;
+
+        public int getObjId() {
+            return objId;
+        }
+
+        public void setObjId(int objId) {
+            this.objId = objId;
+        }
+
+        public String getObjIdType() {
+            return objIdType;
+        }
+
+        public void setObjIdType(String objIdType) {
+            this.objIdType = objIdType;
+        }
+
+        public String getLinkType() {
+            return linkType;
+        }
+
+        public void setLinkType(String linkType) {
+            this.linkType = linkType;
+        }
 
         public int getId() {
             return id;

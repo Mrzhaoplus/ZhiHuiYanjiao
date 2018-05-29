@@ -21,12 +21,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.DisconnectActivity;
 import www.diandianxing.com.diandianxing.ShujuBean.Zan_msg_Bean;
 import www.diandianxing.com.diandianxing.VideoActivity;
 import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
+import www.diandianxing.com.diandianxing.util.MyUtils;
+import www.diandianxing.com.diandianxing.util.NetUtil;
 
 /**
  * date : ${Date}
@@ -54,9 +57,14 @@ public class Commentadapter extends RecyclerView.Adapter<Commentadapter.Myviewho
     public void onBindViewHolder(final Myviewholder holder, final int position) {
         Glide.with(context).load(list.get(position).getPic()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
            holder.text_name.setText(list.get(position).getNickName());
-        holder.dengji.setText(list.get(position).getOperationType()+"");
-        String dateToString = getDateToString(String.valueOf(list.get(position).getCreateTime() / 1000));
-        holder.da_zan.setText(dateToString);
+        holder.dengji.setText(list.get(position).getUserLevel());
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String end = sf.format(date);
+        String fb = MyUtils.stampToDate(list.get(position).getCreateTime()+"");
+
+        String time = MyUtils.dateDiff(fb, end, "yyyy-MM-dd HH:mm:ss",list.get(position).getCreateTime()+"");
+        holder.da_zan.setText(time);
         holder.text_username.setText("评论："+list.get(position).getContent());
         int objType = list.get(position).getObjType();
         if(objType==0){
@@ -79,31 +87,44 @@ public class Commentadapter extends RecyclerView.Adapter<Commentadapter.Myviewho
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=null;
-                if(datasBean.objType==0){//原贴
-                    intent= new Intent(context, JiaoDetailActivity.class);
-                    Log.e("TAG","datasBean.getSponsorId()=="+datasBean.getSponsorId());
-                    intent.putExtra("id",datasBean.getSponsorId()+"");
-                }else if (datasBean.objType==1){//拍客
-                    intent= new Intent(context, VideoActivity.class);
 
-                    PaiKeInfo paiKeInfo = new PaiKeInfo();
-                    paiKeInfo.id=list.get(position).getObjId()+"";
-                    intent.putExtra("pk",paiKeInfo);
+
+                if(NetUtil.checkNet(context)){
+                    Intent intent=null;
+                    if(datasBean.objType==0){//原贴
+                        intent= new Intent(context, JiaoDetailActivity.class);
+                        Log.e("TAG","datasBean.getSponsorId()=="+datasBean.getSponsorId());
+                        intent.putExtra("id",datasBean.getObjId()+"");
+                    }else if (datasBean.objType==1){//拍客
+                        intent= new Intent(context, VideoActivity.class);
+
+                        PaiKeInfo paiKeInfo = new PaiKeInfo();
+                        paiKeInfo.pkid=list.get(position).getObjId()+"";
+                        intent.putExtra("pk",paiKeInfo);
+
+                    }
+                    context.startActivity(intent);
+                }else{
+
+                    context.startActivity(new Intent(context, DisconnectActivity.class));
 
                 }
 
-
-                context.startActivity(intent);
             }
         });
         holder.img_tou.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, MydynamicActivity.class);
-                Log.e("TAG","列表："+list.get(position).getUserId());
-                intent.putExtra("uid",list.get(position).getUserId()+"");
-                context.startActivity(intent);
+
+                if(NetUtil.checkNet(context)){
+                    Intent intent = new Intent(context, MydynamicActivity.class);
+                    Log.e("TAG","列表："+list.get(position).getUserId());
+                    intent.putExtra("uid",list.get(position).getSponsorId()+"");
+                    context.startActivity(intent);
+                }else{
+                    context.startActivity(new Intent(context, DisconnectActivity.class));
+                }
+
             }
         });
 

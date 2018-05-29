@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+
+    <dbname value="zhyj" ></dbname>
+
+    <version value="1" ></version>
+    <list>
+        <mapping class="www.diandianxing.com.diandianxing.bean.TuijianTable"></mapping>
+        <mapping class="www.diandianxing.com.diandianxing.bean.GuanZhuTable"></mapping>
+        <mapping class="www.diandianxing.com.diandianxing.bean.PKdetailsTable"></mapping>
+        <mapping class="www.diandianxing.com.diandianxing.bean.ZixunTable"></mapping>
+        <mapping class="www.diandianxing.com.diandianxing.bean.LunBoTable"></mapping>
+        <mapping class="www.diandianxing.com.diandianxing.bean.HomeMsgTable"></mapping>
+        <mapping class="www.diandianxing.com.diandianxing.bean.HomeMsgOneTable"></mapping>
+        <mapping class="www.diandianxing.com.diandianxing.bean.UserTable"></mapping>
+    </list>
+</litepal>

@@ -180,10 +180,10 @@ public class MsgItmeActivity extends AppCompatActivity implements View.OnClickLi
     private void networkdelete(int id) {
 
         HttpParams params = new HttpParams();
-        params.put("id", id);
+        params.put("msgId", id);
         params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
-        OkGo.<String>post(Api.BASE_URL +"app/information/deleteCommentOrZan")
+        OkGo.<String>post(Api.BASE_URL +"app/home/msgDelete")
                 .tag(this)
                 .params(params)
                 .execute(new StringCallback() {

@@ -18,6 +18,7 @@ public class PingLunInfo {
     public String objType;
     public String nickName;
     public String pic;
+    public String userLevel;
     public List<CustomReplayList> customReplayLists;
 
 }

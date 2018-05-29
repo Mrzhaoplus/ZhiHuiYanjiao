@@ -18,14 +18,19 @@ import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.DisconnectActivity;
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.ShujuBean.Shanchu_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Zan_msg_Bean;
 import www.diandianxing.com.diandianxing.adapter.Commentadapter;
 import www.diandianxing.com.diandianxing.adapter.Praiseadapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
+import www.diandianxing.com.diandianxing.bean.HomeMsgTable;
 import www.diandianxing.com.diandianxing.interfase.Shanchu_presenter_interfase;
 import www.diandianxing.com.diandianxing.interfase.Zan_msg_presenter_interfase;
 import www.diandianxing.com.diandianxing.presenter.Shanchu_presenter;
@@ -71,11 +76,37 @@ public class Praisefragment extends BaseFragment implements Zan_msg_presenter_in
         getActivity().registerReceiver(broadcastReceiver,intentFilter);
         praise_recycle = contentView.findViewById(R.id.praise_recycle);
         spring_view = contentView.findViewById(R.id.spring_view);
+        Log.e("TAG","token值==="+SpUtils.getString(getActivity(),"token",null));
         if(NetUtil.checkNet(getActivity())){
             //获取引用
             zan_msg_presenter.getpath(SpUtils.getString(getActivity(),"token",null),1,pageNo);
         }else{
             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+
+            List<HomeMsgTable> mlist = new ArrayList<>();
+
+            mlist.addAll(DataSupport.findAll(HomeMsgTable.class));
+
+            for(int i=0;i<mlist.size();i++){
+
+                Zan_msg_Bean.DatasBean datasBean = new Zan_msg_Bean.DatasBean();
+                HomeMsgTable homeMsgTable = mlist.get(i);
+                datasBean.setId(homeMsgTable.hsid);
+                datasBean.setUserId(homeMsgTable.userId);
+                datasBean.setSponsorId(homeMsgTable.sponsorId);
+                datasBean.setTitle(homeMsgTable.title);
+                datasBean.setObjId(homeMsgTable.objId);
+                datasBean.setContent(homeMsgTable.content);
+                datasBean.setCreateTime(homeMsgTable.createTime);
+                datasBean.setObjType(homeMsgTable.objType);
+                datasBean.setIsDeleted(homeMsgTable.isDeleted);
+                datasBean.setOperationType(homeMsgTable.operationType);
+                datasBean.setNickName(homeMsgTable.nickName);
+                datasBean.setPic(homeMsgTable.pic);
+                datasBean.setUserLevel(homeMsgTable.userLevel);
+                list.add(datasBean);
+
+            }
         }
 
 
@@ -84,8 +115,6 @@ public class Praisefragment extends BaseFragment implements Zan_msg_presenter_in
         praise_recycle.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         praise_recycle.setAdapter(praiseadapter);
         praise_recycle.setNestedScrollingEnabled(false);
-
-
 
         spring_view.setType(SpringView.Type.FOLLOW);
         spring_view.setListener(new SpringView.OnFreshListener() {
@@ -101,6 +130,32 @@ public class Praisefragment extends BaseFragment implements Zan_msg_presenter_in
                             zan_msg_presenter.getpath(SpUtils.getString(getActivity(),"token",null),1,pageNo);
                         }else{
                             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+
+                            List<HomeMsgTable> mlist = new ArrayList<>();
+
+                            mlist.addAll(DataSupport.findAll(HomeMsgTable.class));
+
+                            for(int i=0;i<mlist.size();i++){
+
+                                Zan_msg_Bean.DatasBean datasBean = new Zan_msg_Bean.DatasBean();
+                                HomeMsgTable homeMsgTable = mlist.get(i);
+                                datasBean.setId(homeMsgTable.hsid);
+                                datasBean.setUserId(homeMsgTable.userId);
+                                datasBean.setSponsorId(homeMsgTable.sponsorId);
+                                datasBean.setTitle(homeMsgTable.title);
+                                datasBean.setObjId(homeMsgTable.objId);
+                                datasBean.setContent(homeMsgTable.content);
+                                datasBean.setCreateTime(homeMsgTable.createTime);
+                                datasBean.setObjType(homeMsgTable.objType);
+                                datasBean.setIsDeleted(homeMsgTable.isDeleted);
+                                datasBean.setOperationType(homeMsgTable.operationType);
+                                datasBean.setNickName(homeMsgTable.nickName);
+                                datasBean.setPic(homeMsgTable.pic);
+                                datasBean.setUserLevel(homeMsgTable.userLevel);
+                                list.add(datasBean);
+
+                            }
+
                         }
 
                         praiseadapter.notifyDataSetChanged();
@@ -120,6 +175,31 @@ public class Praisefragment extends BaseFragment implements Zan_msg_presenter_in
                             zan_msg_presenter.getpath(SpUtils.getString(getActivity(),"token",null),1,pageNo);
                         }else{
                             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                            list.clear();
+                            List<HomeMsgTable> mlist = new ArrayList<>();
+
+                            mlist.addAll(DataSupport.findAll(HomeMsgTable.class));
+
+                            for(int i=0;i<mlist.size();i++){
+
+                                Zan_msg_Bean.DatasBean datasBean = new Zan_msg_Bean.DatasBean();
+                                HomeMsgTable homeMsgTable = mlist.get(i);
+                                datasBean.setId(homeMsgTable.hsid);
+                                datasBean.setUserId(homeMsgTable.userId);
+                                datasBean.setSponsorId(homeMsgTable.sponsorId);
+                                datasBean.setTitle(homeMsgTable.title);
+                                datasBean.setObjId(homeMsgTable.objId);
+                                datasBean.setContent(homeMsgTable.content);
+                                datasBean.setCreateTime(homeMsgTable.createTime);
+                                datasBean.setObjType(homeMsgTable.objType);
+                                datasBean.setIsDeleted(homeMsgTable.isDeleted);
+                                datasBean.setOperationType(homeMsgTable.operationType);
+                                datasBean.setNickName(homeMsgTable.nickName);
+                                datasBean.setPic(homeMsgTable.pic);
+                                datasBean.setUserLevel(homeMsgTable.userLevel);
+                                list.add(datasBean);
+
+                            }
                         }
 
                         praiseadapter.notifyDataSetChanged();
@@ -149,6 +229,32 @@ public class Praisefragment extends BaseFragment implements Zan_msg_presenter_in
                     zan_msg_presenter.getpath(SpUtils.getString(getActivity(),"token",null),1,pageNo);
                 }else{
                     Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+
+                    List<HomeMsgTable> mlist = new ArrayList<>();
+
+                    mlist.addAll(DataSupport.findAll(HomeMsgTable.class));
+
+                    for(int i=0;i<mlist.size();i++){
+
+                        Zan_msg_Bean.DatasBean datasBean = new Zan_msg_Bean.DatasBean();
+                        HomeMsgTable homeMsgTable = mlist.get(i);
+                        datasBean.setId(homeMsgTable.hsid);
+                        datasBean.setUserId(homeMsgTable.userId);
+                        datasBean.setSponsorId(homeMsgTable.sponsorId);
+                        datasBean.setTitle(homeMsgTable.title);
+                        datasBean.setObjId(homeMsgTable.objId);
+                        datasBean.setContent(homeMsgTable.content);
+                        datasBean.setCreateTime(homeMsgTable.createTime);
+                        datasBean.setObjType(homeMsgTable.objType);
+                        datasBean.setIsDeleted(homeMsgTable.isDeleted);
+                        datasBean.setOperationType(homeMsgTable.operationType);
+                        datasBean.setNickName(homeMsgTable.nickName);
+                        datasBean.setPic(homeMsgTable.pic);
+                        datasBean.setUserLevel(homeMsgTable.userLevel);
+                        list.add(datasBean);
+
+                    }
+
                 }
 
                 praiseadapter.notifyDataSetChanged();
@@ -229,16 +335,63 @@ public class Praisefragment extends BaseFragment implements Zan_msg_presenter_in
     public void getsuccess(Zan_msg_Bean zan) {
         if(zan.getCode().equals("200")){
             List<Zan_msg_Bean.DatasBean> datas = zan.getDatas();
+
+            List<HomeMsgTable> mlist = new ArrayList<>();
+            for(int i=0;i<datas.size();i++){
+
+                Zan_msg_Bean.DatasBean datasBean = datas.get(i);
+                HomeMsgTable homeMsgTable = new HomeMsgTable();
+                homeMsgTable.hsid=datasBean.getId();
+                homeMsgTable.userId=datasBean.getUserId();
+                homeMsgTable.sponsorId=datasBean.getSponsorId();
+                homeMsgTable.title=datasBean.getTitle();
+                homeMsgTable.objId=datasBean.getObjId();
+                homeMsgTable.content=datasBean.getContent();
+                homeMsgTable.createTime=datasBean.getCreateTime();
+                homeMsgTable.objType=datasBean.getObjType();
+                homeMsgTable.isDeleted=datasBean.getIsDeleted();
+                homeMsgTable.operationType=datasBean.getOperationType();
+                homeMsgTable.nickName=datasBean.getNickName();
+                homeMsgTable.pic=datasBean.getPic();
+                homeMsgTable.userLevel=datasBean.getUserLevel();
+                mlist.add(homeMsgTable);
+            }
             if(pageNo>1){
                 if(datas.size()>0){
+                    DataSupport.saveAll(mlist);
                     list.addAll(datas);
                 }else{
                     Toast.makeText(getActivity(),Api.TOAST,Toast.LENGTH_SHORT).show();
                 }
             }else{
+
+                DataSupport.deleteAll(HomeMsgTable.class);
+
                 list.addAll(datas);
+
+                DataSupport.saveAll(mlist);
+
             }
             praiseadapter.notifyDataSetChanged();
+
+        }else if(zan.getCode().equals("201")){
+
+            if(NetUtil.checkNet(getActivity())){
+                startActivity(new Intent(getActivity(),LoginActivity.class));
+                SpUtils.putInt(getActivity(), "guid", 1);
+                Intent qh = new Intent();
+                qh.setAction(GlobalParams.DL_QH);
+                getActivity().sendBroadcast(qh);
+
+                Intent sx = new Intent();
+                sx.setAction(GlobalParams.GZ);
+                getActivity().sendBroadcast(sx);
+            }else{
+
+                startActivity(new Intent(getActivity(), DisconnectActivity.class));
+
+            }
+
 
         }
     }
@@ -248,7 +401,23 @@ public class Praisefragment extends BaseFragment implements Zan_msg_presenter_in
         if(shanchu_bean.getCode().equals("200")){
             list.remove(postion);
         }else if(shanchu_bean.getCode().equals("201")){
-            ToastUtils.showShort(getActivity(),shanchu_bean.getMsg());
+
+            if(NetUtil.checkNet(getActivity())){
+                startActivity(new Intent(getActivity(),LoginActivity.class));
+                SpUtils.putInt(getActivity(), "guid", 1);
+                Intent qh = new Intent();
+                qh.setAction(GlobalParams.DL_QH);
+                getActivity().sendBroadcast(qh);
+                Intent sx = new Intent();
+                sx.setAction(GlobalParams.GZ);
+                getActivity().sendBroadcast(sx);
+
+            }else{
+
+                startActivity(new Intent(getActivity(), DisconnectActivity.class));
+
+            }
+
         }else if(shanchu_bean.getCode().equals("203")){
             ToastUtils.showShort(getActivity(),shanchu_bean.getMsg());
         }

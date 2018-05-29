@@ -148,6 +148,7 @@ public class JieshuActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onSuccess(Shouyebean result, String tag) throws RemoteException {
                 Intent intent=new Intent(JieshuActivity.this,JourdetailActivity.class);
+                intent.putExtra("xicheng","xing");
                 startActivity(intent);
                 finish();
 

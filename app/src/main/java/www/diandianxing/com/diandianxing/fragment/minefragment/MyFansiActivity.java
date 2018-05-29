@@ -1,6 +1,9 @@
 package www.diandianxing.com.diandianxing.fragment.minefragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -11,6 +14,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,11 +27,14 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
+import www.diandianxing.com.diandianxing.MainActivity;
 import www.diandianxing.com.diandianxing.ShujuBean.Fensi_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.User_guanzhu_Bean;
 import www.diandianxing.com.diandianxing.adapter.MyFansadapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.bean.Event_coll_size;
+import www.diandianxing.com.diandianxing.fragment.MessageFragment;
 import www.diandianxing.com.diandianxing.interfase.FenSi_presenter_interfase;
 import www.diandianxing.com.diandianxing.interfase.GZ_state;
 import www.diandianxing.com.diandianxing.interfase.Userguanzhu_presenter_interfase;
@@ -37,6 +44,7 @@ import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.SpUtils;
@@ -65,17 +73,22 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void getsuccess(int postion, int state, int userid) {
-       this.postion=postion;
-       this.state=state;
-       this.userid=userid;
-        if(NetUtil.checkNet(MyFansiActivity.this)){
-            //获取引用
-            user_guanzhu_presenter.getpath(SpUtils.getString(this,"token",null),userid);
+
+        int guid = SpUtils.getInt(MyFansiActivity.this, "guid", 0);
+
+        if(guid!=2){
+            startActivity(new Intent(MyFansiActivity.this,LoginActivity.class));
         }else{
-            Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+            this.postion=postion;
+            this.state=state;
+            this.userid=userid;
+            if(NetUtil.checkNet(MyFansiActivity.this)){
+                //获取引用
+                user_guanzhu_presenter.getpath(SpUtils.getString(this,"token",null),userid);
+            }else{
+                Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+            }
         }
-
-
     }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,6 +99,10 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(GlobalParams.LOGING_SX);
+        intentFilter.addAction(GlobalParams.GZ);
+        registerReceiver(broadcastReceiver,intentFilter);
         uid = getIntent().getStringExtra("uid");
         include_back = (ImageView) findViewById(R.id.include_back);
         include_title = (TextView) findViewById(R.id.include_title);
@@ -93,15 +110,20 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
         liner = (LinearLayout) findViewById(R.id.liner);
         spring_view = (SpringView) findViewById(R.id.spring_view);
 
+
           //引用
         if(NetUtil.checkNet(MyFansiActivity.this)){
             //获取引用
-            fensi_presenter.getpath(pageNo,uid, SpUtils.getString(this,"token",null));
+            fensi_presenter.getpath(pageNo,SpUtils.getString(this,"userid",null),uid);
         }else{
             Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
         }
 
-        include_title.setText("我的粉丝");
+
+        Log.e("TAG","uid=="+uid);
+        Log.e("TAG","Myuid=="+SpUtils.getString(this,"userid",null));
+
+        include_title.setText("粉丝");
         include_back.setOnClickListener(this);
         //设置适配器
         //设置模式
@@ -134,7 +156,7 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
                         pageNo=1;
                         if(NetUtil.checkNet(MyFansiActivity.this)){
                             //获取引用
-                            fensi_presenter.getpath(pageNo,uid, SpUtils.getString(MyFansiActivity.this,"token",null));
+                            fensi_presenter.getpath(pageNo,SpUtils.getString(MyFansiActivity.this,"userid",null),uid);
                         }else{
                             Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                         }
@@ -152,7 +174,7 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
                         pageNo++;
                         if(NetUtil.checkNet(MyFansiActivity.this)){
                             //获取引用
-                            fensi_presenter.getpath(pageNo,uid, SpUtils.getString(MyFansiActivity.this,"token",null));
+                            fensi_presenter.getpath(pageNo,SpUtils.getString(MyFansiActivity.this,"userid",null),uid);
                         }else{
                             Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                         }
@@ -177,6 +199,41 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+
+            if(GlobalParams.LOGING_SX.equals(action)){
+
+                list.clear();
+                pageNo=1;
+                if(NetUtil.checkNet(MyFansiActivity.this)){
+                    //获取引用
+                    fensi_presenter.getpath(pageNo,SpUtils.getString(MyFansiActivity.this,"userid",null),uid);
+                }else{
+                    Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+                myFansadapter.notifyDataSetChanged();
+
+            }else if(GlobalParams.GZ.equals(action)){
+
+                list.clear();
+                pageNo=1;
+                if(NetUtil.checkNet(MyFansiActivity.this)){
+                    //获取引用
+                    fensi_presenter.getpath(pageNo,SpUtils.getString(MyFansiActivity.this,"userid",null),uid);
+                }else{
+                    Toast.makeText(MyFansiActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+                myFansadapter.notifyDataSetChanged();
+
+            }
+
+        }
+    };
+
     @Override
     public void getsuccess(Fensi_Bean guanzhu) {
           if(guanzhu.getCode().equals("200")){
@@ -191,6 +248,10 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
                   list.addAll(datas);
               }
               myFansadapter.notifyDataSetChanged();
+          }else if(guanzhu.getCode().equals("201")){
+              startActivity(new Intent(MyFansiActivity.this,LoginActivity.class));
+              SpUtils.putInt(MyFansiActivity.this, "guid", 1);
+              finish();
           }
     }
 
@@ -199,8 +260,14 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
     public void getsuccess(User_guanzhu_Bean user_guanzhu_bean) {
         if(user_guanzhu_bean.getCode().equals("200")){
             shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+            Intent intent = new Intent();
+            intent.setAction(GlobalParams.GZ);
+            sendBroadcast(intent);
+
         }else if(user_guanzhu_bean.getCode().equals("201")){
-            ToastUtils.showShort(MyFansiActivity.this,user_guanzhu_bean.getMsg());
+                startActivity(new Intent(MyFansiActivity.this,LoginActivity.class));
+                SpUtils.putInt(MyFansiActivity.this, "guid", 1);
+                finish();
         }else if(user_guanzhu_bean.getCode().equals("203")){
             ToastUtils.showShort(MyFansiActivity.this,user_guanzhu_bean.getMsg());
         }else if(user_guanzhu_bean.getCode().equals("500")){
@@ -251,5 +318,6 @@ public class MyFansiActivity extends BaseActivity implements View.OnClickListene
         fensi_presenter.getkong();
         user_guanzhu_presenter.getkong();
         EventBus.getDefault().postSticky(new Event_coll_size(2,list.size()));
+        unregisterReceiver(broadcastReceiver);
     }
 }

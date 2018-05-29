@@ -20,19 +20,34 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.compress.Luban;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Response;
+import com.umeng.socialize.UMShareAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import www.diandianxing.com.diandianxing.DisconnectActivity;
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
+import www.diandianxing.com.diandianxing.MainActivity;
 import www.diandianxing.com.diandianxing.MyCollectionActivity;
 import www.diandianxing.com.diandianxing.ReleaseShootoffVidoActivity;
 import www.diandianxing.com.diandianxing.SignActivity;
@@ -42,6 +57,7 @@ import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.bean.UserInfo;
 import www.diandianxing.com.diandianxing.bean.UserMsg1;
 import www.diandianxing.com.diandianxing.bean.UserMsg2;
+import www.diandianxing.com.diandianxing.bean.UserTable;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MyFansiActivity;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MyFllowActivity;
 import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
@@ -95,6 +111,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     private TextView tv_zy_dj;
     private ImageView iv_bg_my;
     private boolean flag=true;
+    private List<LocalMedia> selectList = new ArrayList<>();
+    private String cutPath;
+    private File file;
     @Override
     protected int setContentView() {
 
@@ -105,10 +124,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     protected void lazyLoad() {
         View contentView = getContentView();
         EventBus.getDefault().register(this);
-
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(GlobalParams.TOU_SX);
         intentFilter.addAction(GlobalParams.LOGING_SX);
+        intentFilter.addAction(GlobalParams.DONGTAI_SX);
+        intentFilter.addAction(GlobalParams.GZ);
         getActivity().registerReceiver(broadcastReceiver,intentFilter);
 
         this.text_day = (TextView) contentView.findViewById(R.id.text_day);
@@ -142,6 +162,48 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
             network();
         }else{
             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+
+            List<UserTable> all = DataSupport.findAll(UserTable.class);
+
+            if(all!=null&&all.size()>0){
+
+                UserTable userTable = all.get(0);
+                guan_num.setText(userTable.gznum);
+                fen_num.setText(userTable.fsnum);
+                dong_num.setText(userTable.dtNum);
+                collect_num.setText(userTable.scnum);
+                text_day.setText("加入我们"+userTable.days+"天");
+                if(userTable.pic.length()>0){
+
+
+                    RequestOptions options = new RequestOptions()
+                            .bitmapTransform(new CircleCrop())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL);
+
+                    Glide.with(getActivity()).load(userTable.pic).apply(options).into(iv_grtx);
+                }
+
+
+
+                tv_zy_name.setText(userTable.nickname);
+                tv_zy_dj.setText(userTable.userLevel);
+
+                if(Integer.parseInt(userTable.userSex)==0){//男
+
+                    iv_sex.setImageResource(R.drawable.icon_boy);
+
+                }else{
+
+                    iv_sex.setImageResource(R.drawable.icon_girl);
+
+                }
+
+                Glide.with(getActivity()).load(userTable.imageurl).into(iv_bg_my);
+
+            }
+
+
+
         }
         text_guanzhu.setOnClickListener(this);//设置监听
         text_fensi.setOnClickListener(this);
@@ -155,7 +217,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         real_kefu.setOnClickListener(this);
         real_yaoqing.setOnClickListener(this);
         iv_sz.setOnClickListener(this);
-
+        iv_bg_my.setOnClickListener(this);
         //注册eventbus
         /*if(flag){
             //注册
@@ -168,96 +230,118 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void XXX(EventMessage messageEvent) {
-//        Drawable fromPath = Drawable.createFromPath(messageEvent.getMsg());
-//        iv_bg_my.setImageDrawable(fromPath);
+        if(messageEvent.getMsg().length()>0){
+            Log.e("TAG","北京图ssssssssss");
+            Drawable fromPath = Drawable.createFromPath(messageEvent.getMsg());
+            iv_bg_my.setImageDrawable(fromPath);
+        }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void fff(Event_coll_size msg) {
         int state = msg.getState();
         int size = msg.getSize();
         if(state==3){
-            collect_num.setText(size+"");
+            network();
         }else if(state==2){
-            fen_num.setText(size+"");
+//            fen_num.setText(size+"");
+            network();
         }else if(state==1){
-            guan_num.setText(size+"");
+//            guan_num.setText(size+"");
+            network();
         }else if(state==4){
             network();
         }
-
-
     }
 
 
     @Override
     public void onClick(View view) {
 
-         switch (view.getId()){
-             case R.id.text_guanzhu://关注
-                 Intent intent=new Intent(getActivity(), MyFllowActivity.class);
-                 startActivity(intent);
-                 break;
 
-             case R.id.text_fensi://粉丝
-                 Intent intent1=new Intent(getActivity(), MyFansiActivity.class);
-                 intent1.putExtra("uid", SpUtils.getString(getActivity(),"token",null));
-                 startActivity(intent1);
-                 break;
-             case R.id.text_dongtai:
-                 if(userInfo!=null){
-                     Intent intent2=new Intent(getActivity(), MydynamicActivity.class);
-                     intent2.putExtra("title","我的主页");
-                     intent2.putExtra("userInfo",userInfo);
-                     startActivity(intent2);
-                 }
-                 break;
-             case R.id.text_collect:
-                 Intent intent3=new Intent(getActivity(), MyCollectionActivity.class);
-                 startActivity(intent3);
-                 break;
-             case R.id.text_qiandao:
-                 Intent intent4=new Intent(getActivity(), SignActivity.class);
-                 startActivity(intent4);
-                 break;
-             case R.id.iv_grtx:
-                if(userInfo!=null){
-                         Intent intent5=new Intent(getActivity(), MydynamicActivity.class);
-                         intent5.putExtra("title","我的主页");
-                    intent5.putExtra("userInfo",userInfo);
-                         startActivity(intent5);
-                }
-                 break;
-             case R.id.real_car:
-                 Intent intent6=new Intent(getActivity(),JourActivity.class);
-                 startActivity(intent6);
-                 break;
-             case R.id.about_we:
-                 Intent gy=new Intent(getActivity(),AboutweActivity.class);
-                 startActivity(gy);
-                 break;
-             //意见反馈
-             case R.id.real_suggest:
-                 Intent yjfk=new Intent(getActivity(),Feedback.class);
-                 startActivity(yjfk);
-                 break;
-             case R.id.real_kefu:
+        if(NetUtil.checkNet(getActivity())){
 
-                 networkmoney();
+            switch (view.getId()){
+                case R.id.text_guanzhu://关注
+                    Intent intent=new Intent(getActivity(), MyFllowActivity.class);
+                    intent.putExtra("title","我的主页");
+                    intent.putExtra("uid", SpUtils.getString(getActivity(),"userid",null));
+                    startActivity(intent);
+                    break;
+
+                case R.id.text_fensi://粉丝
+                    Intent intent1=new Intent(getActivity(), MyFansiActivity.class);
+                    intent1.putExtra("uid", SpUtils.getString(getActivity(),"userid",null));
+                    startActivity(intent1);
+                    break;
+                case R.id.text_dongtai:
+                    if(userInfo!=null){
+                        Intent intent2=new Intent(getActivity(), MydynamicActivity.class);
+                        intent2.putExtra("title","我的主页");
+                        intent2.putExtra("userInfo",userInfo);
+                        startActivity(intent2);
+                    }
+                    break;
+                case R.id.text_collect:
+                    Intent intent3=new Intent(getActivity(), MyCollectionActivity.class);
+                    startActivity(intent3);
+                    break;
+                case R.id.text_qiandao:
+                    Intent intent4=new Intent(getActivity(), SignActivity.class);
+                    startActivity(intent4);
+                    break;
+                case R.id.iv_grtx:
+                    if(userInfo!=null){
+                        Intent intent5=new Intent(getActivity(), MydynamicActivity.class);
+                        intent5.putExtra("title","我的主页");
+                        intent5.putExtra("userInfo",userInfo);
+                        startActivity(intent5);
+                    }
+                    break;
+                case R.id.real_car:
+                    Intent intent6=new Intent(getActivity(),JourActivity.class);
+                    startActivity(intent6);
+                    break;
+                case R.id.about_we:
+                    Intent gy=new Intent(getActivity(),AboutweActivity.class);
+                    startActivity(gy);
+                    break;
+                //意见反馈
+                case R.id.real_suggest:
+                    Intent yjfk=new Intent(getActivity(),Feedback.class);
+                    startActivity(yjfk);
+                    break;
+                case R.id.real_kefu:
+
+                    networkmoney();
 
 
-                 break;
-             case R.id.real_yaoqing:
-                 Intent fx=new Intent(getActivity(),ShareActivity.class);
-                 startActivity(fx);
-                 break;
+                    break;
+                case R.id.real_yaoqing:
+                    Intent fx=new Intent(getActivity(),ShareActivity.class);
+                    startActivity(fx);
+                    break;
 
-             //设置
-             case R.id.iv_sz:
-                 Intent sz=new Intent(getActivity(), SetActivity.class);
-                 startActivity(sz);
-                 break;
+                //设置
+                case R.id.iv_sz:
+                    Intent sz=new Intent(getActivity(), SetActivity.class);
+                    startActivity(sz);
+                    break;
 
-         }
+                case R.id.iv_bg_my:
+
+                    showphotoDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion);
+
+                    break;
+
+            }
+
+        }else{
+
+            startActivity(new Intent(getActivity(), DisconnectActivity.class));
+
+        }
+
+
 
     }
 
@@ -282,7 +366,23 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                                 showphotoDialog(Gravity.BOTTOM,R.style.Bottom_Top_aniamtion,tel);
 
 
-                            } else {
+                            } else if(code==201){
+
+                                if(NetUtil.checkNet(getActivity())){
+                                    startActivity(new Intent(getActivity(),LoginActivity.class));
+
+                                    SpUtils.putInt(getActivity(), "guid", 1);
+
+                                    Intent qh = new Intent();
+                                    qh.setAction(GlobalParams.DL_QH);
+                                    getActivity().sendBroadcast(qh);
+                                }else{
+
+                                    startActivity(new Intent(getActivity(), DisconnectActivity.class));
+
+                                }
+
+                            }else {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -308,6 +408,241 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 //            }
 //        });
 //    }
+    }
+
+    private BaseDialog dialog,jzdialog;
+    private void showphotoDialog(int grary, int animationStyle) {
+        BaseDialog.Builder builder = new BaseDialog.Builder(getActivity());
+        //设置dialogpadding
+//设置显示位置
+//设置动画
+//设置dialog的宽高
+//设置触摸dialog外围是否关闭
+//设置监听事件
+        dialog = builder.setViewId(R.layout.dialog_photo)
+                //设置dialogpadding
+                .setPaddingdp(0, 0, 0, 0)
+                //设置显示位置
+                .setGravity(grary)
+                //设置动画
+                .setAnimation(animationStyle)
+                //设置dialog的宽高
+                .setWidthHeightpx(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                //设置触摸dialog外围是否关闭
+                .isOnTouchCanceled(true)
+                //设置监听事件
+                .builder();
+        //拍照
+        dialog.getView(R.id.tv_paizhao).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //相机选取
+                requestCamera();
+                dialog.dismiss();
+
+            }
+        });
+        //相册
+        dialog.getView(R.id.tv_local).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //相册选取
+                requestPhoto();
+                dialog.dismiss();
+
+            }
+        });
+        //取消
+        dialog.getView(R.id.tv_pause).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+
+    /*
+     调用相册
+    */
+    private void requestPhoto() {
+        // 进入相册 以下是例子：不需要的api可以不写
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofImage())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
+                .theme(R.style.picture_default_style1)// 主题样式设置 具体参考 values/styles   用法：R.style.picture.white.style
+                .maxSelectNum(1)// 最大图片选择数量
+                .minSelectNum(1)// 最小选择数量
+                .imageSpanCount(4)// 每行显示个数
+                .selectionMode(PictureConfig.SINGLE)// 多选 or 单选 PictureConfig.SINGLE
+                .previewImage(true)// 是否可预览图片
+                .previewVideo(false)// 是否可预览视频
+                .enablePreviewAudio(false) // 是否可播放音频
+                .compressGrade(Luban.THIRD_GEAR)// luban压缩档次，默认3档 Luban.FIRST_GEAR、Luban.CUSTOM_GEAR
+                .isCamera(true)// 是否显示拍照按钮
+                .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
+                //.setOutputCameraPath("/CustomPath")// 自定义拍照保存路径
+                .enableCrop(true)// 是否裁剪
+                .compress(true)// 是否压缩
+                .compressMode(PictureConfig.SYSTEM_COMPRESS_MODE)//系统自带 or 鲁班压缩 PictureConfig.SYSTEM_COMPRESS_MODE or LUBAN_COMPRESS_MODE
+                //.sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
+                .glideOverride(200, 200)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
+//                .withAspectRatio(aspect_ratio_x, aspect_ratio_y)// 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
+                .hideBottomControls(true)// 是否显示uCrop工具栏，默认不显示
+                .isGif(false)// 是否显示gif图片
+                .freeStyleCropEnabled(true)// 裁剪框是否可拖拽
+                .circleDimmedLayer(true)// 是否圆形裁剪
+                .showCropFrame(false)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false
+                .showCropGrid(false)// 是否显示裁剪矩形网格 圆形裁剪时建议设为false
+                .openClickSound(false)// 是否开启点击声音
+//                .selectionMedia(list)// 是否传入已选图片
+//                        .videoMaxSecond(15)
+//                        .videoMinSecond(10)
+                //.previewEggs(false)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中)
+                //.cropCompressQuality(90)// 裁剪压缩质量 默认100
+                //.compressMaxKB()//压缩最大值kb compressGrade()为Luban.CUSTOM_GEAR有效
+                //.compressWH() // 压缩宽高比 compressGrade()为Luban.CUSTOM_GEAR有效
+                //.cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效
+                //.rotateEnabled() // 裁剪是否可旋转图片
+                .scaleEnabled(false)// 裁剪是否可放大缩小图片
+                //.videoQuality()// 视频录制质量 0 or 1
+                //.videoSecond()//显示多少秒以内的视频or音频也可适用
+                //.recordVideoSecond()//录制视频秒数 默认60s
+                .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
+    }
+    /*
+      调用相机
+     */
+    private void requestCamera() {
+        PictureSelector.create(this)
+                .openCamera(PictureMimeType.ofImage())// 单独拍照，也可录像或也可音频 看你传入的类型是图片or视频
+                .theme(R.style.picture_default_style)// 主题样式设置 具体参考 values/styles
+                .enableCrop(true)// 是否裁剪
+                .compress(true)// 是否压缩
+                .compressMode(PictureConfig.SYSTEM_COMPRESS_MODE)//系统自带 or 鲁班压缩 PictureConfig.SYSTEM_COMPRESS_MODE or LUBAN_COMPRESS_MODE
+                .freeStyleCropEnabled(true)// 裁剪框是否可拖拽
+                .circleDimmedLayer(true)// 是否圆形裁剪
+                .showCropFrame(false)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false
+                .showCropGrid(false)// 是否显示裁剪矩形网格 圆形裁剪时建议设为false
+                .scaleEnabled(false)// 裁剪是否可放大缩小图片
+                .glideOverride(160, 160)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
+//                .selectionMedia(list)// 是否传入已选图片
+//                .previewEggs(true)//预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中)
+                .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == getActivity().RESULT_OK) {
+            switch (requestCode) {
+                case PictureConfig.CHOOSE_REQUEST:
+                    // 图片选择结果回调
+                    selectList = PictureSelector.obtainMultipleResult(data);
+                    cutPath = selectList.get(0).getCutPath();
+                    file = new File(cutPath);
+                    Log.d("TAg",cutPath);
+                    shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+
+
+                    networkImg();
+//                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    /*
+                       质量压缩
+                     */
+//                    FileOutputStream baos = null;
+//                    try {
+//
+//                        baos = new FileOutputStream(filess);
+//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 2, baos);
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+//                    list.clear();
+//                    list.add(cutPath);
+//                    photoworks();
+                    break;
+            }
+        }
+
+    }
+
+    /*
+* 对话框
+* */
+    private void shumaDialog(int grary, int animationStyle) {
+        BaseDialog.Builder builder = new BaseDialog.Builder(getActivity());
+        jzdialog = builder.setViewId(R.layout.view_tips_loading)
+                //设置dialogpadding
+                .setPaddingdp(0, 10, 0, 10)
+                //设置显示位置
+                .setGravity(grary)
+                //设置动画
+                .setAnimation(animationStyle)
+                //设置dialog的宽高
+                .setWidthHeightpx(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                //设置触摸dialog外围是否关闭
+                .isOnTouchCanceled(false)
+                //设置监听事件
+                .builder();
+        jzdialog.show();
+        TextView tips_loading_msg = jzdialog.getView(R.id.tips_loading_msg);
+        tips_loading_msg.setText("");
+    }
+
+    private void networkImg() {
+        HttpParams params = new HttpParams();
+        params.put("file", file);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
+        OkGo.<String>post(Api.BASE_URL +"app/user/backimagebyuser")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        jzdialog.dismiss();
+                        Log.d("TAG", "上传图片成功：" + body);
+                        try {
+                            JSONObject jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+
+                            if (code == 200) {
+                                Log.e("TAG","北京图aaaaaaaaaaaaaa");
+                                Drawable fromPath = Drawable.createFromPath(cutPath);
+                                iv_bg_my.setImageDrawable(fromPath);
+
+                            } else if(code==201){
+
+                                if(NetUtil.checkNet(getActivity())){
+                                    startActivity(new Intent(getActivity(),LoginActivity.class));
+
+                                    SpUtils.putInt(getActivity(), "guid", 1);
+
+                                    Intent qh = new Intent();
+                                    qh.setAction(GlobalParams.DL_QH);
+                                    getActivity().sendBroadcast(qh);
+                                    Intent sx = new Intent();
+                                    sx.setAction(GlobalParams.GZ);
+                                    getActivity().sendBroadcast(sx);
+                                }else{
+
+                                    startActivity(new Intent(getActivity(), DisconnectActivity.class));
+
+                                }
+
+
+                            }else {
+                                Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
     }
 
     private void showphotoDialog(int grary, int animationStyle, final String tel) {
@@ -338,14 +673,16 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 
                 dialog.dismiss();
                 if(getActivity().checkSelfPermission("android.permission.CALL_PHONE")!= PackageManager.PERMISSION_GRANTED){
-
+                    Log.e("TAG","没权限");
                     requestPermissions(new String[]{Manifest.permission.CALL_PHONE},1);
 
+                }else{
+                    Log.e("TAG","有权限");
+                    Intent dialIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + tel));
+                    //跳转到拨号界面，同时传递电话号码
+                    startActivity(dialIntent);
                 }
 
-                Intent dialIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + tel));
-                //跳转到拨号界面，同时传递电话号码
-                startActivity(dialIntent);
             }
         });
 
@@ -396,8 +733,19 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                 }else{
                     Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
                 }
+            }else if(GlobalParams.DONGTAI_SX.equals(action)){
+                if(NetUtil.checkNet(getActivity())){
+                    network();
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+            }else if(GlobalParams.GZ.equals(action)){
+                if(NetUtil.checkNet(getActivity())){
+                    network();
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
             }
-
         }
     };
 
@@ -407,7 +755,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 
         HttpParams params = new HttpParams();
         params.put("token", SpUtils.getString(getActivity(),"token",null));
-        Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/user/myhome")
                 .tag(this)
                 .params(params)
@@ -420,8 +767,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                         try {
                             jsonobj = new JSONObject(body);
                             int code = jsonobj.getInt("code");
-                            JSONObject datas = jsonobj.getJSONObject("datas");
                             if (code == 200) {
+                                JSONObject datas = jsonobj.getJSONObject("datas");
 
                                 userInfo = new UserInfo();
                                 userInfo.dtNum=datas.getString("dtNum");
@@ -470,15 +817,23 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                                 userInfo.userMsg2.userLevel=jo2.getString("userLevel");
 
 
+                                DataSupport.deleteAll(UserTable.class);
+
+                                UserTable userTable = new UserTable();
 
                                 guan_num.setText(userInfo.gznum);
                                 fen_num.setText(userInfo.fsnum);
                                 dong_num.setText(userInfo.dtNum);
                                 collect_num.setText(userInfo.scnum);
                                 text_day.setText("加入我们"+userInfo.days+"天");
-
                                 if(userInfo.userMsg2.pic.length()>0){
-                                    Glide.with(getActivity()).load(userInfo.userMsg2.pic).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_grtx);
+
+
+                                    RequestOptions options = new RequestOptions()
+                                            .bitmapTransform(new CircleCrop())
+                                            .diskCacheStrategy(DiskCacheStrategy.ALL);
+
+                                    Glide.with(getActivity()).load(userInfo.userMsg2.pic).apply(options).into(iv_grtx);
                                 }
 
 
@@ -496,11 +851,43 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 
                                 }
 
-//                                Glide.with(getActivity()).load(datas.getString("imageurl")).into(iv_bg_my);
+                                Log.e("TAG","北京图888888888888888");
+                                Glide.with(getActivity()).load(datas.getString("imageurl")).into(iv_bg_my);
 
-                            } else {
+                                userTable.gznum=userInfo.gznum;
+                                userTable.fsnum=userInfo.fsnum;
+                                userTable.dtNum=userInfo.dtNum;
+                                userTable.scnum=userInfo.scnum;
+                                userTable.days=userInfo.days;
+                                userTable.pic=userInfo.userMsg2.pic;
+                                userTable.nickname=userInfo.userMsg1.nickname;
+                                userTable.userLevel=userInfo.userMsg2.userLevel;
+                                userTable.userSex=jo2.getString("userSex");
+                                userTable.imageurl=datas.getString("imageurl");
+                                userTable.save();
+
+                            } else if(code==201){
+
+                                if(NetUtil.checkNet(getActivity())){
+                                    startActivity(new Intent(getActivity(),LoginActivity.class));
+
+                                    SpUtils.putInt(getActivity(), "guid", 1);
+
+                                    Intent qh = new Intent();
+                                    qh.setAction(GlobalParams.DL_QH);
+                                    getActivity().sendBroadcast(qh);
+                                }else{
+
+                                    startActivity(new Intent(getActivity(), DisconnectActivity.class));
+
+                                }
+//                                Intent sx = new Intent();
+//                                sx.setAction(GlobalParams.GZ);
+//                                getActivity().sendBroadcast(sx);
+
+
+                            }else {
                                 Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
-
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

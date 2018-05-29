@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 
@@ -24,11 +26,16 @@ import www.diandianxing.com.diandianxing.bean.Info;
 public class TPAdapter1 extends RecyclerView.Adapter<TPAdapter1.ViewHolder> {
     Context context;
     List<String> list;
+
+    boolean iszy;
     public TPAdapter1(Context context,List<String>  list) {
         this.context = context;
         this.list=list;
     }
 
+    public void setZY(boolean iszy){
+        this.iszy=iszy;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -41,6 +48,50 @@ public class TPAdapter1 extends RecyclerView.Adapter<TPAdapter1.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.iv_tp.getLayoutParams();
+        if(iszy){
+
+            if(list.size()==1){
+
+
+                layoutParams.width= RelativeLayout.LayoutParams.MATCH_PARENT;
+
+                layoutParams.height=450;
+
+
+            }else if(list.size()==2){
+
+                layoutParams.height=400;
+                layoutParams.width=400;
+
+            }else
+            {
+                layoutParams.height=280;
+                layoutParams.width=280;
+            }
+
+        }else {
+            if(list.size()==1){
+
+                layoutParams.width= RelativeLayout.LayoutParams.MATCH_PARENT;
+
+                layoutParams.height=450;
+
+
+            }else if(list.size()==2){
+
+                layoutParams.height=440;
+                layoutParams.width=440;
+
+            }
+        }
+
+
+//        layoutParams.leftMargin=10;
+//        layoutParams.rightMargin=10;
+
+
+        holder.iv_tp.setLayoutParams(layoutParams);
 
         Glide.with(context).load(list.get(position)).into(holder.iv_tp);
 

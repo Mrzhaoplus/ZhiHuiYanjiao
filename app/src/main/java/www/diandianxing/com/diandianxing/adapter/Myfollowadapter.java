@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.ShujuBean.GZ_person_Bean;
+import www.diandianxing.com.diandianxing.interfase.GZ_state;
 
 /**
  * Created by ASUS on 2018/3/20.
@@ -27,8 +29,11 @@ import www.diandianxing.com.diandianxing.ShujuBean.GZ_person_Bean;
 public class Myfollowadapter extends RecyclerView.Adapter<Myfollowadapter.MyviewHolder> {
     private OnItemClickLister mOnItemClickListener = null;
        private Context context;
+    private GZ_state state;
     private List<GZ_person_Bean.DatasBean> list=new ArrayList<>();
-
+    public void getstate(GZ_state state){
+        this.state=state;
+    }
     public Myfollowadapter(Context context, List<GZ_person_Bean.DatasBean> list) {
         this.context = context;
         this.list = list;
@@ -36,14 +41,11 @@ public class Myfollowadapter extends RecyclerView.Adapter<Myfollowadapter.Myview
 
     @Override
     public MyviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         MyviewHolder myviewHolder=new MyviewHolder(LayoutInflater.from(context).inflate(R.layout.recycler_itemguanzhu,parent,false));
-
         return myviewHolder;
     }
-
     @Override
-    public void onBindViewHolder( final MyviewHolder holder, int position) {
+    public void onBindViewHolder(final MyviewHolder holder, final int position) {
                  if(mOnItemClickListener!=null){
                      holder.itemView.setOnClickListener(  new View.OnClickListener() {
                          @Override
@@ -56,6 +58,18 @@ public class Myfollowadapter extends RecyclerView.Adapter<Myfollowadapter.Myview
                  }
             holder.text_username.setText(list.get(position).getNickName());
            Glide.with(context).load(list.get(position).getPic()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
+        if(list.get(position).getIsGz()==0){
+            holder.liner_guanzhu.setVisibility(View.VISIBLE);
+        }else if(list.get(position).getIsGz()==1){
+            holder.liner_guanzhu.setVisibility(View.GONE);
+        }
+        holder.liner_guanzhu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                state.getsuccess(position,list.get(position).getIsGz(),list.get(position).getUid());
+            }
+        });
     }
 
     @Override
@@ -66,12 +80,13 @@ public class Myfollowadapter extends RecyclerView.Adapter<Myfollowadapter.Myview
     public class MyviewHolder extends RecyclerView.ViewHolder {
         public ImageView img_tou;
         public TextView text_username;
-
+        LinearLayout liner_guanzhu;
 
         public MyviewHolder(View rootView) {
             super(rootView);
             this.img_tou = (ImageView) rootView.findViewById(R.id.img_tou);
             this.text_username = (TextView) rootView.findViewById(R.id.text_username);
+            liner_guanzhu=  rootView.findViewById(R.id.liner_guanzhu);
         }
     }
 

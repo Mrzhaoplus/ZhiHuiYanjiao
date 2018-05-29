@@ -15,7 +15,7 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center" />
 
-        <www.diandianxing.com.diandianxing.bjxf.ms.qr.ViewfinderView
+        <www.diandianxing.com.diandianxing.qr.ViewfinderView
             android:id="@+id/viewfinder_view"
             android:layout_width="fill_parent"
             
@@ -29,9 +29,9 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <!-- <View  
-        android:id="@+id/sweep_code_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/> -->
+        iphone:id="@+id/sweep_code_view"
+        iphone:layout_width="match_parent"
+        iphone:layout_height="wrap_content"/> -->
         
             <RelativeLayout 
                 

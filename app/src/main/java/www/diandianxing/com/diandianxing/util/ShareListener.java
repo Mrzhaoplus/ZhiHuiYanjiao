@@ -6,6 +6,6 @@ package www.diandianxing.com.diandianxing.util;
 
 public interface ShareListener {
 
-    void OnShareListener(int poss);
+    void OnShareListener(int poss,int pos);
 
 }

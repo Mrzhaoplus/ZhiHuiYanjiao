@@ -25,6 +25,7 @@ import www.diandianxing.com.diandianxing.MainActivity;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.base.Myapplication;
 import www.diandianxing.com.diandianxing.bean.Loginsuccess;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 
@@ -121,6 +122,13 @@ public class UMLoginActivity extends BaseActivity {
                                         Loginsuccess loginsuccess = gson.fromJson(body, Loginsuccess.class);
                                         SpUtils.putString(mContext, "userid", loginsuccess.getDatas().getId() + "");
                                         SpUtils.putString(mContext, "token", loginsuccess.getDatas().getToken() + "");
+
+                                        SpUtils.putInt(mContext, "guid", 2);
+
+                                        Intent gb = new Intent();
+                                        gb.setAction(GlobalParams.LOGING_SX);
+                                        mContext.sendBroadcast(gb);
+
                                         mContext.startActivity(new Intent(mContext, MainActivity.class));
                                         mContext.finish();
 

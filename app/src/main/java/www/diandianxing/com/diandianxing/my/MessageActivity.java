@@ -12,13 +12,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.adapter.Messageadapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.bean.Messagebean;
+import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.SpUtils;
 
 
 /**
@@ -56,6 +59,10 @@ public class MessageActivity extends BaseActivity {
                     datas = result.getDatas();
                     Messageadapter messageadapter=new Messageadapter(MessageActivity.this, datas);
                     list_message.setAdapter(messageadapter);
+                }else if(result.getCode()==201){
+                    startActivity(new Intent(MessageActivity.this,LoginActivity.class));
+                    SpUtils.putInt(MessageActivity.this, "guid", 1);
+                    finish();
                 }
             }
 

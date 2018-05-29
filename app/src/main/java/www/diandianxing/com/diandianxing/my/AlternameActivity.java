@@ -60,9 +60,6 @@ public class AlternameActivity extends BaseActivity implements View.OnClickListe
             //保存
             case R.id.name_ok:
                 SpUtils.putString(this,"nickname",alter_name.getText().toString().trim());
-                //调用Eventbus
-                EventMessage eventMessage = new EventMessage("myname");
-                EventBus.getDefault().postSticky(eventMessage);
                 network();
 
                 break;
@@ -79,6 +76,9 @@ public class AlternameActivity extends BaseActivity implements View.OnClickListe
                 if(result.getCode()==200){
 
                     ToastUtils.show(AlternameActivity.this,"修改成功",1);
+                    //调用Eventbus
+                    EventMessage eventMessage = new EventMessage("myname");
+                    EventBus.getDefault().postSticky(eventMessage);
                     finish();
                 }
             }

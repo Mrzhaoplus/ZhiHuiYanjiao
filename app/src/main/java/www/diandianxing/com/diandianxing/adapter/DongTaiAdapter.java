@@ -3,6 +3,7 @@ package www.diandianxing.com.diandianxing.adapter;
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -21,6 +22,8 @@ import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.VideoActivity;
 import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
+import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
+import www.diandianxing.com.diandianxing.util.PaiKeZZListener;
 
 /**
  * Created by Administrator on 2018/4/8.
@@ -28,13 +31,17 @@ import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
 
 public class DongTaiAdapter extends BaseQuickAdapter<PaiKeInfo, BaseViewHolder> {
 
-    public DongTaiAdapter(@LayoutRes int layoutResId, @Nullable List<PaiKeInfo> data) {
-        super(layoutResId, data);
+    public PaiKeZZListener paiKeZZListener;
 
+    public DongTaiAdapter(@LayoutRes int layoutResId, @Nullable List<PaiKeInfo> data,PaiKeZZListener paiKeZZListener) {
+        super(layoutResId, data);
+        this.paiKeZZListener=paiKeZZListener;
     }
 
+
+
     @Override
-    protected void convert(BaseViewHolder helper, final PaiKeInfo item) {
+    protected void convert(final BaseViewHolder helper, final PaiKeInfo item) {
 
         RelativeLayout rl_dt = helper.getView(R.id.rl_dt);
 
@@ -43,10 +50,6 @@ public class DongTaiAdapter extends BaseQuickAdapter<PaiKeInfo, BaseViewHolder> 
         ImageView item_tou=helper.getView(R.id.item_tou);
 
         TextView item_zan=helper.getView(R.id.item_zan);
-
-
-
-
 
         if(helper.getAdapterPosition()%2!=0){
 
@@ -64,8 +67,24 @@ public class DongTaiAdapter extends BaseQuickAdapter<PaiKeInfo, BaseViewHolder> 
 
 
         item_zan.setText(item.dianZanCount);
+        item_tou.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, MydynamicActivity.class);
+
+                intent.putExtra("uid",item.userId);
+
+                mContext.startActivity(intent);
+            }
+        });
 
 
+        item_zan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                paiKeZZListener.onPaiKeZZListener(helper.getAdapterPosition());
+            }
+        });
 
         //设置点击事件
         item_img.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +96,28 @@ public class DongTaiAdapter extends BaseQuickAdapter<PaiKeInfo, BaseViewHolder> 
             }
         });
 
+        if(isxs){
+            item_img.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    Log.d("TAG", "onLongClick: =======================");
+
+                    paiKeZZListener.onPaiKeSCListener(helper.getAdapterPosition());
+
+                    return true;
+                }
+            });
+        }
 
     }
+
+    public boolean isxs;
+
+    public void setXS(boolean isxs){
+
+        this.isxs = isxs;
+
+    }
+
 }

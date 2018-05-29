@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.SpUtils;
@@ -89,18 +91,20 @@ public class Feedback extends BaseActivity implements View.OnClickListener {
 
     private void network() {
         HttpParams httpar=new HttpParams();
-         httpar.put("uid", SpUtils.getString(this, "userid", null));
          httpar.put("token", SpUtils.getString(this, "token", null));
-         httpar.put("type",3);
         httpar.put("content", feel_text.getText().toString());
 
-        OkGo.<String>post(MyContants.BASEURL+"s=Bike/feedback")
+        Log.e("TAG","数据包：：："+httpar.toString());
+        OkGo.<String>post(Api.BASE_URL+"app/home/feedBack")
                 .tag(this)
                 .params(httpar)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
                         String body = response.body();
+
+                        Log.e("TAG","反馈数据：：："+body);
+
                         try {
                             JSONObject jsonobj=new JSONObject(body);
                             int code = jsonobj.getInt("code");
@@ -134,6 +138,7 @@ public class Feedback extends BaseActivity implements View.OnClickListener {
             return;
         }
         if(NetUtil.checkNet(Feedback.this)){
+            Log.e("TAG","反馈提交执行：：：");
             network();
         }else{
             Toast.makeText(Feedback.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();

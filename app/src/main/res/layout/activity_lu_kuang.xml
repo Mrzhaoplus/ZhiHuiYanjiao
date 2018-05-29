@@ -6,13 +6,15 @@
     android:layout_height="match_parent">
     <RelativeLayout
         android:layout_marginTop="20dp"
-        android:padding="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="45dp">
         <ImageView
             android:id="@+id/img_back"
-            android:layout_marginLeft="10dp"
+            android:padding="10dp"
             android:src="@drawable/img_back"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
@@ -54,6 +56,7 @@
                     android:id="@+id/text_zixun"
                     android:gravity="center"
                     android:padding="5dp"
+                    android:layout_centerInParent="true"
                     android:layout_margin="5dp"
                     android:text="燕郊资讯"
                     android:textSize="16sp"
@@ -97,6 +100,7 @@
                     android:layout_margin="5dp"
                     android:text="实时路况"
                     android:textSize="16sp"
+                    android:layout_centerInParent="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <View

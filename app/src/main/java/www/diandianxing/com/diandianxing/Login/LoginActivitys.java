@@ -1,6 +1,8 @@
 package www.diandianxing.com.diandianxing.Login;
 
+import android.app.Notification;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,8 +12,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.MsgConstant;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
+import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.entity.UMessage;
 
 import org.zackratos.ultimatebar.UltimateBar;
 
@@ -21,6 +31,7 @@ import www.diandianxing.com.diandianxing.MainActivity;
 import www.diandianxing.com.diandianxing.bean.Loginbean;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
+import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.CustomProgressDialog;
 import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.MyContants;
@@ -54,6 +65,7 @@ public class LoginActivitys extends UMLoginActivity implements View.OnClickListe
     private ImageView ivcallback;
     private TextView forgetpwd;
     private static ProgressDialog mDialog;
+    PushAgent mPushAgent;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +97,39 @@ public class LoginActivitys extends UMLoginActivity implements View.OnClickListe
         forgetpwd.setOnClickListener(this);
         iv_weixin.setOnClickListener(this);
         iv_qq.setOnClickListener(this);
+        mPushAgent = PushAgent.getInstance(this);
+
     }
+
+//    UmengMessageHandler messageHandler = new UmengMessageHandler() {
+//
+//        @Override
+//        public Notification getNotification(Context context, UMessage msg) {
+//            switch (msg.builder_id) {
+//                case 1:
+//                    Notification.Builder builder = new Notification.Builder(context);
+//                    RemoteViews myNotificationView = new RemoteViews(context.getPackageName(),
+//                            R.layout.notification_view);
+//                    myNotificationView.setTextViewText(R.id.notification_title, msg.title);
+//                    myNotificationView.setTextViewText(R.id.notification_text, msg.text);
+//                    myNotificationView.setImageViewBitmap(R.id.notification_large_icon,
+//                            getLargeIcon(context, msg));
+//                    myNotificationView.setImageViewResource(R.id.notification_small_icon,
+//                            getSmallIconId(context, msg));
+//                    builder.setContent(myNotificationView)
+//                            .setSmallIcon(getSmallIconId(context, msg))
+//                            .setTicker(msg.ticker)
+//                            .setAutoCancel(true);
+//
+//                    return builder.getNotification();
+//                default:
+//                    //默认为0，若填写的builder_id并不存在，也使用默认。
+//                    return super.getNotification(context, msg);
+//            }
+//        }
+//    };
+
+//    mPushAgent.setMessageHandler(messageHandler);
     private void submit() {
         if (TextUtils.isEmpty(login_phone.getText().toString())) {
             Toast.makeText(this, "手机号码不能为空", Toast.LENGTH_SHORT).show();
@@ -123,6 +167,19 @@ public class LoginActivitys extends UMLoginActivity implements View.OnClickListe
                     SpUtils.putString(LoginActivitys.this,"userid",id);
                     SpUtils.putInt(LoginActivitys.this, "guid", 2);
 
+
+                    mPushAgent.addAlias(id, Api.TYPE, new UTrack.ICallBack() {
+                        @Override
+                        public void onMessage(boolean isSuccess, String message) {
+
+                        }
+                    });
+                    mPushAgent.setNotificationPlaySound(MsgConstant.NOTIFICATION_PLAY_SERVER); //声音
+//                    mPushAgent.setNotificationPlaySound(MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
+                    mPushAgent.setNotificationPlayLights(MsgConstant.NOTIFICATION_PLAY_SERVER);//呼吸灯
+//                    mPushAgent.setNotificationPlayLights(MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
+                    mPushAgent.setNotificationPlayVibrate(MsgConstant.NOTIFICATION_PLAY_SERVER);//振动
+//                    mPushAgent.setNotificationPlayVibrate(MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
                     Intent gb = new Intent();
                     gb.setAction(GlobalParams.LOGING_SX);
                     sendBroadcast(gb);
@@ -134,14 +191,14 @@ public class LoginActivitys extends UMLoginActivity implements View.OnClickListe
                     ToastUtils.show(LoginActivitys.this,"账号或密码错误",1);
                 }
             }
-
-
             @Override
             public void onFailed(int code,String data) {
                ToastUtils.show(LoginActivitys.this,data,1);
             }
         });
     }
+
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -163,9 +220,9 @@ public class LoginActivitys extends UMLoginActivity implements View.OnClickListe
 
                 break;
             case R.id.iv_weixin:
-              //  mDialog.show();
+                mDialog.show();
                 loginByWeiXin(this);
-                finish();
+//                finish();
                 break;
             case R.id.iv_weibo:
                 break;
@@ -176,6 +233,7 @@ public class LoginActivitys extends UMLoginActivity implements View.OnClickListe
         mDialog.dismiss();
         mDialog=null;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

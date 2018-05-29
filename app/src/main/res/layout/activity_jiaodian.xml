@@ -7,15 +7,17 @@
 
 
     <RelativeLayout
-        android:padding="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:background="@color/white"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="45dp">
        <ImageView
            android:id="@+id/img_back"
-           android:layout_marginLeft="10dp"
+           android:padding="10dp"
            android:src="@drawable/img_back"
+           android:layout_centerVertical="true"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content" />
    <TextView
@@ -32,7 +34,7 @@
             android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/img_wuestion"
+            android:src="@drawable/fbjd_3x"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>
@@ -45,7 +47,6 @@
     <RelativeLayout
 
         android:id="@+id/relar"
-        android:layout_marginLeft="10dp"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -84,6 +85,7 @@
                 android:orientation="vertical"
                 android:layout_weight="1"
                 android:layout_width="0dp"
+                android:visibility="gone"
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/text_tuijian"
@@ -113,7 +115,7 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="最新发布"
+                    android:text="每日郊点"
                     android:textSize="16sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -127,6 +129,12 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/back_bei"/>
+
     <FrameLayout
         android:id="@+id/fram_layout"
         android:layout_marginTop="10dp"

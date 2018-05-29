@@ -1,6 +1,9 @@
 package www.diandianxing.com.diandianxing;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -14,6 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
@@ -23,6 +29,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.ShujuBean.Coll_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.QuxiaozanAndFenxiang_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.User_guanzhu_Bean;
@@ -41,6 +48,7 @@ import www.diandianxing.com.diandianxing.presenter.User_Guanzhu_presenter;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.NetUtil;
 import www.diandianxing.com.diandianxing.util.SpUtils;
@@ -71,6 +79,11 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
         super.onCreate(savedInstanceState);
         MyContants.windows(this);
         setContentView(R.layout.activity_my_collection);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(GlobalParams.GZ);
+        registerReceiver(broadcastReceiver,intentFilter);
+        Log.e("TAG","token=="+SpUtils.getString(MyCollectionActivity.this,"token",null));
         //引用
         if(NetUtil.checkNet(MyCollectionActivity.this)){
             //获取引用
@@ -143,6 +156,7 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
         public void onItemClickLisener(int pos) {
             Intent intent = new Intent(MyCollectionActivity.this, JiaoDetailActivity.class);
                intent.putExtra("id",mList.get(pos).getPostId()+"");
+            Log.e("TAG","getPostId==="+mList.get(pos).getPostId());
                 startActivity(intent);
         }
         @Override
@@ -204,12 +218,17 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
                 // 网络请求;
                 // mStarFragmentPresenter.queryData();
                 //一分钟之后关闭刷新的方法
+
+                pageNo=1;
+                mList.clear();
+
                 finishFreshAndLoad();
             }
 
             @Override
             public void onLoadmore() {
 //                Toast.makeText(mContext,"玩命加载中...",Toast.LENGTH_SHORT).show();
+                pageNo++;
                 finishFreshAndLoad();
             }
         });
@@ -222,9 +241,18 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
+                //引用
+                if(NetUtil.checkNet(MyCollectionActivity.this)){
+                    //获取引用
+                    coll_presenter.getpath(pageNo, SpUtils.getString(MyCollectionActivity.this,"token",null));
+                }else{
+                    Toast.makeText(MyCollectionActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+
                 springView.onFinishFreshAndLoad();
             }
-        }, 2000);
+        }, 0);
     }
 
     @Override
@@ -240,7 +268,12 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
             }else{
                 mList.addAll(datas);
             }
+            Log.e("TAG","mList==="+mList.size());
             changegameAdapter.notifyDataSetChanged();
+        }else if(coll_bean.getCode().equals("201")){
+            startActivity(new Intent(MyCollectionActivity.this,LoginActivity.class));
+            SpUtils.putInt(MyCollectionActivity.this, "guid", 1);
+            finish();
         }
     }
 
@@ -249,7 +282,9 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
         if(user_guanzhu_bean.getCode().equals("200")){
             shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
         }else if(user_guanzhu_bean.getCode().equals("201")){
-            ToastUtils.showShort(MyCollectionActivity.this,user_guanzhu_bean.getMsg());
+                startActivity(new Intent(MyCollectionActivity.this,LoginActivity.class));
+                SpUtils.putInt(MyCollectionActivity.this, "guid", 1);
+                finish();
         }else if(user_guanzhu_bean.getCode().equals("203")){
             ToastUtils.showShort(MyCollectionActivity.this,user_guanzhu_bean.getMsg());
         }else if(user_guanzhu_bean.getCode().equals("500")){
@@ -262,7 +297,9 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
         if(zan.getCode().equals("200")){
             mList.remove(postion);
         }else if(zan.getCode().equals("201")){
-            ToastUtils.showShort(MyCollectionActivity.this,zan.getMsg());
+                startActivity(new Intent(MyCollectionActivity.this,LoginActivity.class));
+                SpUtils.putInt(MyCollectionActivity.this, "guid", 1);
+                finish();
         }else if(zan.getCode().equals("203")){
             ToastUtils.showShort(MyCollectionActivity.this,zan.getMsg());
         } else if(zan.getCode().equals("500")){
@@ -277,5 +314,26 @@ public class MyCollectionActivity extends BaseActivity implements Coll_presenter
         coll_presenter.getkong();
         quxiaozan_presenter.getkong();
         EventBus.getDefault().postSticky(new Event_coll_size(3,mList.size()));
+        unregisterReceiver(broadcastReceiver);
     }
+
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+
+           if(GlobalParams.GZ.equals(action)){
+                if(NetUtil.checkNet(MyCollectionActivity.this)){
+                    pageNo=1;
+                    mList.clear();
+                    finishFreshAndLoad();
+                }else{
+                    Toast.makeText(MyCollectionActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
+
 }

@@ -19,6 +19,8 @@ import java.util.List;
 import www.diandianxing.com.diandianxing.VideoActivity;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
+import www.diandianxing.com.diandianxing.fragment.minefragment.MydynamicActivity;
+import www.diandianxing.com.diandianxing.util.PaiKeZZListener;
 
 /**
  * date : ${Date}
@@ -30,9 +32,11 @@ import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
 public class Tujianadapter extends BaseAdapter {
      private Context context;
      private List<PaiKeInfo> list;
-    public Tujianadapter(Context context,List<PaiKeInfo> list) {
+    public PaiKeZZListener paiKeZZListener;
+    public Tujianadapter(Context context,List<PaiKeInfo> list,PaiKeZZListener paiKeZZListener) {
         this.context = context;
         this.list=list;
+        this.paiKeZZListener=paiKeZZListener;
     }
 
 
@@ -76,6 +80,38 @@ public class Tujianadapter extends BaseAdapter {
 
         holder.tui_zan.setText(paiKeInfo.dianZanCount);
 
+            holder.tui_zan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    paiKeZZListener.onPaiKeZZListener(i);
+                }
+            });
+        holder.tui_tou.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(context, MydynamicActivity.class);
+
+                intent.putExtra("uid",paiKeInfo.userId);
+
+                context.startActivity(intent);
+
+            }
+        });
+
+
+        if(Integer.parseInt(paiKeInfo.isZan)==0){
+
+            holder.tui_zan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    paiKeZZListener.onPaiKeZZListener(i);
+
+                }
+            });
+
+        }
 
 
         //设置点击事件

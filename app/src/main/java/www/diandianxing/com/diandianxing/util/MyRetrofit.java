@@ -38,7 +38,7 @@ public class MyRetrofit {
                             .connectTimeout(15, TimeUnit.SECONDS)
                             .writeTimeout(15, TimeUnit.SECONDS)
                             .readTimeout(15, TimeUnit.SECONDS)
-                             .addInterceptor(new CommonParamsInterceptor())
+                           //  .addInterceptor(new CommonParamsInterceptor())
                             .build();
                 }
             }
@@ -72,9 +72,9 @@ public class MyRetrofit {
         return retrofit.create(tClass);
     }
 
-    /**
+  /*  *//**
      * 公共参数拦截器
-     */
+     *//*
     private static class CommonParamsInterceptor implements Interceptor {
 
         //拦截的方法
@@ -179,7 +179,7 @@ public class MyRetrofit {
             return response;
         }
     }
-
+*/
 
 
 }

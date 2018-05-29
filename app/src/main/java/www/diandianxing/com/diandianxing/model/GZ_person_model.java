@@ -1,5 +1,7 @@
 package www.diandianxing.com.diandianxing.model;
 
+import android.util.Log;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -19,12 +21,13 @@ public class GZ_person_model {
         this.jiekou=jiekou;
 
     }
-    public void getpath(int pageNo,String uid){
-        Observable<GZ_person_Bean> gz_person_beanObservable = MyRetrofit.getSerViceAPI().gz_person(pageNo, uid);
+    public void getpath(int pageNo,String userid,String uid){
+        Observable<GZ_person_Bean> gz_person_beanObservable = MyRetrofit.getSerViceAPI().gz_person(pageNo, userid,uid);
         gz_person_beanObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<GZ_person_Bean>() {
                     @Override
                     public void accept(GZ_person_Bean gz_person_bean) throws Exception {
+                        Log.e("TAG","进来了");
                            jiekou.getsuccess(gz_person_bean);
                     }
                 });

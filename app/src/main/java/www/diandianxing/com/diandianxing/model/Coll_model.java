@@ -1,5 +1,7 @@
 package www.diandianxing.com.diandianxing.model;
 
+import android.util.Log;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -25,9 +27,9 @@ public class Coll_model {
                 .subscribe(new Consumer<Coll_Bean>() {
                     @Override
                     public void accept(Coll_Bean coll_bean) throws Exception {
+
                         jiekou.getsuccess(coll_bean);
                     }
                 });
     }
-
 }

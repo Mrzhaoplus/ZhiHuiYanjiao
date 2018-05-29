@@ -35,15 +35,14 @@
                             android:layout_height="wrap_content">
                             <RelativeLayout
                                 android:id="@+id/rl_video"
-                                android:layout_width="match_parent"
                                 android:visibility="gone"
+                                android:layout_width="match_parent"
                                 android:layout_height="500dp">
 
-                                <VideoView
+                                <www.diandianxing.com.diandianxing.util.MyVideoView
                                     android:id="@+id/vv_sp"
                                     android:layout_width="match_parent"
-                                    android:layout_centerVertical="true"
-                                    android:layout_height="wrap_content"/>
+                                    android:layout_height="match_parent"/>
 
                                 <ImageView
                                     android:id="@+id/iv_xq_bf"
@@ -52,6 +51,15 @@
                                     android:layout_centerInParent="true"
                                     android:visibility="invisible"
                                     android:src="@drawable/shipin_3x"/>
+
+
+                                <RelativeLayout
+                                    android:id="@+id/rl_bs"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/white"></RelativeLayout>
+
+
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -62,14 +70,14 @@
                                 <android.support.v4.view.ViewPager
                                     android:id="@+id/vp_img_banner"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"></android.support.v4.view.ViewPager>
+                                    android:layout_height="match_parent"></android.support.v4.view.ViewPager>
 
                                 <LinearLayout
                                     android:id="@+id/ll_dian"
                                     android:layout_width="match_parent"
                                     android:orientation="horizontal"
                                     android:gravity="center"
-                                    android:layout_marginBottom="10dp"
+                                    android:layout_marginBottom="20dp"
                                     android:layout_alignParentBottom="true"
                                     android:layout_height="wrap_content">
 
@@ -115,18 +123,24 @@
 
 
                     <TextView
-                        android:padding="10dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
                         android:id="@+id/video_title"
                         android:textSize="14sp"
                         android:text=""
+                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
                     <RelativeLayout
+                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <LinearLayout
                             android:padding="10dp"
+                            android:layout_marginLeft="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
@@ -151,6 +165,7 @@
                             android:padding="10dp"
                             android:layout_alignParentRight="true"
                             android:text=""
+                            android:layout_marginRight="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                     </RelativeLayout>
@@ -161,15 +176,43 @@
                         android:background="@color/color_hui"
                         />
 
-                    <TextView
-                        android:id="@+id/text_pinglun"
-                        android:gravity="center|left"
-                        android:drawablePadding="10dp"
-                        android:drawableLeft="@drawable/img_suggest"
-                        android:padding="10dp"
-                        android:text="0评论"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:paddingLeft="20dp"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="10dp"
+                        >
+
+                        <ImageView
+                            android:id="@+id/iv_pl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/pingjai_3x"/>
+
+
+                        <TextView
+                            android:id="@+id/text_pinglun"
+                            android:layout_marginLeft="10dp"
+                            android:text="0评论"
+                            android:layout_alignTop="@id/iv_pl"
+                            android:layout_toRightOf="@id/iv_pl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </RelativeLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/back_bei"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
+                        ></View>
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rcy_view"
@@ -195,6 +238,7 @@
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true">
 
@@ -252,17 +296,21 @@
 
     </RelativeLayout>
 
-
-
-
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/back_bei"/>
     <LinearLayout
         android:gravity="center_vertical"
         android:id="@+id/lines"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:background="@color/white"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_height="50dp">
+
         <EditText
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
@@ -270,25 +318,24 @@
             android:layout_weight="3"
             android:background="@null"
             android:hint="请说说您的看法..."
-            android:textSize="14sp"
+            android:textSize="16sp"
+            android:singleLine="true"
+            android:maxLength="140"
             android:layout_width="0dp"
             android:layout_gravity="center_vertical"
             android:layout_height="match_parent" />
+
         <Button
             android:background="@drawable/shape_fabu"
             android:id="@+id/button_fabu"
             android:textColor="@color/white"
             android:text="发布"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="10dp"
             android:layout_width="80dp"
+            android:textSize="16sp"
             android:layout_gravity="center_vertical"
-            android:layout_height="35dp" />
+            android:layout_height="33dp" />
     </LinearLayout>
-
-
-
-
-
 
 
 </LinearLayout>

@@ -9,13 +9,15 @@
     >
     <RelativeLayout
         android:layout_marginTop="20dp"
-        android:padding="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="45dp">
         <ImageView
             android:id="@+id/img_back"
-            android:layout_marginLeft="10dp"
+            android:padding="10dp"
             android:src="@drawable/img_back"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
@@ -26,6 +28,16 @@
             android:text="生活服务"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/img_question"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/fbtz_3x"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
     </RelativeLayout>
     <View
         android:layout_width="match_parent"

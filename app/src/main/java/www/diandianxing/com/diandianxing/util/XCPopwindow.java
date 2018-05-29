@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,10 +21,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import www.diandianxing.com.diandianxing.DisconnectActivity;
 import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.MainActivity;
 import www.diandianxing.com.diandianxing.VideoRecordingActivity;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.set.AboutweActivity;
 
 /**
  * date : ${Date}
@@ -34,13 +37,14 @@ public class XCPopwindow extends PopupWindow implements View.OnClickListener {
 
           private View rootView;
           private MainActivity mContext;
-         private RelativeLayout contentView;
+         private LinearLayout contentView;
     private TextView btn_paike,btn_jiaodian;
 
     private AlbumClickListener albumClickListener;
-
-    public XCPopwindow(MainActivity mContext) {
+    int ztheight;
+    public XCPopwindow(MainActivity mContext,int ztheight) {
         this.mContext = mContext;
+        this.ztheight=ztheight;
     }
     public void showMoreWindow(View anchor) {
         LayoutInflater inflater = (LayoutInflater) mContext
@@ -52,7 +56,7 @@ public class XCPopwindow extends PopupWindow implements View.OnClickListener {
         this.setWidth(w);
         this.setHeight(h - ScreenUtils.getStatusHeight(mContext));
 
-        contentView = (RelativeLayout) rootView.findViewById(R.id.contentView);
+        contentView = (LinearLayout) rootView.findViewById(R.id.contentView);
         RelativeLayout close = (RelativeLayout) rootView.findViewById(R.id.r_close);
         /*
           寻找控件
@@ -60,6 +64,9 @@ public class XCPopwindow extends PopupWindow implements View.OnClickListener {
         btn_paike = (TextView) rootView.findViewById(R.id.btn_paike);
         btn_paike.setOnClickListener(this);
         btn_jiaodian = (TextView) rootView.findViewById(R.id.btn_jiaodian);
+        ViewGroup.LayoutParams layoutParams = close.getLayoutParams();
+        layoutParams.height=layoutParams.height+ztheight;
+        close.setLayoutParams(layoutParams);
         btn_jiaodian.setOnClickListener(this);
         close.setBackgroundColor(0xFFFFFFFF);
         close.setOnClickListener(this);
@@ -102,7 +109,6 @@ public class XCPopwindow extends PopupWindow implements View.OnClickListener {
 
                     });
         }
-
     }
     /**
      * 关闭动画效果
@@ -128,7 +134,6 @@ public class XCPopwindow extends PopupWindow implements View.OnClickListener {
                             fadeAnim.setEvaluator(kickAnimator);
                             fadeAnim.start();
                             fadeAnim.addListener(new Animator.AnimatorListener() {
-
                                 @Override
                                 public void onAnimationStart(Animator animation) {
                                 }
@@ -160,35 +165,39 @@ public class XCPopwindow extends PopupWindow implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Intent intent;
-          switch (v.getId()){
-              case R.id.r_close:
-                  if (isShowing()) {
-                      closeAnimation(contentView);
-                  }
-                  break;
-              case R.id.btn_paike:
+
+        if(NetUtil.checkNet(mContext)){
+
+            Intent intent;
+            switch (v.getId()){
+                case R.id.r_close:
+                    if (isShowing()) {
+                        closeAnimation(contentView);
+                    }
+                    break;
+                case R.id.btn_paike:
 //                  Toast.makeText(mContext, "aad", Toast.LENGTH_SHORT).show();
-                  int guid = SpUtils.getInt(mContext, "guid", 0);
-                  if(guid!=2){
-                      mContext.startActivity(new Intent(mContext,LoginActivity.class));
-                  }else{
-                      intent = new Intent(mContext, VideoRecordingActivity.class);
-                      mContext.startActivity(intent);
-                  }
+                    int guid = SpUtils.getInt(mContext, "guid", 0);
+                    if(guid!=2){
+                        mContext.startActivity(new Intent(mContext,LoginActivity.class));
+                    }else{
+                        intent = new Intent(mContext, VideoRecordingActivity.class);
+                        mContext.startActivity(intent);
+                    }
 
-                  dismiss();
+                    dismiss();
 
 
-                  break;
-              case R.id.btn_jiaodian:
+                    break;
+                case R.id.btn_jiaodian:
 //                  Toast.makeText(mContext, "assad", Toast.LENGTH_SHORT).show();
-                  albumClickListener.OnAlbumClickListener();
-                  dismiss();
-                  break;
-
-          }
-
+                    albumClickListener.OnAlbumClickListener();
+                    dismiss();
+                    break;
+            }
+        }else{
+            mContext.startActivity(new Intent(mContext, DisconnectActivity.class));
+        }
     }
 
 

@@ -8,11 +8,10 @@ import java.util.List;
 
 public class Coll_Bean {
 
-
     /**
      * msg : 请求成功
      * code : 200
-     * datas : [{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524725768618,"encrypt":"","lastTime":1524725768618,"ridingState":false,"userId":1,"pic":"http://47.93.45.38:8080/http://47.93.45.38:8080//server/uploads/head/20180328/5abb7c8abee96.jpg","nickName":"啊咯","postImage":"/uploadImages/front/2018-04-18/a_aljhydqeru_874.png,/uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png","postTitle":"帖子标题","postId":2,"isGz":1,"postImagePaths":["http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_aljhydqeru_874.png","http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png"]},{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524725768618,"encrypt":"","lastTime":1524725768618,"ridingState":false,"userId":1,"pic":"http://47.93.45.38:8080/http://47.93.45.38:8080//server/uploads/head/20180328/5abb7c8abee96.jpg","nickName":"啊咯","postImage":"/uploadImages/front/2018-04-18/a_aljhydqeru_874.png,/uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png","postTitle":"","postId":8,"isGz":1,"postImagePaths":["http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_aljhydqeru_874.png","http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png"]},{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524725768618,"encrypt":"","lastTime":1524725768618,"ridingState":false,"userId":1,"pic":"http://47.93.45.38:8080/http://47.93.45.38:8080//server/uploads/head/20180328/5abb7c8abee96.jpg","nickName":"啊咯","postImage":"/uploadImages/front/2018-04-18/a_aljhydqeru_874.png,/uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png","postTitle":"帖子标题","postId":7,"isGz":1,"postImagePaths":["http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_aljhydqeru_874.png","http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png"]},{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524725768618,"encrypt":"","lastTime":1524725768618,"ridingState":false,"userId":1,"pic":"http://47.93.45.38:8080/http://47.93.45.38:8080//server/uploads/head/20180328/5abb7c8abee96.jpg","nickName":"啊咯","postImage":"/uploadImages/front/2018-04-18/a_aljhydqeru_874.png,/uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png","postTitle":"帖子标题","postId":7,"isGz":1,"postImagePaths":["http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_aljhydqeru_874.png","http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png"]},{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524725768618,"encrypt":"","lastTime":1524725768618,"ridingState":false,"userId":1,"pic":"http://47.93.45.38:8080/http://47.93.45.38:8080//server/uploads/head/20180328/5abb7c8abee96.jpg","nickName":"啊咯","postImage":"/uploadImages/front/2018-04-18/a_aljhydqeru_874.png,/uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png","postTitle":"帖子标题","postId":7,"isGz":1,"postImagePaths":["http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_aljhydqeru_874.png","http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png"]},{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524725768618,"encrypt":"","lastTime":1524725768618,"ridingState":false,"userId":1,"pic":"http://47.93.45.38:8080/http://47.93.45.38:8080//server/uploads/head/20180328/5abb7c8abee96.jpg","nickName":"啊咯","postImage":"/uploadImages/front/2018-04-18/a_aljhydqeru_874.png,/uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png","postTitle":"帖子标题","postId":7,"isGz":1,"postImagePaths":["http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_aljhydqeru_874.png","http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png"]},{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524725768618,"encrypt":"","lastTime":1524725768618,"ridingState":false,"userId":1,"pic":"http://47.93.45.38:8080/http://47.93.45.38:8080//server/uploads/head/20180328/5abb7c8abee96.jpg","nickName":"啊咯","postImage":"/uploadImages/front/2018-04-18/a_aljhydqeru_874.png,/uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png","postTitle":"帖子标题","postId":7,"isGz":1,"postImagePaths":["http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_aljhydqeru_874.png","http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png"]},{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524725768618,"encrypt":"","lastTime":1524725768618,"ridingState":false,"userId":1,"pic":"http://47.93.45.38:8080/http://47.93.45.38:8080//server/uploads/head/20180328/5abb7c8abee96.jpg","nickName":"啊咯","postImage":"/uploadImages/front/2018-04-18/a_aljhydqeru_874.png,/uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png","postTitle":"帖子标题","postId":7,"isGz":1,"postImagePaths":["http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_aljhydqeru_874.png","http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png"]},{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":false,"doubles":0,"idIdent":0,"type":0,"addTime":1524725768618,"encrypt":"","lastTime":1524725768618,"ridingState":false,"userId":1,"pic":"http://47.93.45.38:8080/http://47.93.45.38:8080//server/uploads/head/20180328/5abb7c8abee96.jpg","nickName":"啊咯","postImage":"/uploadImages/front/2018-04-18/a_aljhydqeru_874.png,/uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png","postTitle":"帖子标题","postId":7,"isGz":1,"postImagePaths":["http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_aljhydqeru_874.png","http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png"]}]
+     * datas : [{"id":0,"nickname":"","password":"","contact":"","credit":0,"balance":0,"mileage":0,"token":"","deposit":0,"depositStatus":0,"doubles":0,"idIdent":0,"type":0,"addTime":1525934153997,"encrypt":"","lastTime":1525934153997,"ridingState":0,"userId":4571,"pic":"http://47.93.45.38/test/uploads/head/20180502/5ae922f5a7469.jpg","nickName":"赵","postImage":"/uploadImages/front/2018-05-08/a_dheeqeporp_358.png","postTitle":"","postId":105,"isGz":0,"postImagePaths":["http://47.93.45.38:8080/uploadImages/front/2018-05-08/a_dheeqeporp_358.png"]}]
      */
 
     private String msg;
@@ -54,22 +53,22 @@ public class Coll_Bean {
          * mileage : 0
          * token :
          * deposit : 0
-         * depositStatus : false
+         * depositStatus : 0
          * doubles : 0
          * idIdent : 0
          * type : 0
-         * addTime : 1524725768618
+         * addTime : 1525934153997
          * encrypt :
-         * lastTime : 1524725768618
-         * ridingState : false
-         * userId : 1
-         * pic : http://47.93.45.38:8080/http://47.93.45.38:8080//server/uploads/head/20180328/5abb7c8abee96.jpg
-         * nickName : 啊咯
-         * postImage : /uploadImages/front/2018-04-18/a_aljhydqeru_874.png,/uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png
-         * postTitle : 帖子标题
-         * postId : 2
-         * isGz : 1
-         * postImagePaths : ["http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_aljhydqeru_874.png","http://47.93.45.38:8080//uploadImages/front/2018-04-18/a_rlwfdfowhg_874.png"]
+         * lastTime : 1525934153997
+         * ridingState : 0
+         * userId : 4571
+         * pic : http://47.93.45.38/test/uploads/head/20180502/5ae922f5a7469.jpg
+         * nickName : 赵
+         * postImage : /uploadImages/front/2018-05-08/a_dheeqeporp_358.png
+         * postTitle :
+         * postId : 105
+         * isGz : 0
+         * postImagePaths : ["http://47.93.45.38:8080/uploadImages/front/2018-05-08/a_dheeqeporp_358.png"]
          */
 
         private int id;
@@ -81,14 +80,14 @@ public class Coll_Bean {
         private int mileage;
         private String token;
         private int deposit;
-        private boolean depositStatus;
+        private int depositStatus;
         private int doubles;
         private int idIdent;
         private int type;
         private long addTime;
         private String encrypt;
         private long lastTime;
-        private boolean ridingState;
+        private int ridingState;
         private int userId;
         private String pic;
         private String nickName;
@@ -170,11 +169,11 @@ public class Coll_Bean {
             this.deposit = deposit;
         }
 
-        public boolean isDepositStatus() {
+        public int getDepositStatus() {
             return depositStatus;
         }
 
-        public void setDepositStatus(boolean depositStatus) {
+        public void setDepositStatus(int depositStatus) {
             this.depositStatus = depositStatus;
         }
 
@@ -226,11 +225,11 @@ public class Coll_Bean {
             this.lastTime = lastTime;
         }
 
-        public boolean isRidingState() {
+        public int getRidingState() {
             return ridingState;
         }
 
-        public void setRidingState(boolean ridingState) {
+        public void setRidingState(int ridingState) {
             this.ridingState = ridingState;
         }
 

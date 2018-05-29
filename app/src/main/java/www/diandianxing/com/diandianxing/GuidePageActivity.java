@@ -11,11 +11,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import org.zackratos.ultimatebar.UltimateBar;
 
 import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.Login.LoginActivitys;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.bean.Info;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.R;
 
@@ -32,7 +36,7 @@ public class GuidePageActivity extends BaseActivity {
 
     private LinearLayout liner;
     private Handler handler;
-
+    private Info info;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +46,36 @@ public class GuidePageActivity extends BaseActivity {
         setContentView(R.layout.activity_guidepage);
         vp = (ViewPager) findViewById(R.id.vp);
         liner = (LinearLayout) findViewById(R.id.liner);
+        info= (Info) getIntent().getSerializableExtra("imgs");
+
+
+
+        for(int i=0;i<info.imgs.size();i++){
+
+            View view  = new View(GuidePageActivity.this);
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30,30);
+            layoutParams.rightMargin=15;
+            layoutParams.leftMargin=15;
+            view.setLayoutParams(layoutParams);
+            if(i==0){
+                view.setBackgroundResource(R.drawable.icon_true);
+            }else {
+                view.setBackgroundResource(R.drawable.icon_flase);
+            }
+
+            liner.addView(view);
+
+        }
+
+
         handler = new Handler();
         if (mGuidePagerAdapter == null) {
             mGuidePagerAdapter = new GuidePagerAdapter();
         }
 
         vp.setAdapter(mGuidePagerAdapter);
-      //  vp.setOnPageChangeListener(new ViewPagerIndicator(this,vp,liner,5));
+//        vp.setOnPageChangeListener(new ViewPagerIndicator(this,vp,liner,5));
         vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -57,6 +84,16 @@ public class GuidePageActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
+
+                for(int i=0;i<info.imgs.size();i++){
+                    View view  = liner.getChildAt(i);
+                    if(i==position){
+                        view.setBackgroundResource(R.drawable.icon_true);
+                    }else {
+                        view.setBackgroundResource(R.drawable.icon_flase);
+                    }
+                }
+
                 if (position == 3) {
 
                     handler.postDelayed(runnable,3000);
@@ -98,9 +135,10 @@ public class GuidePageActivity extends BaseActivity {
         public Object instantiateItem(ViewGroup container, int position) {
             View view = View.inflate(GuidePageActivity.this, R.layout.item_guide, null);
             ImageView imageView = (ImageView) view.findViewById(R.id.iv_guide);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             View tv_into = view.findViewById(R.id.tv_into);
-            if (position ==3) {
-                tv_into.setVisibility(View.VISIBLE);
+            if (position ==info.imgs.size()-1) {
+//                tv_into.setVisibility(View.VISIBLE);
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -116,10 +154,17 @@ public class GuidePageActivity extends BaseActivity {
                     }
                 });
             } else {
-                tv_into.setVisibility(View.GONE);
+//                tv_into.setVisibility(View.GONE);
             }
 
-            imageView.setImageResource(imgurls[position]);
+
+//            Glide.with(GuidePageActivity.this).load(info.imgs.get(position)).into(imageView);
+
+            Glide.with(GuidePageActivity.this)
+                    .load(info.fileList.get(position))
+                    .into(imageView);
+
+
             container.addView(view);
             return view;
         }
@@ -131,7 +176,7 @@ public class GuidePageActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return 4;
+            return info.imgs.size();
         }
 
         @Override

@@ -1,11 +1,15 @@
 package www.diandianxing.com.diandianxing;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -20,6 +24,7 @@ import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Response;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,6 +32,7 @@ import java.util.ArrayList;
 
 import www.diandianxing.com.diandianxing.adapter.SignAdapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
+import www.diandianxing.com.diandianxing.bean.DengJiGZinfo;
 import www.diandianxing.com.diandianxing.bean.MsgBus;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
@@ -45,7 +51,7 @@ public class SignActivity extends BaseActivity {
 
     RecyclerView rv_dj;
     TextView tv_qdkz;
-    ArrayList<String> mList = new ArrayList<>();
+    ArrayList<DengJiGZinfo> mList = new ArrayList<>();
     Handler handler;
     BaseDialog dialog;
     private TextView tv_qd_zjf;
@@ -63,23 +69,13 @@ public class SignActivity extends BaseActivity {
         tv_bw= (TextView) findViewById(R.id.tv_bw);
         tv_sw= (TextView) findViewById(R.id.tv_sw);
         tv_gw= (TextView) findViewById(R.id.tv_gw);
-        if (mList.size()<=0){
-            mList.add("");
-            mList.add("");
-            mList.add("");
-            mList.add("");
-            mList.add("");
-            mList.add("");
-        }
         if(NetUtil.checkNet(SignActivity.this)){
             networkQD();
+            networkDJ();
         }else{
             Toast.makeText(SignActivity.this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
         }
-        rv_dj.setLayoutManager(new LinearLayoutManager(SignActivity.this));
-        rv_dj.setNestedScrollingEnabled(false);
-        SignAdapter wccAdapter = new SignAdapter(R.layout.sign_item_view, mList);
-        rv_dj.setAdapter(wccAdapter);
+
 
         include_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,8 +135,16 @@ public class SignActivity extends BaseActivity {
                             JSONObject datas = jsonobj.getJSONObject("datas");
                             if (code == 200) {
 
+                                SpannableStringBuilder spannable = new SpannableStringBuilder("总积分："+datas.getString("signinintegral")+"分");
 
-                                tv_qd_zjf.setText("总积分："+datas.getString("signinintegral")+"分");
+                                spannable.setSpan(new ForegroundColorSpan(Color.parseColor("#333333")),0,3
+                                        , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                                spannable.setSpan(new ForegroundColorSpan(Color.parseColor("#f55a0b")),4,datas.getString("signinintegral").length()+4
+                                        , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                spannable.setSpan(new ForegroundColorSpan(Color.parseColor("#333333")),datas.getString("signinintegral").length()+4,("总积分："+datas.getString("signinintegral")+"分").length()
+                                        , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                tv_qd_zjf.setText(spannable);
 
                                 int day=datas.getInt("signindays");
 
@@ -193,6 +197,61 @@ public class SignActivity extends BaseActivity {
                                     },2000);
                                 }
 
+
+                            } else {
+                                Toast.makeText(SignActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+
+    private void networkDJ() {
+
+        HttpParams params = new HttpParams();
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/signinrules/list")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        Log.d("TAG", "等级：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            JSONObject datas = jsonobj.getJSONObject("datas");
+
+
+                            if (code == 200) {
+
+                                JSONArray ja = datas.getJSONArray("list");
+
+                                for(int i=0;i<ja.length();i++){
+
+                                    JSONObject jo = ja.getJSONObject(i);
+
+                                    DengJiGZinfo dengJiGZinfo = new DengJiGZinfo();
+                                    dengJiGZinfo.signLevel=jo.getString("signLevel");
+                                    dengJiGZinfo.signInteger=jo.getInt("signInteger");
+                                    Log.e("TAG","s1="+jo.getString("signInteger"));
+                                    mList.add(dengJiGZinfo);
+
+
+
+                                }
+
+                                rv_dj.setLayoutManager(new LinearLayoutManager(SignActivity.this));
+                                rv_dj.setNestedScrollingEnabled(false);
+                                SignAdapter wccAdapter = new SignAdapter(R.layout.sign_item_view, mList,datas.getString("maxinteger"));
+                                rv_dj.setAdapter(wccAdapter);
 
                             } else {
                                 Toast.makeText(SignActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();

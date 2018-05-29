@@ -135,7 +135,7 @@
                 android:textColor="@color/textcolcr"
                 android:id="@+id/set_lpwd"
                 android:padding="10dp"
-                android:text="姓       名："
+                android:text="姓&#8195;&#8195;名："
                 android:textSize="17sp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/login_phone"

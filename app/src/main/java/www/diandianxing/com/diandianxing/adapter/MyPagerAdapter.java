@@ -1,6 +1,7 @@
 package www.diandianxing.com.diandianxing.adapter;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class MyPagerAdapter extends PagerAdapter {
         this.context=context;
 
     }
+
 
 
 

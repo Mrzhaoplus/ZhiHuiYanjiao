@@ -26,6 +26,7 @@ import www.diandianxing.com.diandianxing.base.Myapplication;
 import www.diandianxing.com.diandianxing.bean.Sharebean;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
+import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.SpUtils;
@@ -60,7 +61,10 @@ public class ZhaopinFragment extends BaseFragment {
 
     private ShareListener shareListener = new ShareListener() {
         @Override
-        public void OnShareListener(int poss) {
+        public void OnShareListener(int poss,int pos) {
+
+            bq=pos;
+
             switch (poss){
                 case 0:
                     SharebyWeixin(getActivity());
@@ -79,54 +83,51 @@ public class ZhaopinFragment extends BaseFragment {
             }
         }
     };
-
+    int bq;
     protected  void SharebyQQ(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+bq);
         web.setTitle("智慧燕郊-点点行");//标题
-        web.setThumb(new UMImage(context, R.drawable.img_diandianlogo));  //缩略图
+        web.setThumb(new UMImage(context, R.drawable.icon_tu));  //缩略图
         web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
 
         new ShareAction(context)
                 .withMedia(web)
                 .setPlatform(SHARE_MEDIA.QQ)//传入平台
-                .withText("点击下载“点点行”，开启燕郊骑行之旅~")//分享内容
                 .setCallback(umShareListener)//回调监听器
                 .share();
     }
 
     protected  void SharebyQzon(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+bq);
         web.setTitle("智慧燕郊-点点行");//标题
-        web.setThumb(new UMImage(context,R.drawable.img_diandianlogo));  //缩略图
+        web.setThumb(new UMImage(context,R.drawable.icon_tu));  //缩略图
         web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
         new ShareAction(context)
                 .setPlatform(SHARE_MEDIA.QZONE)//传入平台
                 .withMedia(web)
-                .withText("点击下载“点点行”，开启燕郊骑行之旅~")//分享内容
                 .setCallback(umShareListener)//回调监听器
                 .share();
     }
 
     protected  void SharebyWeixin(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+bq);
         web.setTitle("智慧燕郊-点点行");//标题
-        web.setThumb(new UMImage(context,R.drawable.img_diandianlogo));  //缩略图
+        web.setThumb(new UMImage(context,R.drawable.icon_tu));  //缩略图
         web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
         new ShareAction(context)
                 .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
-                .withMedia(web)
-                .withText("点击下载“点点行”，开启燕郊骑行之旅~")//分享内容
+                .withMedia(web)//分享内容
                 .setCallback(umShareListener)//回调监听器
                 .share();
     }
     protected  void SharebyWeixincenter(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+bq);
         web.setTitle("智慧燕郊-点点行");//标题
-        web.setThumb(new UMImage(context,R.drawable.img_diandianlogo));  //缩略图
+        web.setThumb(new UMImage(context,R.drawable.icon_tu));  //缩略图
         web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
         new ShareAction(context)
                 .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)//传入平台
-                .withText("点击下载“点点行”，开启燕郊骑行之旅~")//分享内容
+                .withMedia(web)//分享内容
                 .setCallback(umShareListener)//回调监听器
                 .share();
     }

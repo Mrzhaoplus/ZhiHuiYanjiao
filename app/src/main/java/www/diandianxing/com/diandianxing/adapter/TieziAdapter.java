@@ -17,6 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.luck.picture.lib.decoration.RecycleViewDivider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,9 @@ import www.diandianxing.com.diandianxing.bean.GuanzhuJD;
 import www.diandianxing.com.diandianxing.util.MyUtils;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.StateClickListener;
+import www.diandianxing.com.diandianxing.util.divider.RecyclerViewItemDecoration;
+
+import static www.diandianxing.com.diandianxing.R.id.recy_card;
 
 /**
  * Created by Administrator on 2018/4/3.
@@ -59,21 +63,28 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
         final LinearLayout ll_xq = helper.getView(R.id.ll_xq);
         RelativeLayout rl_title_xs = helper.getView(R.id.rl_title_xs);
         TextView item_count =helper.getView(R.id.item_count);
-        TextView text_collect=helper.getView(R.id.text_collect);
-        TextView text_zan=helper.getView(R.id.text_zan);
+        final TextView text_collect=helper.getView(R.id.text_collect);
+        final TextView text_zan=helper.getView(R.id.text_zan);
         TextView tv_nian=helper.getView(R.id.tv_nian);
         TextView tv_yue=helper.getView(R.id.tv_yue);
         item_count.setText(item.postContent);
 
-        text_collect.setText(item.collectCount);
+        if(Integer.parseInt(item.collectCount)==0){
+            text_collect.setText("收藏");
+        }else {
+            text_collect.setText(item.collectCount);
+        }
 
-        text_zan.setText(item.dianZanCount);
-
-        String time = MyUtils.stampNYToDate(item.updateTime);
+        if(Integer.parseInt(item.dianZanCount)==0){
+            text_zan.setText("点赞");
+        }else{
+            text_zan.setText(item.dianZanCount);
+        }
+        String time = MyUtils.stampNYrToDate(item.updateTime);
 
         String[] split = time.split("-");
 
-        tv_nian.setText(split[0].substring(2,split[0].length()));
+        tv_nian.setText(split[2]);
 
         tv_yue.setText(split[1]+"月");
 
@@ -83,12 +94,25 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
             rl_title_xs.setVisibility(View.GONE);
         }
 
-        rv_tp.setLayoutManager(new GridLayoutManager(mContext,3));
+        if(item.imagesList.size()>3){
+            rv_tp.setLayoutManager(new GridLayoutManager(mContext,3));
+        }else{
+            rv_tp.setLayoutManager(new GridLayoutManager(mContext,item.imagesList.size()));
+        }
+//        RecycleViewDivider recycleViewDivider = new RecycleViewDivider(mContext, GridLayoutManager.HORIZONTAL, 5, mContext.getResources().getColor(R.color.transparent));
+//        rv_tp.addItemDecoration(recycleViewDivider);
         rv_tp.setNestedScrollingEnabled(false);
         TPAdapter1 tpAdapter1 = new TPAdapter1(mContext,item.imagesList);
+        tpAdapter1.setZY(true);
         rv_tp.setAdapter(tpAdapter1);
 
-        if(!"我的主页".equals(title)){
+        if(isjd){
+
+            text_collect.setEnabled(true);
+            text_zan.setEnabled(true);
+        }
+
+//        if(!"我的主页".equals(title)){    不是自己的主页执行点赞收藏，  现在是自己的主页可以进行点赞收藏
             if(Integer.parseInt(item.is_collect)==0){
                 Drawable nav_up=mContext.getResources().getDrawable(R.drawable.icon_collect);
                 nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
@@ -117,6 +141,7 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
                     if(guid!=2){
                         mContext.startActivity(new Intent(mContext,LoginActivity.class));
                     }else{
+                        text_collect.setEnabled(false);
                         if(Integer.parseInt(item.is_collect)==0){
 
                             stateClickListener.ShouCangClickListener(Integer.parseInt(item.id),0,1,-1,helper.getAdapterPosition());
@@ -136,6 +161,7 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
                     if(guid!=2){
                         mContext.startActivity(new Intent(mContext,LoginActivity.class));
                     }else{
+                        text_zan.setEnabled(false);
                         if(Integer.parseInt(item.is_zan)==0){
                             stateClickListener.DianZanClickListener(Integer.parseInt(item.id),0,0,-1,helper.getAdapterPosition());
                         }else{
@@ -145,7 +171,7 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
                 }
             });
 
-        }
+//        }
 
         iv_ddd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +182,7 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
         text_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListener.FxClickListener(helper.getAdapterPosition());
+                mOnItemClickListener.FxClickListener(helper.getAdapterPosition(),item.objName);
             }
         });
         ll_xq.setOnClickListener(new View.OnClickListener() {
@@ -187,6 +213,12 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
 
     }
 
+    boolean isjd=true;
+
+    public void setEnable(boolean isjd){
+        this.isjd=isjd;
+    }
+
     public interface DianClickListener{
         void onDianClickListener(int pos);
     }
@@ -198,7 +230,7 @@ public class TieziAdapter extends BaseQuickAdapter<GuanzhuJD, BaseViewHolder> {
     //设置接口回调用于adapter监听
     public interface OnItemClickListener{
         void ItemClick(View view, int position);
-        void FxClickListener(int pos);
+        void FxClickListener(int pos,String ms);
         void ScClickListener(int pos);
         void DzClickListener(int pos);
 

@@ -3,7 +3,6 @@ package www.diandianxing.com.diandianxing.util;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.support.constraint.solver.LinearSystem;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -122,7 +121,7 @@ public class SharingPop extends PopupWindow implements View.OnClickListener{
 
 
     protected  void SharebyWeixin(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
+        UMWeb web = new UMWeb("http://iphone.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
         web.setTitle("智慧燕郊-点点行");//标题
         web.setThumb(new UMImage(context,R.drawable.img_diandianlogo));  //缩略图
         web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
@@ -136,7 +135,7 @@ public class SharingPop extends PopupWindow implements View.OnClickListener{
 
 
     protected  void SharebyWeixincenter(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
+        UMWeb web = new UMWeb("http://iphone.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
         web.setTitle("智慧燕郊-点点行");//标题
         web.setThumb(new UMImage(context,R.drawable.img_diandianlogo));  //缩略图
         web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
@@ -148,7 +147,7 @@ public class SharingPop extends PopupWindow implements View.OnClickListener{
     }
 
     protected  void SharebyQQ(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
+        UMWeb web = new UMWeb("http://iphone.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
         web.setTitle("智慧燕郊-点点行");//标题
         web.setThumb(new UMImage(context, R.drawable.img_diandianlogo));  //缩略图
         web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
@@ -162,7 +161,7 @@ public class SharingPop extends PopupWindow implements View.OnClickListener{
     }
 
     protected void SharebyQzon(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
+        UMWeb web = new UMWeb("http://iphone.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
         web.setTitle("智慧燕郊-点点行");//标题
         web.setThumb(new UMImage(context,R.drawable.img_diandianlogo));  //缩略图
         web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述

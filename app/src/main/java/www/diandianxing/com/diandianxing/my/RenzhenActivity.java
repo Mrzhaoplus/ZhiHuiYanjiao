@@ -1,6 +1,8 @@
 package www.diandianxing.com.diandianxing.my;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,15 +30,24 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpParams;
 import com.lzy.okgo.model.Response;
+import com.socks.library.KLog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.base.Myapplication;
 import www.diandianxing.com.diandianxing.bean.Photobean;
@@ -47,7 +58,6 @@ import www.diandianxing.com.diandianxing.util.IdentityUtils;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
-import www.diandianxing.com.diandianxing.R;
 
 /**
  * date : ${Date}
@@ -124,15 +134,15 @@ public class RenzhenActivity extends BaseActivity implements View.OnClickListene
         String iDcrad = SpUtils.getString(this, "IDcard", null);
         int ids= Integer.parseInt(iDcrad.trim());
         if(ids==0){
-                shenhe.setVisibility(View.GONE);
+            shenhe.setVisibility(View.GONE);
             liner_s.setVisibility(View.VISIBLE);
             real_bao.setVisibility(View.VISIBLE);
-         }
+        }
         else if(ids==1){
             shenhe.setVisibility(View.VISIBLE);
             liner_s.setVisibility(View.GONE);
             real_bao.setVisibility(View.GONE);
-            shen_shen.setText("审核中");
+            shen_shen.setText("认证中");
             shen_maioshu.setVisibility(View.GONE);
             shen_chongxin.setVisibility(View.GONE);
 
@@ -142,7 +152,7 @@ public class RenzhenActivity extends BaseActivity implements View.OnClickListene
             shenhe.setVisibility(View.VISIBLE);
             liner_s.setVisibility(View.GONE);
             real_bao.setVisibility(View.GONE);
-            shen_shen.setText("审核失败");
+            shen_shen.setText("认证失败");
             shen_maioshu.setVisibility(View.VISIBLE);
             shen_chongxin.setVisibility(View.VISIBLE);
             shen_chongxin.setOnClickListener(new View.OnClickListener() {
@@ -177,11 +187,10 @@ public class RenzhenActivity extends BaseActivity implements View.OnClickListene
         }
         boolean b = IdentityUtils.checkIDCard(yanzhneg_hao.getText().toString().trim());
         if(b==false){
-              ToastUtils.show(this,"身份证号码错误",1);
+            ToastUtils.show(this,"身份证号码错误",1);
             return;
         }
-
-                photoworks();
+        photoworks();
     }
 
     @Override
@@ -201,9 +210,9 @@ public class RenzhenActivity extends BaseActivity implements View.OnClickListene
                 break;
         }
     }
-   /*
-     选择照片上传方式
-    */
+    /*
+      选择照片上传方式
+     */
     private void showphotoDialog(int grary, int animationStyle) {
         BaseDialog.Builder builder = new BaseDialog.Builder(this);
         final BaseDialog dialog = builder.setViewId(R.layout.dialog_photo)
@@ -319,48 +328,48 @@ public class RenzhenActivity extends BaseActivity implements View.OnClickListene
     /*
        图片上传
      */
-      private void photoworks(){
-          HttpParams httpParams=new HttpParams();
-          Log.d("file",file+"");
-          httpParams.put("file", file);
-          httpParams.put("uid", SpUtils.getString(Myapplication.getApplication(),"userid",null));
-          httpParams.put("token", SpUtils.getString(RenzhenActivity.this,"token",null));
-          httpParams.put("uname",yanzhneg_name.getText().toString().trim());
-          httpParams.put("ident_num",yanzhneg_hao.getText().toString().trim());
-          OkGo
-                  .<String>post(MyContants.BASEURL+"s=User/submitAuthInfo")
-                  .params(httpParams)
-                  .tag(this)
-                  .execute(new StringCallback() {
-                      @Override
-                      public void onSuccess(Response<String> response) {
-                          String body = response.body();
-                          try {
-                              JSONObject jsonobj=new JSONObject(body);
-                              int code = jsonobj.getInt("code");
-                              String datas = jsonobj.getString("datas");
-                              if(code==200){
-                                  ToastUtils.show(RenzhenActivity.this,"上传成功",1);
+    private void photoworks(){
+        HttpParams httpParams=new HttpParams();
+        Log.d("file",file+"");
+        httpParams.put("file", file);
+        httpParams.put("uid",SpUtils.getString(Myapplication.getApplication(),"userid",null));
+        httpParams.put("token",SpUtils.getString(RenzhenActivity.this,"token",null));
+        httpParams.put("uname",yanzhneg_name.getText().toString().trim());
+        httpParams.put("ident_num",yanzhneg_hao.getText().toString().trim());
+        OkGo
+                .<String>post(MyContants.BASEURL+"s=User/submitAuthInfo")
+                .params(httpParams)
+                .tag(this)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        try {
+                            JSONObject jsonobj=new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            String datas = jsonobj.getString("datas");
+                            if(code==200){
+                                ToastUtils.show(RenzhenActivity.this,"上传成功",1);
                        /*
                           记录认证状态
                         */
-                                  Gson gson = new Gson();
-                                  Photobean photobean = gson.fromJson(body, Photobean.class);
-                                  SpUtils.putString(RenzhenActivity.this,"IDcard",photobean.getDatas().getRealType());
-                                  //调用eventbus刷新状态
-                                  EventMessage message=new EventMessage("idcard");
-                                  EventBus.getDefault().postSticky(message);
-                                  finish();
-                              }
-                              else {
-                                  ToastUtils.show(RenzhenActivity.this,datas,0);
-                              }
-                          } catch (JSONException e) {
-                              e.printStackTrace();
-                          }
-                      }
-                  });
-      }
+                                Gson gson = new Gson();
+                                Photobean photobean = gson.fromJson(body, Photobean.class);
+                                SpUtils.putString(RenzhenActivity.this,"IDcard",photobean.getDatas().getRealType());
+                                //调用eventbus刷新状态
+                                EventMessage message=new EventMessage("idcard");
+                                EventBus.getDefault().postSticky(message);
+                                finish();
+                            }
+                            else {
+                                ToastUtils.show(RenzhenActivity.this,datas,0);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -373,8 +382,21 @@ public class RenzhenActivity extends BaseActivity implements View.OnClickListene
                     // 图片选择结果回调
                     selectList = PictureSelector.obtainMultipleResult(data);
                     cutPath = selectList.get(0).getPath();
-                    file = new File(cutPath);
-                    Glide.with(this).load(this.cutPath).into(pho_idcard);
+                    file = new File(Environment.getExternalStorageDirectory()+"/sfz.jpg");
+                    File cjfile= new File(cutPath);
+
+
+
+                    Log.e("TAG","文件目录：："+cutPath);
+                    try {
+                        FileOutputStream fileOutputStream = new FileOutputStream(file);
+                        Bitmap bitmap=BitmapFactory.decodeStream(new FileInputStream(cjfile));
+                        Log.e("TAG","bitmap对象：："+bitmap);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG,70,fileOutputStream);
+                        Glide.with(this).load(this.cutPath).into(pho_idcard);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }

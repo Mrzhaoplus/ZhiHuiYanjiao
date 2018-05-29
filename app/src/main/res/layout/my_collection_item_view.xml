@@ -14,7 +14,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:orientation="vertical">
 
 
@@ -94,7 +97,7 @@
                 android:id="@+id/img_Ztou"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
-                android:scaleType="fitXY" />
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:id="@+id/zixun"

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -39,6 +40,7 @@ import www.diandianxing.com.diandianxing.interfase.List_view;
 import www.diandianxing.com.diandianxing.interfase.RecyGetonclick;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.ImageLoder;
+import www.diandianxing.com.diandianxing.util.MyUtils;
 import www.diandianxing.com.diandianxing.util.ShareListener;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 import www.diandianxing.com.diandianxing.util.ToastUtils;
@@ -86,6 +88,7 @@ public class GuanzhuAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.fragment_duoone, null);
             holder.img_tou = (ImageView) convertView.findViewById(R.id.img_tou);
+            holder.rl_nr=convertView.findViewById(R.id.rl_nr);
             holder.text_name = (TextView) convertView.findViewById(R.id.text_name);
             holder.da_address = (TextView) convertView.findViewById(R.id.da_address);
             holder.imageView2 = (ImageView) convertView.findViewById(R.id.imageView2);
@@ -100,12 +103,16 @@ public class GuanzhuAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.rl_nr.getLayoutParams();
+        layoutParams.topMargin=20;
+        holder.rl_nr.setLayoutParams(layoutParams);
+
         final Live_gunzhu_Bean.DatasBean datasBean = lists.get(position);
         //分享
         holder.text_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showFXDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion);
+                showFXDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion,position);
             }
         });
 
@@ -137,8 +144,12 @@ public class GuanzhuAdapter extends BaseAdapter {
                 guanzhuJD.userId= String.valueOf(datasBean.getUserId());
                 guanzhuJD.userLevel=datasBean.getUserLevel();
                 guanzhuJD.userName=datasBean.getUserName();
+                guanzhuJD.objName=datasBean.getObjName();
                 Intent intent=new Intent(context,JiaoDetailActivity.class);
                 intent.putExtra("guanzhu",guanzhuJD);
+
+                intent.putExtra("title",guanzhuJD.objName);
+
                 context.startActivity(intent);
             }
         });
@@ -148,24 +159,48 @@ public class GuanzhuAdapter extends BaseAdapter {
             Drawable nav_up=context.getResources().getDrawable(R.drawable.icon_collect);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
             holder.text_colltet.setCompoundDrawables(nav_up, null, null, null);
-            holder.text_colltet.setText(lists.get(position).getCollectCount()+"");
+            if(lists.get(position).getCollectCount()==0){
+                holder.text_colltet.setText("收藏");
+            }else {
+                holder.text_colltet.setText(lists.get(position).getCollectCount()+"");
+            }
+
         }else{
             Drawable nav_up=context.getResources().getDrawable(R.drawable.shouchang_xz_icon_3x);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
             holder.text_colltet.setCompoundDrawables(nav_up, null, null, null);
-            holder.text_colltet.setText(lists.get(position).getCollectCount()+"");
+            if(lists.get(position).getCollectCount()==0){
+                holder.text_colltet.setText("收藏");
+            }else {
+                holder.text_colltet.setText(lists.get(position).getCollectCount()+"");
+            }
         }
         if(lists.get(position).getIs_zan()==0){
             Drawable nav_up=context.getResources().getDrawable(R.drawable.icon_dianzan);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
             holder.text_zan.setCompoundDrawables(nav_up, null, null, null);
-            holder.text_zan.setText(lists.get(position).getDianZanCount()+"");
+            if(lists.get(position).getDianZanCount()==0){
+                holder.text_zan.setText("点赞");
+            }else{
+                holder.text_zan.setText(lists.get(position).getDianZanCount()+"");
+            }
         }else{
             Drawable nav_up=context.getResources().getDrawable(R.drawable.dianzan_xz_icon_3x);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
             holder.text_zan.setCompoundDrawables(nav_up, null, null, null);
-            holder.text_zan.setText(lists.get(position).getDianZanCount()+"");
+            if(lists.get(position).getDianZanCount()==0){
+                holder.text_zan.setText("点赞");
+            }else{
+                holder.text_zan.setText(lists.get(position).getDianZanCount()+"");
+            }
         }
+        if(isjd){
+
+            holder.text_colltet.setEnabled(true);
+            holder.text_zan.setEnabled(true);
+        }
+
+
         //收藏
         holder.text_colltet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,14 +209,18 @@ public class GuanzhuAdapter extends BaseAdapter {
                 if(guid!=2){
                     context.startActivity(new Intent(context,LoginActivity.class));
                 }else{
+
+
+                    holder.text_colltet.setEnabled(false);
+
                     int collectCount = lists.get(position).getCollectCount();
                     if(lists.get(position).getIs_collect()==0){
-                        holder.text_colltet.setText(collectCount+"");
-                        jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getCollectCount(),collectCount);
+//                        holder.text_colltet.setText(collectCount+"");
+                        jiekou.onclick(position,1,lists.get(position).getId(),1,collectCount);
                         //lists.get(position).setIs_collect(1);
                     }else if(lists.get(position).getIs_collect()==1){
-                        holder.text_colltet.setText(collectCount+"");
-                        jiekou.onclick(position,1,lists.get(position).getId(),lists.get(position).getCollectCount(),collectCount);
+//                        holder.text_colltet.setText(collectCount+"");
+                        jiekou.onclick(position,1,lists.get(position).getId(),0,collectCount);
                         // lists.get(position).setIs_collect(0);
                     }
                 }
@@ -202,19 +241,27 @@ public class GuanzhuAdapter extends BaseAdapter {
                 if(guid!=2){
                     context.startActivity(new Intent(context,LoginActivity.class));
                 }else{
+                    holder.text_zan.setEnabled(false);
                     int dianZanCount = lists.get(position).getDianZanCount();
                     if(lists.get(position).getIs_zan()==0){
-                        holder.text_zan.setText(dianZanCount+"");
+//                        holder.text_zan.setText(dianZanCount+"");
                         jiekou.onclick(position,0,lists.get(position).getId(),1,dianZanCount);
                     }else if(lists.get(position).getIs_zan()==1){
-                        holder.text_zan.setText(dianZanCount+"");
+//                        holder.text_zan.setText(dianZanCount+"");
                         jiekou.onclick(position,0,lists.get(position).getId(),0,dianZanCount);
                     }
                 }
             }
         });
         List<String> imagesList = lists.get(position).getImagesList();
-        holder.item_recycler.setLayoutManager(new GridLayoutManager(context,3));
+
+        if(imagesList.size()>3){
+            holder.item_recycler.setLayoutManager(new GridLayoutManager(context,3));
+        }else{
+            holder.item_recycler.setLayoutManager(new GridLayoutManager(context,imagesList.size()));
+        }
+
+
         holder.item_recycler.setNestedScrollingEnabled(false);
         TPAdapter1 tpAdapter1 = new TPAdapter1(context,imagesList);
         holder.item_recycler.setAdapter(tpAdapter1);
@@ -242,13 +289,27 @@ public class GuanzhuAdapter extends BaseAdapter {
 
 
         Glide.with(context).load(lists.get(position).getPic()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.img_tou);
-           String dateToString = getDateToString(String.valueOf(lists.get(position).getCreateTime() / 1000));
             holder.item_count.setText(lists.get(position).getPostContent());
-            holder.text_dengji.setText(lists.get(position).getUserLevel());
-            holder.da_address.setText(dateToString+" "+address);
+        holder.text_dengji.setText(lists.get(position).getUserLevel());
+
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String end = sf.format(date);
+        String fb = MyUtils.stampToDate(lists.get(position).getUpdateTime()+"");
+
+        String time = MyUtils.dateDiff(fb, end, "yyyy-MM-dd HH:mm:ss",lists.get(position).getUpdateTime()+"");
+
+        holder.da_address.setText(time+" "+address);
 
 
         return convertView;
+    }
+
+
+    boolean isjd=true;
+
+    public void setEnable(boolean isjd){
+        this.isjd=isjd;
     }
 
 
@@ -262,11 +323,12 @@ public class GuanzhuAdapter extends BaseAdapter {
         public TextView text_dengji;
         public TextView item_count;
         public TextView text_share,text_colltet,text_zan;
+        public RelativeLayout rl_nr;
     }
 
     private LinearLayout ll_wx,ll_pyq,ll_qq,ll_kj,ll_wb;
     private TextView quxiao;
-    private void showFXDialog(int grary, int animationStyle) {
+    private void showFXDialog(int grary, int animationStyle, final int pos) {
         BaseDialog.Builder builder = new BaseDialog.Builder(context);
         //设置触摸dialog外围是否关闭
         //设置监听事件
@@ -300,31 +362,31 @@ public class GuanzhuAdapter extends BaseAdapter {
         ll_wx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareListener.OnShareListener(0);
+                shareListener.OnShareListener(0,pos);
             }
         });
         ll_pyq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareListener.OnShareListener(1);
+                shareListener.OnShareListener(1,pos);
             }
         });
         ll_qq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareListener.OnShareListener(2);
+                shareListener.OnShareListener(2,pos);
             }
         });
         ll_kj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareListener.OnShareListener(3);
+                shareListener.OnShareListener(3,pos);
             }
         });
         ll_wb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareListener.OnShareListener(4);
+                shareListener.OnShareListener(4,pos);
             }
         });
     }

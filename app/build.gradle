@@ -33,6 +33,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        checkReleaseBuilds false
+    }
     signingConfigs {
         release {
             keyAlias 'syyp'
@@ -61,58 +64,57 @@ android {
 }
 
 dependencies {
-//    compile fileTree(include: ['*.jar'], dir: 'libs')
-//    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//    })
-//    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
-//    testCompile 'junit:junit:4.12'
-//    //解决655536
-//    compile 'com.android.support:multidex:1.0.0'
-//    //沉浸式
-//    compile 'org.zackratos:ultimatebar:1.0.3'
-//    //eventbus
-//    compile 'org.greenrobot:eventbus:3.0.0'
-//    compile 'com.android.support:recyclerview-v7:23.4.0'
-//    compile project(':UpdateAppUtils')
-//    //springview
-//    compile 'com.liaoinstan.springview:library:1.2.6'
-//    //日志
-//    compile 'com.github.zhaokaiqiang.klog:library:1.6.0'
-//    //fastjson
-//    compile 'com.alibaba:fastjson:1.1.62.android'
-//    //网络
-//    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-//    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
-//    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-//    compile 'com.squareup.retrofit2:converter-scalars:+'
-//    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-//    compile 'com.google.code.gson:mgson:2.4'
-//    //加载图片
-//    compile 'com.github.bumptech.glide:glide:3.7.0'
-//    /*//友盟
-//    compile files('libs/SocialSDK_QQ_Simplify.jar')
-//    compile files('libs/umeng_social_shareview.jar')
-//    compile files('libs/umeng-analytics-v6.1.2.jar')
-//    compile files('libs/umeng_shareboard_widget.jar')
-//    compile files('libs/umeng_social_shareboard.jar')
-//    compile files('libs/SocialSDK_WeChat_Simplify.jar')
-//    compile files('libs/umeng_social_tool.jar')
-//    compile files('libs/SocialSDK_Sina_Simplify.jar')
-//    compile files('libs/umeng_social_net.jar')
-//    compile files('libs/umeng_social_api.jar')*/
-//    //图片选择
-//    compile 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.1'
-//    //友盟推送
-//    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
-//    compile project(':PushSDK')
-//    //轮播图banner
-//    compile 'com.youth.banner:banner:1.4.9'
-//    //图片查看器
-//    //   compile 'com.github.SuperKotlin:PictureViewer:2.0.1'
-//    compile 'com.android.support:design:23.3.0'
-
+    //    compile fileTree(include: ['*.jar'], dir: 'libs')
+    //    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    //    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    //        exclude group: 'com.android.support', module: 'support-annotations'
+    //    })
+    //    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    //    testCompile 'junit:junit:4.12'
+    //    //解决655536
+    compile 'com.android.support:multidex:1.0.1'
+    //    //沉浸式
+    //    compile 'org.zackratos:ultimatebar:1.0.3'
+    //    //eventbus
+    //    compile 'org.greenrobot:eventbus:3.0.0'
+    //    compile 'com.android.support:recyclerview-v7:23.4.0'
+    //    compile project(':UpdateAppUtils')
+    //    //springview
+    //    compile 'com.liaoinstan.springview:library:1.2.6'
+    //    //日志
+    //    compile 'com.github.zhaokaiqiang.klog:library:1.6.0'
+    //    //fastjson
+    //    compile 'com.alibaba:fastjson:1.1.62.android'
+    //    //网络
+    //    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    //    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
+    //    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    //    compile 'com.squareup.retrofit2:converter-scalars:+'
+    //    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    //    compile 'com.google.code.gson:mgson:2.4'
+    //    //加载图片
+    //    compile 'com.github.bumptech.glide:glide:3.7.0'
+    //    /*//友盟
+    //    compile files('libs/SocialSDK_QQ_Simplify.jar')
+    //    compile files('libs/umeng_social_shareview.jar')
+    //    compile files('libs/umeng-analytics-v6.1.2.jar')
+    //    compile files('libs/umeng_shareboard_widget.jar')
+    //    compile files('libs/umeng_social_shareboard.jar')
+    //    compile files('libs/SocialSDK_WeChat_Simplify.jar')
+    //    compile files('libs/umeng_social_tool.jar')
+    //    compile files('libs/SocialSDK_Sina_Simplify.jar')
+    //    compile files('libs/umeng_social_net.jar')
+    //    compile files('libs/umeng_social_api.jar')*/
+    //    //图片选择
+    //    compile 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.1'
+    //    //友盟推送
+    //    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
+    //    compile project(':PushSDK')
+    //    //轮播图banner
+    //    compile 'com.youth.banner:banner:1.4.9'
+    //    //图片查看器
+    //    //   compile 'com.github.SuperKotlin:PictureViewer:2.0.1'
+    //    compile 'com.android.support:design:23.3.0'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -155,14 +157,16 @@ dependencies {
     compile files('libs/umeng_social_shareboard.jar')
     compile files('libs/SocialSDK_WeChat_Simplify.jar')
     compile files('libs/umeng_social_tool.jar')
-    compile files('libs/SocialSDK_Sina_Simplify.jar')
+    //    compile files('libs/SocialSDK_Sina_Simplify.jar')
     compile files('libs/umeng_social_net.jar')
     compile files('libs/umeng_social_api.jar')
-
+    compile 'org.greenrobot:eventbus:3.0.0'
     compile project(':PushSDK')
     compile project(':UpdateAppUtils')
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-
-
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+    compile 'com.danikula:videocache:2.6.4'
+    compile files('libs/umeng-share-sina-simplify-6.9.1.jar')
+    compile files('libs/SocialSDK_Sina_Simplify.jar')
 }

@@ -95,6 +95,16 @@ public class Fenlei_Bean {
         private int is_focus;
         private List<String> imagesList;
 
+        private String objName;
+
+        public String getObjName() {
+            return objName;
+        }
+
+        public void setObjName(String objName) {
+            this.objName = objName;
+        }
+
         public int getId() {
             return id;
         }

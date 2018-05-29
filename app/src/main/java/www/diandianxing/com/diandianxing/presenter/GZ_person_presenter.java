@@ -18,8 +18,8 @@ public class GZ_person_presenter implements GZ_person_model_interfase {
         this.jiekou=jiekou;
         gz_person_model = new GZ_person_model(this);
     }
-    public void getpath(int pageNo,String uid){
-        gz_person_model.getpath(pageNo,uid);
+    public void getpath(int pageNo,String userid,String uid){
+        gz_person_model.getpath(pageNo,userid,uid);
     }
     public void getkong(){
       if(jiekou!=null){

@@ -2,6 +2,8 @@ package www.diandianxing.com.diandianxing.base;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Notification;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,13 +16,19 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.danikula.videocache.HttpProxyCacheServer;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.entity.UMessage;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -37,6 +45,7 @@ import www.diandianxing.com.diandianxing.bean.Sharebean;
 import www.diandianxing.com.diandianxing.network.BaseObserver1;
 import www.diandianxing.com.diandianxing.network.RetrofitManager;
 import www.diandianxing.com.diandianxing.util.MyContants;
+import www.diandianxing.com.diandianxing.util.MyUtils;
 import www.diandianxing.com.diandianxing.util.SpUtils;
 
 
@@ -61,7 +70,40 @@ public class BaseActivity extends AppCompatActivity {
 //        请求权限
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA,Manifest.permission.RECORD_AUDIO,Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_REQUEST_CODE);
 
+        initPush();
+    }
 
+
+
+//    /** 判断触摸时间派发间隔 */
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+//            if (MyUtils.isFastDoubleClick()) {
+//                return true;
+//            }
+//        }
+//        return super.dispatchTouchEvent(ev);
+//    }
+
+
+            private void initPush() {
+                PushAgent mPushAgent = PushAgent.getInstance(this);
+                UmengMessageHandler umengMessageHandler = new UmengMessageHandler() {
+                    @Override
+                    public Notification getNotification(Context context, UMessage uMessage) {
+                        Toast.makeText(context, "收到", Toast.LENGTH_SHORT).show();
+                Log.d("MyApplication", uMessage.text + "------------------------------------------");
+//                if (uMessage.text.equals("该用户已被停用")) {
+//                    EventMessageCheck eventMessageCheck=new EventMessageCheck();
+//                    eventMessageCheck.setCheckNum(101);
+//                    EventBus.getDefault().postSticky(eventMessageCheck);
+//                }
+
+                return super.getNotification(context, uMessage);
+            }
+        };
+        mPushAgent.setMessageHandler(umengMessageHandler);
     }
 
 

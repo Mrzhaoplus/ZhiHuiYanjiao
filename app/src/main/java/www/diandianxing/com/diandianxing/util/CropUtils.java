@@ -91,7 +91,7 @@ public class CropUtils {
         } else if (requestCode == REQUEST_CODE_CROP_OF_URI) {
             isBitmap = false;
         }
-        Intent intent = new Intent("com.android.camera.action.CROP");
+        Intent intent = new Intent("com.iphone.camera.action.CROP");
         //***此参数,不能分开写***
         intent.setDataAndType(sourceUri, "image/*");
         intent.putExtra("scale", true );//去黑边

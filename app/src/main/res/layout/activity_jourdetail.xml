@@ -174,12 +174,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true">
-        <www.diandianxing.com.diandianxing.utils.CircleImageView
+        <www.diandianxing.com.diandianxing.util.CircleImageView
             android:src="@drawable/img_motou"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:id="@+id/circleImageView"
-            ></www.diandianxing.com.diandianxing.utils.CircleImageView>
+            ></www.diandianxing.com.diandianxing.util.CircleImageView>
     </RelativeLayout>
 </RelativeLayout>
 

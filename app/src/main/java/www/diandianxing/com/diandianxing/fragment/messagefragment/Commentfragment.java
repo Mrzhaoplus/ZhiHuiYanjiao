@@ -17,18 +17,25 @@ import com.liaoinstan.springview.container.DefaultFooter;
 import com.liaoinstan.springview.container.DefaultHeader;
 import com.liaoinstan.springview.widget.SpringView;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import www.diandianxing.com.diandianxing.DisconnectActivity;
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.ShujuBean.Shanchu_Bean;
 import www.diandianxing.com.diandianxing.ShujuBean.Zan_msg_Bean;
 import www.diandianxing.com.diandianxing.adapter.Commentadapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
+import www.diandianxing.com.diandianxing.bean.HomeMsgOneTable;
+import www.diandianxing.com.diandianxing.bean.HomeMsgTable;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.interfase.Shanchu_presenter_interfase;
 import www.diandianxing.com.diandianxing.interfase.Zan_msg_presenter_interfase;
 import www.diandianxing.com.diandianxing.presenter.Shanchu_presenter;
 import www.diandianxing.com.diandianxing.presenter.Zan_Msg_presenter;
+import www.diandianxing.com.diandianxing.set.AboutweActivity;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
 import www.diandianxing.com.diandianxing.util.DividerItemDecoration;
@@ -64,12 +71,6 @@ public class Commentfragment extends BaseFragment implements Zan_msg_presenter_i
 
     @Override
     protected void lazyLoad() {
-        if(NetUtil.checkNet(getActivity())){
-            //获取引用
-            zan_msg_presenter.getpath(SpUtils.getString(getActivity(),"token",null),0,pageNo);
-        }else{
-            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
-        }
 
         View contentView = getContentView();
         IntentFilter intentFilter = new IntentFilter();
@@ -77,6 +78,38 @@ public class Commentfragment extends BaseFragment implements Zan_msg_presenter_i
         getActivity().registerReceiver(broadcastReceiver,intentFilter);
         comment_relycle = contentView.findViewById(R.id.comment_recycle);
         spring_view = contentView.findViewById(R.id.spring_view);
+        if(NetUtil.checkNet(getActivity())){
+            //获取引用
+            zan_msg_presenter.getpath(SpUtils.getString(getActivity(),"token",null),0,pageNo);
+        }else{
+            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+
+            List<HomeMsgOneTable> mlist = new ArrayList<>();
+            mlist.addAll(DataSupport.findAll(HomeMsgOneTable.class));
+
+
+            for(int i=0;i<mlist.size();i++){
+
+                Zan_msg_Bean.DatasBean datasBean = new Zan_msg_Bean.DatasBean();
+                HomeMsgOneTable homeMsgTable = mlist.get(i);
+                datasBean.setId(homeMsgTable.hsid);
+                datasBean.setUserId(homeMsgTable.userId);
+                datasBean.setSponsorId(homeMsgTable.sponsorId);
+                datasBean.setTitle(homeMsgTable.title);
+                datasBean.setObjId(homeMsgTable.objId);
+                datasBean.setContent(homeMsgTable.content);
+                datasBean.setCreateTime(homeMsgTable.createTime);
+                datasBean.setObjType(homeMsgTable.objType);
+                datasBean.setIsDeleted(homeMsgTable.isDeleted);
+                datasBean.setOperationType(homeMsgTable.operationType);
+                datasBean.setNickName(homeMsgTable.nickName);
+                datasBean.setPic(homeMsgTable.pic);
+                datasBean.setUserLevel(homeMsgTable.userLevel);
+                list.add(datasBean);
+
+            }
+
+        }
 
         comment_relycle.setNestedScrollingEnabled(false);
         commentadapter = new Commentadapter(getActivity(),list);
@@ -97,6 +130,30 @@ public class Commentfragment extends BaseFragment implements Zan_msg_presenter_i
                             zan_msg_presenter.getpath(SpUtils.getString(getActivity(),"token",null),0,pageNo);
                         }else{
                             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                            List<HomeMsgOneTable> mlist = new ArrayList<>();
+
+                            mlist.addAll(DataSupport.findAll(HomeMsgOneTable.class));
+
+                            for(int i=0;i<mlist.size();i++){
+
+                                Zan_msg_Bean.DatasBean datasBean = new Zan_msg_Bean.DatasBean();
+                                HomeMsgOneTable homeMsgTable = mlist.get(i);
+                                datasBean.setId(homeMsgTable.hsid);
+                                datasBean.setUserId(homeMsgTable.userId);
+                                datasBean.setSponsorId(homeMsgTable.sponsorId);
+                                datasBean.setTitle(homeMsgTable.title);
+                                datasBean.setObjId(homeMsgTable.objId);
+                                datasBean.setContent(homeMsgTable.content);
+                                datasBean.setCreateTime(homeMsgTable.createTime);
+                                datasBean.setObjType(homeMsgTable.objType);
+                                datasBean.setIsDeleted(homeMsgTable.isDeleted);
+                                datasBean.setOperationType(homeMsgTable.operationType);
+                                datasBean.setNickName(homeMsgTable.nickName);
+                                datasBean.setPic(homeMsgTable.pic);
+                                datasBean.setUserLevel(homeMsgTable.userLevel);
+                                list.add(datasBean);
+
+                            }
                         }
 
                         commentadapter.notifyDataSetChanged();
@@ -116,6 +173,33 @@ public class Commentfragment extends BaseFragment implements Zan_msg_presenter_i
                             zan_msg_presenter.getpath(SpUtils.getString(getActivity(),"token",null),0,pageNo);
                         }else{
                             Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+
+                            list.clear();
+                            List<HomeMsgOneTable> mlist = new ArrayList<>();
+
+                            mlist.addAll(DataSupport.findAll(HomeMsgOneTable.class));
+
+                            for(int i=0;i<mlist.size();i++){
+
+                                Zan_msg_Bean.DatasBean datasBean = new Zan_msg_Bean.DatasBean();
+                                HomeMsgOneTable homeMsgTable = mlist.get(i);
+                                datasBean.setId(homeMsgTable.hsid);
+                                datasBean.setUserId(homeMsgTable.userId);
+                                datasBean.setSponsorId(homeMsgTable.sponsorId);
+                                datasBean.setTitle(homeMsgTable.title);
+                                datasBean.setObjId(homeMsgTable.objId);
+                                datasBean.setContent(homeMsgTable.content);
+                                datasBean.setCreateTime(homeMsgTable.createTime);
+                                datasBean.setObjType(homeMsgTable.objType);
+                                datasBean.setIsDeleted(homeMsgTable.isDeleted);
+                                datasBean.setOperationType(homeMsgTable.operationType);
+                                datasBean.setNickName(homeMsgTable.nickName);
+                                datasBean.setPic(homeMsgTable.pic);
+                                datasBean.setUserLevel(homeMsgTable.userLevel);
+                                list.add(datasBean);
+
+                            }
+
                         }
 
                         commentadapter.notifyDataSetChanged();
@@ -147,6 +231,30 @@ public class Commentfragment extends BaseFragment implements Zan_msg_presenter_i
                     zan_msg_presenter.getpath(SpUtils.getString(getActivity(),"token",null),0,pageNo);
                 }else{
                     Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                    List<HomeMsgOneTable> mlist = new ArrayList<>();
+
+                    mlist.addAll(DataSupport.findAll(HomeMsgOneTable.class));
+
+                    for(int i=0;i<mlist.size();i++){
+
+                        Zan_msg_Bean.DatasBean datasBean = new Zan_msg_Bean.DatasBean();
+                        HomeMsgOneTable homeMsgTable = mlist.get(i);
+                        datasBean.setId(homeMsgTable.hsid);
+                        datasBean.setUserId(homeMsgTable.userId);
+                        datasBean.setSponsorId(homeMsgTable.sponsorId);
+                        datasBean.setTitle(homeMsgTable.title);
+                        datasBean.setObjId(homeMsgTable.objId);
+                        datasBean.setContent(homeMsgTable.content);
+                        datasBean.setCreateTime(homeMsgTable.createTime);
+                        datasBean.setObjType(homeMsgTable.objType);
+                        datasBean.setIsDeleted(homeMsgTable.isDeleted);
+                        datasBean.setOperationType(homeMsgTable.operationType);
+                        datasBean.setNickName(homeMsgTable.nickName);
+                        datasBean.setPic(homeMsgTable.pic);
+                        datasBean.setUserLevel(homeMsgTable.userLevel);
+                        list.add(datasBean);
+
+                    }
                 }
                 commentadapter.notifyDataSetChanged();
 
@@ -212,18 +320,65 @@ public class Commentfragment extends BaseFragment implements Zan_msg_presenter_i
     public void getsuccess(Zan_msg_Bean zan) {
         if(zan.getCode().equals("200")){
             List<Zan_msg_Bean.DatasBean> datas = zan.getDatas();
+
+            List<HomeMsgOneTable> mlist = new ArrayList<>();
+            for(int i=0;i<datas.size();i++){
+
+                Zan_msg_Bean.DatasBean datasBean = datas.get(i);
+                HomeMsgOneTable homeMsgTable = new HomeMsgOneTable();
+                homeMsgTable.hsid=datasBean.getId();
+                homeMsgTable.userId=datasBean.getUserId();
+                homeMsgTable.sponsorId=datasBean.getSponsorId();
+                homeMsgTable.title=datasBean.getTitle();
+                homeMsgTable.objId=datasBean.getObjId();
+                homeMsgTable.content=datasBean.getContent();
+                homeMsgTable.createTime=datasBean.getCreateTime();
+                homeMsgTable.objType=datasBean.getObjType();
+                homeMsgTable.isDeleted=datasBean.getIsDeleted();
+                homeMsgTable.operationType=datasBean.getOperationType();
+                homeMsgTable.nickName=datasBean.getNickName();
+                homeMsgTable.pic=datasBean.getPic();
+                homeMsgTable.userLevel=datasBean.getUserLevel();
+                mlist.add(homeMsgTable);
+            }
+
             if(pageNo>1){
                 if(datas.size()>0){
+                    DataSupport.saveAll(mlist);
                     list.addAll(datas);
                 }else{
                     Toast.makeText(getActivity(),Api.TOAST,Toast.LENGTH_SHORT).show();
                 }
             }else{
+
+                DataSupport.deleteAll(HomeMsgOneTable.class);
+
                 list.addAll(datas);
+
+                DataSupport.saveAll(mlist);
+
             }
 
 
             commentadapter.notifyDataSetChanged();
+
+        }else if(zan.getCode().equals("201")){
+
+
+            if(NetUtil.checkNet(getActivity())){
+                startActivity(new Intent(getActivity(),LoginActivity.class));
+
+                SpUtils.putInt(getActivity(), "guid", 1);
+
+                Intent qh = new Intent();
+                qh.setAction(GlobalParams.DL_QH);
+                getActivity().sendBroadcast(qh);
+            }else{
+
+                startActivity(new Intent(getActivity(), DisconnectActivity.class));
+
+            }
+
 
         }
     }
@@ -241,7 +396,21 @@ public class Commentfragment extends BaseFragment implements Zan_msg_presenter_i
         if(shanchu_bean.getCode().equals("200")){
             list.remove(postion);
         }else if(shanchu_bean.getCode().equals("201")){
-            ToastUtils.showShort(getActivity(),shanchu_bean.getMsg());
+
+
+            if(NetUtil.checkNet(getActivity())){
+                startActivity(new Intent(getActivity(),LoginActivity.class));
+
+                SpUtils.putInt(getActivity(), "guid", 1);
+
+                Intent qh = new Intent();
+                qh.setAction(GlobalParams.DL_QH);
+                getActivity().sendBroadcast(qh);
+            }else{
+                startActivity(new Intent(getActivity(), DisconnectActivity.class));
+
+            }
+
         }else if(shanchu_bean.getCode().equals("203")){
             ToastUtils.showShort(getActivity(),shanchu_bean.getMsg());
         }

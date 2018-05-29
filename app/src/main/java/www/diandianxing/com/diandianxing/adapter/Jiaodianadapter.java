@@ -29,7 +29,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import www.diandianxing.com.diandianxing.Login.LoginActivity;
@@ -84,7 +86,7 @@ public class Jiaodianadapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup viewGroup) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
 
@@ -109,13 +111,30 @@ public class Jiaodianadapter extends BaseAdapter {
 
         holder.text_name.setText(guanzhuJD.userName);
 
-        holder.da_address.setText(MyUtils.stampToDate(guanzhuJD.updateTime)+" "+guanzhuJD.address);
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String end = sf.format(date);
+        String fb = MyUtils.stampToDate(guanzhuJD.updateTime);
 
-holder.item_count.setText(guanzhuJD.postContent);
+        String time = MyUtils.dateDiff(fb, end, "yyyy-MM-dd HH:mm:ss",guanzhuJD.updateTime);
 
-        holder.text_colltet.setText(guanzhuJD.collectCount);
+        holder.da_address.setText(time+" "+guanzhuJD.address);
 
-        holder.text_zan.setText(guanzhuJD.dianZanCount);
+        holder.item_count.setText(guanzhuJD.postContent);
+
+        if(Integer.parseInt(guanzhuJD.collectCount)==0){
+            holder.text_colltet.setText("收藏");
+        }else {
+            holder.text_colltet.setText(guanzhuJD.collectCount);
+        }
+
+        if(Integer.parseInt(guanzhuJD.dianZanCount)==0){
+            holder.text_zan.setText("点赞");
+        }else{
+            holder.text_zan.setText(guanzhuJD.dianZanCount);
+        }
+
+
 
         holder.text_dengji.setText(guanzhuJD.userLevel);
 
@@ -144,14 +163,20 @@ holder.item_count.setText(guanzhuJD.postContent);
 
 
 
-
         //分享
                 holder.text_share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showFXDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion);
+                        showFXDialog(Gravity.BOTTOM, R.style.Bottom_Top_aniamtion,position);
                     }
                 });
+
+        if(isjd){
+
+            holder.text_colltet.setEnabled(true);
+            holder.text_zan.setEnabled(true);
+        }
+
                 //收藏
                 holder.text_colltet.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -160,14 +185,13 @@ holder.item_count.setText(guanzhuJD.postContent);
                         if(guid!=2){
                             context.startActivity(new Intent(context,LoginActivity.class));
                         }else{
+                            holder.text_colltet.setEnabled(false);
                             if(Integer.parseInt(guanzhuJD.is_collect)==0){
                                 stateClickListener.ShouCangClickListener(Integer.parseInt(guanzhuJD.id),0,1,-1,position);
-
                             }else{
                                 stateClickListener.QuXiaoShouCangClickListener(Integer.parseInt(guanzhuJD.id),0,1,position);
                             }
                         }
-
                     }
                 });
                 //点赞
@@ -178,9 +202,9 @@ holder.item_count.setText(guanzhuJD.postContent);
                         if(guid!=2){
                             context.startActivity(new Intent(context,LoginActivity.class));
                         }else{
+                            holder.text_zan.setEnabled(false);
                             if(Integer.parseInt(guanzhuJD.is_zan)==0){
                                 stateClickListener.DianZanClickListener(Integer.parseInt(guanzhuJD.id),0,0,-1,position);
-
                             }else{
                                 stateClickListener.QuXiaoDianZanClickListener(Integer.parseInt(guanzhuJD.id),0,0,position);
                             }
@@ -189,13 +213,12 @@ holder.item_count.setText(guanzhuJD.postContent);
                 });
 
 
-
-
-        holder.item_recycler.setLayoutManager(new GridLayoutManager(context,3));
+        if(guanzhuJD.imagesList.size()>3){
+            holder.item_recycler.setLayoutManager(new GridLayoutManager(context,3));
+        }else{
+            holder.item_recycler.setLayoutManager(new GridLayoutManager(context,guanzhuJD.imagesList.size()));
+        }
         holder.item_recycler.setNestedScrollingEnabled(false);
-
-
-
         TPAdapter1 tpAdapter1 = new TPAdapter1(context,guanzhuJD.imagesList);
         holder.item_recycler.setAdapter(tpAdapter1);
 
@@ -224,6 +247,12 @@ holder.ll_view.setOnClickListener(new View.OnClickListener() {
         return convertView;
     }
 
+    boolean isjd=true;
+
+    public void setEnable(boolean isjd){
+        this.isjd=isjd;
+    }
+
 
     public static class ViewHolder {
 
@@ -240,7 +269,7 @@ holder.ll_view.setOnClickListener(new View.OnClickListener() {
 
     private LinearLayout ll_wx,ll_pyq,ll_qq,ll_kj,ll_wb;
     private TextView quxiao;
-    private void showFXDialog(int grary, int animationStyle) {
+    private void showFXDialog(int grary, int animationStyle, final int pos) {
         BaseDialog.Builder builder = new BaseDialog.Builder(context);
         //设置触摸dialog外围是否关闭
         //设置监听事件
@@ -274,31 +303,31 @@ holder.ll_view.setOnClickListener(new View.OnClickListener() {
         ll_wx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareListener.OnShareListener(0);
+                shareListener.OnShareListener(0,pos);
             }
         });
         ll_pyq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareListener.OnShareListener(1);
+                shareListener.OnShareListener(1,pos);
             }
         });
         ll_qq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareListener.OnShareListener(2);
+                shareListener.OnShareListener(2,pos);
             }
         });
         ll_kj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareListener.OnShareListener(3);
+                shareListener.OnShareListener(3,pos);
             }
         });
         ll_wb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareListener.OnShareListener(4);
+                shareListener.OnShareListener(4,pos);
             }
         });
     }

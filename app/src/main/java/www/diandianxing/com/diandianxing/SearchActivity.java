@@ -1,5 +1,6 @@
 package www.diandianxing.com.diandianxing;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -62,7 +64,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             Toast.makeText(this, "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
         }
 
-
+//        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.hideSoftInputFromWindow(SearchActivity.this.getCurrentFocus().getWindowToken(), 0);
     }
 
 
@@ -77,11 +80,11 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 //获取输入框内容
                 String content = ed_seach.getText().toString().trim();
                 if (TextUtils.isEmpty(content)) {
-                    Intent intent1 = new Intent(SearchActivity.this, LuKuangActivity.class);
+                    Intent intent1 = new Intent(SearchActivity.this, SearchJGActivity.class);
                     intent1.putExtra("content",content);
                     startActivity(intent1);
                 } else {
-                    Intent intent1 = new Intent(SearchActivity.this, LuKuangActivity.class);
+                    Intent intent1 = new Intent(SearchActivity.this, SearchJGActivity.class);
                     intent1.putExtra("content",content);
                     startActivity(intent1);
                     ed_seach.setText("");

@@ -70,6 +70,15 @@ public class Zan_msg_Bean {
         private int operationType;
         private String nickName;
         private String pic;
+        private String userLevel;
+
+        public String getUserLevel() {
+            return userLevel;
+        }
+
+        public void setUserLevel(String userLevel) {
+            this.userLevel = userLevel;
+        }
 
         public int getId() {
             return id;

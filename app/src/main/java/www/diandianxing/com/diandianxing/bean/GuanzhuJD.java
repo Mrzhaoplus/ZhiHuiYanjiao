@@ -1,5 +1,7 @@
 package www.diandianxing.com.diandianxing.bean;
 
+import org.litepal.crud.DataSupport;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -33,5 +35,6 @@ public class GuanzhuJD implements Serializable{
     public String is_fx;
     public String is_focus;
     public List<String> imagesList;
+    public String objName;
 
 }

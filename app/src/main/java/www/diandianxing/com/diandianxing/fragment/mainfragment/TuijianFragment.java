@@ -5,10 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.liaoinstan.springview.container.DefaultFooter;
@@ -33,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.adapter.Jiaodianadapter;
 import www.diandianxing.com.diandianxing.adapter.Tuijiantieadapter;
 import www.diandianxing.com.diandianxing.base.BaseFragment;
@@ -62,6 +66,8 @@ public class TuijianFragment extends BaseFragment {
     private List<GuanzhuJD> lists =new ArrayList<>();
     private int pageNo=1;
     Tuijiantieadapter jiaodianadapter;
+    IntentFilter intentFilter;
+    private TextView tv_yw_content;
     @Override
     protected int setContentView() {
         return R.layout.fragment_tuijan;
@@ -70,21 +76,33 @@ public class TuijianFragment extends BaseFragment {
     @Override
     protected void lazyLoad() {
         View contentView = getContentView();
+        Log.e("TAG","执行推荐了！！！！！！！");
         jiao_list = contentView.findViewById(R.id.jiaodan_list);
         jiao_spring = contentView.findViewById(R.id.jiao_springview);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(GlobalParams.JDSX);
-        getActivity().registerReceiver(broadcastReceiver,intentFilter);
-        if(NetUtil.checkNet(getActivity())){
-            networklist();
-        }else{
-            Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+        tv_yw_content=contentView.findViewById(R.id.tv_yw_content);
+        if(intentFilter==null){
+            intentFilter = new IntentFilter();
+            intentFilter.addAction(GlobalParams.JDSX);
+            intentFilter.addAction(GlobalParams.GZ);
+            getActivity().registerReceiver(broadcastReceiver,intentFilter);
+            if(NetUtil.checkNet(getActivity())){
+                lists.clear();
+                pageNo=1;
+                networklist();
+            }else{
+                Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+            }
         }
+
         jiao_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
+                GuanzhuJD guanzhuJD=lists.get(position);
+
                 Intent intent=new Intent(getActivity(),JiaoDetailActivity.class);
+                intent.putExtra("guanzhu",guanzhuJD);
+                intent.putExtra("title",guanzhuJD.objName);
                 startActivity(intent);
             }
         });
@@ -136,6 +154,16 @@ public class TuijianFragment extends BaseFragment {
 
             String action = intent.getAction();
             if(GlobalParams.JDSX.equals(action)){
+                Log.e("TAG","广播没走刷新：：：");
+                lists.clear();
+                pageNo=1;
+                if(NetUtil.checkNet(getActivity())){
+                    networklist();
+                }else{
+                    Toast.makeText(getActivity(), "请检查当前网络是否可用！！！", Toast.LENGTH_SHORT).show();
+                }
+
+            }else if(GlobalParams.GZ.equals(action)){
 
                 lists.clear();
                 pageNo=1;
@@ -153,7 +181,9 @@ public class TuijianFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().unregisterReceiver(broadcastReceiver);
+        if(intentFilter!=null){
+            getActivity().unregisterReceiver(broadcastReceiver);
+        }
     }
 
     private void networklist() {
@@ -161,9 +191,8 @@ public class TuijianFragment extends BaseFragment {
         HttpParams params = new HttpParams();
         params.put("pageNo", pageNo);
         params.put("token", SpUtils.getString(getActivity(),"token",null));
-        params.put("type",1);
         Log.d("TAG","数据内容"+params.toString());
-        OkGo.<String>post(Api.BASE_URL +"app/home/postHotOrNew")
+        OkGo.<String>post(Api.BASE_URL +"app/home/stickPost")
                 .tag(this)
                 .params(params)
                 .execute(new StringCallback() {
@@ -176,9 +205,9 @@ public class TuijianFragment extends BaseFragment {
                         try {
                             jsonobj = new JSONObject(body);
                             int code = jsonobj.getInt("code");
-                            JSONArray datas = jsonobj.getJSONArray("datas");
-                            List<GuanzhuJD> guanzhuJDs = new ArrayList<GuanzhuJD>();
                             if (code == 200) {
+                                JSONArray datas = jsonobj.getJSONArray("datas");
+                                List<GuanzhuJD> guanzhuJDs = new ArrayList<GuanzhuJD>();
                                 for(int i=0;i<datas.length();i++){
 
                                     JSONObject jo = datas.getJSONObject(i);
@@ -207,6 +236,7 @@ public class TuijianFragment extends BaseFragment {
                                     guanzhu.is_zan=jo.getString("is_zan");
                                     guanzhu.is_fx=jo.getString("is_fx");
                                     guanzhu.is_focus=jo.getString("is_focus");
+                                    guanzhu.objName=jo.getString("objName");
                                     JSONArray ja=jo.getJSONArray("imagesList");
 
                                     guanzhu.imagesList = new ArrayList<String>();
@@ -234,16 +264,27 @@ public class TuijianFragment extends BaseFragment {
 
                                 }
 
-                                if(jiaodianadapter==null){
-                                    jiaodianadapter =new Tuijiantieadapter(getActivity(),shareListener,lists,stateClickListener,guanzhuClickListener);
-                                    jiao_list.setAdapter(jiaodianadapter);
-                                }else{
+                                if(lists.size()>0){
+                                    if(jiaodianadapter==null){
+                                        jiaodianadapter =new Tuijiantieadapter(getActivity(),shareListener,lists,stateClickListener,guanzhuClickListener);
+                                        jiao_list.setAdapter(jiaodianadapter);
+                                    }else{
 
-                                    jiaodianadapter.notifyDataSetChanged();
+                                        jiaodianadapter.notifyDataSetChanged();
+                                    }
+                                }else{
+                                    tv_yw_content.setVisibility(View.VISIBLE);
                                 }
 
 
-                            } else {
+
+
+                            } else if(code==201){
+
+//                                startActivity(new Intent(getActivity(),LoginActivity.class));
+//                                SpUtils.putInt(getActivity(), "guid", 1);
+
+                            }else {
                                 Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
 
                             }
@@ -344,7 +385,16 @@ public class TuijianFragment extends BaseFragment {
                                 }else{
                                     jiaodianadapter.notifyDataSetChanged();
                                 }
-                            } else {
+                                Log.e("TAG","关注广播要走了：：：");
+                                Intent intent = new Intent();
+                                intent.setAction(GlobalParams.GZ);
+                                getActivity().sendBroadcast(intent);
+
+                            } else if(code==201){
+
+//                                startActivity(new Intent(getActivity(),LoginActivity.class));
+//                                SpUtils.putInt(getActivity(), "guid", 1);
+                            }else {
                                 Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
 
                             }
@@ -382,20 +432,32 @@ public class TuijianFragment extends BaseFragment {
                             int code = jsonobj.getInt("code");
                             if (code == 200) {
 
+                                JSONObject datas = jsonobj.getJSONObject("datas");
+
                                 if(operation_type==0){
                                     lists.get(pos).is_zan="1";
-                                    lists.get(pos).dianZanCount=Integer.parseInt(lists.get(pos).dianZanCount)+1+"";
+                                    lists.get(pos).dianZanCount=datas.getString("zanCount");
                                 }else{
                                     lists.get(pos).is_collect="1";
-                                    lists.get(pos).collectCount=Integer.parseInt(lists.get(pos).collectCount)+1+"";
+                                    lists.get(pos).collectCount=datas.getString("zanCount");
                                 }
+
+                                Intent gz = new Intent();
+                                gz.setAction(GlobalParams.DONGTAI_SX);
+                                getActivity().sendBroadcast(gz);
+
                                 if(jiaodianadapter==null){
                                     jiaodianadapter =new Tuijiantieadapter(getActivity(),shareListener,lists,stateClickListener,guanzhuClickListener);
                                     jiao_list.setAdapter(jiaodianadapter);
                                 }else{
+                                    jiaodianadapter.setEnable(true);
                                     jiaodianadapter.notifyDataSetChanged();
                                 }
-                            } else {
+                            } else if(code==201){
+
+//                                startActivity(new Intent(getActivity(),LoginActivity.class));
+//                                SpUtils.putInt(getActivity(), "guid", 1);
+                            }else {
                                 Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
 
                             }
@@ -434,19 +496,28 @@ public class TuijianFragment extends BaseFragment {
                             int code = jsonobj.getInt("code");
                             if (code == 200) {
 
+                                JSONObject datas = jsonobj.getJSONObject("datas");
                                 if(operation_type==0){
                                     lists.get(pos).is_zan="0";
-                                    lists.get(pos).dianZanCount=Integer.parseInt(lists.get(pos).dianZanCount)-1+"";
+                                    lists.get(pos).dianZanCount=datas.getString("zanCount");
                                 }else{
                                     lists.get(pos).is_collect="0";
-                                    lists.get(pos).collectCount=Integer.parseInt(lists.get(pos).collectCount)-1+"";
+                                    lists.get(pos).collectCount=datas.getString("zanCount");
                                 }
+                                Intent gz = new Intent();
+                                gz.setAction(GlobalParams.DONGTAI_SX);
+                                getActivity().sendBroadcast(gz);
                                 if(jiaodianadapter==null){
                                     jiaodianadapter =new Tuijiantieadapter(getActivity(),shareListener,lists,stateClickListener,guanzhuClickListener);
                                     jiao_list.setAdapter(jiaodianadapter);
                                 }else{
+                                    jiaodianadapter.setEnable(true);
                                     jiaodianadapter.notifyDataSetChanged();
                                 }
+                            }else if(code==201){
+
+//                                startActivity(new Intent(getActivity(),LoginActivity.class));
+//                                SpUtils.putInt(getActivity(), "guid", 1);
                             } else {
                                 Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
 
@@ -462,76 +533,188 @@ public class TuijianFragment extends BaseFragment {
 
     private ShareListener shareListener = new ShareListener() {
         @Override
-        public void OnShareListener(int poss) {
+        public void OnShareListener(int poss,int pos) {
+
+            bq=pos;
+
             switch (poss){
                 case 0:
                     SharebyWeixin(getActivity());
+                    networkFxTj("2");
                     break;
                 case 1:
                     SharebyWeixincenter(getActivity());
+                    networkFxTj("3");
                     break;
                 case 2:
                     SharebyQQ(getActivity());
+                    networkFxTj("0");
                     break;
                 case 3:
                     SharebyQzon(getActivity());
+                    networkFxTj("1");
                     break;
                 case 4:
+                    if(isWxInstall(getActivity())){
+                        SharebyWeiBo(getActivity());
+                        networkFxTj("4");
+                    }else {
+                        Toast.makeText(getActivity(),"请先安装微博",Toast.LENGTH_SHORT).show();
+                    }
                     break;
             }
+            networkFxJF();
         }
     };
 
+    /**
+     * 检测是否安装微信
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isWxInstall(Context context) {
+        final PackageManager packageManager = context.getPackageManager();// 获取packagemanager
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);// 获取所有已安装程序的包信息
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+                if (pn.equals("com.sina.weibo")) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void networkFxTj(String share_status) {
+
+        HttpParams params = new HttpParams();
+        Log.d("TAG","数据内容"+params.toString());
+        params.put("objId",lists.get(bq).id);
+        params.put("obj_type",0);
+        params.put("operation_type",2);
+        params.put("share_status",share_status);
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
+        OkGo.<String>post(Api.BASE_URL +"app/home/userOperation")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "分享" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+
+                            }else {
+//                                Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+    private void networkFxJF() {
+
+        HttpParams params = new HttpParams();
+        Log.d("TAG","数据内容"+params.toString());
+        params.put("token", SpUtils.getString(getActivity(),"token",null));
+        OkGo.<String>post(Api.BASE_URL +"app/home/shareAddMemberPoint")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                        String body = response.body();
+                        Log.d("TAG", "数据" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+                            if (code == 200) {
+
+                            }else {
+//                                Toast.makeText(getActivity(),jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+    int bq;
     protected  void SharebyQQ(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
-        web.setTitle("智慧燕郊-点点行");//标题
-        web.setThumb(new UMImage(context, R.drawable.img_diandianlogo));  //缩略图
-        web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+lists.get(bq).id);
+        web.setTitle(lists.get(bq).postContent);//标题
+        web.setThumb(new UMImage(context, R.drawable.icon_tu));  //缩略图
+        web.setDescription(lists.get(bq).objName);//描述
 
         new ShareAction(context)
                 .withMedia(web)
                 .setPlatform(SHARE_MEDIA.QQ)//传入平台
-                .withText("点击下载“点点行”，开启燕郊骑行之旅~")//分享内容
                 .setCallback(umShareListener)//回调监听器
                 .share();
     }
 
     protected  void SharebyQzon(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
-        web.setTitle("智慧燕郊-点点行");//标题
-        web.setThumb(new UMImage(context,R.drawable.img_diandianlogo));  //缩略图
-        web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+lists.get(bq).id);
+        web.setTitle(lists.get(bq).postContent);//标题
+        web.setThumb(new UMImage(context, R.drawable.icon_tu));  //缩略图
+        web.setDescription(lists.get(bq).objName);//描述
         new ShareAction(context)
                 .setPlatform(SHARE_MEDIA.QZONE)//传入平台
                 .withMedia(web)
-                .withText("点击下载“点点行”，开启燕郊骑行之旅~")//分享内容
                 .setCallback(umShareListener)//回调监听器
                 .share();
     }
 
     protected  void SharebyWeixin(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
-        web.setTitle("智慧燕郊-点点行");//标题
-        web.setThumb(new UMImage(context,R.drawable.img_diandianlogo));  //缩略图
-        web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+lists.get(bq).id);
+        web.setTitle(lists.get(bq).postContent);//标题
+        web.setThumb(new UMImage(context, R.drawable.icon_tu));  //缩略图
+        web.setDescription(lists.get(bq).objName);//描述
         new ShareAction(context)
                 .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
-                .withMedia(web)
-                .withText("点击下载“点点行”，开启燕郊骑行之旅~")//分享内容
+                .withMedia(web)//分享内容
                 .setCallback(umShareListener)//回调监听器
                 .share();
     }
     protected  void SharebyWeixincenter(Activity context) {
-        UMWeb web = new UMWeb("http://android.myapp.com/myapp/detail.htm?apkName=www.diandianxing.com.diandianxing&ADTAG=mobile");
-        web.setTitle("智慧燕郊-点点行");//标题
-        web.setThumb(new UMImage(context,R.drawable.img_diandianlogo));  //缩略图
-        web.setDescription("点击下载“点点行”，开启燕郊骑行之旅~");//描述
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+lists.get(bq).id);
+        web.setTitle(lists.get(bq).postContent);//标题
+        web.setThumb(new UMImage(context, R.drawable.icon_tu));  //缩略图
+        web.setDescription(lists.get(bq).objName);//描述
         new ShareAction(context)
                 .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)//传入平台
-                .withText("点击下载“点点行”，开启燕郊骑行之旅~")//分享内容
+                .withMedia(web)//分享内容
                 .setCallback(umShareListener)//回调监听器
                 .share();
     }
+
+    protected  void SharebyWeiBo(Activity context) {
+        UMWeb web = new UMWeb(Api.H5_URL+"jdxq.html?token="+SpUtils.getString(getActivity(),"token",null)+"&id="+lists.get(bq).id);
+        web.setTitle(lists.get(bq).postContent);//标题
+        web.setThumb(new UMImage(context,R.drawable.icon_tu));  //缩略图
+        web.setDescription(lists.get(bq).objName);//描述
+        new ShareAction(context)
+                .setPlatform(SHARE_MEDIA.SINA)//传入平台
+                .withMedia(web)//分享内容
+                .setCallback(umShareListener)//回调监听器
+                .share();
+    }
+
     public UMShareListener umShareListener = new UMShareListener() {
         @Override
         public void onStart(SHARE_MEDIA platform) {

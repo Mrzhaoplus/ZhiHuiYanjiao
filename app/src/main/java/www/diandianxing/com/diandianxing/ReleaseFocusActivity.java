@@ -1,10 +1,16 @@
 package www.diandianxing.com.diandianxing;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -34,6 +40,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +50,11 @@ import www.diandianxing.com.diandianxing.adapter.TagAdapter;
 import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.bean.FaBuTypeInfo;
 import www.diandianxing.com.diandianxing.bean.MsgBus;
+import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaoDetailActivity;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.JiaodianActivity;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.MyGridView;
 import www.diandianxing.com.diandianxing.R;
@@ -76,6 +86,10 @@ public class ReleaseFocusActivity extends BaseActivity {
 
     private EditText et_title_jd,et_content_jd;
 
+    private int type=0;
+
+    private TextView tv_fl;
+    private TextView tv_dztitle;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,15 +101,39 @@ public class ReleaseFocusActivity extends BaseActivity {
         include_back= (ImageView) findViewById(R.id.include_back);
         rv_fbfl= (RecyclerView) findViewById(R.id.rv_fbfl);
         ll_szwz= (LinearLayout) findViewById(R.id.ll_szwz);
+        tv_fl= (TextView) findViewById(R.id.tv_fl);
+        tv_dztitle= (TextView) findViewById(R.id.tv_dztitle);
         textView2= (TextView) findViewById(R.id.textView2);
         et_title_jd= (EditText) findViewById(R.id.et_title_jd);
         et_content_jd= (EditText) findViewById(R.id.et_content_jd);
         tv_fb= (TextView) findViewById(R.id.tv_fb);
         mygridview= (MyGridView) findViewById(R.id.mygridview);
-        networkType();
+        mygridview.setSelector(new ColorDrawable(Color.TRANSPARENT));
+
+        type=getIntent().getIntExtra("type",0);
+
+        if(type==0){//郊点
+            tv_fl.setVisibility(View.GONE);
+            rv_fbfl.setVisibility(View.GONE);
+            tv_dztitle.setText("发布到郊点");
+            et_content_jd.setFilters(new InputFilter[]{new InputFilter.LengthFilter(140)});
+        }else{//帖子
+            tv_fl.setVisibility(View.VISIBLE);
+            rv_fbfl.setVisibility(View.VISIBLE);
+            tv_dztitle.setText("发布到帖子");
+            et_content_jd.setFilters(new InputFilter[]{new InputFilter.LengthFilter(500)});
+
+            networkType();
+        }
+
 
         rv_fbfl.setLayoutManager(new GridLayoutManager(ReleaseFocusActivity.this,4));
         rv_fbfl.setNestedScrollingEnabled(false);
+
+        textView2.setText(SpUtils.getString(ReleaseFocusActivity.this,"PoiName","所在位置"));
+
+        address=SpUtils.getString(ReleaseFocusActivity.this,"PoiName","所在位置");
+
 
         /**
          * 添加照片adapter
@@ -130,34 +168,54 @@ public class ReleaseFocusActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                postTitle=et_title_jd.getText().toString().trim();
+//                postTitle=et_title_jd.getText().toString().trim();
                 postContent=et_content_jd.getText().toString().trim();
 
 
-                if(postTitle!=null&&postTitle.length()>0){
+//                if(postTitle!=null&&postTitle.length()>0){
 
                     if(postContent!=null&&postContent.length()>0){
-
-
-                        if(postType!=null&&postType.length()>0){
-
                             if(listAll.size()>0){
 
-                                shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
-                                networkImg();
+                                if(type==0){//郊点
+
+                                    shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            networkImg();
+                                        }
+                                    }).start();
+
+
+                                }else{//帖子
+
+                                    if(postType!=null&&postType.length()>0){
+                                        shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                networkImg();
+                                            }
+                                        }).start();
+
+                                    }else{
+                                        Toast.makeText(ReleaseFocusActivity.this,"请选择分类",Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+
 
                             }else{
                                 Toast.makeText(ReleaseFocusActivity.this,"请选择图片",Toast.LENGTH_SHORT).show();
                             }
-                        }else{
-                            Toast.makeText(ReleaseFocusActivity.this,"请选择分类",Toast.LENGTH_SHORT).show();
-                        }
+
                     }else{
                         Toast.makeText(ReleaseFocusActivity.this,"请输入内容",Toast.LENGTH_SHORT).show();
                     }
-                }else{
-                    Toast.makeText(ReleaseFocusActivity.this,"请输入标题",Toast.LENGTH_SHORT).show();
-                }
+//                }else{
+//                    Toast.makeText(ReleaseFocusActivity.this,"请输入标题",Toast.LENGTH_SHORT).show();
+//                }
 
             }
         });
@@ -181,7 +239,7 @@ public class ReleaseFocusActivity extends BaseActivity {
         PictureSelector.create(ReleaseFocusActivity.this)
                 .openGallery(PictureMimeType.ofImage())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                 .theme(R.style.picture_default_style1)// 主题样式设置 具体参考 values/styles   用法：R.style.picture.white.style
-                .maxSelectNum(9)// 最大图片选择数量
+                .maxSelectNum(9-listAll.size())// 最大图片选择数量
                 .minSelectNum(1)// 最小选择数量
                 .imageSpanCount(3)// 每行显示个数
                 .selectionMode(PictureConfig.MULTIPLE)// 多选 or 单选 PictureConfig.SINGLE
@@ -239,14 +297,59 @@ public class ReleaseFocusActivity extends BaseActivity {
     }
 
 
+    private String name="img_scpp";
+
     private void networkImg() {
 
         List<File> fileList = new ArrayList<>();
         for(int i=0;i<listAll.size();i++){
 
-            File file = new File(listAll.get(i).getPath());
+//            File file = new File(listAll.get(i).getPath());
 
-            fileList.add(file);
+
+            Bitmap bitmap = BitmapFactory.decodeFile(listAll.get(i).getPath());
+
+
+            FileOutputStream fos = null;
+            try {
+
+                String substring = listAll.get(i).getPath().substring(listAll.get(i).getPath().lastIndexOf(".")+1, listAll.get(i).getPath().length());
+                Log.e("TAG","substring：：："+substring);
+
+                Log.e("TAG","压缩目录：：："+Environment.getExternalStorageDirectory()+"/"+name+i+".png");
+                File file = null;
+                if("JPEG".equals(substring)||"jpg".equals(substring)){
+                    file=new File(Environment.getExternalStorageDirectory()+"/"+name+i+".jpg");
+                    fos = new FileOutputStream(file);
+
+                    bitmap.compress(Bitmap.CompressFormat.JPEG,50,fos);
+                }else if("png".equals(substring)){
+
+                    file=new File(Environment.getExternalStorageDirectory()+"/"+name+i+".png");
+                    fos = new FileOutputStream(file);
+
+                    bitmap.compress(Bitmap.CompressFormat.PNG,50,fos);
+                }else{
+                    file=new File(Environment.getExternalStorageDirectory()+"/"+name+i+".png");
+                    fos = new FileOutputStream(file);
+
+                    bitmap.compress(Bitmap.CompressFormat.PNG,50,fos);
+                }
+
+                if (bitmap != null && !bitmap.isRecycled()){
+                    bitmap.recycle();
+                    bitmap = null;
+                }
+                fileList.add(file);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+
 
         }
 
@@ -293,8 +396,13 @@ public class ReleaseFocusActivity extends BaseActivity {
         params.put("address", address);
         params.put("images", images);
         params.put("token", SpUtils.getString(this,"token",null));
-        params.put("postTitle", postTitle);
-        params.put("postType", postType);
+        if(type==0){//郊点
+            params.put("postType", -1);
+            params.put("dataType", 1);
+        }else{//帖子
+            params.put("postType", postType);
+            params.put("dataType", 0);
+        }
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/insertPostInfo")
                 .tag(this)
@@ -304,18 +412,50 @@ public class ReleaseFocusActivity extends BaseActivity {
                     public void onSuccess(Response<String> response) {
                         dialog.dismiss();
                         String body = response.body();
-                        Log.d("TAG", "更新图片上传成功：" + body);
+                        Log.d("TAG", "数据上传：" + body);
                         JSONObject jsonobj = null;
                         try {
                             jsonobj = new JSONObject(body);
                             int code = jsonobj.getInt("code");
                             if (code == 200) {
 
-                                Intent intent = new Intent(ReleaseFocusActivity.this,JiaodianActivity.class);
+                                String datas = jsonobj.getString("datas");
 
-                                intent.putExtra("tianzhuan",true);
+                                if(type==0){
+//                                    Intent intent = new Intent(ReleaseFocusActivity.this,JiaodianActivity.class);
+//
+//                                    intent.putExtra("tianzhuan",true);
+//
+//                                    startActivity(intent);
 
-                                startActivity(intent);
+                                    Intent intent = new Intent(ReleaseFocusActivity.this, JiaoDetailActivity.class);
+
+                                    intent.putExtra("id",datas);
+                                    intent.putExtra("type",0);
+                                    intent.putExtra("pos",pos);
+                                    startActivity(intent);
+
+                                }else{
+//                                    Intent intent = new Intent(ReleaseFocusActivity.this,LiveActivity.class);
+//                                    startActivity(intent);
+
+                                    Intent intent = new Intent(ReleaseFocusActivity.this, JiaoDetailActivity.class);
+
+                                    intent.putExtra("id",datas);
+                                    intent.putExtra("type",1);
+                                    intent.putExtra("pos",pos);
+                                    startActivity(intent);
+
+                                }
+
+                                Intent jd = new Intent();
+                                jd.setAction(GlobalParams.DONGTAI_SX);
+                                sendBroadcast(jd);
+
+                                Intent GZ = new Intent();
+                                GZ.setAction(GlobalParams.GZ);
+                                sendBroadcast(GZ);
+
                                 finish();
 
                             } else {
@@ -330,6 +470,7 @@ public class ReleaseFocusActivity extends BaseActivity {
                 });
     }
 
+    private int pos;
 
     private void networkType() {
         HttpParams params = new HttpParams();
@@ -376,7 +517,7 @@ public class ReleaseFocusActivity extends BaseActivity {
                                     @Override
                                     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                                         Log.e("TAG","点击到：："+position);
-
+                                        pos=position;
                                         postType=mList.get(position).id;
                                         tagAdapter.setXZ(position);
                                         tagAdapter.notifyDataSetChanged();

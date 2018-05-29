@@ -123,7 +123,7 @@ public class IssueReportActivity extends BaseActivity implements View.OnClickLis
 
                     if(listAll.size()>0){
                         shumaDialog(Gravity.CENTER,R.style.Alpah_aniamtion);
-                        network();
+                        networkImg();
                     }else{
                         Toast.makeText(IssueReportActivity.this,"请选择图片",Toast.LENGTH_SHORT).show();
                     }
@@ -145,7 +145,7 @@ public class IssueReportActivity extends BaseActivity implements View.OnClickLis
         PictureSelector.create(IssueReportActivity.this)
                 .openGallery(PictureMimeType.ofImage())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                 .theme(R.style.picture_default_style1)// 主题样式设置 具体参考 values/styles   用法：R.style.picture.white.style
-                .maxSelectNum(9)// 最大图片选择数量
+                .maxSelectNum(9-listAll.size())// 最大图片选择数量
                 .minSelectNum(1)// 最小选择数量
                 .imageSpanCount(3)// 每行显示个数
                 .selectionMode(PictureConfig.MULTIPLE)// 多选 or 单选 PictureConfig.SINGLE
@@ -202,9 +202,9 @@ public class IssueReportActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private String content="";
+    private String paths;
 
-    private void network() {
+    private void networkImg() {
 
         List<File> fileList = new ArrayList<>();
         for(int i=0;i<listAll.size();i++){
@@ -215,9 +215,50 @@ public class IssueReportActivity extends BaseActivity implements View.OnClickLis
 
         }
 
+
+        HttpParams params = new HttpParams();
+        params.putFileParams("files", fileList);
+        params.put("token", SpUtils.getString(this,"token",null));
+        Log.d("TAG","数据内容"+params.toString());
+        OkGo.<String>post(Api.BASE_URL +"app/paike/uppaikeimages")
+                .tag(this)
+                .params(params)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        Log.d("TAG", "上传图片成功：" + body);
+                        JSONObject jsonobj = null;
+                        try {
+                            jsonobj = new JSONObject(body);
+                            int code = jsonobj.getInt("code");
+
+                            if (code == 200) {
+
+                                paths = jsonobj.getString("datas");
+
+                                network();
+
+                            } else {
+                                Toast.makeText(IssueReportActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("TAG","解析失败了！！！");
+                        }
+                    }
+                });
+    }
+
+    private String content="";
+
+    private void network() {
+
+
         HttpParams params = new HttpParams();
         params.put("content", content);
-        params.putFileParams("images", fileList);
+        params.put("images", paths);
         params.put("token", SpUtils.getString(this,"token",null));
         Log.d("TAG","数据内容"+params.toString());
         OkGo.<String>post(Api.BASE_URL +"app/home/feedBack")

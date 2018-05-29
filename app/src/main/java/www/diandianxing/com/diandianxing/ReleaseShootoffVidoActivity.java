@@ -1,6 +1,8 @@
 package www.diandianxing.com.diandianxing;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,8 +39,10 @@ import www.diandianxing.com.diandianxing.base.BaseActivity;
 import www.diandianxing.com.diandianxing.R;
 import www.diandianxing.com.diandianxing.bean.MessInfo;
 import www.diandianxing.com.diandianxing.bean.MsgBus;
+import www.diandianxing.com.diandianxing.bean.PaiKeInfo;
 import www.diandianxing.com.diandianxing.util.Api;
 import www.diandianxing.com.diandianxing.util.BaseDialog;
+import www.diandianxing.com.diandianxing.util.GlobalParams;
 import www.diandianxing.com.diandianxing.util.LoadingDialog;
 import www.diandianxing.com.diandianxing.util.MyContants;
 import www.diandianxing.com.diandianxing.util.SpUtils;
@@ -75,6 +79,8 @@ public class ReleaseShootoffVidoActivity extends BaseActivity {
         textView2= (TextView) findViewById(R.id.textView2);
         tv_fb= (TextView) findViewById(R.id.tv_fb);
         et_xcl= (EditText) findViewById(R.id.et_xcl);
+        textView2.setText(SpUtils.getString(ReleaseShootoffVidoActivity.this,"PoiName","所在位置"));
+
         include_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,6 +89,7 @@ public class ReleaseShootoffVidoActivity extends BaseActivity {
         });
 
         String url=getIntent().getStringExtra("url");
+        Log.e("TAG","视频本地地址：：：："+url);
         file = new File(url);
         Uri uri = Uri.parse( url );
 
@@ -215,10 +222,17 @@ public class ReleaseShootoffVidoActivity extends BaseActivity {
                             jsonobj = new JSONObject(body);
                             int code = jsonobj.getInt("code");
                             if (code == 200) {
-                                MsgBus msgBus = new MsgBus();
-                                msgBus.tiaozhuan="首页";
-                                EventBus.getDefault().postSticky(msgBus);
+                                JSONObject datas = jsonobj.getJSONObject("datas");
 
+                                Intent tz = new Intent(ReleaseShootoffVidoActivity.this, VideoActivity.class);
+                                PaiKeInfo paiKeInfo = new PaiKeInfo();
+                                paiKeInfo.pkid=datas.getString("pkid");
+                                tz.putExtra("pk",paiKeInfo);
+                                tz.putExtra("ispk",true);
+                                startActivity(tz);
+                                Intent intent = new Intent();
+                                intent.setAction(GlobalParams.DONGTAI_SX);
+                                sendBroadcast(intent);
                                 finish();
                             } else {
                                 Toast.makeText(ReleaseShootoffVidoActivity.this,jsonobj.getString("msg"),Toast.LENGTH_SHORT).show();

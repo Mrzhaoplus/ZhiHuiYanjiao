@@ -32,7 +32,7 @@ public interface SerViceAPI {
       //资讯
       @FormUrlEncoded
       @POST("app/home/getInformation")
-      Observable<zixun_Bean> zixun(@Field("type") int type,@Field("token") String token,@Field("typeNo") int typeNo);
+      Observable<zixun_Bean> zixun(@Field("type") int type,@Field("token") String token,@Field("pageNo") int typeNo);
       //生活服务
       @FormUrlEncoded
       @POST("app/home/getClassificationList")
@@ -48,7 +48,7 @@ public interface SerViceAPI {
       //生活服务下关注
       @FormUrlEncoded
       @POST("app/home/focusAttention")
-      Observable<Live_gunzhu_Bean> live_guanzhu(@Field("token") String token,@Field("pageNo") int type);
+      Observable<Live_gunzhu_Bean> live_guanzhu(@Field("token") String token,@Field("pageNo") int type,@Field("dataType") int dataType);
       //点赞或者关注
       @FormUrlEncoded
       @POST("app/home/userOperation")
@@ -80,7 +80,7 @@ public interface SerViceAPI {
       //关注的人
       @FormUrlEncoded
       @POST("app/user/concernusered")
-      Observable<GZ_person_Bean>gz_person(@Field("pageNo")int pageNo,@Field("userId")String uid);
+      Observable<GZ_person_Bean>gz_person(@Field("pageNo")int pageNo,@Field("isuserId") String userid, @Field("userId")String uid);
       //粉丝
       @FormUrlEncoded
       @POST("app/user/concernuser")

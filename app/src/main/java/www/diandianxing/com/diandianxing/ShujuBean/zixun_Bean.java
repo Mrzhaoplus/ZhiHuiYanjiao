@@ -1,5 +1,7 @@
 package www.diandianxing.com.diandianxing.ShujuBean;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.List;
 
 /**
@@ -43,7 +45,7 @@ public class zixun_Bean {
         this.datas = datas;
     }
 
-    public static class DatasBean {
+    public static class DatasBean{
         /**
          * id : 3
          * smallImage : /uploadImages/background/2018-04-17/a_jyeulddghi_552.png

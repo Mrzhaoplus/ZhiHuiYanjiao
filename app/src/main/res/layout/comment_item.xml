@@ -16,8 +16,8 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_width="60dp"
-            android:layout_height="60dp" />
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
 
         <RelativeLayout
             android:id="@+id/relan"
@@ -25,55 +25,71 @@
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/img_tou"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="50dp">
 
-            <TextView
-                android:id="@+id/text_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/relativeLayout2"
-                android:layout_toEndOf="@+id/shanchu"
-                android:text="我的昵称"
-                android:textColor="@color/black_san"
-                android:textSize="16sp" />
-            <TextView
-                android:id="@+id/da_zan"
-                android:textSize="14sp"
-                android:drawablePadding="10dp"
-                android:text="12-24"
-                android:layout_marginTop="5dp"
-                android:layout_below="@id/text_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <RelativeLayout
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@id/text_name"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:id="@+id/relativeLayout2">
-                <ImageView
-                    android:src="@drawable/img_dengji"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageView2" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/text_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/relativeLayout2"
+                        android:layout_toEndOf="@+id/shanchu"
+                        android:text="我的昵称"
+                        android:maxWidth="200dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:textColor="@color/black_san"
+                        android:textSize="16sp" />
+
+                    <RelativeLayout
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="3dp"
+                        android:id="@+id/relativeLayout2">
+                        <ImageView
+                            android:src="@drawable/img_dengji"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/imageView2" />
+                        <TextView
+                            android:id="@+id/text_dengji"
+                            android:textColor="#f8b804"
+                            android:textSize="5sp"
+                            android:text="1"
+                            android:layout_marginRight="2.5dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignEnd="@+id/imageView2" />
+                    </RelativeLayout>
+                </LinearLayout>
                 <TextView
-                    android:id="@+id/text_dengji"
-                    android:textColor="#f8b804"
-                    android:textSize="5sp"
-                    android:text="1"
-                    android:layout_marginRight="2.5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="10dp"
+                    android:id="@+id/da_zan"
+                    android:textSize="14sp"
+                    android:drawablePadding="10dp"
+                    android:text="12-24"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignEnd="@+id/imageView2" />
-            </RelativeLayout>
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+
 
             <LinearLayout
                 android:visibility="gone"
                 android:id="@+id/shanchu"
-                android:layout_alignBottom="@+id/da_zan"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/shape_shanchu"
                 android:layout_width="50dp"
@@ -123,6 +139,8 @@
                 android:textSize="14sp"
                 android:text="原帖:今年买房建议一二线城市，三四线随现.."
                 android:padding="10dp"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>

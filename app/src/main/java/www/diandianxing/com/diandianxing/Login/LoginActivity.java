@@ -33,6 +33,7 @@ public class LoginActivity extends UMLoginActivity implements View.OnClickListen
     private TextView iv_qq;
     private TextView iv_weixin;
     private TextView iv_weibo;
+    private ImageView iv_callback;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class LoginActivity extends UMLoginActivity implements View.OnClickListen
         liner = (LinearLayout) findViewById(R.id.liner);
         rel_liner = (RelativeLayout) findViewById(R.id.rel_liner);
         iv_qq = (TextView) findViewById(R.id.iv_qq);
+        iv_callback= (ImageView) findViewById(R.id.iv_callback);
         iv_weixin = (TextView) findViewById(R.id.iv_weixin);
         iv_weibo = (TextView) findViewById(R.id.iv_weibo);
         login_sso.setOnClickListener(this);
@@ -58,6 +60,7 @@ public class LoginActivity extends UMLoginActivity implements View.OnClickListen
         iv_qq.setOnClickListener(this);
         iv_weibo.setOnClickListener(this);
         iv_weixin.setOnClickListener(this);
+        iv_callback.setOnClickListener(this);
     }
 
     @Override
@@ -78,6 +81,9 @@ public class LoginActivity extends UMLoginActivity implements View.OnClickListen
                 loginByWeiXin(this);
                 break;
             case R.id.iv_weibo:
+                break;
+            case R.id.iv_callback:
+                finish();
                 break;
         }
     }

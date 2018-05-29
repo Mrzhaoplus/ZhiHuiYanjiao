@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -21,6 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import www.diandianxing.com.diandianxing.DisconnectActivity;
 import www.diandianxing.com.diandianxing.Login.LoginActivity;
 import www.diandianxing.com.diandianxing.MainActivity;
 import www.diandianxing.com.diandianxing.ReleaseFocusActivity;
@@ -36,12 +38,13 @@ public class AddPopwindow extends PopupWindow implements View.OnClickListener {
 
           private View rootView;
           private MainActivity mContext;
-         private RelativeLayout contentView;
-    private TextView btn_paike,btn_jiaodian;
+         private LinearLayout contentView;
+    private TextView btn_paike,btn_jiaodian,btn_tiezi;
 
-
-    public AddPopwindow(MainActivity mContext) {
+    private int ztheight;
+    public AddPopwindow(MainActivity mContext,int ztheight) {
         this.mContext = mContext;
+        this.ztheight=ztheight;
     }
     public void showMoreWindow(View anchor) {
         LayoutInflater inflater = (LayoutInflater) mContext
@@ -51,16 +54,22 @@ public class AddPopwindow extends PopupWindow implements View.OnClickListener {
         int w = mContext.getWindowManager().getDefaultDisplay().getWidth();
         setContentView(rootView);
         this.setWidth(w);
-        this.setHeight(h - ScreenUtils.getStatusHeight(mContext));
+        this.setHeight(h);
 
-        contentView = (RelativeLayout) rootView.findViewById(R.id.contentView);
+        contentView = (LinearLayout) rootView.findViewById(R.id.contentView);
         RelativeLayout close = (RelativeLayout) rootView.findViewById(R.id.r_close);
         /*
           寻找控件
          */
         btn_paike = (TextView) rootView.findViewById(R.id.btn_paike);
+        btn_tiezi=rootView.findViewById(R.id.btn_tiezi);
         btn_paike.setOnClickListener(this);
+        btn_tiezi.setOnClickListener(this);
         btn_jiaodian = (TextView) rootView.findViewById(R.id.btn_jiaodian);
+        ViewGroup.LayoutParams layoutParams = close.getLayoutParams();
+        layoutParams.height=layoutParams.height+ztheight;
+        close.setLayoutParams(layoutParams);
+
         btn_jiaodian.setOnClickListener(this);
         close.setBackgroundColor(0xFFFFFFFF);
         close.setOnClickListener(this);
@@ -161,37 +170,62 @@ public class AddPopwindow extends PopupWindow implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Intent intent;
-        int guid = SpUtils.getInt(mContext, "guid", 0);
-        switch (v.getId()){
-              case R.id.r_close:
-                  if (isShowing()) {
-                      closeAnimation(contentView);
-                  }
-                  break;
-              case R.id.btn_paike:
+
+        if(NetUtil.checkNet(mContext)){
+            Intent intent;
+            int guid = SpUtils.getInt(mContext, "guid", 0);
+            switch (v.getId()){
+                case R.id.r_close:
+                    if (isShowing()) {
+                        closeAnimation(contentView);
+                    }
+                    break;
+                case R.id.btn_paike:
 //                  Toast.makeText(mContext, "aad", Toast.LENGTH_SHORT).show();
-                  if(guid!=2){
-                      mContext.startActivity(new Intent(mContext,LoginActivity.class));
-                  }else{
-                      intent = new Intent(mContext, VideoRecordingActivity.class);
-                      mContext.startActivity(intent);
-                  }
+                    if(guid!=2){
+                        mContext.startActivity(new Intent(mContext,LoginActivity.class));
+                    }else{
+                        intent = new Intent(mContext, VideoRecordingActivity.class);
+                        mContext.startActivity(intent);
+                    }
 
-                  dismiss();
-                  break;
-              case R.id.btn_jiaodian:
+                    dismiss();
+                    break;
+                case R.id.btn_jiaodian:
 //                  Toast.makeText(mContext, "assad", Toast.LENGTH_SHORT).show();
-                  if(guid!=2){
-                      mContext.startActivity(new Intent(mContext,LoginActivity.class));
-                  }else{
-                      intent = new Intent(mContext, ReleaseFocusActivity.class);
-                      mContext.startActivity(intent);
-                  }
-                  dismiss();
-                  break;
+                    if(guid!=2){
+                        mContext.startActivity(new Intent(mContext,LoginActivity.class));
+                    }else{
+                        intent = new Intent(mContext, ReleaseFocusActivity.class);
 
-          }
+                        intent.putExtra("type",0);
+
+                        mContext.startActivity(intent);
+                    }
+                    dismiss();
+                    break;
+
+                case R.id.btn_tiezi:
+
+                    if(guid!=2){
+                        mContext.startActivity(new Intent(mContext,LoginActivity.class));
+                    }else{
+                        intent = new Intent(mContext, ReleaseFocusActivity.class);
+                        intent.putExtra("type",1);
+                        mContext.startActivity(intent);
+                    }
+                    dismiss();
+
+                    break;
+
+            }
+
+        }else{
+
+            mContext.startActivity(new Intent(mContext, DisconnectActivity.class));
+
+        }
+
 
     }
 

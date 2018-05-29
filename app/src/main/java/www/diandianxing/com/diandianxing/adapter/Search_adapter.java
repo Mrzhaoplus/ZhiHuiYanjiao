@@ -15,6 +15,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 import www.diandianxing.com.diandianxing.R;
+import www.diandianxing.com.diandianxing.SearchJGActivity;
 import www.diandianxing.com.diandianxing.ZixunDitailsActivity;
 import www.diandianxing.com.diandianxing.bean.Evebtbus_fragment;
 import www.diandianxing.com.diandianxing.fragment.mainfragment.LuKuangActivity;
@@ -46,7 +47,7 @@ public class Search_adapter extends RecyclerView.Adapter<Search_adapter.ViewHode
         public void onClick(View view) {
             EventBus.getDefault().postSticky(new Evebtbus_fragment(1));
             String content = holder.ladel.getText().toString().trim();
-            Intent intent1 = new Intent(context, LuKuangActivity.class);
+            Intent intent1 = new Intent(context, SearchJGActivity.class);
             intent1.putExtra("content",content);
             context.startActivity(intent1);
         }

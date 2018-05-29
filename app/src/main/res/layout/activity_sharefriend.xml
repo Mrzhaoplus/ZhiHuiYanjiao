@@ -17,6 +17,7 @@
         android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/iv_fx_bg"
         android:scaleType="centerCrop"
         android:src="@drawable/img_fen"
         android:layout_width="match_parent"
